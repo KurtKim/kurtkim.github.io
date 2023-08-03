@@ -1,0 +1,46 @@
+baseURL = 'https://kurtkim.github.io/'
+languageCode = 'en-us'
+title = 'K2H Blog'
+paginate = 5
+theme = "PaperMod"
+enableRobotsTXT = true
+
+[params.label]
+text = "K2H 블로그"
+
+[params.profileMode]
+enabled = false
+title = "ExampleSite"
+subtitle = "This is subtitle"
+imageUrl = "<img location>"
+imageWidth = 120
+imageHeight = 120
+imageTitle = "my image"
+
+[[params.profileMode.buttons]]
+name = "Posts"
+url = "posts"
+
+[[params.profileMode.buttons]]
+name = "Tags"
+url = "tags"
+
+[params.homeInfoParams]
+Title = "Hi there 👋"
+Content = "Welcome to my blog"
+
+[[params.socialIcons]]
+name = "github"
+url = "https://github.com/kurtkim"
+
+[[menu.main]]
+identifier = "categories"
+name = "categories"
+url = "/categories/"
+weight = 10
+
+[[menu.main]]
+identifier = "tags"
+name = "tags"
+url = "/tags/"
+weight = 20
