@@ -2,7 +2,7 @@ baseURL = 'https://kurtkim.github.io/'
 languageCode = 'en-us'
 title = 'K2H Blog'
 paginate = 5
-theme = "PaperMod"
+theme = "hugo-theme-stack"
 enableRobotsTXT = true
 
 [params.label]
