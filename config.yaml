@@ -183,15 +183,28 @@ menu:
     social:
         - identifier: github
           name: GitHub
-          url: https://github.com/kurtkim
+          url: https://github.com/kurtkim/
           params:
-              icon: brand-github
+              icon: github
 
-        # - identifier: twitter
-        #   name: Twitter
-        #   url: https://twitter.com
+        - identifier: linkedin
+          name: Linkedin
+          url: https://www.linkedin.com/in/kyeong-hun-kim-430ba075/
+          params:
+              icon: linkedin
+
+        - identifier: instagram
+          name: Instagram
+          url: https://www.instagram.com/kurt_k2h/
+          params:
+              icon: instagram
+
+        # - identifier: facebook
+        #   name: Facebook
+        #   url: https://www.facebook.com/StudioK2H/
         #   params:
-        #       icon: brand-instagram3
+        #       icon: facebook
+
 
 related:
     includeNewer: true
