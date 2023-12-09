@@ -45,7 +45,7 @@ params:
         avatar:
             enabled: true
             local: true
-            src: img/k2h.png
+            src: img/k2h.jpg
 
     article:
         math: false
