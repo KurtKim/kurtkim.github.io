@@ -41,7 +41,7 @@ params:
 
     sidebar:
         # emoji: 🍥
-        subtitle: 넓고 얕은 지식
+        subtitle: 넓고 얕은 지식을 위한 Tech Blog
         avatar:
             enabled: true
             local: true
