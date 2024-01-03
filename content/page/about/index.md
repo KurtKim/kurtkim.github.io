@@ -19,6 +19,3 @@ menu:
 - Guitarist
   - [Preta, 2019](https://music.apple.com/kr/album/preta-single/1452969578)
   - [OBSCURE, 2016](https://music.apple.com/kr/album/obscure-ep/1546588615)
-
----
-
