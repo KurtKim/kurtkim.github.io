@@ -9,7 +9,6 @@ categories = [
 tags = [
     "NLP",
     "LLM",
-    "BERT",
 ]
 +++
 
@@ -217,4 +216,3 @@ $BERT_{LARGE}$는 state-of-the-art 방법들과 비슷한 수준의 성능을 �
 
 * [Paper](https://arxiv.org/pdf/1810.04805.pdf)
 * [Code](https://github.com/google-research/bert)
-* [The Annotated Transformer](http://nlp.seas.harvard.edu/2018/04/03/attention.html)

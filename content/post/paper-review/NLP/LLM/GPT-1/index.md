@@ -9,7 +9,6 @@ categories = [
 tags = [
     "NLP",
     "LLM",
-    "GPT",
 ]
 +++
 
