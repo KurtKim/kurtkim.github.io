@@ -1,7 +1,154 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>NLP on K2H Blog</title><link>https://kurtkim.github.io/tags/nlp/</link><description>Recent content in NLP on K2H Blog</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Wed, 10 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/tags/nlp/index.xml" rel="self" type="application/rss+xml"/><item><title>T5</title><link>https://kurtkim.github.io/p/t5/</link><pubDate>Wed, 10 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/t5/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>NLP on K2H Blog</title><link>https://kurtkim.github.io/tags/nlp/</link><description>Recent content in NLP on K2H Blog</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Fri, 12 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/tags/nlp/index.xml" rel="self" type="application/rss+xml"/><item><title>ELECTRA</title><link>https://kurtkim.github.io/p/electra/</link><pubDate>Fri, 12 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/electra/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>BERT와 같은 masked language modeling(MLM) 방법은 일부 토큰을 [MASK]로 바꿔 원래 토큰을 재구성하는 모델을 훈련하지만, 이를 효과적으로 하려면 많은 계산이 필요하다. 대신에, replaced token detection 라는 더 효율적인 사전 학습 작업을 제안한다. 이 방법은 일부 토큰을 가능성 있는 다른 토큰으로 바꾸는 방식으로 입력을 변형하고, 변형된 토큰의 원래 값을 예측하는 대신 각 토큰이 생성자 샘플로 대체되었는지 여부를 예측하는 모델을 학습시킨다. 이 방법은 모든 입력 토큰에 대해 작업을 정의하므로 MLM보다 효율적이다. 결과적으로, 이 방식으로 학습한 컨텍스트 표현은 동일한 모델 크기, 데이터, 계산량을 가진 BERT보다 월등히 높은 성능을 보여준다. 특히, 작은 모델에서는 GLUE 자연어 이해 벤치마크에서 GPT를 능가하는 모델을 한 GPU에서 4일 동안 훈련할 수 있다. 대규모에서도 이 방법은 RoBERTa와 XLNet의 성능에 비교할 수 있으며, 더 적은 계산량을 사용하면서도 동일한 계산량을 사용할 때 그 모델들을 능가한다.&lt;/p>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>현재 state-of-the-art의 언어 표현 학습 방법은 denoising autoencoder이다. 이 방법은 일부 토큰을 마스킹하거나 어텐션을 적용하여 네트워크가 원래 입력을 복원하도록 학습한다. 하지만 이러한 masked language modeling (MLM)은 효과적이지만 상당한 계산 비용을 요구한다.&lt;/p>
+&lt;p>&amp;ldquo;replaced token detection&amp;quot;는 BERT와 XLNet의 불일치 문제를 해결하기 위한 사전 학습 작업이다. 이 방법은 일부 토큰을 대체하여 입력을 손상시키는데, 이를 구분하는 네트워크를 판별자로 사전 학습시킨다. 이 방식은 MLM과 달리 모든 입력 토큰에서 학습하므로 계산적으로 효율적이다. 또한 GAN과 유사하지만 텍스트에 GAN을 적용하기 어려워 maximum likelihood로 손상된 토큰을 생성하는 생성자를 학습시킨다.&lt;/p>
+&lt;p>ELECTRA는 효율적으로 토큰 대체를 정확하게 분류하는 encoder를 학습하는 접근 방식이다. BERT와 비교하여 ELECTRA는 모든 입력 위치에서 학습하며, 학습 속도와 downstream task에서의 정확도에서 우수한 성능을 보여준다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/electra/images/figure1.png"
+width="1078"
+height="492"
+srcset="https://kurtkim.github.io/p/electra/images/figure1_hub5e22e6e60873ae3e2aa86fbd6b7dd0d_98468_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/electra/images/figure1_hub5e22e6e60873ae3e2aa86fbd6b7dd0d_98468_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="219"
+data-flex-basis="525px"
+>&lt;/p>
+&lt;p>ELECTRA는 다른 사전 학습 방법에 비해 계산 및 parameter를 더 효율적으로 사용하여 더 나은 성능을 보여준다. GLUE 벤치마크에서, ELECTRA-Small 모델은 BERT보다 5점 더 높은 성능을 보여주었고, ELECTRA-Large 모델은 RoBERTa와 XLNet과 비슷한 성능을 보이지만 훨씬 적은 계산량을 사용한다. ELECTRA-Large는 GLUE에서 ALBERT보다 우수한 결과를 얻었고, SQuAD 2.0에서 새로운 state-of-the-art를 달성하였다. ELECTRA는 언어 표현 학습에 있어서 계산 및 parameter 효율성이 뛰어난 판별적인 방법이다.&lt;/p>
+&lt;h2 id="method">Method&lt;/h2>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/electra/images/figure2.png"
+width="1040"
+height="290"
+srcset="https://kurtkim.github.io/p/electra/images/figure2_hu2de35ae22d69441a87566217b479d28e_57047_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/electra/images/figure2_hu2de35ae22d69441a87566217b479d28e_57047_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="358"
+data-flex-basis="860px"
+>&lt;/p>
+&lt;p>생성자 $G$와 판별자 $D$라는 두 개의 신경망을 사용한다. 이들은 입력 토큰 시퀀스 $x = [x_1, &amp;hellip;, x_n]$$를 문맥화된 벡터 표현의 시퀀스 $h(x) = [h_1, &amp;hellip;, h_n]$로 매핑한다. 주어진 위치 $t$에 대해, 생성자는 특정 토큰 $x_t$를 생성할 확률을 출력한다.&lt;/p>
+&lt;p>$$ p_G(x_t|x) = exp(e(x_t)^\intercal h_G(x)_t) \ / \sum_{x&amp;rsquo;} exp(e(x&amp;rsquo;)^\intercal h_G(x)_t) $$&lt;/p>
+&lt;p>$e$는 토큰 임베딩을 나타낸다. 주어진 위치 $t$에 대해, 판별자는 토큰 $x_t$가 실제 데이터에서 나온 것인지를 예측한다.&lt;/p>
+&lt;p>$$ D(x, t) = sigmoid(w^\intercal h_D (x)_t) $$&lt;/p>
+&lt;p>생성자는 masked language modeling(MLM)을 수행하기 위해 학습된다. 입력 $x = [x_1, x_2, &amp;hellip;, x_n]$이 주어지면, MLM은 우선 1부터 n 사이의 임의의 위치를 선택하여 $m = [m_1, &amp;hellip;, m_k]$를 마스크한다. 선택된 위치의 토큰은 [MASK] 토큰으로 대체된다. 이를 $x^{masked} = REPLACE(x, m, [MASK])$로 표기한다. 그런 다음 생성자는 마스크된 토큰의 원래 식별자를 예측하는 방법을 학습한다. 판별자는 데이터의 토큰과 생성자 샘플에 의해 대체된 토큰을 구별하는 방법을 학습한다. 구체적으로는, 마스크된 토큰을 생성자 샘플로 대체하여 손상된 예제 $x^{corrupt}를 생성하고, 판별자는 $x^{corrupt}에서 원래 입력 $x$와 일치하는 토큰을 예측하도록 학습된ㄴ다. 형식적으로, 모델의 입력은 다음과 같이 구성된다:&lt;/p>
+&lt;p>$$ m_i \sim unif\{1, n \} \ \text{for} i = 1 \ \text{to} \ k \quad \quad x^{masked} = REPLACE(x, m, [MASK]) $$
+$$ \hat{x}_i \sim p_G(x_i | x^{masked}) \ \text{for} i \in m \quad \quad x^{corrupt} = REPLACE(x, m, \hat{x}) $$&lt;/p>
+&lt;p>손실 함수는 다음과 같다.&lt;/p>
+&lt;p>$$ \mathbf{L}_{MLM}(x, \theta_G) = \mathbb{E} \big( \sum_{i \in m} - log \ p_G(x_i | x^{masked}) \big) $$&lt;/p>
+&lt;p>$$ \mathbf{L}_{Disc}(x, \theta_D) = \mathbb{E} \big( \sum_{t=1}^n - \mathbb{1} (x^{corrupt}_t = x_t) log \ D(x^{corrupt}, t) - \mathbb{1} (x^{corrupt}_t \neq x_t) log(1 - D(x^{corrupt}, t)) $$&lt;/p>
+&lt;p>GAN과 유사하지만 몇 가지 주요한 차이점이 있다. 생성자가 올바른 토큰을 생성하면 &amp;ldquo;진짜&amp;quot;로 간주되며, 적대적으로 훈련되는 대신 maximum likelihood로 학습된다. 일반적인 GAN과 달리 생성자에게 입력으로 노이즈 벡터를 제공하지 않는다.&lt;/p>
+&lt;p>결합된 손실을 최소화한다.&lt;/p>
+&lt;p>$$ \underset{\theta_G, \theta_D}{min} \sum_{x \in \mathbf{X}} \mathbf{L}_{MLM}(x, \theta_G) + \lambda \mathbf{L}_{Disc}(x, \theta_D) $$&lt;/p>
+&lt;p>대규모의 원시 텍스트 데이터에 대해 결합 손실을 최소화한다. 손실의 기대값을 단일 샘플로 근사화하고, 생성자의 손실은 판별자로 역전파하지 않는다. 사전 학습 후에는 생성자를 버리고 판별자를 downstream task에서 세밀하게 조정한다.&lt;/p>
+&lt;h2 id="experiments">Experiments&lt;/h2>
+&lt;h3 id="experimental-setup">Experimental Setup&lt;/h3>
+&lt;p>GLUE 벤치마크와 SQuAD 데이터셋을 사용하여 다양한 언어 이해 작업을 평가한다. GLUE 작업은 텍스트 간 연역, 질문-답변 연역, 문장 재구성, 질문 재구성, 텍스트 유사도, 감성 분석, 문장 수용성 등을 다루며, SQuAD는 질문에 대한 정확한 답변을 선택하는 작업이다. 사전 학습은 BERT 데이터를 사용하고, 일부 모델은 XLNet 데이터를 사용한다. 사전 학습과 평가는 주로 영어 데이터를 기반으로 하지만, 향후 다국어 데이터에도 적용할 수 있다.&lt;/p>
+&lt;p>ELECTRA는 BERT와 비슷한 구조와 hyperparameter를 가지고 있다. GLUE에 대한 미세조정에서는 ELECTRA 위에 단순한 선형 분류기를 추가하고, SQuAD에 대해서는 ELECTRA 위에 XLNet의 질문-답변 모듈을 추가하였다. 결과는 동일한 사전 훈련 체크포인트에서 10번의 파인튜닝 실행의 중앙값을 사용한다.&lt;/p>
+&lt;h3 id="model-extensions">Model Extensions&lt;/h3>
+&lt;p>모델에 여러 확장 기법을 제안하고 평가한다. 다른 명시가 없는 한, 이 실험들은 BERT-Base와 동일한 모델 크기와 훈련 데이터를 사용한다.&lt;/p>
+&lt;p>&lt;strong>Weight Sharing&lt;/strong> 생성자와 판별자 사이의 가중치를 공유하여 사전 학습의 효율성을 높이는 것을 제안한다. 작은 생성자를 사용하고, 생성자와 판별자의 임베딩을 공유한다. 생성자의 입력과 출력 토큰 임베딩은 항상 연결된다.&lt;/p>
+&lt;p>500k step 동안 생성자와 판별자의 가중치 공유 전략을 비교한 결과, 토큰 임베딩을 공유하는 것이 가장 효과적이었다. 이는 masked language modeling이 토큰 임베딩을 학습하는 데 도움이 되기 때문이다. encoder 가중치를 공유하는 것은 큰 향상을 가져오지 않았으며, 생성자와 판별자의 크기가 동일해야 한다는 단점이 있다.&lt;/p>
+&lt;p>&lt;strong>Smaller Generators&lt;/strong> ELECTRA 학습 시, 생성자와 판별자가 동일한 크기라면 계산량이 두 배로 증가한다. 따라서 생성자 크기를 줄여야 한다. 실험 결과, 생성자는 판별자의 1/4에서 1/2 크기가 가장 좋은 성능을 보여주었다. 이는 생성자가 너무 강력하면 판별자의 학습을 방해할 수 있기 때문이다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/electra/images/figure3.png"
+width="1068"
+height="404"
+srcset="https://kurtkim.github.io/p/electra/images/figure3_hue64db30dd87fa6042472793cc96064cb_106744_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/electra/images/figure3_hue64db30dd87fa6042472793cc96064cb_106744_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="264"
+data-flex-basis="634px"
+>&lt;/p>
+&lt;p>&lt;strong>Training Algorithms&lt;/strong> ELECTRA를 위해 다른 학습 알고리즘을 탐색했지만 성능을 향상시키지 못하였다. 대신 다음의 2 step 학습 절차를 사용하여 실험해 보았다.&lt;/p>
+&lt;ul>
+&lt;li>$n$ step 동안 $\mathbf{L}_{MLM}$을 사용하여 생성자만 학습한다.&lt;/li>
+&lt;li>판별자의 가중치를 생성자의 가중치로 초기화한 다음, 생성자의 가중치를 고정한 상태에서 $n$ step 동안 $\mathbf{L}_{Disc}$로 판별자를 학습한다.&lt;/li>
+&lt;/ul>
+&lt;p>생성자와 판별자의 크기가 동일해야 초기화가 가능합니다. 초기화 없이 판별자를 학습하면 판별자가 주요 클래스 이외의 것을 학습하지 못할 수 있다. 반면, 생성자와 판별자를 함께 학습하면 판별자에게 생성자를 점차 개선시킬 수 있는 커리큘럼을 제공한다. 또한, 생성자를 GAN과 같이 적대적으로 훈련하고, 생성자에서 샘플링하는 이산 연산을 위해 강화학습을 사용하는 방법도 탐색하였다.&lt;/p>
+&lt;p>2 step 학습에서 생성적 목적에서 판별적 목적으로 전환한 후에 downstream task 성능이 향상되었지만, 종합 훈련을 뛰어넘지는 못하였다. 적대적 훈련은 maximum-likelihood 학습보다 성능이 떨어지는데, 이는 적대적 생성자의 masked language modeling 성능이 낮고 다양성이 부족하기 때문이다.&lt;/p>
+&lt;h3 id="small-models">Small Models&lt;/h3>
+&lt;p>이 연구에서는 사전 학습의 효율성을 개선하기 위해 BERT-Base를 기반으로 작은 모델을 개발하였다. 이를 위해 시퀀스 길이, 배치 크기, 은닉 차원 크기, 토큰 임베딩을 줄였다. BERT-Small 모델과 동일한 hyperparameter로 학습하여 공정한 비교를 수행하였다. 또한, ELMo와 GPT와 같이 리소스를 적게 사용하는 사전 학습 방법과 BERT-Base와 비교 가능한 ELECTRA 모델의 결과도 확인하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/electra/images/table1.png"
+width="1074"
+height="362"
+srcset="https://kurtkim.github.io/p/electra/images/table1_huf394489a714e64b5cdeb9b728243e34e_107756_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/electra/images/table1_huf394489a714e64b5cdeb9b728243e34e_107756_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="296"
+data-flex-basis="712px"
+>&lt;/p>
+&lt;p>ELECTRA-Small은 크기에 비해 높은 GLUE 점수를 기록하여 다른 모델들보다 우수한 성능을 보여준다. 작은 모델이지만 BERT-Small보다 5점 높은 점수를 기록하며, 큰 GPT 모델보다도 우수한 결과를 보여준다. ELECTRA-Small은 수렴에 가깝게 학습되며, 6시간만 학습해도 합리적인 성능을 얻을 수 있다. 또한, ELECTRA의 중간 크기인 base-sized 모델은 BERT-Base보다 우수한 성능을 보이며, BERT-Large보다도 뛰어난 결과를 얻었다. ELECTRA의 강력한 성능은 상대적으로 적은 계산 비용으로 사전 학습 모델을 개발하고 적용하는 데 도움이 된다.&lt;/p>
+&lt;h3 id="large-models">Large Models&lt;/h3>
+&lt;p>큰 ELECTRA 모델은 BERT-Large와 같은 크기이지만 더 오랜 시간 동안 학습된다. ELECTRA-400K는 RoBERTa의 1/4의 계산 비용으로 학습되었으며, ELECTRA-1.75M은 RoBERTa와 유사한 계산 비용으로 학습되었다. 배치 크기는 2048이고, XLNet 사전 학습 데이터를 사용하였다. ELECTRA-400K와 동일한 hyperparameter와 학습 시간으로 BERT-Large 모델도 학습되었다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/electra/images/table2.png"
+width="1070"
+height="282"
+srcset="https://kurtkim.github.io/p/electra/images/table2_hu161f4080330e270ecfcc557d17544d41_86339_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/electra/images/table2_hu161f4080330e270ecfcc557d17544d41_86339_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="379"
+data-flex-basis="910px"
+>&lt;/p>
+&lt;p>ELECTRA-400K는 RoBERTa와 XLNet와 비슷한 성능을 보이지만, 학습에 필요한 계산량은 1/4로 줄어들었다. ELECTRA-1.75M은 더 오랜 시간을 투자하여 학습되었으며 대부분의 GLUE 작업에서 다른 모델들보다 우수한 성능을 보여준다. BERT 모델은 예상보다 성능이 낮게 나왔는데, 이는 hyperparameter 튜닝이나 RoBERTa 학습 데이터 사용에 더 많은 고려가 필요할 것으로 보인다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/electra/images/table3.png"
+width="1074"
+height="224"
+srcset="https://kurtkim.github.io/p/electra/images/table3_hu39a4c02d38d569be2cac67a555957da5_62895_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/electra/images/table3_hu39a4c02d38d569be2cac67a555957da5_62895_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="479"
+data-flex-basis="1150px"
+>&lt;/p>
+&lt;p>ELECTRA의 이점은 GLUE 테스트 세트에서도 확인되었으나, 모델들이 사용한 추가적인 기법들로 인해 완전히 동일한 비교는 어렵다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/electra/images/table4.png"
+width="1074"
+height="440"
+srcset="https://kurtkim.github.io/p/electra/images/table4_hu91a3b8a93592595d02ac0fe7dd7e1bf3_117245_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/electra/images/table4_hu91a3b8a93592595d02ac0fe7dd7e1bf3_117245_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="244"
+data-flex-basis="585px"
+>&lt;/p>
+&lt;p>ELECTRA는 GLUE 결과와 일관성을 보여준다. 같은 계산 자원을 사용하는 경우, ELECTRA가 masked-language-modeling 방법보다 우수한 성과를 보여준다. ELECTRA-400K는 RoBERTa-100K와 BERT 기준 모델보다 더 좋은 성능을 가지며, ELECTRA-1.75M은 SQuAD 2.0에서 이전 모델들보다 높은 점수를 받았다. ELECTRA-Base는 BERT-Base와 XLNet-Base보다 우수한 결과를 보여주며, 대부분의 지표에서 BERT-Large를 뛰어넘는다. ELECTRA는 SQuAD 2.0에서 SQuAD 1.1보다 성능이 좋다. 이는 모델이 실제 토큰과 가짜 토큰을 구별하는 대체된 토큰 감지 기능이 응답 가능성 분류에 특히 적합하기 때문이다.&lt;/p>
+&lt;h3 id="efficiency-analysis">Efficiency Analysis&lt;/h3>
+&lt;p>ELECTRA의 이점이 어디에서 나오는지 이해하기 위해, BERT와 ELECTRA 사이에 다른 사전 학습 목표를 비교하였다.&lt;/p>
+&lt;p>&lt;strong>ELECTRA 15%&lt;/strong> ELECTRA와 동일하지만, 판별자 손실은 입력에서 마스크 처리된 15%의 토큰에 대해서만 계산된다. 다시 말해서, 판별자 손실의 합인 $\mathbf{L}_{Disc}$은 1부터 $n$까지가 아닌 $i \in m$에 대해 계산된다. 이렇게 함으로써 ELECTRA 15% 모델은 일부 토큰에만 집중하여 손실을 계산하게 된다.&lt;/p>
+&lt;p>&lt;strong>Replace MLM&lt;/strong> ELECTRA 모델이 [MASK] 토큰에 노출되는 사전 학습 단계와 노출되지 않는 미세 조정 단계 사이의 불일치를 해결하는 데서 어느 정도 이득을 얻는지를 테스트한다. 마스크 처리된 토큰을 [MASK]로 대체하는 대신 생성 모델의 토큰으로 대체하는 것이 특징이다.&lt;/p>
+&lt;p>&lt;strong>All-Tokens MLM&lt;/strong> 이 모델은 Replace MLM과 비슷한데, 마스크 처리된 토큰을 생성 모델의 샘플로 대체하고, 입력의 모든 토큰의 신원을 예측한다. 복사 확률 $D$를 출력하기 위해 sigmoid layer를 사용하며, 모델 출력은 입력 토큰에 $D$ 가중치와 $1-D$를 곱한 MLM softmax의 출력으로 구성된다. 이 모델은 BERT와 ELECTRA를 조합한 것으로, [MASK] 토큰에 대한 예측과 다른 토큰에 대해서는 입력을 복사하는 방식으로 학습된다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/electra/images/table5.png"
+width="1072"
+height="108"
+srcset="https://kurtkim.github.io/p/electra/images/table5_huacb6fbffa014db7f95518a2b69ff6a39_20164_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/electra/images/table5_huacb6fbffa014db7f95518a2b69ff6a39_20164_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="992"
+data-flex-basis="2382px"
+>&lt;/p>
+&lt;p>ELECTRA는 모든 입력 토큰에 대한 손실을 가지는 것이 성능 향상에 큰 영향을 미치며, BERT는 [MASK] 토큰으로 인한 사전 학습 및 세부 학습 불일치로 인한 약간의 성능 저하가 있다. 또한, BERT는 이 문제를 완전히 해결하기에는 부족한 것으로 나타났고, All-Tokens MLM은 BERT와 ELECTRA 사이의 차이를 크게 줄이는 역할을 한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/electra/images/figure4.png"
+width="1004"
+height="320"
+srcset="https://kurtkim.github.io/p/electra/images/figure4_hub43d0214d334ff5424dee67fec78262a_73758_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/electra/images/figure4_hub43d0214d334ff5424dee67fec78262a_73758_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="313"
+data-flex-basis="753px"
+>&lt;/p>
+&lt;p>ELECTRA는 빠른 학습뿐만 아니라 다른 이점들로 인해 All-Tokens MLM에 비해 개선되었다. 작은 모델일수록 ELECTRA의 이득이 커지며, 완전히 학습된 경우 BERT보다 더 높은 정확도를 보여준다. ELECTRA는 parameter를 더 효율적으로 사용하여 BERT보다 성능을 높일 수 있다. 그러나 ELECTRA의 parameter 효율성을 완전히 이해하기 위해서는 추가적인 분석이 필요하다.&lt;/p>
+&lt;h2 id="related-work">Related Work&lt;/h2>
+&lt;p>&lt;strong>Self-Supervised Pre-training for NLP&lt;/strong> Self-supervised learning은 단어 및 문맥 표현을 학습하는 데 사용된다. BERT는 masked-language modeling 작업을 통해 Transformer를 사전 학습한다. BERT를 확장한 모델들이 있으며, ELECTRA는 BERT와 비교하여 효율적인 사전 학습을 제공한다. 최근에는 BERT를 작은 모델로 축소하는 연구도 진행되고 있다. ELECTRA-Small은 사전 학습 속도에 초점을 맞춰 처음부터 학습되었다.&lt;/p>
+&lt;p>&lt;strong>Generative Adversarial Networks&lt;/strong> GAN은 고품질 가짜 데이터 생성에 효과적이며, 이 논문의 방법과 유사한 방식으로 GAN의 판별자를 후속 작업에 활용할 수 있다. 텍스트 데이터에도 GAN을 적용할 수 있지만, 최신 기법은 standard maximum-likelihood 학습에 비해 아직 성능이 낮다. 생성자는 MaskGAN과 유사하게 삭제된 토큰을 채우는 방식으로 학습된다.&lt;/p>
+&lt;p>&lt;strong>Contrastive Learning&lt;/strong> contrastive learning은 관찰된 데이터와 가짜 음성 샘플을 구분하는 방법이다. 이 방법은 텍스트, 이미지, 비디오 데이터 등 다양한 모달리티에 적용될 수 있다. ELECTRA는 Noise-Contrastive Estimation (NCE)와 관련이 있는데, 이 방법은 실제와 가짜 데이터를 구별하기 위해 이진 분류기를 학습시킨다.&lt;/p>
+&lt;p>Word2Vec은 NLP의 초기 사전 학습 방법 중 하나로 contrastive learning을 사용한ㄴ다. ELECTRA는 CBOW와 Negative Sampling의 대규모 버전으로 볼 수 있다. CBOW는 주변 문맥을 통해 입력 토큰을 예측하고, Negative Sampling은 이진 분류 작업으로 재구성한다. CBOW는 bag-of-vectors 인코더와 단순한 제안 분포를 사용한다.&lt;/p>
+&lt;h2 id="conclusion">Conclusion&lt;/h2>
+&lt;p>대체 토큰 감지라는 새로운 자기 지도 학습 작업을 제안하였다. 이 작업은 텍스트 인코더를 학습시켜 입력 토큰과 고품질 부정 샘플을 구별하게 한다. 계산 효율성이 우수하며 하위 작업에서 더 좋은 성능을 보인다.&lt;/p>
+&lt;h2 id="reference">Reference&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2003.10555.pdf" target="_blank" rel="noopener"
+>Paper&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://github.com/google-research/electra" target="_blank" rel="noopener"
+>Code&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>T5</title><link>https://kurtkim.github.io/p/t5/</link><pubDate>Wed, 10 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/t5/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>전이 학습은 데이터가 풍부한 작업에서 먼저 모델을 사전 훈련시킨 후, 이를 downstream task에 미세 조정하는 방식으로, 자연어 처리(NLP)에서 중요한 기법이다. 이 논문에서는 모든 텍스트 기반 언어 문제를 텍스트-텍스트 형식으로 변환하는 통합 프레임워크를 통해 NLP를 위한 전이 학습 기법을 탐색한다. 이 연구에서는 사전 훈련 목표, 아키텍처, 라벨이 없는 데이터셋, 전이 접근법 등 다양한 요소를 비교 분석하여, 요약, 질문 응답, 텍스트 분류 등 여러 분야에서 state-of-the-art를 달성하였다. 또한, 이러한 연구를 통한 데이터셋, 사전 훈련된 모델, 코드를 공개하여, NLP를 위한 전이 학습 연구를 더욱 촉진시키고자 한다.&lt;/p>
 &lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>자연어 처리(NLP) 머신러닝 모델 훈련은 모델이 텍스트를 &amp;lsquo;이해&amp;rsquo;하고 적절하게 처리하는 능력을 개발하는 것을 목표로 하며, 이는 단어의 철자와 의미부터 고수준의 지식까지 다양한 요소를 포함한다. 최근에는 데이터가 풍부한 작업에서 모델을 사전 학습하는 것이 일반적이며, 이를 통해 모델은 다양한 작업에 활용할 수 있는 일반적인 능력과 지식을 개발하게 된다. 특히 NLP에서는 레이블이 없는 대량의 텍스트 데이터를 이용한 비지도 학습으로 사전 학습이 진행되며, 이 방법은 주요 NLP 벤치마크에서 state-of-the-art를 달성하는 데 사용되었다.&lt;/p>
+&lt;p>자연어 처리(NLP) 머신러닝 모델 훈련은 모델이 텍스트를 이해하고 적절하게 처리하는 능력을 개발하는 것을 목표로 하며, 이는 단어의 철자와 의미부터 고수준의 지식까지 다양한 요소를 포함한다. 최근에는 데이터가 풍부한 작업에서 모델을 사전 학습하는 것이 일반적이며, 이를 통해 모델은 다양한 작업에 활용할 수 있는 일반적인 능력과 지식을 개발하게 된다. 특히 NLP에서는 레이블이 없는 대량의 텍스트 데이터를 이용한 비지도 학습으로 사전 학습이 진행되며, 이 방법은 주요 NLP 벤치마크에서 state-of-the-art를 달성하는 데 사용되었다.&lt;/p>
 &lt;p>자연어 처리(NLP)에서의 전이 학습에 대한 최근 연구는 다양한 사전 학습 목표와 레이블 없는 데이터 세트, 벤치마크 등을 개발했다. 이 분야는 빠르게 발전하고 있지만, 그로 인해 다양한 기법을 비교하거나 이해하는 것이 어려워졌다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/t5/images/figure1.png"
 width="1170"
@@ -12,14 +159,14 @@ class="gallery-image"
 data-flex-grow="274"
 data-flex-basis="659px"
 >&lt;/p>
-&lt;p>모든 텍스트 처리 문제를 &amp;lsquo;Text-to-Text&amp;rsquo;의 일관된 문제로 바라보며, 이를 통해 다양한 NLP 문제에 대한 성능을 평가하고 전이 학습의 한계를 탐색하고자 한다. 이 연구의 목표는 새로운 방법을 제안하는 것이 아니라, 현재 이 분야가 어디에 서 있는지를 종합적으로 이해하는 것이다. 이를 위해 &amp;lsquo;Colossal Clean Crawled Corpus&amp;rsquo;(C4)라는 웹에서 수집한 영어 텍스트 데이터 세트를 사용한다. 또한, 데이터가 부족한 환경에서의 전이 학습의 중요성을 인식하여, 코드, 데이터 세트, 그리고 사전 학습된 모델을 공개한다.&lt;/p>
+&lt;p>모든 텍스트 처리 문제를 &amp;ldquo;Text-to-Text&amp;quot;의 일관된 문제로 바라보며, 이를 통해 다양한 NLP 문제에 대한 성능을 평가하고 전이 학습의 한계를 탐색하고자 한다. 이 연구의 목표는 새로운 방법을 제안하는 것이 아니라, 현재 이 분야가 어디에 서 있는지를 종합적으로 이해하는 것이다. 이를 위해 &amp;ldquo;Colossal Clean Crawled Corpus(C4)&amp;ldquo;라는 웹에서 수집한 영어 텍스트 데이터 세트를 사용한다. 또한, 데이터가 부족한 환경에서의 전이 학습의 중요성을 인식하여, 코드, 데이터 세트, 그리고 사전 학습된 모델을 공개한다.&lt;/p>
 &lt;h2 id="setup">Setup&lt;/h2>
-&lt;p>모든 문제를 &amp;lsquo;Text-to-Text&amp;rsquo; 변환하는 접근법과 레이블 없는 텍스트 데이터를 구성한 &amp;lsquo;Colossal Clean Crawled Corpus&amp;rsquo;(C4)를 제안한다. 모델과 프레임워크의 이름은 &amp;lsquo;Text-to-Text Transfer Transformer&amp;rsquo;(T5)이다.&lt;/p>
+&lt;p>모든 문제를 &amp;ldquo;Text-to-Text&amp;rdquo; 변환하는 접근법과 레이블 없는 텍스트 데이터를 구성한 &amp;ldquo;Colossal Clean Crawled Corpus(C4)&amp;ldquo;를 제안한다. 모델과 프레임워크의 이름은 &amp;ldquo;Text-to-Text Transfer Transformer(T5)&amp;ldquo;이다.&lt;/p>
 &lt;h3 id="model">Model&lt;/h3>
-&lt;p>NLP의 초기 전이 학습은 RNN을 이용했지만, 최근에는 &amp;lsquo;Transformer&amp;rsquo; 아키텍처 기반의 모델이 일반적이다. Transformer는 처음에는 기계 번역에 효과적이었지만, 이후 다양한 NLP 환경에서 널리 사용되었다. 그래서 논문에서 연구되는 모든 모델은 Transformer 아키텍처를 기반으로 하며, 이 아키텍처에서 크게 벗어나지는 않았다.&lt;/p>
+&lt;p>NLP의 초기 전이 학습은 RNN을 이용했지만, 최근에는 Transformer 아키텍처 기반의 모델이 일반적이다. Transformer는 처음에는 기계 번역에 효과적이었지만, 이후 다양한 NLP 환경에서 널리 사용되었다. 그래서 논문에서 연구되는 모든 모델은 Transformer 아키텍처를 기반으로 하며, 이 아키텍처에서 크게 벗어나지는 않았다.&lt;/p>
 &lt;p>Transformer의 핵심 구성 요소는 self-attention으로, 시퀀스의 각 요소를 시퀀스의 나머지 부분의 가중 평균으로 대체한다. 원래 Transformer는 encoder-decoder 아키텍처로 설계되었지만, 최근에는 언어 모델링이나 분류, 범위 예측 작업에 적합한 아키텍처를 생성하는 다양한 형태의 self-attention을 사용한 single Transformer layer stack 모델이 일반적이다.&lt;/p>
-&lt;p>T5의 encoder-decoder Transformer는 입력 토큰을 임베딩으로 매핑하고 이를 인코더에 전달한다. 인코더는 &amp;lsquo;self-attention layer&amp;rsquo;과 &amp;lsquo;feed-forward network&amp;rsquo;를 포함하며, 각 입력에 layer normalization와 residual skip connection을 적용한다. dropout은 네트워크 전체에 적용된다. 디코더는 인코더와 비슷하지만, 인코더 출력에 self-attention mechanism이 추가되고, autoregressive 또는 causal self-attention을 사용한다. 디코더 출력은 dense layer로 전달되고, 모든 attention mechanism은 독립적인 &amp;lsquo;head&amp;rsquo;로 나누어져 있다.&lt;/p>
-&lt;p>Transformer 모델은 순서에 상관 없는 self-attention 특성 때문에 position signal을 제공한다. 초기에는 sinusoidal position signal이나 learned position embeddings을 사용했지만, 최근에는 relative position embeddings이 주로 사용되고 있다. 이는 &amp;lsquo;key&amp;rsquo;와 &amp;lsquo;query&amp;rsquo;의 오프셋에 따라 다른 임베딩을 생성한다. 우리는 position embedding을 간소화하여 attention weight 계산에 사용되는 스칼라로 만들었다. 모든 layer가 position embedding parameter를 공유하며, 각 layer의 attention head는 다른 position embedding을 사용한다. 이 모델은 원래의 Transformer와 비슷하지만, layer normalization 위치와 position embedding 체계가 다르다.&lt;/p>
+&lt;p>T5의 encoder-decoder Transformer는 입력 토큰을 임베딩으로 매핑하고 이를 인코더에 전달한다. 인코더는 &amp;ldquo;self-attention layer&amp;quot;과 &amp;ldquo;feed-forward network&amp;quot;를 포함하며, 각 입력에 layer normalization와 residual skip connection을 적용한다. dropout은 네트워크 전체에 적용된다. 디코더는 인코더와 비슷하지만, 인코더 출력에 self-attention mechanism이 추가되고, autoregressive 또는 causal self-attention을 사용한다. 디코더 출력은 dense layer로 전달되고, 모든 attention mechanism은 독립적인 &amp;ldquo;head&amp;quot;로 나누어져 있다.&lt;/p>
+&lt;p>Transformer 모델은 순서에 상관 없는 self-attention 특성 때문에 position signal을 제공한다. 초기에는 sinusoidal position signal이나 learned position embeddings을 사용했지만, 최근에는 relative position embeddings이 주로 사용되고 있다. 이는 &amp;ldquo;key&amp;quot;와 &amp;ldquo;query&amp;quot;의 오프셋에 따라 다른 임베딩을 생성한다. 우리는 position embedding을 간소화하여 attention weight 계산에 사용되는 스칼라로 만들었다. 모든 layer가 position embedding parameter를 공유하며, 각 layer의 attention head는 다른 position embedding을 사용한다. 이 모델은 원래의 Transformer와 비슷하지만, layer normalization 위치와 position embedding 체계가 다르다.&lt;/p>
 &lt;p>모델의 확장성을 실험하기 위해 parameter와 layer를 늘리고, 그 성능 변화를 관찰했다. 복잡한 큰 모델 학습을 위해 모델과 데이터 병렬성을 사용하고, 5개의 TPU 파드를 활용한 Cloud TPU Pods에서 모델을 학습시켰다.&lt;/p>
 &lt;h3 id="the-colossal-clean-crawled-corpus">The Colossal Clean Crawled Corpus&lt;/h3>
 &lt;p>레이블이 없는 데이터의 품질, 특성, 크기가 어떤 영향을 미치는지 분석한다. 이를 위해 웹에서 스크랩된 텍스트를 제공하는 Common Crawl을 사용한다. Common Crawl은 이전에 언어 모델 훈련, 상식적 추론, 기계 번역 텍스트 채굴, 사전 훈련 데이터 세트, 최적화기 테스트 등 다양한 NLP 연구에 활용된 바 있다.&lt;/p>
@@ -35,8 +182,8 @@ data-flex-basis="659px"
 &lt;li>많은 페이지에는 보일러플레이트 정책 공지가 있다. &amp;ldquo;terms of use&amp;rdquo;, &amp;ldquo;privacy policy&amp;rdquo;, &amp;ldquo;cookie policy&amp;rdquo;, &amp;ldquo;uses cookies&amp;rdquo;, &amp;ldquo;use of cookies&amp;rdquo;, &amp;ldquo;use cookies&amp;quot;라는 문자열을 포함한 줄은 모두 삭제한다.&lt;/li>
 &lt;li>데이터셋 중복을 제거하기 위해, 데이터셋에서 두 번 이상 나타난 3문장 스팬은 하나만 남기고 모두 삭제한다.&lt;/li>
 &lt;/ul>
-&lt;p>대부분의 작업이 영어 텍스트에 초점을 두고 있기 때문에, 0.99의 확률로 영어로 분류되지 않은 페이지를 제거하기 위해 &amp;rsquo;langdetect&amp;rsquo;를 사용하였다. 하지만, 이전 데이터 세트의 필터링 방법, 공개 여부, 범위 등이 제한적이라고 판단하여 새로운 데이터 세트를 만들기로 결정하였습니다.&lt;/p>
-&lt;p>2019년 4월의 웹 텍스트를 다운로드하고 필터링하여 기본 데이터 세트를 구축하였다. 이 결과, 대부분의 사전 학습 데이터 세트보다 훨씬 크고(750GB), 깨끗하며 자연스러운 영어 텍스트 컬렉션을 만들었다. 이를 &amp;lsquo;Colossal Clean Crawled Corpus&amp;rsquo;(C4)라고 부르며, TensorFlow 데이터 세트의 일부로 공개하였다.&lt;/p>
+&lt;p>대부분의 작업이 영어 텍스트에 초점을 두고 있기 때문에, 0.99의 확률로 영어로 분류되지 않은 페이지를 제거하기 위해 &amp;ldquo;langdetect&amp;quot;를 사용하였다. 하지만, 이전 데이터 세트의 필터링 방법, 공개 여부, 범위 등이 제한적이라고 판단하여 새로운 데이터 세트를 만들기로 결정하였습니다.&lt;/p>
+&lt;p>2019년 4월의 웹 텍스트를 다운로드하고 필터링하여 기본 데이터 세트를 구축하였다. 이 결과, 대부분의 사전 학습 데이터 세트보다 훨씬 크고(750GB), 깨끗하며 자연스러운 영어 텍스트 컬렉션을 만들었다. 이를 &amp;ldquo;Colossal Clean Crawled Corpus(C4)&amp;ldquo;라고 부르며, TensorFlow 데이터 세트의 일부로 공개하였다.&lt;/p>
 &lt;h3 id="downstream-tasks">Downstream Tasks&lt;/h3>
 &lt;p>이 논문의 목표는 일반적인 언어 학습 능력을 측정하는 것이다. 이를 위해, 다양한 벤치마크를 통해 기계 번역, 질문 응답, 추상적 요약, 텍스트 분류 등의 성능을 연구하였다. 이에는 GLUE와 SuperGLUE 텍스트 분류, CNN/Daily Mail 요약, SQuAD 질문 응답, 그리고 WMT 영어에서 독일어, 프랑스어, 루마니아어로의 번역이 포함되었다. 모든 데이터는 TensorFlow 데이터 세트에서 수집하였다.&lt;/p>
 &lt;p>GLUE와 SuperGLUE는 각각 일반적인 언어 이해 능력을 테스트하기 위해 설계된 텍스트 분류 작업들의 모음이다:&lt;/p>
@@ -53,14 +200,14 @@ data-flex-basis="659px"
 &lt;p>GLUE와 SuperGLUE 벤치마크의 데이터 세트를 사용하며, 모든 작업들을 하나의 작업으로 취급하여 데이터 세트를 결합하기 위해 미세 조정을 진행하였다. 또한, SuperGLUE 작업에는 Definite Pronoun Resolution (DPR) 데이터 세트도 포함시켰다.&lt;/p>
 &lt;p>CNN/Daily Mail 데이터 세트는 텍스트 요약 작업으로 적용되었고, SQuAD는 일반적인 질문 응답 벤치마크이다. WMT 영어-독일어, 영어-프랑스어, 영어-루마니아어 번역에는 각각 표준 훈련 데이터와 검증 세트를 사용한다. 모든 사전 학습은 영어 데이터로만 진행되며, 모델이 새로운 언어의 텍스트를 생성하도록 배우기 위해 번역 학습이 필요하다.&lt;/p>
 &lt;h3 id="input-and-output-format">Input and Output Format&lt;/h3>
-&lt;p>모든 작업을 &amp;rsquo;text-to-text&amp;rsquo; 형식으로 표현하여 단일 모델을 훈련시킨다. 이 방식은 사전 학습과 미세 조정에 대해 일관된 훈련 목표를 제공한다. 모델은 작업에 관계없이 maximum likelihood 목표로 훈련되며, 수행해야 할 작업을 지정하기 위해 원래 입력 시퀀스 앞에 작업 특정 텍스트 접두어(prefix)를 추가한다.&lt;/p>
-&lt;p>Text-to-text 프레임워크는 다양한 NLP 작업을 통일된 형식으로 변환한다. McCann et al이 제안한 &amp;lsquo;Natural Language Decathlon&amp;rsquo;과 비슷하지만, 이 논문에서는 각 작업을 개별적으로 미세조정하고 짧은 작업 접두어를 사용한다. 또한 전이 학습에 초점을 맞추며, 기계 번역과 추상적 요약 등의 생성적 작업을 처리할 수 있는 프레임워크를 제안한다.&lt;/p>
+&lt;p>모든 작업을 &amp;ldquo;text-to-text&amp;rdquo; 형식으로 표현하여 단일 모델을 훈련시킨다. 이 방식은 사전 학습과 미세 조정에 대해 일관된 훈련 목표를 제공한다. 모델은 작업에 관계없이 maximum likelihood 목표로 훈련되며, 수행해야 할 작업을 지정하기 위해 원래 입력 시퀀스 앞에 작업 특정 텍스트 접두어(prefix)를 추가한다.&lt;/p>
+&lt;p>Text-to-text 프레임워크는 다양한 NLP 작업을 통일된 형식으로 변환한다. McCann et al이 제안한 &amp;ldquo;Natural Language Decathlon&amp;quot;과 비슷하지만, 이 논문에서는 각 작업을 개별적으로 미세조정하고 짧은 작업 접두어를 사용한다. 또한 전이 학습에 초점을 맞추며, 기계 번역과 추상적 요약 등의 생성적 작업을 처리할 수 있는 프레임워크를 제안한다.&lt;/p>
 &lt;p>대부분의 작업을 text-to-text 형식으로 쉽게 변환했으며, 유사성 점수를 예측하는 STS-B는 점수를 반올림하고 숫자 문자열로 변환하여 처리하였다. 이를 통해 STS-B 회귀 문제를 21 클래스 분류 문제로 재구성하였다.&lt;/p>
 &lt;p>또한, Winograd 작업과 WSC 작업에서는 모호한 대명사를 강조하고, 모델이 대명사가 가리키는 명사를 예측하도록 훈련시켰다. DPR 데이터 세트는 대략 1,000개의 대명사 해결 예제를 추가하여 사용하였다.&lt;/p>
 &lt;p>WNLI의 훈련 및 검증 세트는 WSC와 많이 중복되므로, 훈련 데이터로의 유출을 방지하기 위해 WNLI에서 훈련하지 않았으며, 평균 GLUE 점수에도 포함시키지 않았다.&lt;/p>
 &lt;h2 id="experiments">Experiments&lt;/h2>
 &lt;p>한 번에 하나씩 설정을 변경하면서 체계적으로 기여도를 연구하였다. 예를 들어, 나머지 실험 파이프라인을 고정하고 다양한 비지도 목표의 성능을 측정했다. 이 방법은 이차 효과를 놓칠 수 있지만, 모든 요인의 조합을 탐색하는 것은 비용이 많이 든다. 미래의 연구에서는 다양한 접근법의 조합을 더 철저하게 고려하는 것이 유익할 것으로 예상된다.&lt;/p>
-&lt;p>이 논문의 목표는 다양한 작업에 대해 다양한 접근법을 비교하는 것으로, 가능한 한 많은 요소를 고정하려고 한다. 이를 위해, 기존의 접근법을 정확하게 따르지는 않았다. 예를 들어, BERT와 같은 &amp;lsquo;인코더만 있는&amp;rsquo; 모델은 생성 작업에는 적합하지 않다. 따라서 우리가 고려하는 모델 중 어느 것도 BERT와 정확히 같지 않다. 대신, BERT의 목표와 유사한 목표를 고려하고, BERT와 유사하게 작동하는 모델 아키텍처를 고려하였다.&lt;/p>
+&lt;p>이 논문의 목표는 다양한 작업에 대해 다양한 접근법을 비교하는 것으로, 가능한 한 많은 요소를 고정하려고 한다. 이를 위해, 기존의 접근법을 정확하게 따르지는 않았다. 예를 들어, BERT와 같은 encoder-only 모델은 생성 작업에는 적합하지 않다. 따라서 우리가 고려하는 모델 중 어느 것도 BERT와 정확히 같지 않다. 대신, BERT의 목표와 유사한 목표를 고려하고, BERT와 유사하게 작동하는 모델 아키텍처를 고려하였다.&lt;/p>
 &lt;h3 id="baseline">Baseline&lt;/h3>
 &lt;p>간단한 denoising 목표를 사용하여 표준 Transformer를 사전 학습하고, 각 downstream task에서 별도로 미세 조정을 진행한다.&lt;/p>
 &lt;h4 id="model-1">Model&lt;/h4>
@@ -83,7 +230,7 @@ class="gallery-image"
 data-flex-grow="281"
 data-flex-basis="676px"
 >&lt;/p>
-&lt;p>레이블이 없는 데이터를 활용하여 모델을 사전 학습하는데는, 레이블이 필요하지 않지만 일반화 가능한 지식을 모델에게 가르치는 목표가 필요하다. 최근 &amp;lsquo;denoising&amp;rsquo; 또는 &amp;lsquo;masked language modeling&amp;rsquo;이라는 목표가 효과적이라는 것이 밝혀졌다. 이는 모델이 입력에서 누락되거나 손상된 토큰을 예측하도록 하는 방식이다. 이에 영감을 받아, 입력 시퀀스에서 무작위로 선택한 15%의 토큰을 드롭아웃하는 목표를 설정하였다. 이 목표는 사전 훈련의 계산 비용을 줄이는 데 도움이 된다.&lt;/p>
+&lt;p>레이블이 없는 데이터를 활용하여 모델을 사전 학습하는데는, 레이블이 필요하지 않지만 일반화 가능한 지식을 모델에게 가르치는 목표가 필요하다. 최근 &amp;ldquo;denoising&amp;rdquo; 또는 &amp;ldquo;masked language modeling&amp;quot;이라는 목표가 효과적이라는 것이 밝혀졌다. 이는 모델이 입력에서 누락되거나 손상된 토큰을 예측하도록 하는 방식이다. 이에 영감을 받아, 입력 시퀀스에서 무작위로 선택한 15%의 토큰을 드롭아웃하는 목표를 설정하였다. 이 목표는 사전 훈련의 계산 비용을 줄이는 데 도움이 된다.&lt;/p>
 &lt;h4 id="baseline-performance">Baseline Performance&lt;/h4>
 &lt;p>이상적으로는 모든 실험을 여러 번 반복해야 하지만, 실험의 수가 많으면 비용이 높다. 대신, 기본 모델을 10번 새로 학습하고, 이 실행들의 분산이 각 실험 변형에 적용될 것으로 가정한다. 또한, 사전 학습 없이 모델을 218 step 동안 학습한 후 성능을 측정하여, 사전 학습이 얼마나 도움이 되는지 파악한다.&lt;/p>
 &lt;p>GLUE와 SuperGLUE는 모든 하위 작업의 평균 점수를, 번역 작업은 SacreBLEU에서 제공하는 BLEU 점수를 확인한다. WMT 영어에서 독일어, 프랑스어, 루마니아어로의 점수를 각각 EnDe, EnFr, EnRo라 표기한다. CNN/Daily Mail과 SQuAD는 상관성이 높은 지표만 확인한다.&lt;/p>
@@ -110,7 +257,7 @@ class="gallery-image"
 data-flex-grow="249"
 data-flex-basis="599px"
 >&lt;/p>
-&lt;p>아키텍처를 구분하는 주요 요소는 모델에서 사용하는 &amp;lsquo;mask&amp;rsquo;이다. Transformer의 self-attention 연산은 시퀀스를 입력받아 동일한 길이의 새로운 시퀀스를 출력한다. 각 출력 항목은 입력 항목의 weighted average를 계산해 생성된다. attention mask는 특정 가중치를 0으로 만들어 특정 출력 시간에서 입력 항목에 attention을 기울일 수 있는 범위를 제한한다. 예를 들어, causal mask는 $j &amp;gt; i$인 경우 가중치를 0으로 만든다.&lt;/p>
+&lt;p>아키텍처를 구분하는 주요 요소는 모델에서 사용하는 &amp;ldquo;mask&amp;quot;이다. Transformer의 self-attention 연산은 시퀀스를 입력받아 동일한 길이의 새로운 시퀀스를 출력한다. 각 출력 항목은 입력 항목의 weighted average를 계산해 생성된다. attention mask는 특정 가중치를 0으로 만들어 특정 출력 시간에서 입력 항목에 attention을 기울일 수 있는 범위를 제한한다. 예를 들어, causal mask는 $j &amp;gt; i$인 경우 가중치를 0으로 만든다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/t5/images/figure4.png"
 width="1016"
 height="420"
@@ -121,7 +268,7 @@ data-flex-grow="241"
 data-flex-basis="580px"
 >&lt;/p>
 &lt;p>첫 번째로 고려하는 모델은 encoder-decoder Transformer로, 입력 시퀀스를 받는 encoder와 새로운 출력 시퀀스를 만드는 decoder 두 계층으로 구성되어 있다.&lt;/p>
-&lt;p>encoder는 &amp;lsquo;fully-visible&amp;rsquo; attention mask를 사용한다. 이 마스킹은 출력의 각 항목을 만들 때 입력의 모든 항목에 attention을 기울일 수 있게 해준다. 이 마스킹은 &amp;lsquo;prefix&amp;rsquo; 즉, 예측을 만들 때 사용되는 일부 컨텍스트에 주의를 기울일 때 적합하다. BERT도 이와 같은 마스킹 패턴을 사용하며, 특별한 &amp;lsquo;classification&amp;rsquo; 토큰을 입력에 추가한다. 이 토큰에 해당하는 BERT의 출력은 입력 시퀀스를 분류하는 예측을 하는데 사용된다.&lt;/p>
+&lt;p>encoder는 &amp;ldquo;fully-visible&amp;rdquo; attention mask를 사용한다. 이 마스킹은 출력의 각 항목을 만들 때 입력의 모든 항목에 attention을 기울일 수 있게 해준다. 이 마스킹은 &amp;ldquo;prefix&amp;rdquo; 즉, 예측을 만들 때 사용되는 일부 컨텍스트에 주의를 기울일 때 적합하다. BERT도 이와 같은 마스킹 패턴을 사용하며, 특별한 &amp;ldquo;classification&amp;rdquo; 토큰을 입력에 추가한다. 이 토큰에 해당하는 BERT의 출력은 입력 시퀀스를 분류하는 예측을 하는데 사용된다.&lt;/p>
 &lt;p>Transformer의 decoder에서 self-attention 연산은 &amp;ldquo;causal&amp;rdquo; 마스킹 패턴을 사용한다. 출력 시퀀스의 $i$번째 항목을 생성할 때, 인과적 마스킹은 모델이 입력 시퀀스의 $j$번째 항목$(j &amp;gt; i)$에 attention을 기울이는 것을 방지한다. 이는 모델이 출력을 생성하는 동안 &amp;ldquo;미래를 보는&amp;rdquo; 것을 방지하기 위해 훈련 중에 사용된다.&lt;/p>
 &lt;p>언어 모델은 text-to-text 작업에서 입력과 목표를 연결함으로써 사용될 수 있지만, causal 마스킹 때문에 입력 시퀀스의 특정 항목이 그 이전 항목에만 의존하는 문제가 있다. 이 문제는 Transformer 기반 언어 모델에서 마스킹 패턴을 변경함으로써 해결할 수 있으며, 시퀀스의 접두사 부분에서 완전히 보이는 마스킹을 사용하면 이 문제를 피하면서도 다양한 text-to-text 작업에 효과적일 수 있다. 이 방식은 encoder와 decoder 간에 파라미터를 공유하는 encoder-decoder 모델과 유사하며, 입력과 목표 시퀀스에 걸쳐 전체 attention을 적용한다.&lt;/p>
 &lt;p>prefix LM은 BERT와 비슷하게 작동하지만, 분류 작업을 수행하기 위해 Transformer decoder의 출력 레이어에 분류기를 통합한다. 이 모델은 전체 입력을 보고 예측을 출력함으로써 분류 작업을 수행한다.&lt;/p>
@@ -161,7 +308,7 @@ data-flex-basis="1270px"
 >&lt;/p>
 &lt;p>라벨이 없는 텍스트 데이터 세트에서 토큰화된 텍스트 범위에 해당하는 토큰 ID의 시퀀스를 처리한다. 토큰 시퀀스는 입력 시퀀스와 목표를 생성하고, 모델은 이를 사용해 maximum likelihood로 목표 시퀀스를 예측하도록 학습한다.&lt;/p>
 &lt;h4 id="disparate-high-level-approaches">Disparate High-Level Approaches&lt;/h4>
-&lt;p>세 가지 다른 접근법을 사용한 기법들을 비교한다. 첫 번째로, &amp;lsquo;prefix language modeling&amp;rsquo; 목표를 사용하며, 이는 텍스트를 두 부분으로 나눠 encoder 입력과 decoder 예측 대상으로 사용한다. 두 번째로, BERT의 &amp;lsquo;masked language modeling&amp;rsquo;에서 영감을 받은 목표를 사용하며, 이는 텍스트의 토큰 15%를 손상시키고, 이 중 90%는 마스크 토큰, 10%는 랜덤 토큰으로 대체한다. 세 번째로, &amp;lsquo;deshuffling&amp;rsquo; 목표를 사용하며, 이는 토큰의 순서를 섞은 후 원래 순서를 복원하는 것을 목표로 한다.&lt;/p>
+&lt;p>세 가지 다른 접근법을 사용한 기법들을 비교한다. 첫 번째로, &amp;ldquo;prefix language modeling&amp;rdquo; 목표를 사용하며, 이는 텍스트를 두 부분으로 나눠 encoder 입력과 decoder 예측 대상으로 사용한다. 두 번째로, BERT의 &amp;ldquo;masked language modeling&amp;quot;에서 영감을 받은 목표를 사용하며, 이는 텍스트의 토큰 15%를 손상시키고, 이 중 90%는 마스크 토큰, 10%는 랜덤 토큰으로 대체한다. 세 번째로, &amp;ldquo;deshuffling&amp;rdquo; 목표를 사용하며, 이는 토큰의 순서를 섞은 후 원래 순서를 복원하는 것을 목표로 한다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/t5/images/table4.png"
 width="1148"
 height="170"
@@ -197,7 +344,7 @@ data-flex-basis="1120px"
 >&lt;/p>
 &lt;p>지금까지 BERT에서 사용된 15%의 토큰 손상률을 사용하였다. 그러나 text-to-text 프레임워크가 BERT와 다르므로 다른 손상률이 더 효과적인지 테스트해 보았다. 10%, 15%, 25%, 50%의 손상률을 비교했지만, 손상률이 모델 성능에 큰 영향을 미치지는 않았다. 단, 50%의 가장 높은 손상률은 GLUE와 SQuAD에서 성능 저하를 가져왔다. 또한, 높은 손상률은 학습 속도를 느리게 만드는 긴 대상을 만드는 경향이 있다. 따라서 BERT의 기준에 따라 앞으로 15%의 손상률을 사용할 것이다.&lt;/p>
 &lt;h4 id="corrupting-spans">Corrupting Spans&lt;/h4>
-&lt;p>예측 대상을 짧게 하여 학습 속도를 높이려고 한다. 지금까지의 방법은 각 입력 토큰을 독립적으로 손상시킬지 결정하였고, 연속된 토큰이 손상될 경우 이를 &amp;lsquo;span&amp;rsquo;으로 취급하여 단일 마스크 토큰으로 대체하였다. 이 방식은 레이블이 없는 텍스트 데이터를 짧은 시퀀스로 변환하지만, 항상 많은 수의 손상된 토큰이 연속적으로 나타나지는 않는다. 따라서 토큰의 span을 특정하여 손상시키는 방식을 사용하면 더 큰 속도 향상을 얻을 수 있습니다. 이러한 방법은 BERT의 사전 학습 목표로도 사용되어 성능 향상을 가져왔다.&lt;/p>
+&lt;p>예측 대상을 짧게 하여 학습 속도를 높이려고 한다. 지금까지의 방법은 각 입력 토큰을 독립적으로 손상시킬지 결정하였고, 연속된 토큰이 손상될 경우 이를 &amp;ldquo;span&amp;quot;으로 취급하여 단일 마스크 토큰으로 대체하였다. 이 방식은 레이블이 없는 텍스트 데이터를 짧은 시퀀스로 변환하지만, 항상 많은 수의 손상된 토큰이 연속적으로 나타나지는 않는다. 따라서 토큰의 span을 특정하여 손상시키는 방식을 사용하면 더 큰 속도 향상을 얻을 수 있습니다. 이러한 방법은 BERT의 사전 학습 목표로도 사용되어 성능 향상을 가져왔다.&lt;/p>
 &lt;p>토큰의 연속적인 span을 손상시키는 목표를 테스트하기 위해, 손상시킬 토큰의 비율과 손상된 span의 총 수를 parameter로 사용한다. 예를 들어, 500개의 토큰 시퀀스에서 15%의 토큰을 손상시키고 총 span이 25개가 되도록 지정하면, 손상된 토큰의 총 수는 75개이고 평균 span 길이는 3이 된다. 이 방식은 원래의 시퀀스 길이와 손상률에 따라 span의 길이나 총 span 수를 조절할 수 있다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/t5/images/table7.png"
 width="978"
@@ -1227,13 +1374,13 @@ data-flex-basis="288px"
 &lt;li>&lt;a class="link" href="https://github.com/google-research/bert" target="_blank" rel="noopener"
 >Code&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>GPT-1</title><link>https://kurtkim.github.io/p/gpt-1/</link><pubDate>Thu, 28 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/gpt-1/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>자연어 이해는 텍스트의 함축, 질문에 대한 답변, 의미의 유사성 평가, 문서 분류 등 다양한 작업으로 구성되어 있다. 레이블이 지정된 데이터가 부족한 상황에서, 이 논문은 레이블이 없는 텍스트 데이터에 대해 언어 모델을 &lt;code>(생성적) 사전학습(generative pre-training)&lt;/code>하고, 이를 특정 작업에 &lt;code>미세조정(fine-tuning)&lt;/code>하는 방식을 제안한다. 이 방법은 모델 아키텍처에 최소한의 변경만을 요구하면서도 효과적인 전이를 달성하였고, 다양한 자연어 이해 벤치마크에서 우수한 성능을 보여주었다. 이 모델은 각 작업에 특별히 설계된 모델을 능가하며, 12개의 작업 중 9개에서 최고 성능을 달성하였다.&lt;/p>
+&lt;p>자연어 이해는 텍스트의 함축, 질문에 대한 답변, 의미의 유사성 평가, 문서 분류 등 다양한 작업으로 구성되어 있다. 레이블이 지정된 데이터가 부족한 상황에서, 이 논문은 레이블이 없는 텍스트 데이터에 대해 언어 모델을 (생성적) 사전학습(generative pre-training)하고, 이를 특정 작업에 미세조정(fine-tuning)하는 방식을 제안한다. 이 방법은 모델 아키텍처에 최소한의 변경만을 요구하면서도 효과적인 전이를 달성하였고, 다양한 자연어 이해 벤치마크에서 우수한 성능을 보여주었다. 이 모델은 각 작업에 특별히 설계된 모델을 능가하며, 12개의 작업 중 9개에서 최고 성능을 달성하였다.&lt;/p>
 &lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>자연어 처리(NLP)에서 지도 학습의 의존성을 줄이는 것은 중요한데, 이는 대부분의 딥러닝 방법이 수동 레이블링된 대량의 데이터가 필요하기 때문이다. 이런 상황에서 레이블이 없는 데이터에서 언어 정보를 추출할 수 있는 모델은 유용한 대안이 될 수 있으며, 비지도 학습을 통해 학습하는 것이 더 나은 결과를 얻는 경우도 있다. 이를 입증하는 가장 강력한 예는 사전 학습된 단어 임베딩이며, 이는 다양한 NLP 작업에서 성능 향상을 위해 널리 사용되고 있다.&lt;/p>
 &lt;p>레이블이 없는 텍스트에서 단어 수준을 넘어서는 정보를 활용하는 것은 어려운 도전 과제이며, 이유는 다음과 같다. 첫째, 텍스트 표현을 학습하고 다른 곳에 유용하게 전이하는 최적화 목표가 무엇인지 확실하지 않다. 둘째, 학습된 표현을 어떤 작업에 가장 효과적으로 적용할 방법이 아직 확립되지 않았다. 이런 불확실성이 효과적인 준지도 학습 방법을 개발하는 것을 어렵게 한다.&lt;/p>
-&lt;p>이 연구는 언어 이해 작업에 &lt;code>비지도 사전 학습(unsupervised pre-training)&lt;/code>과 &lt;code>지도 미세 조정(supervised fine-tuning)&lt;/code>을 결합하는 준지도 학습을 제안한다. 목표는 적은 조정으로 다양한 작업에 적용 가능한 표현을 학습하는 것이다. 레이블이 없는 대량의 텍스트와 수동으로 레이블링된 훈련 예제를 사용하며, 학습은 두 단계로 진행된다. 먼저, 레이블이 없는 데이터로 모델의 초기 파라미터를 학습하고, 그 다음으로 지도 학습을 통해 이 파라미터를 목표 작업에 맞게 조정한다.&lt;/p>
-&lt;p>이 연구에서는 다양한 작업에서 뛰어난 성능을 보인 &lt;code>Transformer&lt;/code>모델을 사용한다. 이 모델은 텍스트의 장기적인 의존성을 처리하는 더 구조화된 메모리를 제공하므로 강한 전이 성능을 보여준다. 전이 단계에서는 작업 특정 입력 조정을 사용하여 텍스트 입력을 연속 토큰 시퀀스로 처리하며, 이 방식은 사전 학습된 모델의 구조를 최소한으로 변경하면서 효과적으로 미세 조정할 수 있음을 실험적으로 입증한다.&lt;/p>
+&lt;p>이 연구는 언어 이해 작업에 비지도 사전 학습(unsupervised pre-training)과 지도 미세 조정(supervised fine-tuning)을 결합하는 준지도 학습을 제안한다. 목표는 적은 조정으로 다양한 작업에 적용 가능한 표현을 학습하는 것이다. 레이블이 없는 대량의 텍스트와 수동으로 레이블링된 훈련 예제를 사용하며, 학습은 두 단계로 진행된다. 먼저, 레이블이 없는 데이터로 모델의 초기 파라미터를 학습하고, 그 다음으로 지도 학습을 통해 이 파라미터를 목표 작업에 맞게 조정한다.&lt;/p>
+&lt;p>이 연구에서는 다양한 작업에서 뛰어난 성능을 보인 Transformer모델을 사용한다. 이 모델은 텍스트의 장기적인 의존성을 처리하는 더 구조화된 메모리를 제공하므로 강한 전이 성능을 보여준다. 전이 단계에서는 작업 특정 입력 조정을 사용하여 텍스트 입력을 연속 토큰 시퀀스로 처리하며, 이 방식은 사전 학습된 모델의 구조를 최소한으로 변경하면서 효과적으로 미세 조정할 수 있음을 실험적으로 입증한다.&lt;/p>
 &lt;p>이 연구는 자연어 추론, 질문 응답, 의미 유사성, 텍스트 분류 등 네 가지 언어 이해 작업에서 모델을 평가하였다. 제시된 모델은 각 작업에 특화된 모델들보다 더 우수한 성능을 보여주었고, 12개 작업 중 9개에서 최고 성능을 보여주었다.&lt;/p>
 &lt;hr>
 &lt;h2 id="related-work">Related Work&lt;/h2>
