@@ -18,27 +18,27 @@ tags = [
 
 ## Introduction
 
-자연어 처리(NLP) 머신러닝 모델 훈련은 모델이 텍스트를 '이해'하고 적절하게 처리하는 능력을 개발하는 것을 목표로 하며, 이는 단어의 철자와 의미부터 고수준의 지식까지 다양한 요소를 포함한다. 최근에는 데이터가 풍부한 작업에서 모델을 사전 학습하는 것이 일반적이며, 이를 통해 모델은 다양한 작업에 활용할 수 있는 일반적인 능력과 지식을 개발하게 된다. 특히 NLP에서는 레이블이 없는 대량의 텍스트 데이터를 이용한 비지도 학습으로 사전 학습이 진행되며, 이 방법은 주요 NLP 벤치마크에서 state-of-the-art를 달성하는 데 사용되었다.
+자연어 처리(NLP) 머신러닝 모델 훈련은 모델이 텍스트를 이해하고 적절하게 처리하는 능력을 개발하는 것을 목표로 하며, 이는 단어의 철자와 의미부터 고수준의 지식까지 다양한 요소를 포함한다. 최근에는 데이터가 풍부한 작업에서 모델을 사전 학습하는 것이 일반적이며, 이를 통해 모델은 다양한 작업에 활용할 수 있는 일반적인 능력과 지식을 개발하게 된다. 특히 NLP에서는 레이블이 없는 대량의 텍스트 데이터를 이용한 비지도 학습으로 사전 학습이 진행되며, 이 방법은 주요 NLP 벤치마크에서 state-of-the-art를 달성하는 데 사용되었다.
 
 자연어 처리(NLP)에서의 전이 학습에 대한 최근 연구는 다양한 사전 학습 목표와 레이블 없는 데이터 세트, 벤치마크 등을 개발했다. 이 분야는 빠르게 발전하고 있지만, 그로 인해 다양한 기법을 비교하거나 이해하는 것이 어려워졌다. 
 
 ![](images/figure1.png)
 
-모든 텍스트 처리 문제를 'Text-to-Text'의 일관된 문제로 바라보며, 이를 통해 다양한 NLP 문제에 대한 성능을 평가하고 전이 학습의 한계를 탐색하고자 한다. 이 연구의 목표는 새로운 방법을 제안하는 것이 아니라, 현재 이 분야가 어디에 서 있는지를 종합적으로 이해하는 것이다. 이를 위해 'Colossal Clean Crawled Corpus'(C4)라는 웹에서 수집한 영어 텍스트 데이터 세트를 사용한다. 또한, 데이터가 부족한 환경에서의 전이 학습의 중요성을 인식하여, 코드, 데이터 세트, 그리고 사전 학습된 모델을 공개한다.
+모든 텍스트 처리 문제를 "Text-to-Text"의 일관된 문제로 바라보며, 이를 통해 다양한 NLP 문제에 대한 성능을 평가하고 전이 학습의 한계를 탐색하고자 한다. 이 연구의 목표는 새로운 방법을 제안하는 것이 아니라, 현재 이 분야가 어디에 서 있는지를 종합적으로 이해하는 것이다. 이를 위해 "Colossal Clean Crawled Corpus(C4)"라는 웹에서 수집한 영어 텍스트 데이터 세트를 사용한다. 또한, 데이터가 부족한 환경에서의 전이 학습의 중요성을 인식하여, 코드, 데이터 세트, 그리고 사전 학습된 모델을 공개한다.
 
 ## Setup
 
-모든 문제를 'Text-to-Text' 변환하는 접근법과 레이블 없는 텍스트 데이터를 구성한 'Colossal Clean Crawled Corpus'(C4)를 제안한다. 모델과 프레임워크의 이름은 'Text-to-Text Transfer Transformer'(T5)이다.
+모든 문제를 "Text-to-Text" 변환하는 접근법과 레이블 없는 텍스트 데이터를 구성한 "Colossal Clean Crawled Corpus(C4)"를 제안한다. 모델과 프레임워크의 이름은 "Text-to-Text Transfer Transformer(T5)"이다.
 
 ### Model
 
-NLP의 초기 전이 학습은 RNN을 이용했지만, 최근에는 'Transformer' 아키텍처 기반의 모델이 일반적이다. Transformer는 처음에는 기계 번역에 효과적이었지만, 이후 다양한 NLP 환경에서 널리 사용되었다. 그래서 논문에서 연구되는 모든 모델은 Transformer 아키텍처를 기반으로 하며, 이 아키텍처에서 크게 벗어나지는 않았다.
+NLP의 초기 전이 학습은 RNN을 이용했지만, 최근에는 Transformer 아키텍처 기반의 모델이 일반적이다. Transformer는 처음에는 기계 번역에 효과적이었지만, 이후 다양한 NLP 환경에서 널리 사용되었다. 그래서 논문에서 연구되는 모든 모델은 Transformer 아키텍처를 기반으로 하며, 이 아키텍처에서 크게 벗어나지는 않았다.
 
 Transformer의 핵심 구성 요소는 self-attention으로, 시퀀스의 각 요소를 시퀀스의 나머지 부분의 가중 평균으로 대체한다. 원래 Transformer는 encoder-decoder 아키텍처로 설계되었지만, 최근에는 언어 모델링이나 분류, 범위 예측 작업에 적합한 아키텍처를 생성하는 다양한 형태의 self-attention을 사용한 single Transformer layer stack 모델이 일반적이다.
 
-T5의 encoder-decoder Transformer는 입력 토큰을 임베딩으로 매핑하고 이를 인코더에 전달한다. 인코더는 'self-attention layer'과 'feed-forward network'를 포함하며, 각 입력에 layer normalization와 residual skip connection을 적용한다. dropout은 네트워크 전체에 적용된다. 디코더는 인코더와 비슷하지만, 인코더 출력에 self-attention mechanism이 추가되고, autoregressive 또는 causal self-attention을 사용한다. 디코더 출력은 dense layer로 전달되고, 모든 attention mechanism은 독립적인 'head'로 나누어져 있다.
+T5의 encoder-decoder Transformer는 입력 토큰을 임베딩으로 매핑하고 이를 인코더에 전달한다. 인코더는 "self-attention layer"과 "feed-forward network"를 포함하며, 각 입력에 layer normalization와 residual skip connection을 적용한다. dropout은 네트워크 전체에 적용된다. 디코더는 인코더와 비슷하지만, 인코더 출력에 self-attention mechanism이 추가되고, autoregressive 또는 causal self-attention을 사용한다. 디코더 출력은 dense layer로 전달되고, 모든 attention mechanism은 독립적인 "head"로 나누어져 있다.
 
-Transformer 모델은 순서에 상관 없는 self-attention 특성 때문에 position signal을 제공한다. 초기에는 sinusoidal position signal이나 learned position embeddings을 사용했지만, 최근에는 relative position embeddings이 주로 사용되고 있다. 이는 'key'와 'query'의 오프셋에 따라 다른 임베딩을 생성한다. 우리는 position embedding을 간소화하여 attention weight 계산에 사용되는 스칼라로 만들었다. 모든 layer가 position embedding parameter를 공유하며, 각 layer의 attention head는 다른 position embedding을 사용한다. 이 모델은 원래의 Transformer와 비슷하지만, layer normalization 위치와 position embedding 체계가 다르다.
+Transformer 모델은 순서에 상관 없는 self-attention 특성 때문에 position signal을 제공한다. 초기에는 sinusoidal position signal이나 learned position embeddings을 사용했지만, 최근에는 relative position embeddings이 주로 사용되고 있다. 이는 "key"와 "query"의 오프셋에 따라 다른 임베딩을 생성한다. 우리는 position embedding을 간소화하여 attention weight 계산에 사용되는 스칼라로 만들었다. 모든 layer가 position embedding parameter를 공유하며, 각 layer의 attention head는 다른 position embedding을 사용한다. 이 모델은 원래의 Transformer와 비슷하지만, layer normalization 위치와 position embedding 체계가 다르다.
 
 모델의 확장성을 실험하기 위해 parameter와 layer를 늘리고, 그 성능 변화를 관찰했다. 복잡한 큰 모델 학습을 위해 모델과 데이터 병렬성을 사용하고, 5개의 TPU 파드를 활용한 Cloud TPU Pods에서 모델을 학습시켰다.
 
@@ -58,9 +58,9 @@ Common Crawl은 웹에서 스크랩된 텍스트를 제공하는 공개 아카�
 * 많은 페이지에는 보일러플레이트 정책 공지가 있다. "terms of use", "privacy policy", "cookie policy", "uses cookies", "use of cookies", "use cookies"라는 문자열을 포함한 줄은 모두 삭제한다.
 * 데이터셋 중복을 제거하기 위해, 데이터셋에서 두 번 이상 나타난 3문장 스팬은 하나만 남기고 모두 삭제한다.
 
-대부분의 작업이 영어 텍스트에 초점을 두고 있기 때문에, 0.99의 확률로 영어로 분류되지 않은 페이지를 제거하기 위해 'langdetect'를 사용하였다. 하지만, 이전 데이터 세트의 필터링 방법, 공개 여부, 범위 등이 제한적이라고 판단하여 새로운 데이터 세트를 만들기로 결정하였습니다.
+대부분의 작업이 영어 텍스트에 초점을 두고 있기 때문에, 0.99의 확률로 영어로 분류되지 않은 페이지를 제거하기 위해 "langdetect"를 사용하였다. 하지만, 이전 데이터 세트의 필터링 방법, 공개 여부, 범위 등이 제한적이라고 판단하여 새로운 데이터 세트를 만들기로 결정하였습니다.
 
-2019년 4월의 웹 텍스트를 다운로드하고 필터링하여 기본 데이터 세트를 구축하였다. 이 결과, 대부분의 사전 학습 데이터 세트보다 훨씬 크고(750GB), 깨끗하며 자연스러운 영어 텍스트 컬렉션을 만들었다. 이를 'Colossal Clean Crawled Corpus'(C4)라고 부르며, TensorFlow 데이터 세트의 일부로 공개하였다.
+2019년 4월의 웹 텍스트를 다운로드하고 필터링하여 기본 데이터 세트를 구축하였다. 이 결과, 대부분의 사전 학습 데이터 세트보다 훨씬 크고(750GB), 깨끗하며 자연스러운 영어 텍스트 컬렉션을 만들었다. 이를 "Colossal Clean Crawled Corpus(C4)"라고 부르며, TensorFlow 데이터 세트의 일부로 공개하였다.
 
 ### Downstream Tasks
 
@@ -83,9 +83,9 @@ CNN/Daily Mail 데이터 세트는 텍스트 요약 작업으로 적용되었고
 
 ### Input and Output Format
 
-모든 작업을 'text-to-text' 형식으로 표현하여 단일 모델을 훈련시킨다. 이 방식은 사전 학습과 미세 조정에 대해 일관된 훈련 목표를 제공한다. 모델은 작업에 관계없이 maximum likelihood 목표로 훈련되며, 수행해야 할 작업을 지정하기 위해 원래 입력 시퀀스 앞에 작업 특정 텍스트 접두어(prefix)를 추가한다.
+모든 작업을 "text-to-text" 형식으로 표현하여 단일 모델을 훈련시킨다. 이 방식은 사전 학습과 미세 조정에 대해 일관된 훈련 목표를 제공한다. 모델은 작업에 관계없이 maximum likelihood 목표로 훈련되며, 수행해야 할 작업을 지정하기 위해 원래 입력 시퀀스 앞에 작업 특정 텍스트 접두어(prefix)를 추가한다.
 
-Text-to-text 프레임워크는 다양한 NLP 작업을 통일된 형식으로 변환한다. McCann et al이 제안한 'Natural Language Decathlon'과 비슷하지만, 이 논문에서는 각 작업을 개별적으로 미세조정하고 짧은 작업 접두어를 사용한다. 또한 전이 학습에 초점을 맞추며, 기계 번역과 추상적 요약 등의 생성적 작업을 처리할 수 있는 프레임워크를 제안한다.
+Text-to-text 프레임워크는 다양한 NLP 작업을 통일된 형식으로 변환한다. McCann et al이 제안한 "Natural Language Decathlon"과 비슷하지만, 이 논문에서는 각 작업을 개별적으로 미세조정하고 짧은 작업 접두어를 사용한다. 또한 전이 학습에 초점을 맞추며, 기계 번역과 추상적 요약 등의 생성적 작업을 처리할 수 있는 프레임워크를 제안한다.
 
 대부분의 작업을 text-to-text 형식으로 쉽게 변환했으며, 유사성 점수를 예측하는 STS-B는 점수를 반올림하고 숫자 문자열로 변환하여 처리하였다. 이를 통해 STS-B 회귀 문제를 21 클래스 분류 문제로 재구성하였다.
 
@@ -97,7 +97,7 @@ WNLI의 훈련 및 검증 세트는 WSC와 많이 중복되므로, 훈련 데이
 
 한 번에 하나씩 설정을 변경하면서 체계적으로 기여도를 연구하였다. 예를 들어, 나머지 실험 파이프라인을 고정하고 다양한 비지도 목표의 성능을 측정했다. 이 방법은 이차 효과를 놓칠 수 있지만, 모든 요인의 조합을 탐색하는 것은 비용이 많이 든다. 미래의 연구에서는 다양한 접근법의 조합을 더 철저하게 고려하는 것이 유익할 것으로 예상된다.
 
-이 논문의 목표는 다양한 작업에 대해 다양한 접근법을 비교하는 것으로, 가능한 한 많은 요소를 고정하려고 한다. 이를 위해, 기존의 접근법을 정확하게 따르지는 않았다. 예를 들어, BERT와 같은 '인코더만 있는' 모델은 생성 작업에는 적합하지 않다. 따라서 우리가 고려하는 모델 중 어느 것도 BERT와 정확히 같지 않다. 대신, BERT의 목표와 유사한 목표를 고려하고, BERT와 유사하게 작동하는 모델 아키텍처를 고려하였다.
+이 논문의 목표는 다양한 작업에 대해 다양한 접근법을 비교하는 것으로, 가능한 한 많은 요소를 고정하려고 한다. 이를 위해, 기존의 접근법을 정확하게 따르지는 않았다. 예를 들어, BERT와 같은 encoder-only 모델은 생성 작업에는 적합하지 않다. 따라서 우리가 고려하는 모델 중 어느 것도 BERT와 정확히 같지 않다. 대신, BERT의 목표와 유사한 목표를 고려하고, BERT와 유사하게 작동하는 모델 아키텍처를 고려하였다.
 
 ### Baseline
 
@@ -127,7 +127,7 @@ SentencePiece를 사용하여 텍스트를 WordPiece 토큰으로 인코딩하�
 
 ![](images/figure2.png)
 
-레이블이 없는 데이터를 활용하여 모델을 사전 학습하는데는, 레이블이 필요하지 않지만 일반화 가능한 지식을 모델에게 가르치는 목표가 필요하다. 최근 'denoising' 또는 'masked language modeling'이라는 목표가 효과적이라는 것이 밝혀졌다. 이는 모델이 입력에서 누락되거나 손상된 토큰을 예측하도록 하는 방식이다. 이에 영감을 받아, 입력 시퀀스에서 무작위로 선택한 15%의 토큰을 드롭아웃하는 목표를 설정하였다. 이 목표는 사전 훈련의 계산 비용을 줄이는 데 도움이 된다.
+레이블이 없는 데이터를 활용하여 모델을 사전 학습하는데는, 레이블이 필요하지 않지만 일반화 가능한 지식을 모델에게 가르치는 목표가 필요하다. 최근 "denoising" 또는 "masked language modeling"이라는 목표가 효과적이라는 것이 밝혀졌다. 이는 모델이 입력에서 누락되거나 손상된 토큰을 예측하도록 하는 방식이다. 이에 영감을 받아, 입력 시퀀스에서 무작위로 선택한 15%의 토큰을 드롭아웃하는 목표를 설정하였다. 이 목표는 사전 훈련의 계산 비용을 줄이는 데 도움이 된다.
 
 #### Baseline Performance
 
@@ -149,13 +149,13 @@ Transformer는 처음에는 encoder-decoder 구조로 소개되었지만, 최근
 
 ![](images/figure3.png)
 
-아키텍처를 구분하는 주요 요소는 모델에서 사용하는 'mask'이다. Transformer의 self-attention 연산은 시퀀스를 입력받아 동일한 길이의 새로운 시퀀스를 출력한다. 각 출력 항목은 입력 항목의 weighted average를 계산해 생성된다. attention mask는 특정 가중치를 0으로 만들어 특정 출력 시간에서 입력 항목에 attention을 기울일 수 있는 범위를 제한한다. 예를 들어, causal mask는 $j > i$인 경우 가중치를 0으로 만든다.
+아키텍처를 구분하는 주요 요소는 모델에서 사용하는 "mask"이다. Transformer의 self-attention 연산은 시퀀스를 입력받아 동일한 길이의 새로운 시퀀스를 출력한다. 각 출력 항목은 입력 항목의 weighted average를 계산해 생성된다. attention mask는 특정 가중치를 0으로 만들어 특정 출력 시간에서 입력 항목에 attention을 기울일 수 있는 범위를 제한한다. 예를 들어, causal mask는 $j > i$인 경우 가중치를 0으로 만든다.
 
 ![](images/figure4.png)
 
 첫 번째로 고려하는 모델은 encoder-decoder Transformer로, 입력 시퀀스를 받는 encoder와 새로운 출력 시퀀스를 만드는 decoder 두 계층으로 구성되어 있다. 
 
-encoder는 'fully-visible' attention mask를 사용한다. 이 마스킹은 출력의 각 항목을 만들 때 입력의 모든 항목에 attention을 기울일 수 있게 해준다. 이 마스킹은 'prefix' 즉, 예측을 만들 때 사용되는 일부 컨텍스트에 주의를 기울일 때 적합하다. BERT도 이와 같은 마스킹 패턴을 사용하며, 특별한 'classification' 토큰을 입력에 추가한다. 이 토큰에 해당하는 BERT의 출력은 입력 시퀀스를 분류하는 예측을 하는데 사용된다.
+encoder는 "fully-visible" attention mask를 사용한다. 이 마스킹은 출력의 각 항목을 만들 때 입력의 모든 항목에 attention을 기울일 수 있게 해준다. 이 마스킹은 "prefix" 즉, 예측을 만들 때 사용되는 일부 컨텍스트에 주의를 기울일 때 적합하다. BERT도 이와 같은 마스킹 패턴을 사용하며, 특별한 "classification" 토큰을 입력에 추가한다. 이 토큰에 해당하는 BERT의 출력은 입력 시퀀스를 분류하는 예측을 하는데 사용된다.
 
 Transformer의 decoder에서 self-attention 연산은 "causal" 마스킹 패턴을 사용한다. 출력 시퀀스의 $i$번째 항목을 생성할 때, 인과적 마스킹은 모델이 입력 시퀀스의 $j$번째 항목$(j > i)$에 attention을 기울이는 것을 방지한다. 이는 모델이 출력을 생성하는 동안 "미래를 보는" 것을 방지하기 위해 훈련 중에 사용된다. 
 
@@ -195,7 +195,7 @@ prefix LM은 BERT와 비슷하게 작동하지만, 분류 작업을 수행하기
 
 #### Disparate High-Level Approaches
 
-세 가지 다른 접근법을 사용한 기법들을 비교한다. 첫 번째로, 'prefix language modeling' 목표를 사용하며, 이는 텍스트를 두 부분으로 나눠 encoder 입력과 decoder 예측 대상으로 사용한다. 두 번째로, BERT의 'masked language modeling'에서 영감을 받은 목표를 사용하며, 이는 텍스트의 토큰 15%를 손상시키고, 이 중 90%는 마스크 토큰, 10%는 랜덤 토큰으로 대체한다. 세 번째로, 'deshuffling' 목표를 사용하며, 이는 토큰의 순서를 섞은 후 원래 순서를 복원하는 것을 목표로 한다. 
+세 가지 다른 접근법을 사용한 기법들을 비교한다. 첫 번째로, "prefix language modeling" 목표를 사용하며, 이는 텍스트를 두 부분으로 나눠 encoder 입력과 decoder 예측 대상으로 사용한다. 두 번째로, BERT의 "masked language modeling"에서 영감을 받은 목표를 사용하며, 이는 텍스트의 토큰 15%를 손상시키고, 이 중 90%는 마스크 토큰, 10%는 랜덤 토큰으로 대체한다. 세 번째로, "deshuffling" 목표를 사용하며, 이는 토큰의 순서를 섞은 후 원래 순서를 복원하는 것을 목표로 한다. 
 
 ![](images/table4.png)
 
@@ -219,7 +219,7 @@ BERT 스타일 목표의 간단한 변형을 고려하며, 이는 무작위 토�
 
 #### Corrupting Spans
 
-예측 대상을 짧게 하여 학습 속도를 높이려고 한다. 지금까지의 방법은 각 입력 토큰을 독립적으로 손상시킬지 결정하였고, 연속된 토큰이 손상될 경우 이를 'span'으로 취급하여 단일 마스크 토큰으로 대체하였다. 이 방식은 레이블이 없는 텍스트 데이터를 짧은 시퀀스로 변환하지만, 항상 많은 수의 손상된 토큰이 연속적으로 나타나지는 않는다. 따라서 토큰의 span을 특정하여 손상시키는 방식을 사용하면 더 큰 속도 향상을 얻을 수 있습니다. 이러한 방법은 BERT의 사전 학습 목표로도 사용되어 성능 향상을 가져왔다.
+예측 대상을 짧게 하여 학습 속도를 높이려고 한다. 지금까지의 방법은 각 입력 토큰을 독립적으로 손상시킬지 결정하였고, 연속된 토큰이 손상될 경우 이를 "span"으로 취급하여 단일 마스크 토큰으로 대체하였다. 이 방식은 레이블이 없는 텍스트 데이터를 짧은 시퀀스로 변환하지만, 항상 많은 수의 손상된 토큰이 연속적으로 나타나지는 않는다. 따라서 토큰의 span을 특정하여 손상시키는 방식을 사용하면 더 큰 속도 향상을 얻을 수 있습니다. 이러한 방법은 BERT의 사전 학습 목표로도 사용되어 성능 향상을 가져왔다.
 
 토큰의 연속적인 span을 손상시키는 목표를 테스트하기 위해, 손상시킬 토큰의 비율과 손상된 span의 총 수를 parameter로 사용한다. 예를 들어, 500개의 토큰 시퀀스에서 15%의 토큰을 손상시키고 총 span이 25개가 되도록 지정하면, 손상된 토큰의 총 수는 75개이고 평균 span 길이는 3이 된다. 이 방식은 원래의 시퀀스 길이와 손상률에 따라 span의 길이나 총 span 수를 조절할 수 있다.
 
