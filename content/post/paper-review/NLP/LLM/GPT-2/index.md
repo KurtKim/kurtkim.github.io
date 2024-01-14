@@ -159,4 +159,4 @@ decaNLP나 GLUE와 갈은 benchmark에서 미세조정 할 것을 계획하고 �
 ## Reference
 
 * [Paper](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf)
-* [Code](https://github.com/openai/gpt-2)
+* [Github](https://github.com/openai/gpt-2)

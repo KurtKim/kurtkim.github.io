@@ -30,4 +30,4 @@ Transformer-XL은 단어와 문자 수준 언어 모델링에서 뛰어난 결�
 ## Reference
 
 * [Paper](https://arxiv.org/pdf/1901.02860.pdf)
-* [Code](https://github.com/kimiyoung/transformer-xl)
+* [Github](https://github.com/kimiyoung/transformer-xl)

@@ -395,4 +395,4 @@ T5는 실험 연구의 통찰력과 큰 규모를 결합하여 강력한 성능�
 ## Reference
 
 * [Paper](https://arxiv.org/pdf/1910.10683.pdf)
-* [Code](https://github.com/google-research/text-to-text-transfer-transformer)
+* [Github](https://github.com/google-research/text-to-text-transfer-transformer)

@@ -215,4 +215,4 @@ $BERT_{LARGE}$는 state-of-the-art 방법들과 비슷한 수준의 성능을 �
 ## Reference
 
 * [Paper](https://arxiv.org/pdf/1810.04805.pdf)
-* [Code](https://github.com/google-research/bert)
+* [Github](https://github.com/google-research/bert)

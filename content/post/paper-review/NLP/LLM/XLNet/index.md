@@ -199,4 +199,4 @@ XLNet은 AR과 AE 방법의 이점을 결합하는 순열 언어 모델링을 �
 ## Reference
 
 * [Paper](https://arxiv.org/abs/1906.08237)
-* [Code](https://github.com/zihangdai/xlnet)
+* [Github](https://github.com/zihangdai/xlnet)

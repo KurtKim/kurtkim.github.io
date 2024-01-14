@@ -209,4 +209,4 @@ Trasformer를 사용한 language model이 pre-training에 효과적인 이유에
 ## Reference
 
 * [Paper](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf)
-* [Code](https://github.com/openai/finetune-transformer-lm)
+* [Github](https://github.com/openai/finetune-transformer-lm)

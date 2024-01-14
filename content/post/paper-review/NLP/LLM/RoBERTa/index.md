@@ -189,4 +189,4 @@ BERT 모델을 사전 학습시키는데 있어 다양한 디자인 결정을 �
 ## Reference
 
 * [Paper](https://arxiv.org/pdf/1907.11692.pdf)
-* [Code](https://github.com/facebookresearch/fairseq)
+* [Github](https://github.com/facebookresearch/fairseq)

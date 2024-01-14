@@ -189,4 +189,4 @@ ALBERT-xxlarge는 BERT-large보다 parameter가 적지만 더 좋은 성능을 �
 ## Reference
 
 * [Paper](https://arxiv.org/pdf/1909.11942.pdf)
-* [Code](https://github.com/google-research/ALBERT)
+* [Github](https://github.com/google-research/ALBERT)

@@ -147,4 +147,4 @@ Word2Vec은 NLP의 초기 사전 학습 방법 중 하나로 contrastive learnin
 ## Reference
 
 * [Paper](https://arxiv.org/pdf/2003.10555.pdf)
-* [Code](https://github.com/google-research/electra)
+* [Github](https://github.com/google-research/electra)
