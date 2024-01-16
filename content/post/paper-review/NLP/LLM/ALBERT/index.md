@@ -72,7 +72,7 @@ ALBERT에서는 임베딩 파라미터를 두 개의 작은 행렬로 분해한�
 
 ALBERT에서는 parameter 효율성을 향상시키는 방법으로 cross-layer parameter sharing를 제안한다. 여기에는 레이어 간에 feed-forward network (FFN) parameter만 공유하거나, attention parameter만 공유하는 등 여러 가지 방법이 있다. 그러나 ALBERT의 기본 설정은 모든 레이어 간에 모든 parameter를 공유하는 것이다. 이 설정은 특별히 명시되지 않는 한 모든 실험에서 사용된다.
 
-Universal Transformer와 Deep Equilibrium Models에서도 Transformer 네트워크에 대해 유사한 전략들이 탐구되었다. Universal Transformer가 일반 Transformer를 능가한다고 보여주었고, Deep Equilibrium Models가 특정 레이어의 입력과 출력 임베딩이 동일하게 유지되는 균형점에 도달함을 보여주었다. 반면 이 논문의 측정 결과에서는 임베딩들이 수렴하기보다는 진동하고 있다는 것을 보여준다.
+Universal Transformer와 Deep Equilibrium Models에서도 Transformer 네트워크에 대해 유사한 전략들이 연구되었다. Universal Transformer가 일반 Transformer를 능가한다고 보여주었고, Deep Equilibrium Models가 특정 레이어의 입력과 출력 임베딩이 동일하게 유지되는 균형점에 도달함을 보여주었다. 반면 이 논문의 측정 결과에서는 임베딩들이 수렴하기보다는 진동하고 있다는 것을 보여준다.
 
 ![](images/figure1.png)
 
