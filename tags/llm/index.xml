@@ -1,4 +1,158 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>LLM on K2H Blog</title><link>https://kurtkim.github.io/tags/llm/</link><description>Recent content in LLM on K2H Blog</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Sat, 13 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/tags/llm/index.xml" rel="self" type="application/rss+xml"/><item><title>GPT-3</title><link>https://kurtkim.github.io/p/gpt-3/</link><pubDate>Sat, 13 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/gpt-3/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>LLM on K2H Blog</title><link>https://kurtkim.github.io/tags/llm/</link><description>Recent content in LLM on K2H Blog</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Mon, 15 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/tags/llm/index.xml" rel="self" type="application/rss+xml"/><item><title>FLAN</title><link>https://kurtkim.github.io/p/flan/</link><pubDate>Mon, 15 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/flan/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>이 논문은 언어 모델의 zero-shot 학습 능력을 향상시키는 방법을 연구한다. &amp;ldquo;instruction tuning&amp;rdquo; 이라는 방법을 통해 미처 볼 수 없었던 작업에서의 zero-shot 성능을 크게 향상시킬 수 있음을 보여준다.&lt;/p>
+&lt;p>137B 개의 parameter를 가진 사전 학습된 언어 모델을 60개 이상의 NLP 데이터셋에 대한 instruction tuning을 통해, 이 모델인 FLAN은 보이지 않는 작업 유형에서 월등한 성능을 보여준다. FLAN은 여러 데이터셋에서 zero-shot GPT-3를 능가하고, 몇몇 작업에서는 few-shot GPT-3를 크게 앞선다.&lt;/p>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>대규모 언어 모델은 few-shot 학습을 잘 수행하지만, zero-shot 학습에서는 성공적이지 못하며, 이는 사전 학습 데이터와 비슷하지 않은 프롬프트에서 모델이 작업을 수행하기 어렵기 때문일 수 있다.&lt;/p>
+&lt;p>이 논문에서는 대규모 언어 모델의 zero-shot 성능을 향상시키는 방법을 연구한다. 60개 이상의 NLP 데이터셋을 자연어 지시문으로 표현하여 137B parameter의 언어 모델을 미세 조정하는 방식을 사용한다. 이 결과 생성된 모델을 FLAN(Finetuned Language Net)이라고 한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan/images/figure1.png"
+width="912"
+height="636"
+srcset="https://kurtkim.github.io/p/flan/images/figure1_hu53cc1b2de5c2393ea95504fc3ec0baa4_152068_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan/images/figure1_hu53cc1b2de5c2393ea95504fc3ec0baa4_152068_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="143"
+data-flex-basis="344px"
+>&lt;/p>
+&lt;p>NLP 데이터셋을 작업 유형별로 그룹화하여 FLAN의 zero-shot 성능을 평가한다. 특정 작업(예: 자연어 추론)을 평가하기 위해 해당 작업을 제외한 다른 모든 작업에서 FLAN을 조정하고, 그 후에 zero-shot 자연어 추론 성능을 평가한다.&lt;/p>
+&lt;p>FLAN은 기본 137B-parameter 모델의 zero-shot 성능을 크게 향상시키며, 25개의 데이터셋 중 20개에서 GPT-3의 zero-shot을 능가한다. 또한 특정 작업에서는 GPT-3의 few-shot 성능까지 능가한다. instruction tuning에서 작업 클러스터 수를 늘리는 것이 성능을 향상시키며, 충분한 모델 규모에서만 instruction tuning의 이점이 나타난다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan/images/figure2.png"
+width="1020"
+height="342"
+srcset="https://kurtkim.github.io/p/flan/images/figure2_huc400aba4a6ad9b0723bf44ae631c524a_108997_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan/images/figure2_huc400aba4a6ad9b0723bf44ae631c524a_108997_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="298"
+data-flex-basis="715px"
+>&lt;/p>
+&lt;p>instruction tuning은 언어 모델이 추론 시 텍스트 상호작용에 더 잘 응답하도록 미세조정을 통한 지도학습을 사용하는 간단한 방법이다. 이 방법은 언어 모델이 지시문만을 통해 작업을 수행하는 능력을 보여준다.&lt;/p>
+&lt;h2 id="flan-instruction-tuning-improves-zero-shot-learning">FLAN: Instruction Tuning Improves Zero-Shot Learning&lt;/h2>
+&lt;p>instruction tuning의 목표는 언어 모델이 NLP 지시문에 더 잘 응답하도록 향상시키는 것이다. 지시문을 통해 설명된 작업을 수행하도록 언어 모델을 교육함으로써, 보이지 않는 작업에 대해서도 지시문을 따를 수 있게 한다. 작업 유형별로 데이터셋을 그룹화하고, 남은 클러스터에서 instruction tuning을 하면서 볼 수 없는 작업의 성능을 평가한다.&lt;/p>
+&lt;h3 id="tasks--templates">Tasks &amp;amp; Templates&lt;/h3>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan/images/figure3.png"
+width="1068"
+height="348"
+srcset="https://kurtkim.github.io/p/flan/images/figure3_hu5dd5a15e50bf0eaf0feb3af4dc50d61a_193664_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan/images/figure3_hu5dd5a15e50bf0eaf0feb3af4dc50d61a_193664_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="306"
+data-flex-basis="736px"
+>&lt;/p>
+&lt;p>기존의 연구 데이터셋을 지시문 형식으로 변환하여, 자원 집약적인 새로운 데이터셋 생성을 피한다. Tensorflow Datasets에서 공개적으로 이용 가능한 62개의 텍스트 데이터셋을 하나의 혼합물로 집계하며, 이 데이터셋들은 12개의 작업 클러스터 중 하나로 분류된다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan/images/figure4.png"
+width="1002"
+height="342"
+srcset="https://kurtkim.github.io/p/flan/images/figure4_hu72e09559eb9945d8e01e74a1d5b5f08c_123105_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan/images/figure4_hu72e09559eb9945d8e01e74a1d5b5f08c_123105_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="292"
+data-flex-basis="703px"
+>&lt;/p>
+&lt;p>각 데이터셋에 대해, 작업을 설명하는 10개의 고유한 자연어 지시문 템플릿을 작성하며, 다양성을 높이기 위해 일부 템플릿은 원래의 작업을 뒤집는 방식으로 구성된다. 이후 모든 데이터셋의 혼합물에서 사전 학습된 언어 모델을 instruction tuning하며, 각 데이터셋의 예제는 해당 데이터셋에 대한 무작위로 선택된 지시 템플릿으로 형식화된다.&lt;/p>
+&lt;h3 id="evaluation-splits">Evaluation Splits&lt;/h3>
+&lt;p>FLAN이 instruction tuning에서 본적 없는 작업에 대해 어떻게 수행하는지를 알고자 한다. 본적 없는 작업을 정의하기 위해, instruction tuning 중에 보지 않은 작업 클러스터에 속한 모든 데이터셋을 본적 없는 것으로 간주한다. 따라서, 특정 작업 클러스터에서 zero-shot FLAN을 평가하려면, 각각 다른 작업 클러스터를 보류한 모델을 instruction tuning합니다.&lt;/p>
+&lt;h3 id="classification-with-options">Classification With Options&lt;/h3>
+&lt;p>작업의 출력 공간은 클래스 중 하나(classiﬁcation) 또는 자유 텍스트(generation)이 된다. FLAN은 decoder만 있는 언어 모델의 지시 조정 버전이므로, 생성 작업에 대한 추가 수정 없이도 자유 텍스트로 자연스럽게 응답한다.&lt;/p>
+&lt;p>분류 작업에서는 &amp;ldquo;예&amp;quot;와 &amp;ldquo;아니오&amp;quot;와 같은 두 가지 출력만 고려하는 순위 분류 방법을 사용하였다. 하지만 이 방법은 답변의 확률 분포가 원치 않는 방식으로 나타날 수 있다. 따라서, 분류 작업의 끝에 OPTIONS 토큰과 해당 작업의 출력 클래스 목록을 추가하여 모델이 분류 작업에 응답할 때 원하는 선택지를 인식하게 한다.&lt;/p>
+&lt;h3 id="training-details">Training Details&lt;/h3>
+&lt;p>&lt;strong>Model architecture and pretraining.&lt;/strong> 137B parameter의 LaMDA-PT라는 decoder-only transformer 언어 모델을 사용한다. 이 모델은 웹 문서, 대화 데이터, 위키백과 등을 통해 사전 학습되었고, SentencePiece 라이브러리를 사용해 32k 어휘로 토큰화되었다. 사전 학습 데이터의 약 10%는 비영어이다. LaMDA-PT는 언어 모델 사전 학습만을 가지고 있다.&lt;/p>
+&lt;p>&lt;strong>Instruction tuning procedure.&lt;/strong> FLAN은 LaMDA-PT의 instruction tuning 버전이다. 모든 데이터셋을 혼합하여 무작위로 샘플링하며, 데이터셋 당 최대 30k의 학습 예제를 사용한다. 모델은 30k의 그래디언트 단계 동안 미세조정되며, 입력 시퀀스와 목표 시퀀스의 길이는 각각 1024와 256입니다. 이 튜닝 과정은 TPUv3에서 약 60시간이 소요된다.&lt;/p>
+&lt;h3 id="results">Results&lt;/h3>
+&lt;p>FLAN은 다양한 작업들에서 평가되며, 이는 natural language inference, reading comprehension, closed-book QA, translation, commonsense reasoning, coreference resolution, struct-to-text 등을 포함한다. 각 작업 클러스터는 다른 체크포인트를 사용하며, 각 데이터셋의 성능은 모든 템플릿에 대한 평균 성능으로 평가된다. 또한, 개발 세트의 성능이 가장 좋은 템플릿을 사용하여 테스트 세트의 성능도 측정한다.&lt;/p>
+&lt;p>LaMDA-PT의 zero-shot과 few-shot 결과를 GPT-3의 프롬프트와 동일하게 보고한다. 이는 instruction tuning이 얼마나 효과적인지 직접적으로 보여주는 기준선이다. 결과적으로, instruction tuning은 대부분의 데이터셋에서 LaMDA-PT의 성능을 크게 향상시켰다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan/images/figure5.png"
+width="1074"
+height="774"
+srcset="https://kurtkim.github.io/p/flan/images/figure5_hu2fa5a6362367fa9dc5272a014132c211_159127_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan/images/figure5_hu2fa5a6362367fa9dc5272a014132c211_159127_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="138"
+data-flex-basis="333px"
+>&lt;/p>
+&lt;p>zero-shot FLAN은 25개 데이터셋 중 20개에서 GPT-3 175B를 능가하며, 19개 데이터셋 중 13개에서는 GLaM 64B/64E를 능가한다.&lt;/p>
+&lt;p>instruction tuning은 NLI, QA, translation, struct-to-text 등의 과제에 효과적이며, 언어 모델링으로 직접 구성된 과제에서는 효과적이지 않다.&lt;/p>
+&lt;p>&lt;strong>Natural language inference (NLI).&lt;/strong> 5개의 NLI 데이터셋에서, FLAN은 모든 기준 모델을 크게 능가했습니다. FLAN은 NLI를 &amp;ldquo;Does &lt;!-- raw HTML omitted --> mean that &lt;!-- raw HTML omitted -->?&amp;ldquo;라는 더 자연스러운 질문으로 표현하여 훨씬 높은 성능을 보여주었다.&lt;/p>
+&lt;p>&lt;strong>Reading comprehension.&lt;/strong> FLAN은 MultiRC와 OBQA에서 기준 모델을 능가하였다. 또한, BoolQ에서는 GPT-3를 크게 능가하였다.&lt;/p>
+&lt;p>&lt;strong>Closed-book QA.&lt;/strong> FLAN은 모든 네 개의 데이터셋에서 GPT-3를 능가하였다. ARC-e와 ARC-c에서는 GLaM보다 더 좋은 성능을 보였지만, NQ와 TQA에서는 약간 낮은 성능을 보였다.&lt;/p>
+&lt;p>&lt;strong>Translation.&lt;/strong> FLAN은 GPT-3 논문에서 평가된 세 개의 데이터셋인 프랑스어-영어, 독일어-영어, 루마니아어-영어에 대한 기계 번역 성능을 평가하였다. FLAN은 모든 평가에서 zero-shot GPT-3를 능가했지만, 대부분의 경우 few-shot GPT-3보다 성능이 떨어졌다. FLAN은 영어로 번역하는 데 강한 결과를 보였지만, 영어에서 다른 언어로 번역하는 것은 상대적으로 약했다.&lt;/p>
+&lt;p>&lt;strong>Additional tasks.&lt;/strong> instruction tuning은 많은 언어 모델링 과제의 성능을 향상시키지 못하는 한계가 있다. 7개의 상식 추론 및 공통 참조 해결 과제 중 FLAN은 3개 과제에서만 LaMDA-PT를 능가하였다. 하지만, zero-shot FLAN은 일반적으로 zero-shot LaMDA-PT를 능가하며, few-shot LaMDA-PT와 비슷하거나 더 나은 성능을 보여주었다.&lt;/p>
+&lt;h2 id="ablation-studies--further-analysis">Ablation Studies &amp;amp; Further Analysis&lt;/h2>
+&lt;h3 id="number-of-instruction-turning-clusters">Number Of Instruction Turning Clusters&lt;/h3>
+&lt;p>이 연구에서는 instruction tuning이 어떻게 모델의 zero-shot 성능을 향상시키는지를 중점으로 살펴보았다. 첫 번째 축소 실험에서는 instruction tuning에 사용된 클러스터와 과제의 수가 성능에 어떻게 영향을 미치는지를 검토하였다. 이때 NLI, closed-book QA, commonsense reasoning을 평가 클러스터로 보류하고, 나머지 클러스터를 instruction tuning에 사용하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan/images/figure6.png"
+width="682"
+height="422"
+srcset="https://kurtkim.github.io/p/flan/images/figure6_hub2ee1795a43435d66f715189ce4efe1b_103115_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan/images/figure6_hub2ee1795a43435d66f715189ce4efe1b_103115_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="161"
+data-flex-basis="387px"
+>&lt;/p>
+&lt;p>instruction tuning에 추가 클러스터와 과제를 추가하면, 보류된 세 개의 클러스터에서의 평균 성능이 향상됨을 확인했다. 테스트한 일곱 개의 클러스터에서 성능이 포화되지 않아 보이므로, instruction tuning에 더 많은 클러스터가 추가되면 성능이 더욱 향상될 수 있을 것으로 보인다. 하지만, 감정 분석 클러스터에서는 최소한의 추가 가치만을 볼 수 있었다.&lt;/p>
+&lt;h3 id="scaling-laws">Scaling Laws&lt;/h3>
+&lt;p>언어 모델의 zero-shot과 few-shot 능력이 더 큰 모델에 대해 크게 향상된다는 연구 결과를 바탕으로, instruction tuning의 이점이 모델 규모에 어떻게 영향을 받는지를 살펴보았다. 모델 규모를 422M, 2B, 8B, 68B, 137B로 설정하고 instruction tuning의 효과를 평가하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan/images/figure7.png"
+width="574"
+height="398"
+srcset="https://kurtkim.github.io/p/flan/images/figure7_hu06d61b58778b9d23f80bcb7bfddd86e8_57546_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan/images/figure7_hu06d61b58778b9d23f80bcb7bfddd86e8_57546_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="144"
+data-flex-basis="346px"
+>&lt;/p>
+&lt;p>100B parameter 규모의 두 모델에서는 instruction tuning이 보류된 과제에서의 성능을 크게 향상시켰다. 그러나, 8B 및 더 작은 모델에서는 instruction tuning이 보류된 과제에서의 성능을 저하시켰다. 이는 작은 규모의 모델에서 instruction tuning 중 사용되는 과제를 학습하는 것이 모델의 전체 용량을 차지하게 되어, 새로운 과제에서 성능이 떨어지게 만들 수 있기 때문일 수 있다.&lt;/p>
+&lt;h3 id="role-of-instructions">Role Of Instructions&lt;/h3>
+&lt;p>마지막 ablation study에서는 미세 조정 중 지시문의 역할을 살펴보았다. 지시문 없이 모델이 어떻게 수행하는지 살펴보기 위해, 지시문이 없는 두 가지 미세 조정 설정을 고려하였다. 하나는 템플릿이 없는 설정으로, 모델에게 입력과 출력만이 주어지는 것이고, 다른 하나는 데이터셋 이름 설정으로, 각 입력이 과제와 데이터셋의 이름으로 시작된다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan/images/figure8.png"
+width="478"
+height="368"
+srcset="https://kurtkim.github.io/p/flan/images/figure8_hue286e52e5e2eb558effda57d405b1d3a_46002_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan/images/figure8_hue286e52e5e2eb558effda57d405b1d3a_46002_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="129"
+data-flex-basis="311px"
+>&lt;/p>
+&lt;p>자연스러운 지시문을 사용한 FLAN의 미세 조정 절차와 두 가지 ablation study을 비교하였다. 이 두 ablation study는 각각 템플릿이 없는 설정과 데이터셋 이름만을 사용한다. 결과에서 두 축소 설정 모두 FLAN보다 훨씬 나쁜 성능을 보여, 보이지 않는 과제에서의 zero-shot 성능에 지시문을 사용한 학습이 결정적임을 나타냈다.&lt;/p>
+&lt;h3 id="instructions-with-few-shot-exemplars">Instructions With Few-Shot Exemplars&lt;/h3>
+&lt;p>few-shot 예시가 추론 시간에 사용 가능할 때 instruction tuning이 어떻게 사용될 수 있는지 연구하였다. few-shot 설정의 형식은 zero-shot 형식을 기반으로 한다. 학습 시간과 추론 시간 모두에서 예시는 학습 세트에서 무작위로 추출되며, 예시의 수는 16개로 제한하고 전체 시퀀스 길이가 960 토큰 미만이 되도록 했다. 실험은 보이지 않는 과제에 대한 few-shot 예시를 오직 추론 시간에만 사용하는 동일한 과제 분할과 평가 절차를 사용하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan/images/figure9.png"
+width="1088"
+height="292"
+srcset="https://kurtkim.github.io/p/flan/images/figure9_hu553b7afb6075f4d3935015206efa02e8_52139_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan/images/figure9_hu553b7afb6075f4d3935015206efa02e8_52139_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="372"
+data-flex-basis="894px"
+>&lt;/p>
+&lt;p>few-shot 예시는 zero-shot FLAN에 비해 모든 과제 클러스터의 성능을 향상시킨다. 예시는 특히 크거나 복잡한 출력 공간을 가진 과제에 효과적이며, 이는 예시가 모델이 출력 형식을 더 잘 이해하는 데 도움이 되기 때문일 가능성이 있다. 또한, 모든 과제 클러스터에서 템플릿 간의 표준 편차는 퓨샷 FLAN에서 더 낮아, 프롬프트 엔지니어링에 대한 민감도가 줄어든 것을 나타낸다.&lt;/p>
+&lt;h3 id="instruction-turning-facilitates-prompt-turning">Instruction Turning Facilitates Prompt Turning&lt;/h3>
+&lt;p>instruction tuning이 모델의 지시문에 대한 반응 능력을 향상시키는 것을 확인했기 때문에, FLAN이 NLP 과제를 수행하는 데 더 적합하다면, 소프트 프롬프트를 사용하여 추론을 수행할 때도 더 나은 성능을 달성해야 한다. 추가 분석으로, SuperGLUE 과제 각각에 대해 연속 프롬프트를 훈련시켰고, 이는 특정 과제에 대한 프롬프트 튜닝을 수행할 때, 동일한 클러스터에 있는 다른 과제가 instruction tuning 동안 보이지 않게 하는 클러스터 분할을 따랐다. 프롬프트 튜닝 설정은 Lester et al.의 절차를 따르되, 몇 가지 변화를 주었고, 이 변화들이 LaMDA-PT의 성능을 향상시키는 것으로 확인되었다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan/images/figure10.png"
+width="376"
+height="314"
+srcset="https://kurtkim.github.io/p/flan/images/figure10_hu068f59284c4acff449424ced936d048c_32927_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan/images/figure10_hu068f59284c4acff449424ced936d048c_32927_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="119"
+data-flex-basis="287px"
+>&lt;/p>
+&lt;p>모든 시나리오에서 프롬프트 튜닝은 LaMDA-PT보다 FLAN에서 더 잘 작동하였다. 특히 low-resource 설정에서는, FLAN에서의 프롬프트 튜닝이 LaMDA-PT에서의 것보다 10% 이상 성능이 향상되었다. 이 결과는 instruction tuning이 NLP 과제를 수행하는 데 더 바람직한 모델을 만드는 데 어떻게 기여할 수 있는지를 보여준다.&lt;/p>
+&lt;h2 id="related-work">Related Work&lt;/h2>
+&lt;p>이 논문은 zero-shot 학습, 프롬프팅, 다중 과제 학습, NLP 응용 프로그램을 위한 언어 모델 등 여러 넓은 연구 영역과 관련이 있다. 이러한 넓은 영역에 대한 이전 연구를 확장된 관련 연구 섹션에서 설명하고, 이 논문의 연구와 가장 밀접하게 연관된 범위가 좁은 두 개의 하위 영역을 설명하였다.&lt;/p>
+&lt;p>모델에 지시문에 대한 반응을 요청하는 방식은 QA 기반 과제 구성과 유사하며, 이는 NLP 과제를 통일하는 것을 목표로 한다. 이 방법들은 주로 다중 과제 학습에 초점을 맞추며, 사전 학습된 LMs의 기존 지식을 사용하는 것에 크게 기반하지 않는다. 이 연구의 작업은 모델 규모와 과제 범위 모두에서 최근의 일부 연구를 초월한다.&lt;/p>
+&lt;p>언어 모델의 성공으로 모델이 지시문을 따르는 능력에 대한 연구가 진행되고 있다. 최근 연구에서는 지시문과 few-shot 예시를 이용해 BART를 미세 조정하고, 이를 통해 보이지 않는 과제에 대한 few-shot 성능을 향상시킬 수 있음을 보여주었다. 또한, T5를 미세 조정하는 등의 방법으로 zero-shot 학습을 개선하고, 미세 조정과 강화 학습을 병행하여 인간 평가자가 선호하는 출력을 생성하는 연구도 있다.&lt;/p>
+&lt;h2 id="discussion">Discussion&lt;/h2>
+&lt;p>지시문으로 표현된 여러 과제에 대해 모델을 미세 조정하면 보이지 않는 과제에서의 성능이 향상된다는 것을 보여주었다. FLAN은 미세 조정되지 않은 모델보다 성능이 좋고, zero-shot GPT-3를 능가한다. 또한, 충분한 모델 규모에서만 instruction tuning에 의한 성능 향상이 나타나며, 이는 다른 프롬프팅 방법과도 결합될 수 있다.&lt;/p>
+&lt;p>언어 모델의 다양한 능력은 specialist 모델과 generalist 모델 사이의 균형에 대한 관심을 끌어내었다. 레이블이 있는 데이터가 specialist 모델을 개선하는 데 도움이 될 것으로 예상되지만, instruction tuning을 통해 이 데이터가 큰 언어 모델이 보이지 않는 다양한 과제를 수행하는 데도 도움이 될 수 있음을 보여주었다. 이는 과제 특정 학습이 일반 언어 모델링과 보완적이라는 것을 보여주며, generalist 모델에 대한 추가 연구를 촉진한다.&lt;/p>
+&lt;p>이 연구의 한계점은 과제를 클러스터에 할당하는 데 있는 주관성과 짧은 지시문의 사용에 대한 연구의 한정성이다. 개별 예시가 모델의 사전 훈련 데이터에 포함되어 있을 수 있지만, 이것이 결과에 크게 영향을 미쳤다는 증거는 찾지 못하였다. 또한, FLAN 137B의 규모는 그것을 서비스하는 데 비용이 많이 든다. 향후 instruction tuning 연구는 더 많은 과제 클러스터를 수집하고, 다언어 실험을 진행하며, downstream classiﬁer 학습 데이터를 생성하고, 편향과 공정성에 대한 모델 행동을 개선하는 방향으로 진행될 수 있다.&lt;/p>
+&lt;h2 id="conclusions">Conclusions&lt;/h2>
+&lt;p>이 논문은 지시문에 기반한 zero-shot 과제를 수행하는 대규모 언어 모델의 능력을 향상시키는 간단한 방법을 연구하였다. FLAN은 GPT-3에 비해 더 우수한 결과를 보여주며, 대규모 언어 모델이 지시문을 따를 수 있는 잠재력을 보여주었다.&lt;/p>
+&lt;h2 id="reference">Reference&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2109.01652.pdf" target="_blank" rel="noopener"
+>Paper&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://github.com/google-research/flan" target="_blank" rel="noopener"
+>Github&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>GPT-3</title><link>https://kurtkim.github.io/p/gpt-3/</link><pubDate>Sat, 13 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/gpt-3/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>최근의 연구는 대량의 텍스트 말뭉치로 사전 학습한 후 특정 작업에 대해 미세 조정하는 것으로 많은 NLP 작업과 벤치마크에서 상당한 성과를 보여주었다. 일반적으로 과제에 중립적인 구조를 가지지만, 이 방법은 여전히 수천 개 또는 수만 개의 예제로 이루어진 과제별 미세 조정 데이터셋을 필요로 한다. 인간은 보통 몇 가지 예제나 간단한 지시사항만으로도 새로운 언어 작업을 수행할 수 있지만, 현재의 NLP 시스템은 이를 여전히 어려워한다. 이 연구에서는 언어 모델의 규모를 확장함으로써 과제 중립적이고 소수의 예제로 이루어진 작업 성능을 크게 개선하는 것을 보여준다. 때로는 이전의 state-of-the-art 미세 조정 접근법과 경쟁력을 갖출 수도 있다. 구체적으로, 1750억 개의 parameter를 가진 GPT-3라는 autoregressive 언어 모델을 학습시키고, 이를 소수의 예제로 평가해보았다. 모든 작업에서 GPT-3는 어떠한 그래디언트 업데이트나 미세 조정 없이 적용되며, 작업 및 소수의 예제는 모델과의 텍스트 상호작용을 통해 명시된다. GPT-3는 번역, 질의응답, 문맥 채우기 작업뿐만 아니라 단어 섞기, 새로운 단어를 문장에 사용하기, 3자리 산술 연산을 수행하는 등의 실시간 추론이나 도메인 적응이 필요한 작업과 같은 많은 NLP 데이터셋에서 강력한 성능을 보여주었다. 한편, GPT-3의 소수 학습은 여전히 어려운 몇몇 데이터셋과 대규모 웹 말뭉치에서의 훈련에 관련된 방법론적 문제가 있다는 점도 확인했다. 마지막으로, GPT-3는 인간 평가자가 사람이 작성한 기사와 구분하기 어려운 뉴스 기사 샘플을 생성할 수 있음을 발견하였다.&lt;/p>
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>최근 NLP 시스템은 사전 학습된 언어 표현을 다양한 작업에 유연하게 적용하는 추세가 있다. 초기에는 단어 벡터를 사용한 단일 계층 표현을 과제 특정 아키텍처에 적용했으나, 후에는 RNN을 사용한 다계층 표현을 도입하였다. 최근에는 과제 특정 아키텍처의 필요성을 완전히 제거하고, 사전 학습된 recurrent 또는 transformer 언어 모델을 직접 미세 조정하는 방식이 사용되고 있다.&lt;/p>
@@ -503,7 +657,7 @@ data-flex-basis="331px"
 &lt;p>미세조정된 언어 모델이 많은 벤치마크 작업에서 인간 수준의 성능에 근접하면서, 더 어려운 혹은 개방형 작업을 구성하는 데 많은 노력이 기울여져 왔다. 이런 작업들에는 질문 응답, 읽기 이해, 그리고 기존 언어 모델에게 어려운 데이터셋을 고의로 만드는 것이 포함된다.&lt;/p>
 &lt;p>많은 연구들이 질문-응답에 집중했으며, 이는 테스트한 작업들 중 상당 부분을 차지한다. 최근의 연구로는 11B 개의 매개변수를 가진 언어 모델을 미세조정한 연구와, 테스트 시점에 대량의 데이터에 집중하는 연구가 있다. GPT-3는 문맥 내 학습에 중점을 두는 것이 특징이며, 이는 미래에 다른 연구와 결합될 수 있다.&lt;/p>
 &lt;p>언어 모델의 메타러닝은 이전 연구에서 활용되었지만, 그 결과는 제한적이었다. 언어 모델 메타러닝은 내부 루프와 외부 루프의 구조를 가지고 있으며, 이는 일반적인 머신러닝에 적용된 메타러닝과 유사하다. GPT-3는 모델의 문맥을 이전 예제로 채우는 것으로, 이는 모델의 활성화를 통해 적응하는 내부 루프와 가중치를 업데이트하는 외부 루프를 가지고 있다. 또한, few-shot auto-regressive density estimation과 low-resource NMT를 few-shot 학습 문제로 연구한 사례도 있다.&lt;/p>
-&lt;p>이전 연구들도 사전 학습된 언어 모델과 경사 하강법을 결합하여 few-shot 학습을 할 방법을 탐색했다. 또한, 레이블이 거의 없는 상황에서의 미세조정 방법을 탐구하는 반지도 학습과 같은 비슷한 목표를 가진 분야도 있다.&lt;/p>
+&lt;p>이전 연구들도 사전 학습된 언어 모델과 경사 하강법을 결합하여 few-shot 학습을 할 방법을 탐색했다. 또한, 레이블이 거의 없는 상황에서의 미세조정 방법을 연구하는 반지도 학습과 같은 비슷한 목표를 가진 분야도 있다.&lt;/p>
 &lt;p>자연 언어로 다중 과제 모델에 지시를 하는 방법은 처음으로 지도 학습 환경에서 공식화되었고, 일부 과제에 언어 모델에 사용되었다. 이와 유사한 개념이 text-to-text transformer에서도 탐색되었지만, 이 경우에는 문맥 학습이 아닌 다중 과제 미세조정에 적용되었다.&lt;/p>
 &lt;p>다중 과제 학습은 언어 모델의 일반성과 전이 학습 능력을 향상시키는 방법으로, 여러 과제를 함께 미세조정하며 가중치를 업데이트한다. 이 방법은 단일 모델을 가중치 업데이트 없이 다양한 과제에 사용하거나, 새로운 과제에 대한 가중치 업데이트 시 샘플 효율성을 향상시킬 수 있다. 다중 과제 학습은 초기에는 좋은 결과를 보였지만, 데이터셋 구성과 훈련 커리큘럼 설정에 대한 수작업이 필요한 한계가 있다. 하지만 대규모 사전 학습은 텍스트 예측을 통해 암시적으로 다양한 과제를 포함하는 방법을 제공한다. 미래의 연구 방향은 다중 과제 학습에 대해 더 넓은 범위의 명시적 과제를 생성하는 것일 수 있다.&lt;/p>
 &lt;p>지난 두 해 동안 언어 모델의 알고리즘은 매우 크게 발전했다. denoising-based bidirectionality, preﬁxLM and encoder-decoder architectures, random permutations during training, architectures that improve the efﬁciency of sampling, improvements in data and training procedures, and efﬁciency increases in the embedding parameters 등이 포함된다. 이런 기술들은 downstream task에서 큰 이익을 가져다주며, 이러한 알고리즘 발전을 GPT-3에 통합하면 downstream task 성능이 향상될 가능성이 높다. GPT-3의 규모와 이런 알고리즘 기법을 결합하는 것은 미래 연구의 유망한 방향이다.&lt;/p>
@@ -943,7 +1097,7 @@ data-flex-basis="972px"
 >&lt;/p>
 &lt;p>adapter layers는ㄴ 작업 크기에 따라 차원을 적절히 조정하면 parameter가 적은 상태에서도 미세 조정이 가능하다는 것을 보여준다. 반면에, gradual unfreezing은 미세 조정 시간을 단축시키지만, 모든 작업에서 성능이 약간 떨어진다는 결과를 보여주었다. 이를 통해 언프리징 일정을 더 신중하게 조정하면 더 나은 결과를 얻을 수 있을 것으로 예상된다.&lt;/p>
 &lt;h4 id="multi-task-learning">Multi-task Learning&lt;/h4>
-&lt;p>Multi-task Learning은 여러 작업을 동시에 학습하는 방법으로, 하나의 모델이 다양한 작업을 수행하도록 학습한다. 이 방법은 데이터 세트를 혼합하여 레이블이 없는 데이터에서도 학습이 가능하다. 중요한 점은 모델이 각 작업에서 적절한 양의 데이터를 학습하도록 하는 것이며, 이는 데이터 세트 크기, 작업 학습의 난이도, 정규화 등에 따라 달라진다. 또한, 한 작업에서의 성과가 다른 작업의 성능을 저해하는 문제를 고려하여, 데이터 비율 설정 전략을 탐구하고 있다.&lt;/p>
+&lt;p>Multi-task Learning은 여러 작업을 동시에 학습하는 방법으로, 하나의 모델이 다양한 작업을 수행하도록 학습한다. 이 방법은 데이터 세트를 혼합하여 레이블이 없는 데이터에서도 학습이 가능하다. 중요한 점은 모델이 각 작업에서 적절한 양의 데이터를 학습하도록 하는 것이며, 이는 데이터 세트 크기, 작업 학습의 난이도, 정규화 등에 따라 달라진다. 또한, 한 작업에서의 성과가 다른 작업의 성능을 저해하는 문제를 고려하여, 데이터 비율 설정 전략을 연구하고 있다.&lt;/p>
 &lt;p>&lt;strong>Examples-proportional mixing&lt;/strong> 모델이 작업에 overfit되는 속도는 작업의 데이터 세트 크기에 따라 결정된다. 그래서 데이터 세트 크기에 비례하여 샘플링하는 것이 일반적이다. 하지만, 어떤 작업은 데이터 크기가 월등히 크기 때문에, 이 방법을 사용하면 레이블이 없는 데이터가 대부분이 되고 모든 지도 작업이 undertrain 되는 문제가 발생한다. 이를 해결하기 위해, 비율을 계산하기 전에 데이터 세트 크기에 인위적인 &amp;ldquo;limit&amp;quot;을 설정한다. 각 작업에서 샘플하는 확률은 작업의 데이터 세트 크기와 인위적인 제한 작은 값에 비례하도록 설정된다.&lt;/p>
 &lt;p>&lt;strong>Temperature-scaled mixing&lt;/strong> 데이터 세트 크기의 큰 차이를 완화하는 다른 방법은 혼합 비율의 &amp;ldquo;temperature&amp;quot;를 조정하는 것이다. 이 방식은 다국어 BERT에서 적용되어, 자원이 적은 언어에 대한 충분한 학습을 보장하였다. 이는 각 작업의 혼합 비율을 1/temperature로 거듭제곱하고, 이 비율이 합쳐져 1이 되도록 재정규화하는 방식으로 이루어진다. 온도가 증가하면 비율은 동등 혼합에 가까워진다. 가장 큰 데이터 세트의 혼합 비율이 감소하는 것을 방지하기 위해 데이터 세트 크기 제한을 큰 값으로 설정한다.&lt;/p>
 &lt;p>&lt;strong>Equal mixing&lt;/strong> 각 작업에서 예제를 동일한 확률로 뽑는다. 각 배치의 예제는 학습 데이터 세트 중 무작위로 선택된다. 이 방법은 low-resource 작업에 빠르게 overfit되고 high-resource 작업에 underfit되기 때문에 최적의 전략이 아닐 가능성이 크다. 이 점은 비율 설정이 최적이 아닐 때 발생할 수 있는 문제를 보여주는 참고점이다.&lt;/p>
@@ -1249,7 +1403,7 @@ data-flex-basis="658px"
 &lt;p>ALBERT에서는 임베딩 파라미터를 두 개의 작은 행렬로 분해한다. one-hot vector를 $H$ 크기의 hidden space로 투영하는 대신, 먼저 $E$ 크기의 lower dimensional embedding space로 투영한 후 hidden space으로 투영한다. 이 방식을 통해 임베딩 파라미터를 $O(V \times H)$에서 $O(V \times E \times E \times H)$로 줄일 수 있다. 이 parameter 축소는 $H$가 $E$보다 훨씬 클 때 중요하며, 모든 워드피스에 대해 같은 $E$를 사용하게 된다.&lt;/p>
 &lt;h4 id="cross-layer-parameter-sharing-1">Cross-layer parameter sharing&lt;/h4>
 &lt;p>ALBERT에서는 parameter 효율성을 향상시키는 방법으로 cross-layer parameter sharing를 제안한다. 여기에는 레이어 간에 feed-forward network (FFN) parameter만 공유하거나, attention parameter만 공유하는 등 여러 가지 방법이 있다. 그러나 ALBERT의 기본 설정은 모든 레이어 간에 모든 parameter를 공유하는 것이다. 이 설정은 특별히 명시되지 않는 한 모든 실험에서 사용된다.&lt;/p>
-&lt;p>Universal Transformer와 Deep Equilibrium Models에서도 Transformer 네트워크에 대해 유사한 전략들이 탐구되었다. Universal Transformer가 일반 Transformer를 능가한다고 보여주었고, Deep Equilibrium Models가 특정 레이어의 입력과 출력 임베딩이 동일하게 유지되는 균형점에 도달함을 보여주었다. 반면 이 논문의 측정 결과에서는 임베딩들이 수렴하기보다는 진동하고 있다는 것을 보여준다.&lt;/p>
+&lt;p>Universal Transformer와 Deep Equilibrium Models에서도 Transformer 네트워크에 대해 유사한 전략들이 연구되었다. Universal Transformer가 일반 Transformer를 능가한다고 보여주었고, Deep Equilibrium Models가 특정 레이어의 입력과 출력 임베딩이 동일하게 유지되는 균형점에 도달함을 보여주었다. 반면 이 논문의 측정 결과에서는 임베딩들이 수렴하기보다는 진동하고 있다는 것을 보여준다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/albert/images/figure1.png"
 width="996"
 height="326"
