@@ -4,7 +4,7 @@ title = "FLAN"
 date = "2024-01-15"
 description = "Finetuned Language Models Are Zero-Shot Learners"
 categories = [
-    "Paper Review"
+    "Paper Review",
 ]
 tags = [
     "NLP",
