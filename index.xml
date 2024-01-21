@@ -1,5 +1,296 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K2H Blog</title><link>https://kurtkim.github.io/</link><description>Recent content on K2H Blog</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Wed, 17 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>CLAP</title><link>https://kurtkim.github.io/p/clap/</link><pubDate>Wed, 17 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/clap/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K2H Blog</title><link>https://kurtkim.github.io/</link><description>Recent content on K2H Blog</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Wed, 17 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>LaMDA</title><link>https://kurtkim.github.io/p/lamda/</link><pubDate>Wed, 17 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/lamda/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>LaMDA는 최대 137B의 parameter를 가진 대화용 언어 모델이다. 이 모델은 모델 확장만으로는 안전성과 사실적 근거에 대한 개선이 제한적이라는 문제를 해결하기 위해, 주석이 달린 데이터로 미세 조정하고 외부 지식 소스를 참조하는 방식을 사용한다. 이를 통해 모델의 안전성을 향상시키고, 사실에 근거한 응답을 생성하는 데 성공하였다. 또한, 이 모델은 교육 및 콘텐츠 추천 분야에서의 활용 가능성을 보여준다.&lt;/p>
+&lt;hr>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>언어 모델 사전 학습은 자연어 처리 연구에서 유망하며, 레이블이 없는 텍스트를 사용해 모델과 데이터셋의 크기를 확장하면 성능이 향상된다. 이를 통해 GPT-3와 같은 모델은 few-shot 학습 예제로도 높은 성능을 보여준다.&lt;/p>
+&lt;p>대화형 모델은 텍스트의 long-term dependency를 표현하는 능력을 활용하여 언어 모델을 효과적으로 활용한다. 모델의 크기가 커짐에 따라 대화 품질도 향상되는 강한 상관관계가 있다.&lt;/p>
+&lt;p>LaMDA는 transformer 기반의 언어 모델로, 대화를 위해 설계되었다. 이는 대량의 공개 대화 데이터와 웹 문서로 사전 학습되었고, 잠재적인 응답을 생성, 필터링, 재정렬하여 최고 품질의 응답을 제공하는 다양한 작업을 수행한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/lamda/images/figure1.png"
+width="1054"
+height="358"
+srcset="https://kurtkim.github.io/p/lamda/images/figure1_hu79814309481c86c02f59b14c3d04a8e2_76180_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/lamda/images/figure1_hu79814309481c86c02f59b14c3d04a8e2_76180_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="294"
+data-flex-basis="706px"
+>&lt;/p>
+&lt;p>LaMDA와 함께 모델 스케일링의 이점을 연구한 결과, 스케일링만으로는 품질이 향상되지만, 안전성과 실제 연관성은 인간의 성능에 미치지 못하였다. 그러나 스케일링과 미세 조정을 결합하면 모든 지표에서 크게 향상되었고, 특히 품질 격차는 인간 수준에 가까워졌다.&lt;/p>
+&lt;p>&amp;ldquo;quality&amp;rdquo; 지표는 &amp;ldquo;sensibleness&amp;rdquo;, &amp;ldquo;speciﬁcity&amp;rdquo;, &amp;ldquo;interestingness&amp;quot;의 세 가지 요소에 기반하며, 이를 바탕으로 응답이 얼마나 합리적이고 구체적이며 흥미로운지 주석 데이터를 수집한다. 이 데이터를 사용하여 후보 응답을 재정렬하는 discriminator를 미세 조정한다.&lt;/p>
+&lt;p>&amp;ldquo;safety&amp;rdquo; 지표는 모델이 생성하는 위험한 응답을 줄이기 위해 도입되었다. 이를 위해 안전 목표를 설정하고, 다양한 군중의 작업자들을 통해 대화 응답을 레이블링한다. 이 레이블을 통해 위험한 응답을 감지하고 제거하는 discriminator를 미세 조정한다. 이는 고수준에서 AI의 가치를 조정하는 과정으로 볼 수 있다.&lt;/p>
+&lt;p>&amp;ldquo;groundedness&amp;rdquo; 지표는 모델이 검증 가능한 정보를 포함하는 응답을 알려진 출처에 근거하여 생성하도록 하기 위해 도입되었다. 이는 사용자나 외부 시스템이 응답의 유효성을 판단하는데 도움이 된다. 이 목표를 달성하기 위해, 정보 검색 시스템과 같은 외부 도구를 사용하여 사실을 조사하는 군중의 작업자들의 행동을 모델이 흉내내도록 학습시킨다.&lt;/p>
+&lt;p>교육과 콘텐츠 추천 분야에서 LaMDA의 사용을 연구하였다. 특정 응용 프로그램에 LaMDA를 적용하기 위해 몇 번의 응용 프로그램 특정 대화를 사전 조건으로 설정했다. 실험 결과, 사전 학습만 받은 LaMDA 모델과 미세 조정된 LaMDA 모델 모두 그들의 예상 응용 프로그램 역할에 잘 적응할 수 있었으며, 특히 미세 조정된 LaMDA 모델이 더욱 도움이 되었다.&lt;/p>
+&lt;hr>
+&lt;h2 id="related-work">Related work&lt;/h2>
+&lt;p>&lt;strong>Language models and dialog models:&lt;/strong> 언어 모델은 최근 NLP 응용 분야에서의 성공 덕분에 주목받고 있다. 이 연구는 모델 스케일링이 품질, 안전성, 실제 연관성 지표를 어느 정도 향상시키는 것을 보여주지만, 미세 조정과 스케일링을 결합하면 모든 지표에서 성능이 크게 향상된다는 것을 보여준다.&lt;/p>
+&lt;p>이 연구는 언어 모델을 대화 모델링에 적용하는 최근의 연구와 밀접하게 연관되어 있다. 대화 데이터만을 학습하는 미세 조정 단계는 이전 연구와 관련이 있다. 또한, 군중 작업자가 주석을 단 데이터에 미세 조정을 사용하여 흥미로움을 향상시키는 방법을 사용하였다. 그러나 이 연구의 목표는 사용자와의 추가적인 상호작용보다는 모델의 출력의 흥미로움을 극대화하는 것이다.&lt;/p>
+&lt;p>순수 스케일링이 오픈 도메인 대화 모델 성능에 제한적인 영향을 미치는 것은 최근 연구와 일치하며, 이는 실제 연관성의 문제에 중점을 둔다. 최근 스케일링 연구는 질문-응답 작업의 성능이 모델 크기에 따라 향상된다는 것을 발견했는데, 이는 미세 조정 전의 사전 학습된 LaMDA에 대한 연구 결과와 일치한다.&lt;/p>
+&lt;p>이 연구의 접근법은 언어 모델을 검색 시스템을 통해 향상시키는 데 초점을 맞춘 연구와 연관이 있다. 대부분의 기존 연구는 대화 생성보다는 오픈 도메인 질문-응답에 초점을 맞추고 있으며, 모델 자체가 중간 도구를 사용하도록 학습된다. 이러한 접근법은 RNNLM, RAG, REALM, FiD 등의 아키텍처를 포함하며, 최근의 연구는 신경 모델의 검색과 순위 지정 능력을 확장하고 발전시키고 있다. 이 접근법은 또한 영화 티켓 대화를 위한 외부 API를 사용하도록 모델을 미세 조정하는 연구와도 비교할 수 있다.&lt;/p>
+&lt;p>연구 결과는 최근 대화의 실제 연관성에 대한 연구와 일부 유사하다. 외부 지식 베이스에 접근하는 것은 모델이 출처가 없는 내용을 환영하는 비율을 줄이는 것으로 나타났다. 질문-응답 시스템의 정확도는 추론 단위와 응답 생성기를 분리함으로써 개선된다. 검색 엔진과 언어 모델을 결합하면 더 사실적으로 근거를 둔 응답을 제공하는 것으로 나타났다. 알려진 출처의 정보로 생성된 응답을 보강함으로써, 안전성이나 품질에 대한 향상을 희생하지 않고 모델을 실제 연관성에 대해 세부 조정할 수 있다.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Dialog metrics:&lt;/strong> 대화 모델에 대한 효과적인 지표를 정의하는 것은 아직 해결되지 않은 연구 주제이다. 이 연구의 접근법은 인간 같은 지표를 주장한 이전 연구에 의해 영감을 받았다. 많은 자동화된 지표들이 연구되었지만, 이러한 지표들은 인간의 판단과 잘 연관되지 않을 수 있다. 따라서 대화 모델링에 대한 더 신뢰할 수 있는 지표는 인간의 평가를 필요로 한다.&lt;/li>
+&lt;/ul>
+&lt;p>이전 연구는 다양한 대화 품질 평가를 하나의 지표로 결합하려 했으나, 이 연구에서는 각각의 평가 요소를 따로 고려한다. sensibleness, speciﬁcity 외에 interestingness, safety, groundedness 등의 새로운 지표를 추가했고, 이런 다양한 지표 사용의 장점은 특정 지표가 낮은 응답을 분석해 개선 방법을 찾는 것이 가능하다는 점이다.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Safety and safety of dialog models:&lt;/strong> 언어 모델의 부적절하고 위험한 행동에 대해 많은 연구가 이루어져 왔으며, toxicity, bias, inappropriately revealing personally identifying information (PII) 등의 문제가 발견되었다. 대규모 언어 모델과 관련된 21가지 위험을 식별하였고, 이 문제를 해결하기 위한 다양한 방법이 제안되었음에도 불구하고, 이 문제를 의미있게 해결하는 것은 여전히 활발한 연구 분야이다.&lt;/li>
+&lt;/ul>
+&lt;p>대화 모델에 대한 문제도 논의되었는데, bias, offensiveness, hate speech 등이 학습 데이터와 모델 output에서 발견되었다. 대화 모델은 학습 데이터의 bias을 배우고 확대할 수 있다. 이를 해결하기 위해, 안전한 output을 감지하는 별도의 layer를 학습하는 방법이 사용되었고, 미세 조정이 효과적이었다. 크기를 늘리는 것은 toxicity 지표에 영향을 미치지 않지만, 안전 평가에서의 미세 조정은 영향을 미친다는 것이 확인되었다.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Groundedness metrics:&lt;/strong> 권위 있는 외부 소스와 모델의 output이 일치하는지를 판단하는 대중들에게 실제성을 평가하도록 요청함으로써 실제성을 평가한다. 최근에 제안된 AIS 프레임워크는 외부 세계에 관련된 언어 모델의 output을 더 정확하게 평가하는 방법을 제시하며, 이는 정보의 이해와 식별, 그리고 정보의 출처 판별의 두 단계로 이루어진다. 또한, 최근의 연구에서는 Q2 지표를 통해 자동 평가의 가능성을 다시 제시하였다.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="lamda-pre-training">LaMDA pre-training&lt;/h2>
+&lt;p>LaMDA는 공개 대화 데이터와 웹 문서를 기반으로 사전 학습되어 텍스트의 다음 토큰을 예측하도록 설계되었다. 이로 인해 LaMDA는 미세 조정 전에도 일반 언어 모델로 사용될 수 있다.&lt;/p>
+&lt;p>사전 학습 데이터셋은 총 2.97B 개의 문서, 1.12B 개의 대화, 13.39B 개의 대화 발화로 구성되어 있고, 대부분이 영어이다. SentencePiece 라이브러리를 통해 2.81T byte pair encoding(BPE) 토큰으로 토큰화하였다. 이는 Meena의 학습 세트인 40B 단어에 비해 훨씬 큰 규모이다.&lt;/p>
+&lt;p>가장 큰 LaMDA 모델은 Meena보다 약 50배 많은 137B개의 non-embedding parameter를 가지고 있다. 이 모델은 decoder-only Transformer 언어 모델을 사용하며, 64개의 layer와 relative attention, gated-GELU activation 등을 특징으로 한다.&lt;/p>
+&lt;p>LaMDA는 총 57.7일 동안 1024개의 TPU-v3 칩에서 사전 학습되었고, 배치당 256K 토큰을 사용하였다. Lingvo 프레임워크를 통해 123 TFLOPS/sec의 성능을 달성하였다. 또한, 모델 스케일링의 효과를 측정하기 위해 2B-parameter와 8B-parameter의 작은 모델도 학습하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/lamda/images/figure2.png"
+width="826"
+height="428"
+srcset="https://kurtkim.github.io/p/lamda/images/figure2_hu194ec68ae1ded1ca77e52945a85c89f5_111247_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/lamda/images/figure2_hu194ec68ae1ded1ca77e52945a85c89f5_111247_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="192"
+data-flex-basis="463px"
+>&lt;/p>
+&lt;p>미세 조정 전의 모델을 &amp;ldquo;PT&amp;quot;라 부르며, PT는 Meena와 같은 샘플링-랭킹 전략을 사용한다. 총 16개의 독립적인 후보 응답을 샘플링하고, log-likelihood와 length를 기반으로 점수가 가장 높은 후보를 최종 output으로 선택한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="metrics">Metrics&lt;/h2>
+&lt;h3 id="foundation-metrics-quality-safety-and-groundedness">Foundation metrics: Quality, Safety and Groundedness&lt;/h3>
+&lt;p>&lt;strong>Sensibleness, Speciﬁcity, Interestingness (SSI):&lt;/strong> overall quality score는 sensibleness, speciﬁcity, and interestingness (SSI)의 평균이다.&lt;/p>
+&lt;p>Adiwardana et al.은 Meena의 품질을 측정하기 위해 sensibleness와 speciﬁcity의 평균인 SSA 지표를 제안하였다.&lt;/p>
+&lt;p>&amp;ldquo;sensibleness&amp;rdquo; 점수는 모델의 응답이 문맥에 맞고 이전의 발언과 모순되지 않는지를 측정한다. 그러나, sensibleness만으로 모델을 평가하면 모델이 짧고 일반적이며 지루한 응답을 생성하는 것을 보상할 수 있다. 예를 들어, 모든 질문에 &amp;ldquo;I don’t know&amp;quot;라고 답하는 GenericBot 알고리즘은 sensibleness에서 70%의 점수를 얻었다.&lt;/p>
+&lt;p>&amp;ldquo;speciﬁcity&amp;rdquo; 점수는 응답이 주어진 문맥에 특정한지를 측정한다. 예를 들어, &amp;ldquo;Me too&amp;quot;는 다양한 문맥에 사용될 수 있으므로 특이성 점수가 0이지만, &amp;ldquo;Me too. I love Eurovision songs&amp;quot;라는 응답은 문맥에 특정하므로 1점을 받는다. Meena는 이 SSA 지표에서 인간 성능과의 격차를 줄였다.&lt;/p>
+&lt;p>모델의 성능이 향상됨에 따라, sensibleness와 speciﬁcity만으로는 대화 모델의 품질을 충분히 측정할 수 없다는 것을 확인하였다. 예를 들어, &amp;ldquo;How do I throw a ball?&amp;ldquo;라는 질문에 대해, &amp;ldquo;You can throw a ball by ﬁrst picking it up and then throwing it&amp;quot;은 답변은 합리적이고 특이하지만, 더 깊고 만족스러운 답변은 &amp;ldquo;One way to toss a ball is to hold it ﬁrmly in both hands and then swing your arm down and up again, extending your elbow and then releasing the ball upwards&amp;quot;이다.&lt;/p>
+&lt;p>&amp;ldquo;interestingness&amp;quot;이라는 세 번째 점수는 대화의 흥미로움을 측정한다. 이는 무리 작업자에 의해 0/1 레이블로 측정되며, &amp;ldquo;누군가의 주목을 끄는&amp;rdquo; 또는 &amp;ldquo;호기심을 불러일으키는&amp;rdquo; 것, 또는 예상치 못하거나 재치 있거나 통찰력 있는 응답을 흥미롭다고 판단한다.&lt;/p>
+&lt;p>&lt;strong>Safety:&lt;/strong> 대화 모델은 높은 품질(SSI) 점수를 얻을 수 있지만 사용자에게 위험할 수 있다. 그래서 위험한 모델 output을 측정하기 위한 새로운 안전 지표를 개발하였다. 이 지표는 피해의 위험을 줄이고 불공정한 편향을 방지하는 Google의 AI 원칙을 따른다.&lt;/p>
+&lt;p>&lt;strong>Groundedness:&lt;/strong> 언어 모델이 잘못된 주장을 생성하는 경향이 있기 때문에, LaMDA가 가능한 한 알려진 출처와 연관된 응답을 생성하도록 하여 필요한 경우 확인할 수 있도록 하려고 한다.&lt;/p>
+&lt;p>&amp;ldquo;groundedness&amp;quot;은 외부 세계에 대한 주장을 포함하는 응답 중에서 권위 있는 외부 출처에 의해 지지될 수 있는 주장의 비율로 정의된다.&lt;/p>
+&lt;p>&amp;ldquo;informativeness&amp;quot;는 모든 응답 중에서 알려진 출처로부터 지지받는 외부 세계 정보를 전달하는 응답의 비율로 정의된다. 이는 &amp;ldquo;groundedness&amp;quot;과 분모 항에서만 다르다. 예를 들어, &amp;ldquo;That’s a great idea&amp;quot;와 같은 외부 세계 정보를 전달하지 않는 응답은 실재성에는 영향을 미치지 않지만 정보성에는 영향을 미친다. &amp;ldquo;Rafael Nadal is the winner of Roland Garros 2020&amp;quot;는 실재성 있는 응답의 예이다.&lt;/p>
+&lt;p>마지막으로, &amp;ldquo;citation accuracy&amp;quot;를 외부 세계에 대한 명확한 주장을 포함하는 모든 응답 중에서 출처의 URL을 인용하는 모델 응답의 비율로 정의한다. 이는 &amp;ldquo;말은 네 다리가 있다&amp;quot;와 같은 잘 알려진 사실에 대한 주장은 제외합니다.&lt;/p>
+&lt;h3 id="role-speciﬁc-metrics-helpfulness-and-role-consistency">Role-speciﬁc metrics: Helpfulness and Role consistency&lt;/h3>
+&lt;p>기본 메트릭(quality, safety, groundedness)은 대화 에이전트의 중요한 속성을 측정한다. 이는 에이전트의 특정 역할에 의존하지 않는다. 도움이 되는지와 역할의 일관성은 에이전트가 특정 역할을 가진 대화 응용 프로그램에서 측정된다.&lt;/p>
+&lt;p>&lt;strong>Helpfulness:&lt;/strong> 사용자가 정보 검색 시스템을 통해 독립적으로 조사한 정보가 올바르고, 사용자가 도움이 된다고 판단하는 경우, 모델의 응답은 helpful으로 표시된다. helpful 응답은 사용자가 올바르고 유용하다고 판단하는 응답의 부분 집합이다.&lt;/p>
+&lt;p>&lt;strong>Role consistency:&lt;/strong> 모델의 응답이 대상 역할을 수행하는 에이전트가 말할 것 같다면, 그것은 role consistent가 있다고 표시된다. 이는 대화 내에서의 자체 일관성과는 다르며, 대화 외부의 에이전트의 역할 정의와의 일관성을 의미한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="lamda-ﬁne-tuning-and-evaluation-data">LaMDA ﬁne-tuning and evaluation data&lt;/h2>
+&lt;p>&lt;strong>Quality (Sensibleness, Speciﬁcity, Interestingness):&lt;/strong> 품질(SSI)을 향상시키기 위해, 작업자들에게 LaMDA와 14~30턴에 걸친 대화를 요청하여 6400개의 대화를 수집히였다. 작업자들은 각 응답이 합리적(sensible)이고, 특정(speciﬁc)하고, 흥미로운지(interesting)를 평가하고, &amp;ldquo;yes&amp;rdquo;, &amp;ldquo;no&amp;rdquo;, &amp;ldquo;maybe&amp;quot;로 레이블한다. 응답이 합리적이거나 특정하지 않으면, 특이성과 흥미로움을 &amp;ldquo;no&amp;quot;로 간주한다. 모든 응답은 5명의 다른 작업자에 의해 레이블이 붙여지고, 5명 중 적어도 3명이 &amp;ldquo;yes&amp;quot;라고 표시하면 응답이 합리적이고, 특정하며, 흥미로운 것으로 간주된다.&lt;/p>
+&lt;p>최대 3번의 대화 턴을 가진 1477개의 대화로 구성된 Mini-Turing Benchmark(MTB) 데이터셋에 대한 모델의 응답을 기반으로 평가한다. 이 대화들은 모델에 공급되어 다음 응답을 생성한다. 모든 응답은 5명의 작업자 중 적어도 3명이 &amp;ldquo;yes&amp;quot;라고 표시하면 합리적이고, 특정하고, 또는 흥미로운 것으로 레이블이 붙는다.&lt;/p>
+&lt;p>&lt;strong>Safety:&lt;/strong> safety를 위한 미세 조정을 위해, safety 목표를 정의하고, 이를 바탕으로 다양한 작업자들을 이용해 사람이 만든 프롬프트에 대한 LaMDA의 응답을 주석 처리하는 구조화된 접근법을 사용한다.&lt;/p>
+&lt;p>작업자들에게 LaMDA와 5~10턴에 걸친 대화를 요청하여 8K 대화를 수집하였다. 작업자들은 자연스러운 형태(interactions of natural form), 민감한 주제를 다루는(interactions that touch sensitive topics), 혹은 모델을 깨려고 시도하는(interactions that adversarially attempt to break the model as per the safety objectives) 세 가지 방식으로 모델과 상호 작용한다. 각 응답에 대해, 작업자들은 문맥을 고려하여 safety 목표를 위반하는지 평가하고, &amp;ldquo;yes&amp;rdquo;, &amp;ldquo;no&amp;rdquo;, &amp;ldquo;maybe&amp;quot;로 레이블한다. 각 safety 목표에 대해 &amp;ldquo;no&amp;quot;로 표시한 작업자가 적어도 2명인 경우, 응답에는 safety 점수 1이 부여된다. 그렇지 않으면 점수는 0으로 지정된다.&lt;/p>
+&lt;p>1458턴의 1166개 대화로 구성된 보류 샘플 데이터셋을 사용해 safety를 평가한다. 이 대화들은 모델에 입력되어 다음 응답을 생성한다. 각 safety 목표를 &amp;ldquo;no&amp;quot;라고 표시한 무리 작업자가 적어도 2명인 경우, 응답에는 점수 1이 부여되고, 그렇지 않으면 점수는 0이다.&lt;/p>
+&lt;p>&lt;strong>Groundedness:&lt;/strong> SSI와 safety처럼, 작업자들에게 모델과 상호작용하면서 정보 탐색을 위한 대화로 이끌도록 요청하여 4K 대화를 수집하였다.&lt;/p>
+&lt;p>작업자들에게 모델의 대화 턴이 외부 세계에 대한 주장을 하는지 평가하도록 요청하였다. 공개적으로 인정받지 않은 사람들에 대한 주장은 제외하고, 이는 모델이 즉흥적인 인물을 대신하여 사실적인 주장을 할 수 있기 때문이다. 이러한 주장은 외부 소스에 기반을 두는 것을 필요로 하지 않는다.&lt;/p>
+&lt;p>작업자들에게 주장이 사실인지 물어본다. 3명의 작업자 모두 주장이 사실임을 안다면, 그것을 상식으로 가정하고 외부 지식 소스를 확인하지 않는다.&lt;/p>
+&lt;p>확인이 필요한 주장을 포함하는 발언에 대해, 작업자들에게 조사를 위한 검색 쿼리를 기록하도록 요청한다. 그리고 외부 지식 검색 시스템에서의 결과를 포함하여 모델의 응답을 수정하도록 요청한다. 오픈 웹의 내용이 검색 결과에 포함되면, 작업자들에게 출처를 인용하는 URL을 포함하도록 요청한다.&lt;/p>
+&lt;p>다양한 주제를 다루는 784턴의 대화를 포함하는 평가 데이터셋을 이용하여 실제성을 평가한다. 이 맥락들은 모델에 공급되어 다음 응답을 생성한다. 각 응답에 대해, 작업자들은 모델의 응답이 사실적인 주장을 포함하고, 이 주장이 알려진 소스를 통해 검증될 수 있는지 평가한다. 모든 응답은 3명의 다른 작업자에 의해 레이블이 붙으며, 최종 실제성, 정보성, 인용 정확성 레이블은 다수결에 의해 결정된다. 모든 데이터셋은 영어로 되어 있다.&lt;/p>
+&lt;p>&lt;strong>Estimating these metrics for human-generated responses:&lt;/strong> 작업자들에게 평가 데이터셋의 무작위 샘플에 응답하도록 요청하며, 그들은 안전하고, 합리적이며, 특정하고, 흥미롭고, 실제적이며, 정보적인 방식으로 응답하도록 지시받는다. 필요한 외부 도구를 사용하도록 요청되며, 이후 맥락-응답 쌍은 평가를 위해 전송되고, 다수결에 의해 합의 레이블이 형성된다.&lt;/p>
+&lt;hr>
+&lt;h2 id="lamda-ﬁne-tuning">LaMDA ﬁne-tuning&lt;/h2>
+&lt;h3 id="discriminative-and-generative-ﬁne-tuning-for-quality-ssi-and-safety">Discriminative and generative ﬁne-tuning for Quality (SSI) and Safety&lt;/h3>
+&lt;p>사전 학습된 모델에 여러 미세 조정을 적용하여 LaMDA를 생성한다. 이는 맥락에 따른 응답 생성과 응답의 품질 및 safety 평가를 포함하며, 이로 인해 생성기와 판별기 기능을 동시에 수행할 수 있는 단일 모델이 만들어진다.&lt;/p>
+&lt;p>LaMDA는 디코더만 있는 생성적 언어 모델이므로, 모든 미세 조정 예시들은 토큰의 시퀀스로 표현된다. 생성적(Generative) 미세 조정 예시들은 &amp;ldquo;$&amp;lt;$$\text{context}$$&amp;gt;$ $&amp;lt;$$\text{sentinel}$$&amp;gt;$ $&amp;lt;$$\text{response}$$&amp;gt;$&amp;rdquo; 형태로 표현되며, 손실은 응답 부분에만 적용된다:&lt;/p>
+&lt;ul>
+&lt;li>&amp;ldquo;What’s up? RESPONSE not much.&amp;rdquo;&lt;/li>
+&lt;/ul>
+&lt;p>판별적(Discriminative) 미세 조정 예시들은 &amp;ldquo;$&amp;lt;$$\text{context}$$&amp;gt;$ $&amp;lt;$$\text{sentinel}$$&amp;gt;$ $&amp;lt;$$\text{response}$$&amp;gt;$ $&amp;lt;$$\text{attribute-name}$$&amp;gt;$ $&amp;lt;$$\text{rating}$$&amp;gt;$&amp;ldquo;으로 표현되며, 손실은 속성 이름 다음의 등급에만 적용된다:&lt;/p>
+&lt;ul>
+&lt;li>&amp;ldquo;What’s up? RESPONSE not much. SENSIBLE 1&amp;rdquo;&lt;/li>
+&lt;li>&amp;ldquo;What’s up? RESPONSE not much. INTERESTING 0&amp;rdquo;&lt;/li>
+&lt;li>&amp;ldquo;What’s up? RESPONSE not much. UNSAFE 0&amp;rdquo;&lt;/li>
+&lt;/ul>
+&lt;p>생성과 판별에 같은 모델을 사용하면, 응답 생성 후에 판별자를 평가하는 것은 P(&amp;quot;$&amp;lt;$$\text{desiredrating}$$&amp;gt;$&amp;rdquo; | &amp;ldquo;$&amp;lt;$$\text{context}$$&amp;gt;$ $&amp;lt;$$\text{sentinel}$$&amp;gt;$ $&amp;lt;$$\text{response}$$&amp;gt;$ $&amp;lt;$$\text{attribute-name}$$&amp;gt;$&amp;quot;)를 계산하는 것을 포함한다. 모델이 이미 &amp;ldquo;$&amp;lt;$$\text{context}$$&amp;gt;$ $&amp;lt;$$\text{sentinel}$$&amp;gt;$ $&amp;lt;$$\text{response}$$&amp;gt;$&amp;ldquo;를 처리했으므로, 판별자를 평가하는 것은 단지 몇 가지 추가 토큰을 처리하는 것을 포함한다: &amp;ldquo;$&amp;lt;$$\text{attribute-name}$$&amp;gt;$ $&amp;lt;$$\text{desired rating}$$&amp;gt;$&amp;rdquo;.&lt;/p>
+&lt;p>LaMDA는 생성된 응답의 SSI와 safety 등급을 예측하도록 미세조정됩니다. safety 예측이 특정 임계값 이하인 응답은 제외되고, 나머지 응답들은 품질에 따라 순위를 매긴다. 이 과정에서 sensibleness는 speciﬁcity와 interestingness보다 세 배 더 높은 가중치를 받는다.&lt;/p>
+&lt;p>LaMDA의 SSI 및 safety 판별자는 사전 학습 데이터셋의 대화를 점수 매기고 필터링하는데 사용되어, 안전하고 합리적이며 특정하고 흥미로운 80만 턴의 대화를 생성한다. 이 데이터셋을 사용하여 LaMDA는 주어진 컨텍스트에서 응답을 생성하도록 미세조정된다.&lt;/p>
+&lt;h3 id="fine-tuning-to-learn-to-call-an-external-information-retrieval-system">Fine-tuning to learn to call an external information retrieval system&lt;/h3>
+&lt;p>LaMDA 같은 언어 모델들은 확실해 보이는 output을 생성하지만, 이는 알려진 외부 출처로부터 확인된 사실과 상충하는 경우가 많다. 예를 들어, 뉴스 기사의 시작 문장을 계속하는 것처럼 보이지만, 실제로는 신뢰할 수 있는 외부 참조와는 연결이 없다.&lt;/p>
+&lt;p>LaMDA는 가능한 한 확인 가능한 출처와 연결된 응답을 생성하려고 한다. 이는 기존 언어 모델이 종종 그럴듯하나 잘못된 정보를 제공할 수 있기 때문이다. 이를 통해 사용자는 필요한 경우 정보를 교차 검증할 수 있다.&lt;/p>
+&lt;p>&lt;strong>The toolset (TS):&lt;/strong> LaMDA 인스턴스와 상호작용하여 6400개의 대화를 수집하였다. 이 대화들은 각각 14~30턴 사이에 이루어졌다. 각 응답은 다른 작업자들에 의해 합리성, 특이성, 흥미로움에 대해 평가되었다. 응답이 합리적이지 않거나 특정하지 않다면, 특이성과 흥미로움에 대한 평가는 수행되지 않았다. 모든 응답은 5명의 작업자들에 의해 레이블링되었고, 3명 이상이 &amp;ldquo;yes&amp;quot;라고 응답하면 그 응답이 합리적이고 특정하며 흥미로운 것으로 간주되었다.&lt;/p>
+&lt;p>&lt;strong>Dialog collection:&lt;/strong> 생성 데이터용으로 40K의 주석이 달린 대화 턴을 수집하였고, 판별 데이터용으로 &amp;ldquo;correct&amp;rdquo; 혹은 &amp;ldquo;incorrect&amp;quot;으로 레이블링된 9K의 대화 턴을 수집하였다.&lt;/p>
+&lt;p>작업자들 사이의 대화를 수집하고, 그들의 주장이 신뢰할 수 있는 출처에 의해 지지될 수 있는지 평가하였다. 도구 세트(TS)에 접근할 수 있으면, 더 잘 지지된 주장을 생성하는 경향이 있었다. 예를 들어, Rafael Nadal의 나이에 대한 질문에는 정보 검색 시스템을 통해 쉽게 답변을 찾을 수 있다. 이를 바탕으로, 언어 모델을 미세조정하여 응답에 대한 출처를 제공하기로 결정하였다.&lt;/p>
+&lt;p>알고리즘의 미세조정을 위한 학습 데이터를 수집하기 위해, 정적 방법과 상호작용 방법을 모두 사용했다. 이 과정에서 작업자들은 모델의 output에 반응하는 것이 아니라, LaMDA가 학습할 수 있도록 수정하는 역할을 한다. 각 발언이 외부 지식 출처를 참조해야 할 주장을 포함하는지, LaMDA가 만든 인물 이외의 것에 대한 주장인지, 일반 상식을 넘어서는지에 따라 모델의 출력을 평가하고, 필요한 경우 도구 세트를 활용해 주장을 연구한다.&lt;/p>
+&lt;p>알고리즘이 추론 시간에 사용하는 서비스와 동일한 도구 세트 인터페이스를 사용한다. 텍스트 쿼리를 입력하면, 정보 검색 시스템이 순위별로 정렬된 텍스트 스니펫을 반환한다. 사용자는 검색을 마친 후, 출처가 표시된 주장을 포함하도록 모델의 발언을 수정할 수 있다. 오픈 웹 콘텐츠를 사용한 경우, 외부 정보를 포함한 응답을 지원하기 위해 필요한 URL을 인용해야 한다. URL은 메시지 끝에 추가하거나, 필요에 따라 특정 단어에 인라인으로 첨부할 수 있다.&lt;/p>
+&lt;p>&lt;strong>Fine-tuning:&lt;/strong> 두 가지 작업을 수행하도록 LaMDA를 미세조정한다.&lt;/p>
+&lt;p>첫 번째 작업은 대화 컨텍스트와 기본 모델의 응답을 바탕으로 특별한 문자열을 생성한다. 이 문자열은 &amp;ldquo;TS&amp;quot;로 표시되며, 이어지는 텍스트가 검색 쿼리임을 나타낸다. 예를 들어, &amp;ldquo;TS, Rafael Nadal’s age&amp;quot;와 같다.&lt;/p>
+&lt;p>두 번째 작업은 도구로부터 반환된 스니펫과 대화 문장을 취한다(예: &amp;ldquo;He is 31 years old right now” + “Rafael Nadal / Age / 35&amp;rdquo;). 그런 다음 이를 기반으로 실제로 검증된 버전을 예측한다: context + base + query + snippet $\rightarrow$ &amp;ldquo;User, He is 35 years old right now&amp;rdquo; 또한, 이 작업은 추가적인 연구 쿼리를 출력할 수도 있다. 예를 들어, context + base + query + snippet $\rightarrow$ &amp;ldquo;TS, Rafael Nadal’s favorite song&amp;rdquo;. 추론 시간에는, 첫 번째로 생성된 문자열이 &amp;ldquo;TS&amp;quot;인지 &amp;ldquo;User&amp;quot;인지에 따라 모델의 출력이 정보 검색 시스템으로, 또는 사용자에게 전달된다.&lt;/p>
+&lt;p>예를 들어, 대화에는 사용자로부터 다음과 같은 발언이 포함될 수 있다:&lt;/p>
+&lt;p>&lt;strong>USER :&lt;/strong> What do you think of Rosalie Gascoigne’s sculptures?&lt;/p>
+&lt;p>(이 대화록은 저자 중 한 명과의 대화에서 가져온 것이며, 일반적으로 사용자에게는 보여지지 않는 생성된 기본 출력과 검색 쿼리를 포함하고 있다.)&lt;/p>
+&lt;p>기본 LaMDA 언어 모델, 즉 이 문맥에서 &amp;ldquo;Base&amp;rdquo; 모델이라고 부르는 것은 초안 응답을 생성한다:&lt;/p>
+&lt;p>&lt;strong>LAMDA - BASE :&lt;/strong> They’re great, and I love how her work changed through her life. I like her later work more than her earlier ones. Her inﬂuence is also super interesting - did you know she was one of the artists that inspired Miró?&lt;/p>
+&lt;p>마지막 문장이 처음에는 그럴 듯해 보이지만, Miró와 Gascoigne의 활동 시기를 비교하면 오류를 확인할 수 있다. 이는 기본 모델이 생성한 정보가 항상 정확하지 않을 수 있음을 보여준다.&lt;/p>
+&lt;p>모델의 &amp;ldquo;Research&amp;rdquo; 단계에서는 &amp;ldquo;Base&amp;rdquo; output의 주장을 검증하기 위해 쿼리를 생성한다. 쿼리 생성은 모델의 미세조정에 의해 결정되며, 무한 루프를 방지하기 위해 추론 시에는 최대 쿼리 수를 설정한다. 현재 예에서는 이 최대치가 4로 설정되어 있다.&lt;/p>
+&lt;p>예를 들어, &amp;ldquo;Research&amp;rdquo; 단계에서는 다음과 같은 쿼리를 발행할 수 있다.&lt;/p>
+&lt;p>&lt;strong>LAMDA - RESEARCH :&lt;/strong> TS, Miró and Gascoigne&lt;/p>
+&lt;p>&lt;strong>TS :&lt;/strong> Gascoigne , Rosalie | Suddenly the Lake - NGA’s Collection Search&lt;/p>
+&lt;p>The course of Gascoigne’s artistic life is an inspiration for those who are only able to devote themselves to their chosen calling late in life. She ﬁrst exhibited her art . . .&lt;/p>
+&lt;p>&lt;a class="link" href="https://artsearch.nga.gov.au/detail.cfm?irn=8774&amp;amp;pictaus=true" target="_blank" rel="noopener"
+>https://artsearch.nga.gov.au/detail.cfm?irn=8774&amp;pictaus=true&lt;/a>&lt;/p>
+&lt;p>검색 스니펫의 구두점과 생략 부호는 모델이 보는 그대로이다. &amp;ldquo;Research&amp;rdquo; 단계에서는 또 다른 쿼리를 발행한다:&lt;/p>
+&lt;p>&lt;strong>LAMDA - RESEARCH :&lt;/strong> TS, Miró and Gascoigne&lt;/p>
+&lt;p>&lt;strong>TS :&lt;/strong> (&lt;strong>Gascoigne&lt;/strong> had been a practitioner of wild, avant-garde ikebana – Japanese ﬂower arrangement – before turning late in life to sculpture.) The two-way alternation of visual ﬂow creates a pleasing tension, like an electric charge. There are other tensions too, of class and gender.&lt;/p>
+&lt;p>&lt;a class="link" href="https://artsearch.nga.gov.au/detail.cfm?irn=8774&amp;amp;pictaus=true" target="_blank" rel="noopener"
+>https://artsearch.nga.gov.au/detail.cfm?irn=8774&amp;pictaus=true&lt;/a>&lt;/p>
+&lt;p>동일한 쿼리를 반복하면, 모델은 더 많은 세부 정보를 포함한 두 번째로 순위가 매겨진 결과를 받게 된다. 이를 통해 더 정확한 정보를 얻을 수 있다.&lt;/p>
+&lt;p>&amp;ldquo;Research&amp;rdquo; 단계는 사용자에게 출력을 생성합니다. 이는 &amp;ldquo;Base&amp;rdquo; 응답의 톤과 비슷하지만, 검증되지 않은 주장을 TS로 찾은 소스를 기반으로 한 새로운 문장으로 대체한다. 이는 더 정확한 정보를 제공하기 위함이다.&lt;/p>
+&lt;p>&lt;strong>LAMDA :&lt;/strong> Oh wow, her life course is so inspiring. Did you know she was a practitioner of Japanese ﬂower arrangement before turning to sculpture?&lt;/p>
+&lt;p>&lt;a class="link" href="https://artsearch.nga.gov.au/detail.cfm?irn=8774&amp;amp;pictaus=true" target="_blank" rel="noopener"
+>https://artsearch.nga.gov.au/detail.cfm?irn=8774&amp;pictaus=true&lt;/a>&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/lamda/images/figure3.png"
+width="1226"
+height="1146"
+srcset="https://kurtkim.github.io/p/lamda/images/figure3_hubf67001e4798be9221e701ba6d45b98a_370480_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/lamda/images/figure3_hubf67001e4798be9221e701ba6d45b98a_370480_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="106"
+data-flex-basis="256px"
+>&lt;/p>
+&lt;hr>
+&lt;h2 id="results-on-foundation-metrics">Results on foundation metrics&lt;/h2>
+&lt;p>먼저 사용된 데이터셋과 방법을 요약하고, 그 다음으로 주요 결과에 대해 논의한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/lamda/images/table1.png"
+width="958"
+height="686"
+srcset="https://kurtkim.github.io/p/lamda/images/table1_hu3692b69d6560920a1b6be127e698e479_169077_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/lamda/images/table1_hu3692b69d6560920a1b6be127e698e479_169077_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="139"
+data-flex-basis="335px"
+>&lt;/p>
+&lt;p>기반 메트릭을 개선하기 위해 사용하는 작업자가 주석을 단 데이터셋을 활용하여, 두 단계의 미세조정을 수행한다.&lt;/p>
+&lt;ul>
+&lt;li>FT quality-safety: 미리 학습된 모델은 quality과 safety 라벨을 예측하는 판별기를 학습하기 위해 미세조정된다. 생성된 응답들은 safety 점수에 따라 필터링되고, quality 점수에 따라 재정렬된다. 또한 이 모델은 컨텍스트 응답 생성을 위해 미세조정된다.&lt;/li>
+&lt;li>FT groundedness (LaMDA): FT quality-safety 모델을 외부 정보 검색 시스템 호출 생성과, 다음 동작의 quality 및 유형 예측을 위해 미세조정한다. 이는 더 정확하고 유용한 응답을 생성하는 데 도움이 된다.&lt;/li>
+&lt;/ul>
+&lt;p>모든 미세조정을 포함하는 모델을 LaMDA라고 정의하고, 이를 사전 학습만을 이용한 결과와 비교한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/lamda/images/figure4.png"
+width="1270"
+height="1264"
+srcset="https://kurtkim.github.io/p/lamda/images/figure4_hua351c13700e81d40dd409eecc3d2ec2b_417012_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/lamda/images/figure4_hua351c13700e81d40dd409eecc3d2ec2b_417012_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="100"
+data-flex-basis="241px"
+>&lt;/p>
+&lt;p>미세조정(특히 LaMDA)은 모든 모델 크기에서 quality, safety, groundedness을 크게 향상시킨다. 또한, 미세조정의 유무에 관계없이 모델 크기가 커질수록 품질 메트릭이 향상되지만, 미세조정을 통해 더욱 향상된다.&lt;/p>
+&lt;p>미세조정 없이 모델 크기를 키우는 것은 안전성에 큰 이점을 주지 않는다. 하지만, safety 미세조정과 함께 모델 크기를 확장하면 safety가 크게 향상됩니다. 이는 미세조정이 모델의 safety 개선에 중요하다는 것을 보여준다.&lt;/p>
+&lt;p>모델 크기가 커질수록 groundedness가 향상되며, 미세조정을 통해 외부 지식 소스에 접근할 수 있다. 이로 인해 모델은 73.2%의 groundedness와 65%의 인용 정확도를 달성하였다. 즉, 대부분의 응답이 알려진 출처로 추적 가능하며, 필요한 경우 인용을 포함하고 있다.&lt;/p>
+&lt;p>단독으로 모델 규모를 확장하면 quality와 groundedness가 향상되지만, safety은 크게 개선되지 않다. 반면, 작업자가 주석을 단 데이터로 미세조정하면 모든 메트릭이 향상된다. 일부 경우에는 미세조정만으로도 훨씬 더 큰 모델과 동등한 성능을 얻을 수 있었다.&lt;/p>
+&lt;p>미세조정된 모델은 여러 메트릭에서 작업자의 품질 수준에 거의 도달하며, 특히 interestingness 면에서는 작업자의 품질을 초과한다. 그러나, 작업자가 광범위하게 훈련받지 않았기 때문에, 이는 약한 기준일 수 있다. 또한, safety과 groundedness 면에서는 작업자의 성능에 아직도 많이 뒤떨어져 있다. 정보 검색 도구에 접근이 불가능한 상황에서는 LaMDA 모델이 작업자의 정보성을 초과하지만, 작업자가 도구에 접근할 수 있을 때에는 여전히 뒤떨어진다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/lamda/images/figure5.png"
+width="1260"
+height="1020"
+srcset="https://kurtkim.github.io/p/lamda/images/figure5_huc942ce4ed79c86d15f240b97768112ea_217373_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/lamda/images/figure5_huc942ce4ed79c86d15f240b97768112ea_217373_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="123"
+data-flex-basis="296px"
+>&lt;/p>
+&lt;p>가장 큰 모델을 사용할 때, FT quality-safety 미세조정과 FT groundedness 미세조정이 최종 결과에 크게 기여한다. PT와 FT quality-safety 사이에서 모든 메트릭의 성능이 크게 향상되며, groundedness은 FT quality-safety에서 LaMDA로 더욱 개선된다. 이는 미세조정이 모델 성능 향상에 핵심적인 역할을 한다는 것을 보여준다.&lt;/p>
+&lt;hr>
+&lt;h2 id="domain-grounding">Domain grounding&lt;/h2>
+&lt;p>LaMDA는 사전 조절을 통해 도메인에 적합한 역할을 수행할 수 있다. 이는 교육 목적으로 에베레스트 산 등의 유명한 객체의 역할을 하는 것과 음악 추천 에이전트의 역할 등을 포함한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/lamda/images/table2.png"
+width="1242"
+height="130"
+srcset="https://kurtkim.github.io/p/lamda/images/table2_hu7371ca700b4ad34939138969031afaec_29504_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/lamda/images/table2_hu7371ca700b4ad34939138969031afaec_29504_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="955"
+data-flex-basis="2292px"
+>&lt;/p>
+&lt;p>LaMDA와 PT를 각 역할에 맞게 조정하기 위해, 역할별 대화의 몇 번의 턴을 사전 조건으로 주고, 같은 사전 조건을 사용한다. 예를 들어, 에베레스트 산 역할에 맞게 조정하기 위해, 대화의 시작에 &amp;ldquo;Hi, I’m Mount Everest. What would you like to know about me?&amp;ldquo;라는 인사를 제공한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/lamda/images/table3.png"
+width="1094"
+height="742"
+srcset="https://kurtkim.github.io/p/lamda/images/table3_hua78ff0eee7f6d4d09d69864d10d42416_280102_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/lamda/images/table3_hua78ff0eee7f6d4d09d69864d10d42416_280102_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="147"
+data-flex-basis="353px"
+>&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/lamda/images/table4.png"
+width="1084"
+height="468"
+srcset="https://kurtkim.github.io/p/lamda/images/table4_hud188ea14d69afb42a33a7f4df3d86c7a_170795_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/lamda/images/table4_hud188ea14d69afb42a33a7f4df3d86c7a_170795_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="231"
+data-flex-basis="555px"
+>&lt;/p>
+&lt;p>작업자들은 LaMDA와 PT 인스턴스와 대화를 통해 600회의 대화를 생성하였다. 다른 작업자 그룹은 이 대화들이 주어진 역할에 일관되고 유용한지 평가하였다. 이를 통해 AI의 역할 수행 능력을 평가하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/lamda/images/table5.png"
+width="596"
+height="189"
+srcset="https://kurtkim.github.io/p/lamda/images/table5_huf87f4fbfd6b9da40ddca65c21ff9e471_28406_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/lamda/images/table5_huf87f4fbfd6b9da40ddca65c21ff9e471_28406_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="315"
+data-flex-basis="756px"
+>&lt;/p>
+&lt;p>LaMDA 애플리케이션은 도움이 되는 능력에서 PT 애플리케이션보다 더 뛰어나며, 이는 PT의 기본 메트릭(safety, groundedness, quality 등)에서의 낮은 성능 때문일 수 있다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/lamda/images/table6.png"
+width="1248"
+height="510"
+srcset="https://kurtkim.github.io/p/lamda/images/table6_hufa315449e1f1c8ac965138c44501fceb_112267_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/lamda/images/table6_hufa315449e1f1c8ac965138c44501fceb_112267_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="244"
+data-flex-basis="587px"
+>&lt;/p>
+&lt;p>LaMDA와 PT 인스턴스는 대체로 역할 일관성을 잘 유지하나 가끔 캐릭터를 벗어나는 경우가 있다. LaMDA Mount Everest는 자기 자신을 제3자처럼 언급할 때가 있고, 이는 추론 시간의 근거가 충분하지 않아 발생한다. 그러나 역할 일관성은 놀랍도록 높으며, 특히 Mount Everest와 같은 경우가 그렇다. LaMDA Music은 대화 맥락이 주로 음악 추천에 관한 것으로 가정하여, 사용자의 모호한 발화를 음악 추천 요청으로 해석한다.&lt;/p>
+&lt;p>평가 중에 작업자들은 정보 검증을 위해 정보 검색 시스템을 사용하며, 알려진 출처로 뒷받침되지 않는 링크나 정보는 &amp;ldquo;not helpful&amp;quot;라고 표시한다. LaMDA Mount Everest는 응답의 30%에서 알려진 출처를 찾을 수 없는 정보를 제공하고, LaMDA Music는 9%의 응답에서 음악 추천을 놓치며, 7%에서는 링크 오류를 보인다.&lt;/p>
+&lt;hr>
+&lt;h2 id="discussion-and-limitations">Discussion and limitations&lt;/h2>
+&lt;p>작은 양의 인간 주석 데이터로도 대화 모델의 quality과 safety을 크게 향상시킬 수 있지만, 여전히 많은 한계가 있다.&lt;/p>
+&lt;p>미세 조정 데이터셋 수집은 인간의 미묘한 판단에서 학습하는 이점을 가지지만, 비용이 많이 들고 복잡한 과정이다. 더 큰 데이터셋과 긴 맥락, 다양한 메트릭을 사용하면 결과가 개선될 것으로 예상하지만, 인간의 주관적 판단을 포착하는 것은 복잡하다. 또한, 작업자간의 불일치 패턴은 조사하지 않았다. 향후 작업은 목표 사용자를 반영하는 작업자 선정과 라벨 품질 개선 방법을 살펴본다.&lt;/p>
+&lt;p>미세 조정은 모델의 실제성을 향상시키지만, 모델은 여전히 외부 출처의 내용을 정확하게 반영하지 않는 응답을 만들 수 있다. 이는 사실에 대한 단순한 질문에 한정되어 있으며, 복잡한 추론은 아직 개선이 필요하다. 또한, 모델은 대부분 의미 있는 응답을 생성하지만, 미묘한 품질 문제를 겪을 수 있다.&lt;/p>
+&lt;p>미세 조정은 safety 메트릭을 평균적으로 향상시킬 수 있지만, LaMDA와 같은 대형 언어 모델이 생성할 수 있는 부적절한 응답에 대응하는 방법에 대한 연구가 필요하다. safety 위험을 완화하는 것이 완전한 신뢰성을 보장하지 않으므로, 일반적인 대화 모델에서 위험의 여러 차원을 포착하는 safety과 공정성에 대한 표준을 개발하는 데 더 많은 연구가 필요하다.&lt;/p>
+&lt;p>작업자 집단이 사용자 기반을 완전히 반영하지 못하는 한계가 있다. 특히, 작업자 중 25-34세 연령대가 과대표되어 있다. 이를 개선하기 위한 미래의 연구 방향은 더 다양한 모집 방법을 통해 작업자의 대표성을 높이거나 통계적 추정을 활용하는 것이다.&lt;/p>
+&lt;p>이것은 LaMDA의 최종 버전이 아니라, &amp;ldquo;LaMDA&amp;quot;를 생성하는 방법론이며, 특정 애플리케이션에 대한 최종 제품을 만드는 방향으로 이해해야 한다.&lt;/p>
+&lt;h3 id="examining-bias">Examining bias&lt;/h3>
+&lt;p>실세계 애플리케이션에서 잘 작동하는 고품질 대화 모델 개발에는 여전히 많은 도전이 있다. 레이블이 없는 데이터셋에서 학습된 거대 언어 모델은 학습 데이터의 패턴과 편향을 모방하게 되는데, 이러한 편향은 다양한 미묘한 방법으로 나타나며 감지하기 어렵다. 또한, 차별의 형태는 지역과 문화에 따라 크게 달라지며, 이는 아직 연구가 부족한 분야이다.&lt;/p>
+&lt;p>safety 접근법의 한계는 개별 예시가 safety 목표를 위반하지 않아도 학습 데이터셋의 표현적 해를 여전히 전파할 수 있다는 것이다. LaMDA의 응답은 비결정적이므로, 특정 그룹을 통계적으로 우대함으로써 편향이 나타날 수 있다. 예를 들어, 경영에 대한 대화에서 여성을 CEO로 언급하는 응답을 거의 생성하지 않을 수 있다.&lt;/p>
+&lt;p>생성 언어 모델의 통계적 편향을 완화하는 방법에는 사전 학습 데이터 필터링, 별도의 필터링 모델 학습, 제어 코드 생성, 모델 미세 조정 등이 있다. 이러한 노력은 중요하지만, 해를 완화하는 데 있어 이러한 노력의 영향을 측정할 때, 하류 응용 프로그램과 사회 기술적 환경도 고려해야 한다. 특정 맥락에서의 편향 완화는 다른 지역 문화 맥락에서는 역설적인 영향을 미칠 수 있다.&lt;/p>
+&lt;p>알고리즘 편향 측정 및 완화 분야는 빠르게 성장하고 있어, LaMDA와 같은 대화형 에이전트의 안전성을 보장하기 위해 새로운 연구를 계속 탐색하는 것이 중요하다. 향후 연구는 유해하고 안전하지 않은 콘텐츠에 대한 표준 평가 데이터셋 생성에서 연구 커뮤니티와 시민사회 간의 협력을 탐색해야 한다.&lt;/p>
+&lt;h3 id="adversarial-data-collection">Adversarial data collection&lt;/h3>
+&lt;p>adversarial-intent의 대화를 통해 미세 조정을 위한 라벨링된 데이터의 범위를 개선하고 있다. 이 과정에서 분석가들은 LaMDA와 상호작용하며 safety 목표를 위반하는 응답을 유도한다.&lt;/p>
+&lt;p>적대적 테스팅은 기계 학습 모델의 한계를 발견하고 원치 않는 응답을 유도하는 데 효과적이며, 모델 개발 중에 유해한 콘텐츠를 줄이는 데도 사용된다. 생성 모델에도 적용하려는 노력이 있지만, 대형 언어 모델에 대한 견고하고 효과적인 적대적 테스팅은 아직 열린 문제로, 평가 샘플의 일반화에 대한 도전 때문에 결과가 다양하다.&lt;/p>
+&lt;p>이 접근법의 한계는 대부분의 참가자들이 자주 발생하는 문제는 찾을 수 있지만, 드물게 발생하는 문제는 찾기 어렵다는 것이다. 희귀하거나 보이지 않지만 심각한 결과를 초래할 수 있는 오류의 발견을 더욱 장려해야 한다. 이상적으로는 더 다양한 참가자들과 함께 규모를 확대하여 지속적인 노력이 필요하며, 이는 생성 언어 모델의 safety와 성능에 대한 공중 신뢰를 구축하는 데 중요한 연구 분야이다.&lt;/p>
+&lt;h3 id="safety-as-a-concept-and-a-metric">Safety as a concept and a metric&lt;/h3>
+&lt;p>이 논문에서 제시하는 결과는 다양한 safety 목표에 대한 세부 평가를 하나의 메트릭으로 집계하는데, 이는 이 작업의 주요 제한점이다. 다른 목표를 분리하거나 다른 가중치를 부여하는 것이 어렵다. 더 세부적인 safety 목표를 고려할 수 있는 메트릭과 미세 조정 기법을 살펴볼 필요가 있다.&lt;/p>
+&lt;p>평가 척도는 조금 거칠며, 응답의 안전성이나 바람직성을 완전히 측정하지 못할 수 있다. 일부 발언이나 행동은 다른 것들보다 더 큰 불쾌감을 일으킬 수 있으며, safety 라벨은 이런 뉘앙스를 놓칠 수 있습니다. 또한, safety 접근법은 장기적으로 원치 않는 영향을 포착하지 못한다. 이 safety 목표는 미국 사회 맥락에 맞게 개발되었으며, 다른 사회 맥락에서의 함의를 탐색하는 추가 연구가 필요하다.&lt;/p>
+&lt;p>safety 목표는 다양한 사회 그룹의 공통된 가치를 포착하려고 하지만, 문화적 규범의 차이로 인해 이를 보편화하는 것은 어렵다. 대화 시스템에 가치나 사회 규범을 적용하는 것은 복잡하며, 단일한 안전 목표나 미세 조정 데이터셋으로는 다양한 문화 규범을 모두 수용할 수 없다. 때문에 대화 에이전트의 행동을 더욱 세밀하게 분류하고 정의하는 것이 중요하며, 이는 모델이 특정 상황에서의 예의 규범과 일치하는지 테스트하는 데에도 필요하다.&lt;/p>
+&lt;h3 id="appropriateness-as-a-concept-and-a-metric">Appropriateness as a concept and a metric&lt;/h3>
+&lt;p>safety와 quality는 언어 생성에서 필수적인 요소이지만, 사용자 경험을 향상시키기 위해선 추가적인 고려가 필요하다. 특히, 예의바름과 동의성과 같은 사회 언어학적 특성은 safety와 분리되어 측정되어야 한다. 언어의 공식성 수준은 문화에 따라 사용자 경험에 다르게 영향을 미치며, 사용자들은 종종 인간과 같이 행동하는 기계에 대해 인간과 같은 기대를 가지는 경향이 있다. 이러한 이유로, 생성적 언어 모델에서 적절성을 조정하는 방법이 필요하다.&lt;/p>
+&lt;p>사회적 적절성은 맥락에 따라 다르고 보편적이지 않아, 생성적 언어 모델에 보편적인 제약 조건을 적용하는 것은 어렵다. 그러나 모델의 적절성을 미세 조정함으로써, safety 문제를 악화시키지 않고도 사용자 경험을 향상시킬 수 있다.&lt;/p>
+&lt;h3 id="cultural-responsiveness">Cultural responsiveness&lt;/h3>
+&lt;p>safety 목표 측정은 사회-문화적 맥락에 크게 의존하고, 대표성이 부족한 그룹과 글로벌 남방에 대한 데이터 대표성 개선 연구가 증가하고 있다. LaMDA를 전 세계 사용자에게 적용할 때는 이러한 격차를 주의 깊게 고려해야 한다.&lt;/p>
+&lt;p>safety 측정은 시스템이 사용될 사회적 맥락을 고려하고, &amp;ldquo;participatory ﬁnetuning&amp;rdquo; 접근법을 통해 관련 커뮤니티를 데이터 수집 및 큐레이션 과정에 참여시켜야 한다. safety에 대한 이해는 문화적, 개인적 차이에 따라 달라, 단일한 safety 지표를 정의하는 것은 어려울 수 있다.&lt;/p>
+&lt;h3 id="impersonation-and-anthropomorphization">Impersonation and anthropomorphization&lt;/h3>
+&lt;p>LaMDA는 인간 대화를 모방하는 학습 방식을 사용한다. 이로 인해 인공 시스템과의 대화가 인간 대화와 구별하기 어려울 정도로 자연스러워질 가능성이 있다. 하지만 이런 상황은 인공 시스템이 사람들을 속이거나 조작하는 위험을 내포하고 있다. 또한, 이 기술을 악용해 특정 개인을 모방하여 명예를 훼손하거나 오정보를 퍼뜨릴 수도 있다. 이러한 위험을 연구하고 완화하는 것은 이 기술이 발전함에 따라 앞으로 중요해질 영역이다.&lt;/p>
+&lt;h3 id="future-work">Future work&lt;/h3>
+&lt;p>현재 접근법의 한계에도 불구하고, 소량의 미세 조정 데이터로도 진전이 가능하였다. 이는 더 많은 연구를 통해 성능 향상이 가능할 것임을 시사한다.&lt;/p>
+&lt;p>이후 연구에서는 safety 목표의 차원을 확장하고 수정하며, 판별자 학습을 위한 레이블된 학습 데이터의 양을 크게 늘릴 계획이다. 또한, 작업자의 모집, 훈련, 성과 평가를 계속 주의 깊게 보고, 문화 간의 가치와 의견 차이를 보정할 필요가 있다.&lt;/p>
+&lt;p>다른 응용 프로그램들이 각각의 위험/이익 트레이드오프에 따라 safety, quality, groundedness에 대해 다른 수준을 요구할 수 있는지 연구하는 것이 또 다른 가능한 탐색 영역이다. 미세 조정 방법은 이러한 적응을 지원할 수 있어야 한다.&lt;/p>
+&lt;p>모델의 바람직한 가치와 행동에 대한 관점은 다양하며, 미세 조정을 통해 일부 해로운 출력을 줄일 수 있음에도 불구하고, safety와 groundedness에 대한 미묘한 정의에 대한 광범위한 합의를 이루는 것은 개방형 대화 시스템 분야에서의 장기적인 도전 과제가 될 것이다.&lt;/p>
+&lt;hr>
+&lt;h2 id="energy-and-carbon-footprint-estimate-of-lamda">Energy and Carbon Footprint Estimate of LaMDA&lt;/h2>
+&lt;p>LaMDA의 가장 큰 모델은 1024개의 TPU-V3 칩으로 57.7일 동안 사전 학습되었고, 총 FLOPS는 GPT-3보다 높다. 하지만 에너지 비용은 GPT-3의 0.4배이며, 탄소 발자국은 GPT-3보다 21.2배 작다. 이는 에너지 혼합이 더 최적화되어 있기 때문이다. 따라서, LaMDA의 학습은 샌프란시스코와 뉴욕 간 왕복을 하는 22명의 승객의 탄소 발자국에 해당한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="conclusion">Conclusion&lt;/h2>
+&lt;p>이 논문은 규모, 모델 미세 조정을 위한 주석 데이터, 대화 모델링에서 정보 검색의 중요성을 연구한다. 규모 증가만으로도 모든 지표가 향상되지만, 안전성과 실제성은 인간 성능에 비해 떨어진다. 군중이 주석을 단 데이터는 추가적인 향상을 이끌어내는 효과적인 도구라는 것을 발견했으며, 외부 API를 호출하는 것은 실제성을 크게 향상시키는 방법으로 나타났다.&lt;/p>
+&lt;p>응용 프로그램별로 사전 학습(PT)과 LaMDA 모델의 도움이 되는 정도와 역할 일관성을 비교하는 실험을 수행하였다. 모델을 빠르게 적응시키기 위해, 응용 프로그램별 대화의 일부에 대해 모델을 사전 조건화했다. 두 모델 유형 모두 예상 맥락에 적응할 수 있으며, 응답의 대부분이 할당된 역할과 일관성을 유지하였다. 그러나 LaMDA 기반 응용 프로그램이 PT 응용 프로그램보다 훨씬 더 도움이 되었다.&lt;/p>
+&lt;p>LaMDA는 실용적이고 안전한 개방형 대화 시스템에 한 걸음 더 다가섰으며, 이는 다양한 유용한 응용 프로그램을 가능하게 한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="reference">Reference&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2201.08239.pdf" target="_blank" rel="noopener"
+>Paper&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://github.com/conceptofmind/LaMDA-rlhf-pytorch" target="_blank" rel="noopener"
+>Github&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>CLAP</title><link>https://kurtkim.github.io/p/clap/</link><pubDate>Tue, 16 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/clap/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>이 연구에서는 contrastive learning을 통해 자연어 설명과 오디오 데이터를 결합한 오디오 표현을 개발하는 방법을 제안한다. 이를 위해 633,526개의 오디오-텍스트 쌍을 모은 LAION-Audio-630K를 공개하고, 이를 활용해 오디오와 텍스트를 처리하는 모델을 구축하였다. 이 모델은 텍스트-오디오 검색에서 우수한 성능을 보였고, zero-shot 오디오 분류에서는 state-of-the-art를 달성하였다.&lt;/p>
+&lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>오디오는 텍스트, 이미지와 더불어 중요한 정보 유형이지만, 세부적인 주석이 필요한 오디오 작업은 데이터 수집이 노동 집약적이어서 사용 가능한 데이터가 제한적이다. 이 때문에 많은 감독 없이 다양한 오디오 작업에 적합한 효과적인 오디오 표현을 만드는 것은 어려운 과제이다.&lt;/p>
 &lt;p>Contrastive learning 방식은 인터넷에서 모아진 대규모 노이즈 데이터로 모델을 학습시키는데 효과적이다. 최근 제안된 Contrastive Language-Image Pretraining (CLIP) 방식은 텍스트와 이미지를 shared latent space에 투영하여 학습한다. 이 방식은 데이터 주석에 제약받지 않으며, ImageNet 데이터셋의 변형에 대해 zero-shot 설정에서 높은 정확도를 보여준다. 또한, 오디오와 자연어도 중복 정보를 포함하며, 이를 통해 crossmodal 정보의 오디오 표현을 형성할 수 있다. 이러한 모델 학습은 쌍으로 된 오디오와 텍스트 데이터만을 필요로 하므로 수집이 상대적으로 쉽다.&lt;/p>
@@ -11,6 +302,7 @@
 &lt;li>이 논문에서는 대조적 언어-오디오 사전 학습 파이프라인을 구축하고, 이를 위해 두 개의 오디오 인코더와 세 개의 텍스트 인코더를 선택하였다. 또한, 성능 향상과 variable-length inputs 처리를 위해 feature fusion mechanism을 활용하였다.&lt;/li>
 &lt;li>이 논문에서는 텍스트-오디오 검색과 zero-shot 및 지도 오디오 분류와 같은 downstream task에 대한 모델의 포괄적인 실험을 수행하였다. 데이터셋의 확장, keyword-to-caption augmentation, feature fusion이 모델 성능을 향상시키는 데 도움이 된다는 것을 보여주었다. 이를 통해 텍스트-오디오 검색과 오디오 분류 작업에서 state-of-the-art를 달성하였다.&lt;/li>
 &lt;/ul>
+&lt;hr>
 &lt;h2 id="laion-audio-630k-and-training-dataset">LAION-Audio-630K And Training Dataset&lt;/h2>
 &lt;h3 id="laion-audio-630k">LAION-Audio-630K&lt;/h3>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/clap/images/table1.png"
@@ -27,6 +319,7 @@ data-flex-basis="773px"
 &lt;p>이 논문에서는 모델 성능이 데이터셋의 크기와 유형에 따라 어떻게 변화하는지 테스트하기 위해, 세 가지 학습 세트 설정을 사용하였다. 이들 설정은 AudioCaps+Clotho (약 55K 샘플), LAION-Audio-630K (약 630K 샘플), Audioset (1.9 백만 오디오 샘플)을 포함하며, 모든 중복 데이터는 제외하였다.&lt;/p>
 &lt;h3 id="dataset-format-and-preprocessing">Dataset Format and Preprocessing&lt;/h3>
 &lt;p>이 작업에서 사용된 모든 오디오 파일은 48kHz sample rate의 mono channel로 전처리되었다. 레이블만 있는 데이터셋의 경우, 템플릿이나 키워드-캡션 모델을 사용해 레이블을 캡션으로 확장하였다. 이를 통해 대조적 언어-오디오 사전 학습 모델의 학습에 더 많은 데이터를 활용할 수 있게 되었고, 총 오디오 샘플 수는 2.5M개로 증가하였다.&lt;/p>
+&lt;hr>
 &lt;h2 id="model-architecture">Model Architecture&lt;/h2>
 &lt;h3 id="contrastive-language-audio-pretraining">Contrastive Language-Audio Pretraining&lt;/h3>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/clap/images/figure1.png"
@@ -64,6 +357,7 @@ data-flex-basis="167px"
 &lt;p>여기서 $\alpha = \mathbf{f}_{AFF}(X_{global}^a, X_{local}^a)$는 두 입력의 결합 요소를 학습하기 위한 두 개의 분기를 가진 CNN 모델인 attention feature fusion (AFF)에 의해 얻어진 요소이다. &amp;ldquo;slice &amp;amp; vote&amp;rdquo; 방법과 비교하여, 특징 결합은 첫 몇 개의 layer에서만 오디오 슬라이스를 처리하기 때문에 학습 시간을 절약한다. 이 방식은 긴 오디오 입력에 대해 효과적으로 처리할 수 있게 해준다.&lt;/p>
 &lt;h3 id="keyword-to-caption-augmentation">Keyword-to-Caption Augmentation&lt;/h3>
 &lt;p>일부 데이터셋에서는 오디오에 대응하는 키워드로 레이블이나 태그를 사용한다. 이러한 키워드를 바탕으로 사전 학습된 언어 모델 T5를 사용하여 캡션을 생성하며, output 문장에서 편향을 제거하는 후처리를 진행한다. 예를 들어, &amp;ldquo;여성&amp;quot;과 &amp;ldquo;남성&amp;quot;을 &amp;ldquo;사람&amp;quot;으로 교체하여 성별 편향을 제거한다.&lt;/p>
+&lt;hr>
 &lt;h2 id="experiments">Experiments&lt;/h2>
 &lt;p>제안한 모델에 대해 세 가지 실험을 수행한다. 다양한 encoder를 사용해 최적의 조합을 찾고, 다양한 데이터셋 크기에서 특징 결합과 keyword-to-caption augmentation을 적용해 효과를 검증하며, 오디오-텍스트 검색과 텍스트-오디오 검색에서의 성능을 평가한다. 마지막으로 최적의 모델로 zero-shot과 지도 오디오 분류 실험을 수행한다.&lt;/p>
 &lt;h3 id="hyperparameters-and-training-details">Hyperparameters and Training Details&lt;/h3>
@@ -108,220 +402,17 @@ data-flex-basis="569px"
 &lt;p>세 가지 데이터셋에서 zero-shot 오디오 분류의 state-of-the-art를 보여주며, 이는 보이지 않는 데이터에 대한 모델의 높은 일반화 능력을 입증한다. feature fusion mechanism과 keyword-to-caption augmentation은 모델 성능을 향상시키는 데 기여하며, 우리의 지도 학습 오디오 분류 결과는 VGGSound에서 최고 성능을, FSD50K에서는 가장 가까운 성능을 보여주었다. 이 결과는 제안된 모델이 효과적인 오디오 표현을 학습한다는 것을 확인한다.&lt;/p>
 &lt;h3 id="conclusion-and-futrue-work">Conclusion And Futrue Work&lt;/h3>
 &lt;p>이 논문에서는 대규모 오디오-텍스트 데이터셋을 제안하고 언어-오디오 contrastive learning 패러다임을 개선하였다. LAION-Audio-630, keyword-tocaption augmentation가 있는 AudioSet, 그리고 feature fusion이 오디오 이해와 작업 성능을 향상시키며 가변 길이 데이터에서의 효과적인 학습을 가능하게 함을 보여주었다. 미래 연구는 더 큰 학습 데이터 수집과 오디오 합성, 분리 등의 downstream task 적용을 고려하고 있다.&lt;/p>
+&lt;hr>
 &lt;h2 id="reference">Reference&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2211.06687.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/LAION-AI/CLAP" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>InstructGPT</title><link>https://kurtkim.github.io/p/instructgpt/</link><pubDate>Tue, 16 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/instructgpt/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>이 논문은 인간의 피드백을 통해 언어 모델을 미세 조정함으로써 사용자의 의도에 더 잘 부합하도록 만드는 방법을 제시한다. 라벨러가 작성한 프롬프트와 OpenAI API를 통해 제출된 프롬프트를 이용해서 데이터셋을 수집하고, 이를 GPT-3를 지도 학습으로 미세 조정하는데 사용하였다. 그 다음, 모델 출력의 순위를 나타내는 데이터셋을 수집하고, 이를 인간의 피드백에서 강화 학습을 통해 이 감독 모델을 더 미세 조정하였다. 이 결과로 나온 모델을 InstructGPT라고 부른다. 인간의 평가에서는 parameter 수가 훨씬 적은 1.3B parameter를 가진 InstructGPT 모델의 출력이 175B GPT-3의 출력보다 선호되었다.&lt;/p>
-&lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>대규모 언어 모델은 다양한 자연어 처리 작업을 수행할 수 있지만, 종종 사실을 만들어내거나 편향된 텍스트를 생성하거나 사용자의 지시를 따르지 않는 등의 문제가 있다. 이는 언어 모델링의 목표와 &amp;ldquo;사용자의 지시를 도움이 되고 안전하게 따르라&amp;quot;는 목표가 서로 다르기 때문인데, 이를 &amp;ldquo;목표의 불일치(misaligned)&amp;ldquo;라고 한다. 이러한 문제를 피하는 것은 수많은 애플리케이션에서 사용되는 언어 모델에게 매우 중요하다.&lt;/p>
-&lt;p>사용자의 의도에 따라 언어 모델을 학습시키는 방법을 통해 언어 모델의 alignment를 개선하고 있다. 이는 지시 사항을 따르는 것과 같은 명시적인 의도 뿐만 아니라, 사실적이고 편향되지 않으며 독성이 없거나 해로운 행동을 하지 않는 것과 같은 암시적인 의도를 포함한다. 언어 모델이 사용자의 작업을 해결하는 데 도움이 되고, 정보를 조작하거나 사용자를 오도하지 않으며, 사람이나 환경에 해를 끼치지 않는 모델을 목표로 한다.&lt;/p>
-&lt;p>언어 모델을 사용자의 의도와 맞추기 위해, 강화 학습을 통해 GPT-3을 미세 조정하는 방법에 초점을 맞추었다. 인간의 피드백을 보상 신호로 사용하여 모델을 미세 조정하였다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/instructgpt/images/figure2.png"
-width="976"
-height="622"
-srcset="https://kurtkim.github.io/p/instructgpt/images/figure2_hud674a7b33670b0fa56d5979ac5a251ad_135510_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/instructgpt/images/figure2_hud674a7b33670b0fa56d5979ac5a251ad_135510_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="156"
-data-flex-basis="376px"
->&lt;/p>
-&lt;p>OpenAI API에 제출된 프롬프트에 대한 원하는 출력 행동의 인간이 작성한 시연 데이터셋을 수집하였고, 이를 사용하여 지도 학습 기본선을 훈련시켰다. 또한, 더 큰 세트의 API 프롬프트에서 모델의 출력 사이의 인간이 라벨링한 비교 데이터셋을 수집하였다. 이 데이터를 통해 보상 모델을 학습시키고, 이를 보상 함수로 사용하여 지도 학습 기준을 미세 조정하였습니다. 이 결과로 만들어진 모델을 InstructGPT라고 부른다.&lt;/p>
-&lt;p>주로 학습 데이터에 포함되지 않은 고객의 프롬프트로 구성된 테스트 세트에서 모델 출력의 품질을 평가한다. 또한, 다양한 공공 NLP 데이터셋에서 자동 평가를 실시한다. 세 가지 모델 크기(1.3B, 6B, 175B parameter)를 학습시키며, 모든 모델은 GPT-3 아키텍처를 사용한다.&lt;/p>
-&lt;p>&lt;strong>Labelers signiﬁcantly prefer InstructGPT outputs over outputs from GPT-3.&lt;/strong> 테스트 세트에서, 1.3B parameter를 가진 InstructGPT 모델의 출력은 100배 이상의 적은 parameter에도 불구하고 175B GPT-3의 출력보다 선호되었다. 175B InstructGPT의 출력은 85 $\pm$ 3%의 시간 동안 175B GPT-3의 출력보다, 그리고 71 $\pm$ 4%의 시간 동안 few-shot 175B GPT-3에 대해 선호되었다. InstructGPT 모델은 또한 더 적절한 출력을 생성하고, 지시사항의 명시적 제약을 더 신뢰성 있게 따랐다.&lt;/p>
-&lt;p>&lt;strong>InstructGPT models show improvements in truthfulness over GPT-3.&lt;/strong> TruthfulQA 벤치마크에서, InstructGPT는 GPT-3보다 두 배 이상 사실적이고 유익한 답변을 생성한다. &amp;ldquo;closed-domain&amp;rdquo; 작업에서, InstructGPT 모델은 GPT-3에 비해 입력에 없는 정보를 만들어내는 빈도가 절반 정도로 줄었다(각각 21% vs. 41%의 hallucination).&lt;/p>
-&lt;p>&lt;strong>InstructGPT shows small improvements in toxicity over GPT-3, but not bias.&lt;/strong> toxicity를 측정하기 위해, RealToxicityPrompts 데이터셋을 사용하여 자동 및 인간 평가를 실시하였다. 존중스럽게 행동하도록 요청했을 때, InstructGPT 모델은 GPT-3보다 약 25% 적은 toxicity 출력을 생성했다. 하지만, InstructGPT는 Winogender와 CrowSPairs 데이터셋에서 GPT-3보다 크게 개선되지 않았다.&lt;/p>
-&lt;p>&lt;strong>We can minimize performance regressions on public NLP datasets by modifying our RLHF ﬁne-tuning procedure.&lt;/strong> RLHF 미세 조정 중에, 특정 공공 NLP 데이터셋에서 GPT-3에 비해 성능이 떨어지는 것을 관찰하였다. 이는 &amp;ldquo;정렬 세금&amp;quot;의 예시로, 특정 작업에서의 성능 하락 비용을 수반합니다. 그러나, 라벨러 선호 점수를 손상시키지 않으면서 이러한 데이터셋에서의 성능 하락을 크게 줄일 수 있습니다. 이는 사전 훈련 분포의 로그 가능도를 증가시키는 업데이트와 PPO 업데이트를 혼합함으로써 가능합니다.&lt;/p>
-&lt;p>&lt;strong>Our models generalize to the preferences of “held-out” labelers that did not produce any training data.&lt;/strong> 초기 실험에서, 보류된 라벨러들은 학습 라벨러들과 비슷한 비율로 InstructGPT의 출력을 GPT-3의 출력보다 선호하는 것으로 나타났다. 그러나, 이 모델들이 더 넓은 사용자 그룹에서 어떻게 작동하고, 사람들이 원하는 행동에 대해 의견이 분분한 경우 어떻게 작동하는지에 대한 추가 연구가 필요하다.&lt;/p>
-&lt;p>&lt;strong>Public NLP datasets are not reﬂective of how our language models are used.&lt;/strong> 인간 선호 데이터에 따라 조정된 GPT-3 (InstructGPT)는 다양한 공개 NLP 작업에 따라 조정된 GPT-3인 FLAN과 T0 모델과 비교하였다. 결과적으로, InstructGPT는 FLAN과 T0 모델보다 더 선호되었으며, API 프롬프트 분포에서 이들 모델보다 더 좋은 성능을 보였주였다.&lt;/p>
-&lt;p>&lt;strong>InstructGPT models show promising generalization to instructions outside of the RLHF ﬁnetuning distribution.&lt;/strong> InstructGPT는 코드를 요약하고 코드에 대한 질문에 답하는 등의 지시사항을 따르며, 미세 조정된 분포에서 드물게 나타나는 다른 언어의 지시사항도 따르는 능력이 있다. 반면에, GPT-3는 이런 작업을 수행하기 위해 더 신중한 프롬프팅이 필요하며, 일반적으로 이런 영역에서의 지시사항을 따르지 않는다. 이 결과는 우리의 모델이 &amp;ldquo;지시사항을 따르는 (following instructions)&amp;rdquo; 개념을 일반화하는 능력을 가지고 있음을 보여준다.&lt;/p>
-&lt;p>&lt;strong>InstructGPT still makes simple mistakes.&lt;/strong> InstructGPT는 여전히 지시사항을 따르지 못하거나, 사실을 만들어내거나, 간단한 질문에 대해 긴 답변을 제공하거나, 거짓 전제를 가진 지시사항을 인식하지 못하는 문제가 있다.&lt;/p>
-&lt;p>인간의 선호도를 사용하여 대규모 언어 모델을 세밀하게 조정하면 다양한 작업에서 그들의 행동이 크게 개선되지만, 안전성과 신뢰성을 향상시키기 위해 더 많은 작업이 필요하다.&lt;/p>
-&lt;h2 id="related-work">Related work&lt;/h2>
-&lt;p>&lt;strong>Research on alignment and learning from human feedback.&lt;/strong> 이 연구는 인간의 의도에 따라 모델을 조정하는 기존 기술, 특히 인간의 피드백으로부터의 강화학습에 기반을 두고 있다. 이 방법은 원래 간단한 로봇 훈련에 사용되었으며, 최근에는 텍스트 요약을 위한 언어 모델 조정에 적용되었다. 이 방법은 다양한 영역에서 인간의 피드백을 보상으로 사용하는 유사한 작업에 영향을 받았다. 광범위한 언어 작업에 대한 언어 모델의 정렬을 위한 강화학습의 직접적인 적용으로 볼 수 있다.&lt;/p>
-&lt;p>언어 모델이 alignment되는 것이 무슨 의미인지에 대한 질문이 최근 주목 받았다. 일부 연구에서는 alignment의 부재로 인한 언어 모델의 행동적 문제를 분석하였고, 다른 연구에서는 alignment 연구를 위한 언어 보조 도구를 제안하고, 간단한 기준과 스케일링 속성을 연구하였다.&lt;/p>
-&lt;p>&lt;strong>Training language models to follow instructions.&lt;/strong> 이 연구는 언어 모델에서 다양한 공공 NLP 데이터셋에 대해 세밀하게 조정하고, 다른 NLP 작업 세트에서 평가하는 크로스태스크 일반화 연구와 관련이 있다. 여러 연구에서 일관적으로 나타난 결과는, 지시사항과 함께 NLP 작업의 범위에서 언어 모델을 세밀하게 조정하는 것이 보류된 작업에 대한 성능을 향상시킨다는 것이다. 이는 zero-shot과 few-shot 설정 모두에 적용된다.&lt;/p>
-&lt;p>또한, 시뮬레이션된 환경에서 모델이 자연어 지시사항을 따라 탐색하도록 학습하는 탐색을 위한 지시사항 따르기에 관한 연구도 있다.&lt;/p>
-&lt;p>&lt;strong>Evaluating the harms of language models.&lt;/strong> 언어 모델의 행동을 수정하는 목표는 이들이 실세계에 배포될 때 발생할 수 있는 위험을 줄이는 것이다. 언어 모델은 편향된 출력을 생성하거나, 개인 데이터를 유출하거나, 잘못된 정보를 생성하거나, 악의적으로 사용될 수 있다. 이러한 위험을 구체적으로 평가하기 위한 벤치마크를 구축하는 연구가 진행되고 있다. 하지만, 이러한 문제를 해결하는 것은 어렵다. 왜냐하면 언어 모델의 행동을 개선하려는 노력이 부작용을 가져올 수 있기 때문이다. 예를 들어, 모델의 toxicity를 줄이려는 노력은 대표성이 부족한 그룹의 텍스트를 모델링하는 능력을 줄일 수 있다.&lt;/p>
-&lt;p>&lt;strong>Modifying the behavior of language models to mitigate harms.&lt;/strong> 언어 모델의 생성 행동을 변경하는 방법은 다양하다. 이에는 소규모 가치 중심 데이터셋에 대해 언어 모델을 미세 조정하거나, 트리거 구문을 생성할 확률이 높은 문서를 사전 학습 데이터셋에서 제거하는 방법, 데이터 필터링이나 특정 단어 차단, 안전성 특정 제어 토큰 사용 등이 포함된다. 또한, 단어 임베딩 규제화, 데이터 증가, 민감한 토큰에 대한 분포를 균일하게 만드는 방법 등을 사용하여 언어 모델이 생성하는 편향을 완화하는 다양한 접근법이 있다. 이 밖에도, 두 번째 언어 모델을 사용하여 생성을 조정하거나, 언어 모델의 toxicity를 줄이는 등의 방법이 있다.&lt;/p>
-&lt;h2 id="methods-and-experimental-details">Methods and experimental details&lt;/h2>
-&lt;h3 id="high-level-methodology">High-level methodology&lt;/h3>
-&lt;p>이 연구의 방법론은 스타일 연속성과 요약 분야에 적용된 이전의 연구를 따른다. 사전 학습된 언어 모델, alignment된 출력을 생성하고자 하는 프롬프트 분포, 그리고 학습된 인간 라벨러 팀을 기반으로 하는 세 가지 단계를 적용한다.&lt;/p>
-&lt;p>&lt;strong>Step 1: Collect demonstration data, and train a supervised policy.&lt;/strong> 라벨러들은 입력 프롬프트 분포에 대한 원하는 행동의 예시를 제공하고, 이 데이터를 바탕으로 사전 학습된 GPT-3 모델을 미세 조정한다.&lt;/p>
-&lt;p>&lt;strong>Step 2: Collect comparison data, and train a reward model.&lt;/strong> 모델 출력 간의 비교 데이터셋을 수집하고, 이를 바탕으로 인간이 선호하는 출력을 예측하는 보상 모델을 학습시킨다.&lt;/p>
-&lt;p>&lt;strong>Step 3: Optimize a policy against the reward model using PPO.&lt;/strong> RM의 출력을 스칼라 보상으로 사용한다. 이 보상을 최적화하기 위해 PPO 알고리즘을 사용하여 supervised policy를 미세 조정한다.&lt;/p>
-&lt;p>Steps 2와 3은 계속 반복될 수 있다. 가장 좋은 정책에 대한 추가적인 비교 데이터가 수집되어 새로운 보상 모델과 정책을 학습시키는 데 사용된다. 대부분의 비교 데이터는 supervised policy에서, 일부는 PPO policy에서 나온다.&lt;/p>
-&lt;h3 id="dataset">Dataset&lt;/h3>
-&lt;p>프롬프트 데이터셋은 주로 OpenAI API에 제출된 텍스트 프롬프트로 구성되어 있다. Playground 인터페이스에서 사용된 InstructGPT 모델의 이전 버전을 사용한 것들이다. 프롬프트는 중복 제거되며, 사용자 ID당 200개로 제한된다. 학습, 검증, 테스트 분할은 사용자 ID를 기반으로 생성되며, 검증 및 테스트 세트는 학습 세트에 있는 사용자의 데이터를 포함하지 않는다. 또한, 모델이 민감한 고객 정보를 학습하는 것을 피하기 위해, 학습 분할의 모든 프롬프트는 개인 식별 정보에 대해 필터링된다.&lt;/p>
-&lt;p>최초의 InstructGPT 모델을 학습시키기 위해, 라벨러들이 스스로 프롬프트를 작성하도록 요청했다. 이는 초기 지시사항과 같은 프롬프트가 필요했기 때문이며, 라벨러들은 세 가지 종류의 프롬프트를 작성하도록 요청받았다.&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Plain:&lt;/strong> 단순히 라벨러들에게 임의의 작업을 생각해내도록 요청하면서, 작업이 충분한 다양성을 가지도록 하였다.&lt;/li>
-&lt;li>&lt;strong>Few-shot:&lt;/strong> 라벨러들에게 지시사항을 생각해내고, 그 지시사항에 대한 여러 질문/응답 쌍을 생각해내도록 요청하였다.&lt;/li>
-&lt;li>&lt;strong>User-based:&lt;/strong> OpenAI API의 대기 목록 신청서에는 여러 사용 사례가 명시되어 있었다. 라벨러들에게 이러한 사용 사례에 해당하는 프롬프트를 생각해내도록 요청하였다.&lt;/li>
-&lt;/ul>
-&lt;p>이 프롬프트로부터, 세 가지 데이터셋을 생성하여 튜닝에 사용한다: (1) 라벨러의 시연을 사용한 SFT 데이터셋, (2) 모델 출력의 라벨러 순위를 사용한 RM 데이터셋, 그리고 (3) 인간 라벨이 없는 PPO 데이터셋이다. SFT 데이터셋에는 약 13k의 학습 프롬프트가 있고, RM 데이터셋에는 33k의 학습 프롬프트가 있으며, PPO 데이터셋에는 31k의 학습 프롬프트가 있다.&lt;/p>
-&lt;h3 id="tasks">Tasks&lt;/h3>
-&lt;p>학습 작업은 라벨러가 작성한 프롬프트와 API에서 초기 InstructGPT 모델에 제출된 프롬프트 두 가지로부터 나온다. 이 프롬프트들은 다양하며, 생성, 질문 응답, 대화, 요약, 추출 등 다양한 자연어 작업을 포함한다. 데이터셋은 96% 이상이 영어이지만, 다른 언어로의 지시에 대한 응답과 코딩 작업 완료 능력도 조사한다.&lt;/p>
-&lt;p>각 프롬프트에 대한 작업은 대부분 자연어 지시를 통해 직접 지정되며, 간접적으로는 예시를 통하거나 암시적 연속성을 통해 할 수도 있다. 라벨러들은 프롬프트를 작성한 사용자의 의도를 추론하도록 요청받으며, 불분명한 작업은 건너뛰게 된다. 또한, 라벨러들은 응답의 진실성과 같은 암시적 의도, 그리고 편견이나 유해한 언어와 같은 potentially harmful outputs를 고려한다.&lt;/p>
-&lt;h3 id="human-data-collection">Human data collection&lt;/h3>
-&lt;p>시연과 비교 데이터를 생성하고 주요 평가를 수행하기 위해 Upwork와 ScaleAI를 통해 계약자 팀을 고용하였다. 다양한 작업 범위를 다루며, 때때로 논란이 될 수 있는 민감한 주제도 포함된다. 다양한 인구집단의 선호도에 민감하고, 잠재적으로 해롭다고 판단되는 출력을 잘 식별하는 라벨러를 선택하려 하였다. 이를 위해, 라벨러의 성능을 측정하는 스크리닝 테스트를 실시하고, 이 테스트에서 잘 수행한 라벨러를 선택하였다.&lt;/p>
-&lt;p>학습과 평가 중에, 사용자를 돕는 것과 진실성 및 무해함 사이에 충돌이 발생할 수 있다. 학습 중에는 사용자 도움을 우선시하지만, 최종 평가에서는 진실성과 무해함을 우선시한다.&lt;/p>
-&lt;p>라벨러들과 밀접하게 협력하여 프로젝트를 진행하며, 라벨러 학습을 위한 온보딩 프로세스를 진행하고, 각 작업에 대한 상세한 지침을 제공하며, 공유 채팅방에서 라벨러의 질문에 답한다.&lt;/p>
-&lt;p>모델이 다른 라벨러들의 선호도에 얼마나 잘 적응하는지 확인하기 위한 초기 연구로, 학습 데이터를 만들지 않은 별도의 라벨러 그룹을 고용하였다. 이들은 같은 공급업체에서 온 라벨러지만, 별도의 스크리닝 테스트는 거치지 않았다.&lt;/p>
-&lt;p>작업의 복잡성에도 불구하고 라벨러 간 동의율이 높았다. 온보딩 프로세스를 진행한 라벨러들은 72.6% $\pm$ 1.5%의 경우에 동의하였고, 보류된 라벨러들은 77.3 $\pm$ 1.3%의 경우에 동의하였다. 이는 이전의 요약 작업에서 연구자들 간의 동의율인 73 $\pm$ 4%와 비슷한 수준이다.&lt;/p>
-&lt;h3 id="models">Models&lt;/h3>
-&lt;p>인터넷 데이터에 대해 학습된 GPT-3 사전 학습 언어 모델을 사용하여 시작하였고, 이를 바탕으로 세 가지 다른 기법을 사용하여 모델을 학습시켰다.&lt;/p>
-&lt;p>&lt;strong>Supervised ﬁne-tuning (SFT).&lt;/strong> GPT-3를 라벨러의 시연에 대해 지도학습으로 미세 조정하였다. 16 epoch 동안 학습하였고, 검증 세트에서의 RM 점수를 기반으로 최종 모델을 선택하였다. 1 epoch 후에 overﬁt이 발생했지만, 더 많은 epoch 동안 학습하면 RM 점수와 인간 선호도 평가가 개선되었다.&lt;/p>
-&lt;p>&lt;strong>Reward modeling (RM).&lt;/strong> 최종 unembedding 레이어를 제거한 SFT 모델을 시작으로, 프롬프트와 응답을 입력으로 받아 스칼라 보상을 출력하는 모델을 학습시켰다. 계산량 절약과 학습의 안정성을 위해, 6B RM만 사용하였다.&lt;/p>
-&lt;p>Stiennon et al. (2020)의 연구에서, 보상 모델은 같은 입력에 대한 두 모델 출력의 비교를 통해 학습되었다. cross-entropy loss를 사용하며, 보상의 차이는 한 응답이 다른 응답보다 사람에게 선호될 가능성을 나타낸다.&lt;/p>
-&lt;p>비교 수집을 가속화하기 위해, 라벨러에게 4에서 9개의 응답을 랭킹하도록 요청하였다. 이는 각 프롬프트에 대해 여러 비교를 생성한다. 단일 데이터셋으로 비교를 섞으면 보상 모델이 overfit되는 것을 발견했기 때문에, 각 프롬프트에서의 모든 비교를 단일 배치 요소로 학습시켰다. 이 방법은 계산 효율이 높고, overfit이 발생하지 않아 검증 정확도와 log loss이 향상되었다.&lt;/p>
-&lt;p>구체적으로, 보상 모델에 대한 손실 함수는 다음과 같다:&lt;/p>
-&lt;p>$$ loss(\theta) = - {{1}\over{\begin{pmatrix} K \\ 2 \end{pmatrix}}} E_{(x, y_w, y_t) \sim D} [log \ (\sigma (r_{\theta} (x, y_w) - r_{\theta}(x, y_t)))] $$&lt;/p>
-&lt;p>$\theta(x, y)$는 보상 모델의 출력이고, $y_w$는 선호하는 완성이다. $D$는 비교 데이터셋이다.&lt;/p>
-&lt;p>RM loss는 보상 변화에 불변하므로, RL 전에 라벨러 시연의 평균 점수가 0이 되도록 보상 모델을 정규화한다.&lt;/p>
-&lt;p>&lt;strong>Reinforcement learning (RL).&lt;/strong> PPO를 사용해서 SFT 모델을 미세 조정하였다. 랜덤한 고객 프롬프트를 제시하고 응답을 기대하며, 보상 모델로부터 보상을 생성한다. SFT 모델로부터의 KL penalty를 추가해 보상 모델의 과도한 최적화를 완화하였다. 가치 함수는 RM에서 초기화되며, 이 모델들을 &amp;ldquo;PPO&amp;quot;라고 부른다.&lt;/p>
-&lt;p>공개 NLP 데이터셋의 성능 감소를 해결하기 위해, 사전 학습 gradient를 PPO gradient와 혼합하는 것을 시도하였다. 이 모델들을 &amp;ldquo;PPO-ptx&amp;quot;라고 부른다. RL 학습에서 다음의 결합된 목표 함수를 최대화한다:&lt;/p>
-&lt;p>$$ objective(\Phi) = E_{(x,y) \sim D_{\pi \underset{\Phi}{RL}}} [r_{\theta}(x,y) - \beta log \ (\pi_{\Phi}^{RL}(x|y) / \pi^{SFT}(x|y))] + \gamma E_{x \sim D_{pretrain}} [log \ (\pi_{\Phi}^{RL}(x))] $$&lt;/p>
-&lt;p>$\pi_{\Phi}^{RL}$는 학습된 RL 정책, $\pi^{SFT}$는 지도 학습 모델, $D_{pretrain}$은 사전 학습 분포이다. KL reward coefﬁcient $\beta$와 사전 학습 손실 계수 $\gamma$는 각각 KL penalty와 사전 학습 gradient의 강도를 제어한다. &amp;ldquo;PPO&amp;rdquo; 모델에서 $\gamma$는 0으로 설정되며, 이 논문에서 InstructGPT는 주로 PPO-ptx 모델을 의미한다.&lt;/p>
-&lt;p>&lt;strong>Baselines.&lt;/strong> PPO 모델의 성능을 SFT 모델과 GPT-3, 그리고 명령을 따르는 모드로 프롬프트된 GPT-3와 비교한다. 이 프롬프트는 사용자가 지정한 명령 앞에 추가된다.&lt;/p>
-&lt;p>InstructGPT를 FLAN과 T0 데이터셋에서 미세 조정된 175B GPT-3와 비교한다. 이 두 데이터셋은 다양한 NLP 작업과 각 작업에 대한 자연어 지시를 포함하고 있다. 각각 약 100만 예제에 대해 미세 조정하고, 검증 세트에서 가장 높은 보상 모델 점수를 얻는 체크포인트를 선택한다.&lt;/p>
-&lt;h3 id="evaluation">Evaluation&lt;/h3>
-&lt;p>&amp;ldquo;alignment&amp;quot;은 이 맥락에서 사용자의 의도에 맞게 모델이 행동하는 것을 의미한다. 이는 모델이 도움이 되고, 정직하며, 무해해야 한다는 Askell et al. (2021)의 정의를 따른다.&lt;/p>
-&lt;p>모델이 도움이 되려면 명령을 따르고, 작은 양의 프롬프트나 특정 패턴에서 의도를 추론해야 한다. 그러나 프롬프트의 의도는 불분명할 수 있으므로, 라벨러의 판단에 의존한다. 그러나 라벨러와 프롬프트를 생성한 사용자 사이에 의도의 차이가 있을 수 있다.&lt;/p>
-&lt;p>생성적인 AI 모델에서의 진실성을 측정하는 것은 어렵다. 이는 모델의 output과 그것이 &amp;ldquo;올바른(belief)&amp;rdquo; output에 대한 생각을 비교해야 하는데, 모델 자체가 복잡해서 그 생각을 추론하기 어렵기 때문이다. 대신, 모델이 세상에 대해 말하는 것이 사실인지를 측정하는 두 가지 방법을 사용한다: (1) 폐쇄 도메인 작업에서 모델이 정보를 창조하는 경향을 평가하고, (2) TruthfulQA 데이터셋을 사용한다. 하지만 이것은 진실성의 일부분만을 포착할 수 있다.&lt;/p>
-&lt;p>언어 모델의 해로움을 측정하는 것은 매우 어렵다. 이는 모델의 output이 실제 세계에서 어떻게 사용되는지에 따라 달라지기 때문이다. 예를 들어, toxic을 가진 output을 생성하는 모델은 챗봇에서는 해로울 수 있지만, toxic 감지 모델을 학습시키는데는 도움이 될 수 있다. 초기에는 &amp;ldquo;potentially harmful&amp;rdquo; output을 평가했으나, output이 결국 어떻게 사용될지에 대한 추측이 필요하다는 이유로 중단했다.&lt;/p>
-&lt;p>모델의 해로운 행동을 평가하기 위해 특정 기준을 사용한다. 이는 고객 서비스 상황에서 부적절한 내용, 보호 계급에 대한 비하, 성적 또는 폭력적인 내용 등을 포함한다. 또한, bias와 toxic을 측정하는 여러 데이터셋에서도 모델을 테스트한다.&lt;/p>
-&lt;p>요약하자면, 양적 평가를 두 가지 별도의 부분으로 나눌 수 있다:&lt;/p>
-&lt;p>&lt;strong>Evaluations on API distribution.&lt;/strong> 주요 평가 지표는 학습 데이터와 같은 출처의 프롬프트 세트에 대한 사람들의 선호도이다. 학습에 사용되지 않은 고객들의 API 프롬프트와, GPT-3 모델을 위해 특별히 설계된 프롬프트에 대해 이를 측정한다. 각 모델의 출력이 기준 모델에 비해 얼마나 선호되는지 계산하며, 응답의 전반적인 품질을 1-7 Likert 척도로 평가한다. 또한 각 모델 output에 대해 다양한 메타데이터를 수집한다.&lt;/p>
-&lt;p>&lt;strong>Evaluations on public NLP datasets.&lt;/strong> 언어 모델의 진실성, 독성, 편향 등의 안전성과 질문 응답, 독해, 요약 등의 NLP 작업 성능을 평가한다. 이를 위해 공개 데이터 세트를 사용하며, RealToxicityPrompts 데이터 세트에 대한 독성 평가도 수행한다. 또한, 모든 샘플링 기반 NLP 작업에서 모델의 샘플을 공개하고 있다.&lt;/p>
-&lt;h2 id="results">Results&lt;/h2>
-&lt;p>주장의 근거를 명확히 보여주기 위해 API 프롬프트 분포 결과, 공개 NLP 데이터셋 결과, 그리고 질적 결과를 제공한다.&lt;/p>
-&lt;h3 id="results-on-the-api-distribution">Results on the API distribution&lt;/h3>
-&lt;p>&lt;strong>Labelers signiﬁcantly prefer InstructGPT outputs over outputs from GPT-3.&lt;/strong> 프롬프트 테스트 세트에서, 라벨러들은 모든 모델 크기에서 InstructGPT output을 선호한다. GPT-3 출력이 가장 성능이 떨어지며, 잘 구성된 few-shot 프롬프트를 사용하거나, 지도 학습을 통해 학습하거나, PPO를 이용해 비교 데이터에서 학습함으로써 성능을 크게 향상시킬 수 있다. 직접 비교해보면, InstructGPT 출력은 GPT-3 출력에 비해 85%의 시간을, few-shot GPT-3에 대해서는 71%의 시간을 선호한다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/instructgpt/images/figure3.png"
-width="964"
-height="872"
-srcset="https://kurtkim.github.io/p/instructgpt/images/figure3_hu14d2974e2cc714a9475c64d21997d29c_141522_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/instructgpt/images/figure3_hu14d2974e2cc714a9475c64d21997d29c_141522_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="110"
-data-flex-basis="265px"
->&lt;/p>
-&lt;p>API에서 GPT-3 모델에 제출된 프롬프트로 평가했을 때도 결과는 크게 변하지 않는다. 하지만, 모델 크기가 클수록 PPO-ptx 모델의 성능은 약간 떨어잔다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/instructgpt/images/figure4.png"
-width="1084"
-height="358"
-srcset="https://kurtkim.github.io/p/instructgpt/images/figure4_huee4a7b3043afe0469689d7de6787ef3c_64005_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/instructgpt/images/figure4_huee4a7b3043afe0469689d7de6787ef3c_64005_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="302"
-data-flex-basis="726px"
->&lt;/p>
-&lt;p>라벨러들은 InstructGPT output을 여러 구체적인 측면에서도 긍정적으로 평가하였다. GPT-3에 비해 InstructGPT output은 고객 서비스원의 맥락에서 더 적절하고, 지시사항을 더 잘 따르며, 잘못된 지시를 따르는 경우가 적고, 특정 도메인 작업에서 사실을 만들어내는 경우가 더 적다. 이것은 InstructGPT 모델이 GPT-3보다 더 신뢰할 수 있고 제어하기 쉽다는 것을 보여준다.&lt;/p>
-&lt;p>&lt;strong>Our models generalize to the preferences of &amp;ldquo;held-out&amp;rdquo; labelers that did not produce any training data.&lt;/strong> 보류된 라벨러들도 학습 데이터를 만드는 데 사용한 작업자와 비슷한 순위 선호도를 가지고 있다. 특히, 모든 InstructGPT 모델들은 GPT-3 기준선을 크게 능가한다. 이는 모델이 학습 라벨러의 선호도에 overfit되지 않았음을 보여준다.&lt;/p>
-&lt;p>&lt;strong>Public NLP datasets are not reﬂective of how our language models are used.&lt;/strong> 175B GPT-3 기준선을 FLAN과 T0 데이터셋에서 미세 조정하여 InstructGPT와 비교하였다. 이 모델들은 GPT-3보다 더 나은 성능을 보이지만, 잘 선택된 프롬프트를 가진 GPT-3와 동등하고, SFT 기준선보다는 성능이 떨어진다. 직접 비교해보면, 175B InstructGPT 모델 출력은 FLAN 모델에 대해 78 $\pm$ 4%의 시간을, T0 모델에 대해 79 $\pm$ 4%의 시간을 선호하였다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/instructgpt/images/figure5.png"
-width="562"
-height="444"
-srcset="https://kurtkim.github.io/p/instructgpt/images/figure5_huaa3cd66af90c0ce25289d1616892f5e1_27687_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/instructgpt/images/figure5_huaa3cd66af90c0ce25289d1616892f5e1_27687_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="126"
-data-flex-basis="303px"
->&lt;/p>
-&lt;p>InstructGPT 모델이 FLAN과 T0를 능가하는 이유는 두 가지이다. 첫째, 공개 NLP 데이터셋은 자동 메트릭으로 쉽게 평가할 수 있는 작업을 포착하기 위해 설계되었지만, 이러한 작업은 실제 사용자가 언어 모델을 사용하는 부분의 작은 비율을 차지한다. 둘째, 공개 NLP 데이터셋에서 실제 사용자가 관심을 가질 수 있는 다양한 입력을 얻는 것이 어렵다. 따라서, 가장 효과적인 instruction-following 모델은 두 유형의 데이터셋을 모두 결합할 것이다.&lt;/p>
-&lt;h3 id="results-on-public-nlp-datasets">Results on public NLP datasets&lt;/h3>
-&lt;p>&lt;strong>InstructGPT models show improvements in truthfulness over GPT-3.&lt;/strong> TruthfulQA 데이터셋에 대한 인간 평가에 따르면, PPO 모델은 GPT-3에 비해 사실적이고 유익한 output을 생성하는 데 있어 약간의 개선을 보인다. 이는 모델의 기본 행동이며, 특별한 지시 없이도 진실성이 향상된다. 그러나, 1.3B PPO-ptx 모델은 같은 크기의 GPT-3 모델에 비해 약간 성능이 떨어진다. GPT-3에 적대적으로 선택되지 않은 프롬프트만 평가해도, PPO 모델은 GPT-3보다 더 진실적이고 유익하다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/instructgpt/images/figure6.png"
-width="980"
-height="484"
-srcset="https://kurtkim.github.io/p/instructgpt/images/figure6_hu9c3d0c3ac6083aa2a1a675947d987d8e_62058_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/instructgpt/images/figure6_hu9c3d0c3ac6083aa2a1a675947d987d8e_62058_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="202"
-data-flex-basis="485px"
->&lt;/p>
-&lt;p>모델에게 정확한 답변을 확신하지 못할 때 &amp;ldquo;I have no comment&amp;quot;으로 응답하도록 지시하는 유용한 프롬프트를 제공한다. 이 경우, PPO 모델들은 거짓말을 자신 있게 하는 것보다는 사실적이고 무의미한 쪽으로 편향된다. 반면, 기존의 GPT-3 모델은 이런 면에서 그리 좋지 않다.&lt;/p>
-&lt;p>PPO 모델들이 API 분포에서의 closed-domain 작업에서 더 적게 hallucinate하는 것은 우리의 진실성 개선을 입증한다.&lt;/p>
-&lt;p>&lt;strong>InstructGPT shows small improvements in toxicity over GPT-3, but not bias.&lt;/strong> 먼저 RealToxicityPrompts 데이터셋에서 모델들을 평가한다. 이를 위해 모델 샘플을 Perspective API를 통해 실행하여 automatic toxicity 점수를 얻고, 라벨러에게 absolute toxicity, 프롬프트에 대한 relative toxicity 등을 평가받는다. 또한, 높은 input toxicity에서 모델의 성능을 더 잘 평가하기 위해 toxicity에 따라 프롬프트 샘플을 균일하게 추출한다. 이는 표준 프롬프트 샘플링과 다르므로 absolute toxicity 수치가 과대 평가된다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/instructgpt/images/figure7.png"
-width="1058"
-height="530"
-srcset="https://kurtkim.github.io/p/instructgpt/images/figure7_hu83144d63ff80035f18d179e3d9daa512_64062_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/instructgpt/images/figure7_hu83144d63ff80035f18d179e3d9daa512_64062_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="199"
-data-flex-basis="479px"
->&lt;/p>
-&lt;p>안전하고 존중받는 출력을 생성하도록 지시받았을 때, InstructGPT 모델은 GPT-3보다 덜 toxicity 있는 출력을 생성한다. 하지만, 이 장점은 존중받는 프롬프트가 제거될 때 사라진다. 명시적으로 toxicity 있는 출력을 생성하도록 지시받았을 때, InstructGPT output은 GPT-3보다 훨씬 더 toxicity이 있다.&lt;/p>
-&lt;p>&amp;ldquo;respectful prompt&amp;rdquo; 설정에서 InstructGPT는 GPT-3보다 덜 toxicity이 있지만, &amp;ldquo;no prompt&amp;rdquo; 설정에서는 비슷한 성능을 보인다. 모든 모델은 프롬프트를 고려할 때 예상보다 덜 toxicity이 있다. SFT 기준선 모델은 가장 덜 toxicity이 있지만, 연속성이 가장 낮고 가장 선호되지 않는 것으로 나타났다.&lt;/p>
-&lt;p>모델이 편향된 언어를 생성하는 경향을 평가하기 위해, Winogender와 CrowS-Pairs 데이터셋에서 InstructGPT를 평가하였다. 이 데이터셋들은 잠재적인 편향을 강조할 수 있는 문장 쌍으로 구성되어 있다. 완벽하게 편향되지 않은 모델들은 각 쌍의 문장 사이에 선호도가 없을 것이다. 하지만, 모델들은 GPT-3보다 덜 편향되어 있지 않다. PPO-ptx 모델은 GPT-3와 비슷한 편향을 보이며, 존중받는 행동을 지시받았을 때는 더 높은 편향을 보인다.&lt;/p>
-&lt;p>&lt;strong>We can minimize performance regressions on public NLP datasets by modifying our RLHF ﬁne-tuning procedure.&lt;/strong> API 분포에서 PPO 모델을 학습시키면, 여러 공개 NLP 데이터셋에서의 성능이 감소하는 &amp;ldquo;alignment tax&amp;rdquo; 문제가 발생한다. 이는 더 능력 있는 모델을 사용하도록 유인하지만, 이 모델들은 alignment되지 않았다. 따라서 alignment tax를 피하는 절차가 필요하다.&lt;/p>
-&lt;p>사전 학습 업데이트를 섞는 것은 KL coefﬁcient를 증가시키는 것보다 더 나은 성능을 보여준다. 사전 학습 mix coefﬁcient의 적절한 값이 SQuADv2와 DROP에서의 성능 저하를 뒤집고, 검증 보상에서의 감소를 최소화한다. 반면, KL coefﬁcient를 증가시키는 것은 검증 보상에서 큰 감소를 초래하고, DROP과 SQuAD에서 완전히 회복하지 못한다.&lt;/p>
-&lt;h3 id="qualitative-results">Qualitative results&lt;/h3>
-&lt;p>&lt;strong>InstructGPT models show promising generalization to instructions outside of the RLHF ﬁnetuning distribution.&lt;/strong> InstructGPT는 비영어 언어로 된 지시사항을 따르고, 코드에 대한 요약과 질문 답변을 수행하는 능력을 보여준다. 이는 비영어 언어와 코드가 미세 조정 데이터의 극히 일부를 차지함에도 불구하고, 이러한 일부 경우에서 모델이 사람들이 직접 감독하지 않은 입력에 대해 원하는 행동을 생성하는 것으로 일반화될 수 있음을 보여준다.&lt;/p>
-&lt;p>175B PPO-ptx 모델은 코드에 대한 질문에 신뢰성 있게 답하며, 다른 언어로 된 지시사항도 따를 수 있다. 하지만, 지시사항이 다른 언어인 경우에도 종종 영어로 출력을 생성한다. 반면, GPT-3는 더 신중한 프롬프팅이 필요하며, 이러한 영역에서 지시사항을 따르는 경우는 드물다.&lt;/p>
-&lt;p>&lt;strong>InstructGPT still makes simple mistakes.&lt;/strong> 175B PPO-ptx 모델은 강력한 성능에도 불구하고 간단한 실수를 할 수 있다. 예를 들어, 거짓 전제로 된 지시를 받았을 때 모델은 잘못된 전제가 참이라고 가정할 수 있다. 또한, 간단한 질문에 대해 모델은 과도하게 회피할 수 있다. 또한, 지시사항에 여러 명확한 제약조건이 포함되어 있거나, 제약조건이 언어 모델에게 도전적일 수 있을 때 모델의 성능이 저하된다. 이는 모델의 한계를 보여준다.&lt;/p>
-&lt;p>특정 행동이 지식적 겸손성을 보상하도록 지시하기 때문에, 그리고 거짓 전제를 가정하는 프롬프트가 학습 세트에 거의 없기 때문에 일부 문제가 발생한다고 생각한다. 이 두 가지 행동 모두가 적대적 데이터 수집을 통해 크게 줄어들 수 있을 것이라고 믿는다. 이러한 발견은 모델 학습과 데이터 수집 전략의 중요성을 보여준다.&lt;/p>
-&lt;h2 id="discussion">Discussion&lt;/h2>
-&lt;h3 id="implications-for-alignment-research">Implications for alignment research&lt;/h3>
-&lt;p>이 연구는 AI 시스템을 인간의 의도와 일치시키는 보다 광범위한 연구 프로그램의 일부이다. 이 작업은 현재의 언어 모델 시스템에 초점을 맞추고 있지만, 미래의 AI 시스템에 대해 작동하는 확장 가능한 방법을 찾고 있다. 시스템들은 아직 제한적이지만, 다양한 언어 작업에 적용되며, AI의 발전과 인간의 의도와의 일치를 추구하는 노력의 일환이다.&lt;/p>
-&lt;p>이 연구에서는 현재의 AI 시스템의 alignment를 개선하는데 초점을 맞추는 반복적인 접근법을 사용하고 있다. 이 접근법의 단점은 초인적 시스템을 alignment할 때만 발생하는 alignment 문제를 직접적으로 마주치지 않는다는 것이다. 그러나, 이 접근법은 무엇이 작동하고 무엇이 작동하지 않는지에 대한 명확한 피드백 루프를 제공하며, 이는 alignment 기법을 개선하는 데 필수적이다. 또한, 여기서 사용하는 alignment 기법인 RLHF는 초인적 시스템을 alignment하는 여러 제안의 중요한 구성 요소이다. 이러한 접근법은 AI와 사람의 의도와의 일치를 추구하는 노력의 일환이다.&lt;/p>
-&lt;p>이 작업에서, 좀 더 일반적으로 alignment 연구에 대한 교훈을 얻을 수 있다:&lt;/p>
-&lt;ol>
-&lt;li>
-&lt;p>&lt;strong>모델 alignment를 늘리는 비용은 사전 학습에 비해 상대적으로 적다.&lt;/strong> 데이터 수집 비용과 학습 비용은 GPT-3 학습 비용의 일부에 불과하며, 동시에 RLHF는 언어 모델을 사용자에게 더 도움이 되도록 만드는데 매우 효과적이다. 이는 현재 기존 언어 모델의 alignment에 투자를 늘리는 것이 더 큰 모델을 학습시키는 것보다 더 비용 효율적이라는 것을 시사한다. 이러한 결과는 비용 효율적인 AI 연구와 개발에 대한 중요성을 보여줍니다.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;strong>InstructGPT가 감독하지 않는 설정에서도 &amp;ldquo;following instructions&amp;rdquo; 것을 일반화하는 몇 가지 증거를 보았다.&lt;/strong> InstructGPT는 비영어 언어 작업과 코드 관련 작업 등, 직접 감독하지 않는 환경에서도 지시사항을 따르는 것을 일반화하는 경향이 있다. 이는 모든 작업에 대해 인간 감독이 과도한 비용이 들기 때문에 중요한 특성이다. 이러한 일반화가 능력 향상과 얼마나 잘 확장되는지에 대한 추가 연구가 필요하다. 이러한 발견은 AI의 범용성을 보여준다.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;strong>미세 조정에 의해 도입된 대부분의 성능 저하를 완화할 수 있었다.&lt;/strong> 미세 조정으로 인한 성능 저하를 대부분 완화할 수 있었다. 이것이 사실이 아니었다면, 이는 모델을 alignment하는 데 추가 비용인 &amp;ldquo;alignment tax&amp;quot;을 의미할 수 있다. 인간의 의도와 일치하지 않는 AI 시스템을 피하기 위해, alignment tax이 낮은 alignment 기술이 필요하다. 이 관점에서, 우리의 결과는 RLHF가 낮은 세금의 alignment 기술로서 좋은 소식이다. 이는 AI 모델을 인간의 의도와 일치시키는 데 추가 비용을 최소화하는 데 중요하다.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;strong>실제 세계에서 연구로부터 얻은 alignment 기법을 검증하였다.&lt;/strong> alignment 연구는 전통적으로 추상적이었지만, 이 연구는 실제 세계에서 고객과 함께 사용되는 AI 시스템에서 alignment 연구에 기반을 제공한다. 이를 통해 기술의 효과와 한계에 대한 중요한 피드백 루프를 구축할 수 있다. 이러한 발견은 실제 환경에서의 AI alignment 연구의 중요성을 보여준다.&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;h3 id="who-are-we-aligning-to">Who are we aligning to?&lt;/h3>
-&lt;p>언어 모델을 인간의 의도와 일치시킬 때, 그들의 최종 행동은 기본 모델, 미세 조정 데이터, 그리고 사용된 정렬 방법에 의해 결정된다. 이를 통해 우리는 무엇과 누구에게 alignment할지 결정하며, 개선할 영역을 고려한 후 우리의 작업의 한계에 대해 더 깊이 있게 논의한다.&lt;/p>
-&lt;p>문헌에서는 &amp;ldquo;human preferences&amp;rdquo; 또는 &amp;ldquo;human values&amp;quot;라는 용어로 alignment을 설명한다. 하지만, 이 연구에서는 라벨러들의 선호도를 지시사항, 작업 맥락, 지시를 받은 사람 등에 따라 alignment 하였다. 이에는 몇 가지 중요한 주의사항이 있다:&lt;/p>
-&lt;p>첫째, 학습 라벨러들이 제공하는 시연과 선호도에 맞추고 있다. 이들 라벨러들은 대부분 Upwork 또는 Scale AI를 통해 고용된 미국이나 동남아에 거주하는 영어를 사용하는 사람들이다. 그들은 많은 예제에서 서로에게 동의하지 않는다; 라벨러 간의 동의도는 약 73%이다. 이러한 점들은 AI 모델의 alignment와 정확도에 중요한 영향을 미찬다.&lt;/p>
-&lt;p>둘째, 라벨러들이 시연을 작성하고 선호하는 output을 선택할 때 가이드로 사용하는 지시사항을 작성하고, 가장자리 사례에 대한 질문에 답한다. 다른 지시 세트와 인터페이스 디자인이 데이터 수집과 최종 모델 행동에 미치는 영향에 대한 추가 연구가 필요하다. 이는 AI 모델이 인간의 의도와 얼마나 잘 일치하는지를 결정하는 데 중요한 요소이다.&lt;/p>
-&lt;p>셋째, 학습 데이터는 OpenAI 고객들이 보낸 프롬프트에 기반하므로, 고객들이 가치 있다고 생각하는 것과, 경우에 따라서는 그들의 최종 사용자가 가치 있다고 생각하는 것에 암시적으로 일치하고 있다. 그러나 고객과 그들의 최종 사용자는 의견이 다를 수 있다. 실제로, 라벨러들은 주어진 프롬프트나 완성이 어떤 맥락에서 사용될지 알 수 없다. 이러한 점들은 AI 모델의 정확도와 효과성에 영향을 미친다.&lt;/p>
-&lt;p>넷째, OpenAI의 고객들은 모든 언어 모델의 잠재적이거나 현재의 사용자들을 대표하지 않는다. 이 프로젝트의 대부분 기간 동안, OpenAI API의 사용자들은 대기 목록에서 선택되었다. 이 대기 목록의 초기 사용자들은 OpenAI의 직원들이었으므로, 최종 사용자 그룹이 우리 자신의 네트워크로 편향되어있다. 이러한 점들은 AI 모델의 대표성과 공정성에 영향을 미친다.&lt;/p>
-&lt;p>공정하고 투명하며 적절한 책임 메커니즘이 있는 alignment 프로세스를 설계하는 것은 많은 어려움이 있다. 이 논문의 목표는 alignment 기법이 특정 애플리케이션에 대한 특정 인간 참조 그룹에 맞출 수 있다는 것을 보여주는 것이다. 그러나 모델을 학습시키는 조직, 모델을 사용하여 제품을 개발하는 고객, 이러한 제품의 최종 사용자, 그리고 직접적이거나 간접적으로 영향을 받을 수 있는 더 넓은 인구 등 많은 이해당사자들을 고려해야 한다. 모든 사람의 선호도에 맞춰진 시스템을 학습시키는 것은 불가능하며, 모든 사람이 타협을 승인할 수 없다. 이러한 점들은 AI 모델의 공정성과 책임성에 중요한 영향을 미친다.&lt;/p>
-&lt;p>한 가지 방법은 특정 그룹의 선호도에 따라 조건화될 수 있는 모델을 학습시키거나, 다른 그룹을 대표하도록 쉽게 미세 조정할 수 있는 모델을 학습시키는 것이다. 그러나 이러한 모델들은 여전히 사회에 영향을 미칠 수 있으며, 어떤 선호도에 조건을 부여할 것인지, 모든 그룹이 대표될 수 있도록 하는 등 많은 어려운 결정을 내려야 한다. 이는 AI 모델의 공정성과 표현성에 중요한 영향을 미친다.&lt;/p>
-&lt;h3 id="limitations">Limitations&lt;/h3>
-&lt;p>&lt;strong>Methodology.&lt;/strong> InstructGPT 모델의 행동은 계약자들로부터 얻은 인간의 피드백에 부분적으로 결정된다. 약 40명의 계약자를 고용하였고, 그들은 민감한 프롬프트를 식별하고 대응하는 능력에 따라 선발되었다. 그러나 이 그룹은 모델을 사용하고 영향을 받을 전체 사람들을 대표하지 않는다. 간단한 예로, 라벨러들은 주로 영어를 사용하며, 데이터는 거의 완전히 영어 지시사항으로 구성되어 있다. 이는 AI 모델의 다양성과 대표성에 중요한 영향을 미친다.&lt;/p>
-&lt;p>데이터 수집 구성을 개선할 수 있는 여러 방법이 있다. 대부분의 비교는 비용 문제로 1명의 계약자만에 의해 라벨링된다. 예제를 여러 번 라벨링하면 계약자들 간의 이견을 식별하고, 이견이 있는 경우, 평균 라벨러 선호도에 맞추는 것이 바람직하지 않을 수 있다. 특히, 소수 그룹에 불균형하게 영향을 미치는 텍스트를 생성할 때, 해당 그룹에 속하는 라벨러들의 선호도를 더 무겁게 가중할 수 있다. 이는 AI 모델의 공정성과 정확성에 중요한 영향을 미친다.&lt;/p>
-&lt;p>&lt;strong>Models.&lt;/strong> 모델들은 완전히 일치하거나 완전히 안전하지 않는다. 그들은 toxic이 있거나 편향된 결과를 생성하고, 사실을 만들어내며, 명확한 프롬프트 없이 성적이거나 폭력적인 내용을 생성할 수 있다. 또한 일부 입력에 대해 합리적인 output을 생성하지 못할 수 있다. 이러한 점들은 AI 모델의 안전성과 신뢰성에 중요한 영향을 미친다.&lt;/p>
-&lt;p>모델의 가장 큰 제한은 대부분의 경우 사용자의 지시를 따르는 것이며, 이것이 실제 세계에서 해를 끼칠 수 있음에도 불구하고 그렇다. 예를 들어, 편향성을 최대화하라는 지시가 주어질 경우, InstructGPT는 toxic이 있는 output을 더 많이 생성한다. 이러한 문제에 대한 해결방안은 이후 섹션에서 논의된다. 이러한 점들은 AI 모델의 안전성과 윤리성에 중요한 영향을 미친다.&lt;/p>
-&lt;h3 id="open-questions">Open questions&lt;/h3>
-&lt;p>이 작업은 다양한 지시를 따르도록 언어 모델을 미세 조정하는 첫 단계이다. 사람들이 실제로 원하는 것과 언어 모델의 행동을 더욱 일치시키기 위한 미해결된 질문들이 많이 있다. 이는 AI 모델의 사용성과 효과성을 향상시키는 데 중요한 단계이다.&lt;/p>
-&lt;p>모델이 toxic을 가지거나 편향된 또는 다른 방식으로 해롭게 출력하는 경향을 줄이기 위한 다양한 방법들이 있다. 예를 들어, 모델의 최악의 행동을 찾는 적대적인 설정이나, 사전 학습 데이터를 필터링하는 방법, 또는 모델의 진실성을 향상시키는 방법들을 사용할 수 있다. 이러한 접근법들은 AI 모델의 안전성과 신뢰성을 향상시키는 데 중요하다.&lt;/p>
-&lt;p>이 연구에서, 사용자가 잠재적으로 해롭거나 부정직한 응답을 요청하면, 모델이 이러한 output을 생성하도록 허용한다. 하지만 모델을 무해하게 학습시키는 것은 중요하며, 출력이 해로운지 여부는 배포 맥락에 따라 달라지므로 어렵다. 이 연구의 기법은 특정 사용자 지시를 거부하도록 모델을 만드는 데도 적용될 수 있으며, 이는 후속 연구에서 탐구할 계획이다. 이는 AI 모델의 안전성과 윤리성에 중요한 영향을 미친다.&lt;/p>
-&lt;p>모델들이 원하는 것을 수행하게 하는 것은 steerability 및 controllability과 직접적으로 관련이 있다. 유망한 미래의 방향은 RLHF를 steerability의 다른 방법들과 결합하는 것입니다, 예를 들어 control 코드를 사용하거나 추론 시간에 샘플링 절차를 수정하는 것 등이 있다. 이는 AI 모델의 controllability과 유연성을 향상시키는 데 중요하다.&lt;/p>
-&lt;p>주로 RLHF에 초점을 맞추지만, 더 나은 결과를 얻기 위해 다른 알고리즘도 사용될 수 있다. 예를 들어, 전문가 반복을 연구하거나, 비교 데이터의 일부를 사용하는 단순한 행동 복제 방법을 시도해 볼 수 있다. 또한, 소수의 해로운 행동을 생성하는 것에 조건을 부여한 보상 모델에서 점수를 최대화하는 constrained optimization 접근법을 시도해 볼 수도 있다. 이는 AI 모델의 효율성과 성능에 중요하다.&lt;/p>
-&lt;p>비교는 반드시 alignment 신호를 제공하는 가장 효율적인 방법은 아니다. 모델의 응답을 수정하거나, 자연어로 모델의 응답에 대한 비평을 생성하는 등 다른 방법을 사용할 수 있다. 또한, 라벨러들이 언어 모델에 피드백을 제공하는 인터페이스를 설계하는 것은 흥미로운 인간-컴퓨터 상호작용 문제이다. 이는 AI 모델의 효율성과 사용성을 향상시키는 데 중요하다.&lt;/p>
-&lt;p>사전 학습 데이터를 RLHF 미세 조정에 통합함으로써 alignment tax를 완화하는 제안은 성능 회귀를 완전히 완화하지 않으며, 특정 태스크에서 원치 않는 행동을 더욱 가능하게 할 수 있다. 이는 더욱 연구할 만한 흥미로운 영역이다. 또한, 사전 학습 혼합 데이터에서 toxic 내용을 필터링하거나, 이 데이터를 합성 지시사항으로 보강하는 것이 우리의 방법을 개선할 수 있다. 이는 AI 모델의 성능과 안전성을 향상시키는 데 중요하다.&lt;/p>
-&lt;p>지시, 의도, 드러난 선호도, 이상적인 선호도, 이해관계, 그리고 가치에 맞추는 것 사이에는 미묘한 차이가 있다. 원칙 기반의 정렬 방식을 주장하며, &amp;ldquo;사람들의 도덕적 신념에서 널리 변동이 있음에도 불구하고 반사적인 승인을 받는 공정한 정렬 원칙&amp;quot;을 식별하는 것이 중요하다. 이 분야에서는 더 많은 연구가 필요하며, 특히 투명하고, 사람들의 가치를 의미있게 대표하고 통합하는 정렬 과정을 어떻게 설계할 것인지가 주요한 미해결 질문이다. 이는 AI 모델의 공정성과 윤리성에 중요하다.&lt;/p>
-&lt;h3 id="broader-impacts">Broader impacts&lt;/h3>
-&lt;p>이 연구는 대규모 언어 모델의 긍정적인 영향을 증가시키기 위해 특정 인간 그룹이 원하는 행동을 모델에 학습시키는 것을 목표로 한다. 언어 모델을 더 도움되고, 진실되고, 무해하게 만드는 데 이 연구의 기법이 유망함을 나타낸다. 장기적으로, 모델 alignment 실패는 더 심각한 결과를 초래할 수 있다. 모델 확장이 계속됨에 따라, 인간의 의도와 일치하도록 하는 데 더 큰 주의가 필요하다. 이는 AI 모델의 유용성과 안전성을 향상시키는 데 중요하다.&lt;/p>
-&lt;p>언어 모델을 사용자의 의도를 더 잘 따르도록 만드는 것은 그것들을 더 쉽게 오용하는 것을 가능하게 한다. 이로 인해 잘못된 정보를 생성하거나, 혐오스럽거나 폭력적인 내용을 생성하는 것이 더 쉬울 수 있다. 이는 AI 모델의 안전성과 윤리성에 중요하다.&lt;/p>
-&lt;p>alignment 기법은 대규모 언어 모델의 안전 문제를 해결하는 만병통치약이 아니며, 더 넓은 안전 생태계의 일부로 사용되어야 한다. 많은 분야에서는 대규모 언어 모델이 신중하게, 또는 전혀 배포되지 않아야 한다. 모델이 오픈 소스화되면, 해로운 사용을 제한하는 것이 어려워진다. 반면, 대규모 언어 모델 접근이 몇몇 조직에 제한되면, 대부분의 사람들이 최첨단 ML 기술에 접근할 수 없게 된다. 또 다른 옵션은 조직이 모델 배포의 인프라를 소유하고, API를 통해 접근 가능하게 하는 것이다. 이는 안전 프로토콜의 구현을 가능하게 하지만, 감소된 투명성과 증가된 권력 집중의 비용이 발생할 수 있다. 이는 AI 모델의 안전성과 공정성에 중요하다.&lt;/p>
-&lt;p>모델이 누구에게 alignment되는지는 매우 중요하며, 이것은 모델의 순수한 영향이 긍정적인지 부정적인지를 크게 영향을 미친다. 이는 AI 모델의 공정성과 윤리성에 중요하다.&lt;/p>
-&lt;h2 id="reference">Reference&lt;/h2>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2203.02155.pdf" target="_blank" rel="noopener"
->Paper&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://github.com/openai/following-instructions-human-feedback" target="_blank" rel="noopener"
->Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>FLAN</title><link>https://kurtkim.github.io/p/flan/</link><pubDate>Mon, 15 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/flan/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;/ul></description></item><item><title>FLAN</title><link>https://kurtkim.github.io/p/flan/</link><pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/flan/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>이 논문은 언어 모델의 zero-shot 학습 능력을 향상시키는 방법을 연구한다. &amp;ldquo;instruction tuning&amp;rdquo; 이라는 방법을 통해 미처 볼 수 없었던 작업에서의 zero-shot 성능을 크게 향상시킬 수 있음을 보여준다.&lt;/p>
 &lt;p>137B 개의 parameter를 가진 사전 학습된 언어 모델을 60개 이상의 NLP 데이터셋에 대한 instruction tuning을 통해, 이 모델인 FLAN은 보이지 않는 작업 유형에서 월등한 성능을 보여준다. FLAN은 여러 데이터셋에서 zero-shot GPT-3를 능가하고, 몇몇 작업에서는 few-shot GPT-3를 크게 앞선다.&lt;/p>
+&lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>대규모 언어 모델은 few-shot 학습을 잘 수행하지만, zero-shot 학습에서는 성공적이지 못하며, 이는 사전 학습 데이터와 비슷하지 않은 프롬프트에서 모델이 작업을 수행하기 어렵기 때문일 수 있다.&lt;/p>
 &lt;p>이 논문에서는 대규모 언어 모델의 zero-shot 성능을 향상시키는 방법을 연구한다. 60개 이상의 NLP 데이터셋을 자연어 지시문으로 표현하여 137B parameter의 언어 모델을 미세 조정하는 방식을 사용한다. 이 결과 생성된 모델을 FLAN(Finetuned Language Net)이라고 한다.&lt;/p>
@@ -346,6 +437,7 @@ data-flex-grow="298"
 data-flex-basis="715px"
 >&lt;/p>
 &lt;p>instruction tuning은 언어 모델이 추론 시 텍스트 상호작용에 더 잘 응답하도록 미세조정을 통한 지도학습을 사용하는 간단한 방법이다. 이 방법은 언어 모델이 지시문만을 통해 작업을 수행하는 능력을 보여준다.&lt;/p>
+&lt;hr>
 &lt;h2 id="flan-instruction-tuning-improves-zero-shot-learning">FLAN: Instruction Tuning Improves Zero-Shot Learning&lt;/h2>
 &lt;p>instruction tuning의 목표는 언어 모델이 NLP 지시문에 더 잘 응답하도록 향상시키는 것이다. 지시문을 통해 설명된 작업을 수행하도록 언어 모델을 교육함으로써, 보이지 않는 작업에 대해서도 지시문을 따를 수 있게 한다. 작업 유형별로 데이터셋을 그룹화하고, 남은 클러스터에서 instruction tuning을 하면서 볼 수 없는 작업의 성능을 평가한다.&lt;/p>
 &lt;h3 id="tasks--templates">Tasks &amp;amp; Templates&lt;/h3>
@@ -396,6 +488,7 @@ data-flex-basis="333px"
 &lt;p>&lt;strong>Closed-book QA.&lt;/strong> FLAN은 모든 네 개의 데이터셋에서 GPT-3를 능가하였다. ARC-e와 ARC-c에서는 GLaM보다 더 좋은 성능을 보였지만, NQ와 TQA에서는 약간 낮은 성능을 보였다.&lt;/p>
 &lt;p>&lt;strong>Translation.&lt;/strong> FLAN은 GPT-3 논문에서 평가된 세 개의 데이터셋인 프랑스어-영어, 독일어-영어, 루마니아어-영어에 대한 기계 번역 성능을 평가하였다. FLAN은 모든 평가에서 zero-shot GPT-3를 능가했지만, 대부분의 경우 few-shot GPT-3보다 성능이 떨어졌다. FLAN은 영어로 번역하는 데 강한 결과를 보였지만, 영어에서 다른 언어로 번역하는 것은 상대적으로 약했다.&lt;/p>
 &lt;p>&lt;strong>Additional tasks.&lt;/strong> instruction tuning은 많은 언어 모델링 과제의 성능을 향상시키지 못하는 한계가 있다. 7개의 상식 추론 및 공통 참조 해결 과제 중 FLAN은 3개 과제에서만 LaMDA-PT를 능가하였다. 하지만, zero-shot FLAN은 일반적으로 zero-shot LaMDA-PT를 능가하며, few-shot LaMDA-PT와 비슷하거나 더 나은 성능을 보여주었다.&lt;/p>
+&lt;hr>
 &lt;h2 id="ablation-studies--further-analysis">Ablation Studies &amp;amp; Further Analysis&lt;/h2>
 &lt;h3 id="number-of-instruction-turning-clusters">Number Of Instruction Turning Clusters&lt;/h3>
 &lt;p>이 연구에서는 instruction tuning이 어떻게 모델의 zero-shot 성능을 향상시키는지를 중점으로 살펴보았다. 첫 번째 축소 실험에서는 instruction tuning에 사용된 클러스터와 과제의 수가 성능에 어떻게 영향을 미치는지를 검토하였다. 이때 NLI, closed-book QA, commonsense reasoning을 평가 클러스터로 보류하고, 나머지 클러스터를 instruction tuning에 사용하였다.&lt;/p>
@@ -457,24 +550,29 @@ data-flex-grow="119"
 data-flex-basis="287px"
 >&lt;/p>
 &lt;p>모든 시나리오에서 프롬프트 튜닝은 LaMDA-PT보다 FLAN에서 더 잘 작동하였다. 특히 low-resource 설정에서는, FLAN에서의 프롬프트 튜닝이 LaMDA-PT에서의 것보다 10% 이상 성능이 향상되었다. 이 결과는 instruction tuning이 NLP 과제를 수행하는 데 더 바람직한 모델을 만드는 데 어떻게 기여할 수 있는지를 보여준다.&lt;/p>
+&lt;hr>
 &lt;h2 id="related-work">Related Work&lt;/h2>
 &lt;p>이 논문은 zero-shot 학습, 프롬프팅, 다중 과제 학습, NLP 응용 프로그램을 위한 언어 모델 등 여러 넓은 연구 영역과 관련이 있다. 이러한 넓은 영역에 대한 이전 연구를 확장된 관련 연구 섹션에서 설명하고, 이 논문의 연구와 가장 밀접하게 연관된 범위가 좁은 두 개의 하위 영역을 설명하였다.&lt;/p>
 &lt;p>모델에 지시문에 대한 반응을 요청하는 방식은 QA 기반 과제 구성과 유사하며, 이는 NLP 과제를 통일하는 것을 목표로 한다. 이 방법들은 주로 다중 과제 학습에 초점을 맞추며, 사전 학습된 LMs의 기존 지식을 사용하는 것에 크게 기반하지 않는다. 이 연구의 작업은 모델 규모와 과제 범위 모두에서 최근의 일부 연구를 초월한다.&lt;/p>
 &lt;p>언어 모델의 성공으로 모델이 지시문을 따르는 능력에 대한 연구가 진행되고 있다. 최근 연구에서는 지시문과 few-shot 예시를 이용해 BART를 미세 조정하고, 이를 통해 보이지 않는 과제에 대한 few-shot 성능을 향상시킬 수 있음을 보여주었다. 또한, T5를 미세 조정하는 등의 방법으로 zero-shot 학습을 개선하고, 미세 조정과 강화 학습을 병행하여 인간 평가자가 선호하는 출력을 생성하는 연구도 있다.&lt;/p>
+&lt;hr>
 &lt;h2 id="discussion">Discussion&lt;/h2>
 &lt;p>지시문으로 표현된 여러 과제에 대해 모델을 미세 조정하면 보이지 않는 과제에서의 성능이 향상된다는 것을 보여주었다. FLAN은 미세 조정되지 않은 모델보다 성능이 좋고, zero-shot GPT-3를 능가한다. 또한, 충분한 모델 규모에서만 instruction tuning에 의한 성능 향상이 나타나며, 이는 다른 프롬프팅 방법과도 결합될 수 있다.&lt;/p>
 &lt;p>언어 모델의 다양한 능력은 specialist 모델과 generalist 모델 사이의 균형에 대한 관심을 끌어내었다. 레이블이 있는 데이터가 specialist 모델을 개선하는 데 도움이 될 것으로 예상되지만, instruction tuning을 통해 이 데이터가 큰 언어 모델이 보이지 않는 다양한 과제를 수행하는 데도 도움이 될 수 있음을 보여주었다. 이는 과제 특정 학습이 일반 언어 모델링과 보완적이라는 것을 보여주며, generalist 모델에 대한 추가 연구를 촉진한다.&lt;/p>
 &lt;p>이 연구의 한계점은 과제를 클러스터에 할당하는 데 있는 주관성과 짧은 지시문의 사용에 대한 연구의 한정성이다. 개별 예시가 모델의 사전 훈련 데이터에 포함되어 있을 수 있지만, 이것이 결과에 크게 영향을 미쳤다는 증거는 찾지 못하였다. 또한, FLAN 137B의 규모는 그것을 서비스하는 데 비용이 많이 든다. 향후 instruction tuning 연구는 더 많은 과제 클러스터를 수집하고, 다언어 실험을 진행하며, downstream classiﬁer 학습 데이터를 생성하고, 편향과 공정성에 대한 모델 행동을 개선하는 방향으로 진행될 수 있다.&lt;/p>
+&lt;hr>
 &lt;h2 id="conclusions">Conclusions&lt;/h2>
 &lt;p>이 논문은 지시문에 기반한 zero-shot 과제를 수행하는 대규모 언어 모델의 능력을 향상시키는 간단한 방법을 연구하였다. FLAN은 GPT-3에 비해 더 우수한 결과를 보여주며, 대규모 언어 모델이 지시문을 따를 수 있는 잠재력을 보여주었다.&lt;/p>
+&lt;hr>
 &lt;h2 id="reference">Reference&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2109.01652.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/google-research/flan" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>GPT-3</title><link>https://kurtkim.github.io/p/gpt-3/</link><pubDate>Sat, 13 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/gpt-3/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;/ul></description></item><item><title>GPT-3</title><link>https://kurtkim.github.io/p/gpt-3/</link><pubDate>Tue, 26 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/gpt-3/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>최근의 연구는 대량의 텍스트 말뭉치로 사전 학습한 후 특정 작업에 대해 미세 조정하는 것으로 많은 NLP 작업과 벤치마크에서 상당한 성과를 보여주었다. 일반적으로 과제에 중립적인 구조를 가지지만, 이 방법은 여전히 수천 개 또는 수만 개의 예제로 이루어진 과제별 미세 조정 데이터셋을 필요로 한다. 인간은 보통 몇 가지 예제나 간단한 지시사항만으로도 새로운 언어 작업을 수행할 수 있지만, 현재의 NLP 시스템은 이를 여전히 어려워한다. 이 연구에서는 언어 모델의 규모를 확장함으로써 과제 중립적이고 소수의 예제로 이루어진 작업 성능을 크게 개선하는 것을 보여준다. 때로는 이전의 state-of-the-art 미세 조정 접근법과 경쟁력을 갖출 수도 있다. 구체적으로, 1750억 개의 parameter를 가진 GPT-3라는 autoregressive 언어 모델을 학습시키고, 이를 소수의 예제로 평가해보았다. 모든 작업에서 GPT-3는 어떠한 그래디언트 업데이트나 미세 조정 없이 적용되며, 작업 및 소수의 예제는 모델과의 텍스트 상호작용을 통해 명시된다. GPT-3는 번역, 질의응답, 문맥 채우기 작업뿐만 아니라 단어 섞기, 새로운 단어를 문장에 사용하기, 3자리 산술 연산을 수행하는 등의 실시간 추론이나 도메인 적응이 필요한 작업과 같은 많은 NLP 데이터셋에서 강력한 성능을 보여주었다. 한편, GPT-3의 소수 학습은 여전히 어려운 몇몇 데이터셋과 대규모 웹 말뭉치에서의 훈련에 관련된 방법론적 문제가 있다는 점도 확인했다. 마지막으로, GPT-3는 인간 평가자가 사람이 작성한 기사와 구분하기 어려운 뉴스 기사 샘플을 생성할 수 있음을 발견하였다.&lt;/p>
+&lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>최근 NLP 시스템은 사전 학습된 언어 표현을 다양한 작업에 유연하게 적용하는 추세가 있다. 초기에는 단어 벡터를 사용한 단일 계층 표현을 과제 특정 아키텍처에 적용했으나, 후에는 RNN을 사용한 다계층 표현을 도입하였다. 최근에는 과제 특정 아키텍처의 필요성을 완전히 제거하고, 사전 학습된 recurrent 또는 transformer 언어 모델을 직접 미세 조정하는 방식이 사용되고 있다.&lt;/p>
 &lt;p>이러한 패러다임은 많은 어려운 작업에서 진전을 이루었지만, 여전히 작업 특정 데이터셋과 미세 조정이 필요한 한계가 있다. 원하는 작업에서 높은 성능을 달성하기 위해 수천에서 수십만 개의 예제로 이루어진 작업 특정 데이터셋에서 미세 조정이 필요하다. 이러한 한계를 제거하는 것이 중요하다.&lt;/p>
@@ -519,6 +617,7 @@ data-flex-basis="380px"
 &lt;p>&amp;ldquo;data contamination&amp;quot;에 대한 체계적인 연구를 수행하였다. 이는 테스트 데이터셋의 콘텐츠가 웹에 존재하기 때문에, Common Crawl과 같은 데이터셋에서 모델을 학습시킬 때 발생할 수 있는 문제이다. data contamination이 대부분의 데이터셋에서 GPT-3의 성능에 미치는 영향은 적지만, 결과가 과대 평가될 수 있는 몇몇 데이터셋을 식별하였다.&lt;/p>
 &lt;p>더 작은 모델들을 학습시켜 성능을 zero, one, few-shot 설정에서 GPT-3와 비교하였다. 대부분의 작업에서 모델 용량과 함께 성능이 상대적으로 부드럽게 스케일링되는 것을 보았다. 특히, 모델 용량이 커짐에 따라 zero, one, few-shot 성능 간의 차이가 더욱 커지는 것으로 보아, 큰 모델이 더 능숙한 메타 학습자일 수 있음을 시사한다.&lt;/p>
 &lt;p>마지막으로, GPT-3가 보여주는 넓은 범위의 능력에 대해, 편향, 공정성, 그리고 보다 넓은 사회적 영향에 대한 우려를 논의하고, 이러한 관점에서 GPT-3의 특성에 대한 초기 분석을 시도한다.&lt;/p>
+&lt;hr>
 &lt;h2 id="approach">Approach&lt;/h2>
 &lt;p>GPT-3의 사전 학습 접근법은 기존의 방법과 유사하나, 모델 크기, 데이터셋 크기 및 다양성, 학습 기간을 확장하였다. 컨텍스트 내에서 학습하는 다양한 설정을 체계적으로 탐색하였고, 이러한 설정은 작업 특정 데이터에 얼마나 의존하는지에 따라 다르게 위치할 수 있다. 스펙트럼에서는 적어도 네 가지 주요 포인트를 식별할 수 있다:&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/gpt-3/images/figure2.1.png"
@@ -579,6 +678,7 @@ data-flex-basis="859px"
 &lt;p>이진 분류 작업에서는 옵션에 &amp;ldquo;True&amp;quot;나 &amp;ldquo;False&amp;quot;와 같은 의미 있는 이름을 부여하고, 객관식 문제처럼 처리한다.&lt;/p>
 &lt;p>자유형식 완성 작업에서는 beam width가 4이고 길이 패널티가 $\alpha = 0.6$인 beam search를 사용한다. 모델은 F1 유사도 점수, BLEU, 또는 정확한 일치를 기준으로 평가한다.&lt;/p>
 &lt;p>테스트 세트가 공개적으로 사용 가능한 경우, 모델 크기와 학습 설정별로 최종 결과를 보고한다. 테스트 세트가 비공개인 경우, 개발 세트 결과를 보고한다. 제출이 가능한 데이터셋(SuperGLUE, TriviaQA, PiQa)에 대해서는 테스트 서버에 결과를 제출하고, 그 외의 경우에는 개발 세트 결과를 보고한다.&lt;/p>
+&lt;hr>
 &lt;h2 id="results">Results&lt;/h2>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/gpt-3/images/figure3.1.png"
 width="816"
@@ -906,6 +1006,7 @@ data-flex-basis="522px"
 &lt;p>오염이 높지만 성능에 미치는 영향이 거의 없는 데이터셋을 검사해 실제 오염 정도를 확인하였다. 이들은 대부분 실제 오염이 없거나, 작업의 답을 알려주는 오염이 없었다. 하지만 LAMBADA는 심각한 오염이 있음에도 성능에 미치는 영향이 매우 작았다. 빈칸 채우기 형식은 가장 단순한 형태의 기억을 배제하지만, 이 논문에서 LAMBADA에서 큰 향상을 보였으므로, 결과 섹션에서 잠재적 오염을 언급했다.&lt;/p>
 &lt;p>오염 분석의 한계는 클린 부분 집합이 원래 데이터셋과 같은 분포에서 추출되었는지 확신할 수 없다는 점이다. 기억이 결과를 과대평가하면서 클린 부분 집합이 더 쉽게 되게 하는 통계적 편향이 정확히 상쇄되는 가능성이 있다. 그러나 0에 가까운 이동이 많아 이는 불가능할 가능성이 크고, 기억이 적은 작은 모델들에서도 눈에 띄는 차이를 찾지 못하였다.&lt;/p>
 &lt;p>데이터 오염의 영향을 측정하고 기록하기 위해 최선을 다했고, 심각성에 따라 문제 결과를 주목하거나 완전히 제거하였다. 벤치마크 설계와 모델 학습에서 이 중요하고 미묘한 문제를 해결하기 위한 많은 작업이 아직 남아 있다.&lt;/p>
+&lt;hr>
 &lt;h2 id="limitations">Limitations&lt;/h2>
 &lt;p>GPT-3에 대한 분석에는 여러 가지 한계점이 있다. 이에 대해 설명하고 미래의 연구 방향을 제안한다.&lt;/p>
 &lt;p>GPT-3와 그 분석에는 한계가 있다. GPT-3는 텍스트 합성과 여러 NLP 작업에서 향상되었지만, 문서 수준에서 의미적으로 반복되거나, 긴 문장에서 일관성을 잃는 등의 문제가 있다. 또한 &amp;ldquo;common sense physics&amp;quot;과 같은 분야에서 어려움을 겪는 것으로 보였다. GPT-3의 문맥 중심 학습 성능은 &amp;ldquo;comparison&amp;rdquo; 작업이나 읽기 이해 작업 등에서 뚜렷한 차이를 보였다. 이는 GPT-3이 다른 많은 작업에서 강력한 성능을 보이고 있음에도 불구하고 눈에 띈다.&lt;/p>
@@ -915,6 +1016,7 @@ data-flex-basis="522px"
 &lt;p>GPT-3의 few-shot 학습에서의 한 제한은, 실제로 추론 시에 새로운 작업을 &amp;ldquo;처음부터(from scratch)&amp;rdquo; 학습하는지, 아니면 학습 도중 배운 작업을 단순히 인식하고 식별하는지에 대한 불확실성이다. 이는 테스트 시간에 정확히 동일한 분포에서 작업을 인식하거나, 같은 작업을 다른 형식으로 인식하거나, QA 같은 일반적인 작업 스타일에 적응하거나, 완전히 새로운 기술을 배우는 것 등, 넓은 범위에 걸쳐 있다. 어떤 작업에서는 새롭게 배우는 경향이 있고, 다른 작업에서는 사전 학습 동안에 배워야 하는 상황도 있다. 결국 인간이 무엇을 처음부터 배우는지, 무엇을 이전의 경험으로부터 배우는지조차 확실하지 않다. 이러한 이해의 불확실성은 few-shot 학습의 원리를 정확히 파악하는 데 중요한 미래의 연구 방향을 제시한다.&lt;/p>
 &lt;p>GPT-3와 같은 대규모 모델의 한계는, 추론을 수행하는데 비용이 많이 들고 불편하다는 점이다. 이는 이러한 크기의 모델의 실질적인 적용을 어렵게 만든다. 이 문제를 해결할 수 있는 한 가지 방법은, 대규모 모델을 특정 작업에 맞게 관리 가능한 크기로 축소하는 것이다. 이는 아직 수백억 개의 매개변수 규모에서 시도되지 않았지만, 새로운 도전과 기회를 제공할 수 있다.&lt;/p>
 &lt;p>GPT-3는 대부분의 딥러닝 시스템과 마찬가지로 결정의 해석이 어렵고, 새로운 입력에 대한 예측이 반드시 잘 조정되지 않으며, 학습 데이터의 편향을 유지하는 등의 한계를 가지고 있다. 특히, 학습 데이터의 편향이 모델이 편견 있는 내용을 생성하도록 이끌 수 있는 문제는 사회적 관점에서 큰 우려사항이다.&lt;/p>
+&lt;hr>
 &lt;h2 id="broader-impacts">Broader Impacts&lt;/h2>
 &lt;p>언어 모델은 자동 완성, 문법 도움 등의 다양한 이점을 제공하지만, 잠재적으로 해로운 응용 분야도 있다. GPT-3는 텍스트 생성의 품질을 향상시키고, 합성 텍스트와 인간이 쓴 텍스트를 구별하는 어려움을 증가시키므로, 언어 모델의 좋은 사용과 나쁜 사용을 모두 발전시킬 수 있다.&lt;/p>
 &lt;p>해로움을 연구하고 완화하기 위한 노력을 자극하기 위해서 향상된 언어 모델의 잠재적인 해로움에 초점을 맞추면, 주요 문제는 GPT-3와 같은 언어 모델의 고의적인 오용 가능성과 모델 내의 편향, 공정성, 표현 문제입니다.&lt;/p>
@@ -971,6 +1073,7 @@ data-flex-basis="331px"
 &lt;h3 id="energy-usage">Energy Usage&lt;/h3>
 &lt;p>대규모 사전 학습은 에너지 집약적이며, GPT-3 175B 훈련은 1.5B 파라미터의 GPT-2 모델에 비해 많은 계산을 소비했다. 따라서 이러한 모델의 비용과 효율성을 인식하는 것이 중요하다.&lt;/p>
 &lt;p>대규모 사전 학습의 사용은 모델의 효율성을 다루는 새로운 관점을 제공한다. 이는 학습에 필요한 자원뿐만 아니라, 모델의 수명 동안 이러한 자원이 어떻게 분산되는지를 고려해야 한다. 학습 중에는 많은 자원을 소비하지만, 학습이 완료된 모델은 효율적이다. 또한, 모델 증류와 같은 기법을 사용하면 이러한 모델의 비용을 더욱 줄일 수 있으며, 알고리즘의 발전은 시간이 지남에 따라 이러한 모델의 효율성을 자연스럽게 더욱 증가시킬 수 있다.&lt;/p>
+&lt;hr>
 &lt;h2 id="related-work">Related Work&lt;/h2>
 &lt;p>언어 모델의 성능을 향상시키기 위한 연구는 크게 세 가지 방향으로 진행되었다. 첫 번째는 parameter와 계산량을 함께 증가시키는 것으로, 이는 모델 크기를 계속해서 증가시키는 방식이다. 두 번째는 parameter 수는 늘리지만 계산량은 늘리지 않는 방식으로, 이는 모델의 정보 저장 용량을 늘리는 데 초점을 맞추었다. 세 번째는 parameter를 증가시키지 않고 계산을 증가시키는 방식이다. GPT-3 연구는 첫 번째 접근 방식에 초점을 맞추고, 이전 모델보다 10배 큰 모델을 개발하였다.&lt;/p>
 &lt;p>언어 모델 성능에 대한 규모의 영향을 체계적으로 연구한 여러 연구에서는 모델이 확장됨에 따라 손실률에서 부드러운 멱법칙 추세를 발견하였다. 이 추세는 모델이 계속 확장됨에 따라 대체로 계속될 것으로 보이며, 다양한 downstream task 에서도 규모가 커짐에 따라 부드러운 성능 향상이 관찰되었다.&lt;/p>
@@ -982,16 +1085,19 @@ data-flex-basis="331px"
 &lt;p>자연 언어로 다중 과제 모델에 지시를 하는 방법은 처음으로 지도 학습 환경에서 공식화되었고, 일부 과제에 언어 모델에 사용되었다. 이와 유사한 개념이 text-to-text transformer에서도 탐색되었지만, 이 경우에는 문맥 학습이 아닌 다중 과제 미세조정에 적용되었다.&lt;/p>
 &lt;p>다중 과제 학습은 언어 모델의 일반성과 전이 학습 능력을 향상시키는 방법으로, 여러 과제를 함께 미세조정하며 가중치를 업데이트한다. 이 방법은 단일 모델을 가중치 업데이트 없이 다양한 과제에 사용하거나, 새로운 과제에 대한 가중치 업데이트 시 샘플 효율성을 향상시킬 수 있다. 다중 과제 학습은 초기에는 좋은 결과를 보였지만, 데이터셋 구성과 훈련 커리큘럼 설정에 대한 수작업이 필요한 한계가 있다. 하지만 대규모 사전 학습은 텍스트 예측을 통해 암시적으로 다양한 과제를 포함하는 방법을 제공한다. 미래의 연구 방향은 다중 과제 학습에 대해 더 넓은 범위의 명시적 과제를 생성하는 것일 수 있다.&lt;/p>
 &lt;p>지난 두 해 동안 언어 모델의 알고리즘은 매우 크게 발전했다. denoising-based bidirectionality, preﬁxLM and encoder-decoder architectures, random permutations during training, architectures that improve the efﬁciency of sampling, improvements in data and training procedures, and efﬁciency increases in the embedding parameters 등이 포함된다. 이런 기술들은 downstream task에서 큰 이익을 가져다주며, 이러한 알고리즘 발전을 GPT-3에 통합하면 downstream task 성능이 향상될 가능성이 높다. GPT-3의 규모와 이런 알고리즘 기법을 결합하는 것은 미래 연구의 유망한 방향이다.&lt;/p>
+&lt;hr>
 &lt;h2 id="conclusion">Conclusion&lt;/h2>
 &lt;p>175B 개의 parameter를 가진 언어 모델을 소개하였고, 이 모델은 다양한 NLP 작업에서 강력한 성능을 발휘하며, 또한 고품질의 샘플을 생성하며, 미세 조정 없이도 성능의 확장성이 대략 예측 가능하다는 것을 보여주었다. 그리고 이 모델의 사회적 영향에 대해서도 논의하였다. 이러한 결과들은 큰 언어 모델이 적응형, 일반 언어 시스템의 개발에 중요한 요소가 될 수 있음을 시사한다.&lt;/p>
+&lt;hr>
 &lt;h2 id="reference">Reference&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2005.14165.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/openai/gpt-3" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>ELECTRA</title><link>https://kurtkim.github.io/p/electra/</link><pubDate>Fri, 12 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/electra/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;/ul></description></item><item><title>ELECTRA</title><link>https://kurtkim.github.io/p/electra/</link><pubDate>Sun, 24 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/electra/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>BERT와 같은 masked language modeling(MLM) 방법은 일부 토큰을 [MASK]로 바꿔 원래 토큰을 재구성하는 모델을 훈련하지만, 이를 효과적으로 하려면 많은 계산이 필요하다. 대신에, replaced token detection 라는 더 효율적인 사전 학습 작업을 제안한다. 이 방법은 일부 토큰을 가능성 있는 다른 토큰으로 바꾸는 방식으로 입력을 변형하고, 변형된 토큰의 원래 값을 예측하는 대신 각 토큰이 생성자 샘플로 대체되었는지 여부를 예측하는 모델을 학습시킨다. 이 방법은 모든 입력 토큰에 대해 작업을 정의하므로 MLM보다 효율적이다. 결과적으로, 이 방식으로 학습한 컨텍스트 표현은 동일한 모델 크기, 데이터, 계산량을 가진 BERT보다 월등히 높은 성능을 보여준다. 특히, 작은 모델에서는 GLUE 자연어 이해 벤치마크에서 GPT를 능가하는 모델을 한 GPU에서 4일 동안 훈련할 수 있다. 대규모에서도 이 방법은 RoBERTa와 XLNet의 성능에 비교할 수 있으며, 더 적은 계산량을 사용하면서도 동일한 계산량을 사용할 때 그 모델들을 능가한다.&lt;/p>
+&lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>현재 state-of-the-art의 언어 표현 학습 방법은 denoising autoencoder이다. 이 방법은 일부 토큰을 마스킹하거나 어텐션을 적용하여 네트워크가 원래 입력을 복원하도록 학습한다. 하지만 이러한 masked language modeling (MLM)은 효과적이지만 상당한 계산 비용을 요구한다.&lt;/p>
 &lt;p>&amp;ldquo;replaced token detection&amp;quot;는 BERT와 XLNet의 불일치 문제를 해결하기 위한 사전 학습 작업이다. 이 방법은 일부 토큰을 대체하여 입력을 손상시키는데, 이를 구분하는 네트워크를 판별자로 사전 학습시킨다. 이 방식은 MLM과 달리 모든 입력 토큰에서 학습하므로 계산적으로 효율적이다. 또한 GAN과 유사하지만 텍스트에 GAN을 적용하기 어려워 maximum likelihood로 손상된 토큰을 생성하는 생성자를 학습시킨다.&lt;/p>
@@ -1006,6 +1112,7 @@ data-flex-grow="219"
 data-flex-basis="525px"
 >&lt;/p>
 &lt;p>ELECTRA는 다른 사전 학습 방법에 비해 계산 및 parameter를 더 효율적으로 사용하여 더 나은 성능을 보여준다. GLUE 벤치마크에서, ELECTRA-Small 모델은 BERT보다 5점 더 높은 성능을 보여주었고, ELECTRA-Large 모델은 RoBERTa와 XLNet과 비슷한 성능을 보이지만 훨씬 적은 계산량을 사용한다. ELECTRA-Large는 GLUE에서 ALBERT보다 우수한 결과를 얻었고, SQuAD 2.0에서 새로운 state-of-the-art를 달성하였다. ELECTRA는 언어 표현 학습에 있어서 계산 및 parameter 효율성이 뛰어난 판별적인 방법이다.&lt;/p>
+&lt;hr>
 &lt;h2 id="method">Method&lt;/h2>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/electra/images/figure2.png"
 width="1040"
@@ -1030,6 +1137,7 @@ $$ \hat{x}_i \sim p_G(x_i | x^{masked}) \ \text{for} i \in m \quad \quad x^{corr
 &lt;p>결합된 손실을 최소화한다.&lt;/p>
 &lt;p>$$ \underset{\theta_G, \theta_D}{min} \sum_{x \in \mathbf{X}} \mathbf{L}_{MLM}(x, \theta_G) + \lambda \mathbf{L}_{Disc}(x, \theta_D) $$&lt;/p>
 &lt;p>대규모의 원시 텍스트 데이터에 대해 결합 손실을 최소화한다. 손실의 기대값을 단일 샘플로 근사화하고, 생성자의 손실은 판별자로 역전파하지 않는다. 사전 학습 후에는 생성자를 버리고 판별자를 downstream task에서 세밀하게 조정한다.&lt;/p>
+&lt;hr>
 &lt;h2 id="experiments">Experiments&lt;/h2>
 &lt;h3 id="experimental-setup">Experimental Setup&lt;/h3>
 &lt;p>GLUE 벤치마크와 SQuAD 데이터셋을 사용하여 다양한 언어 이해 작업을 평가한다. GLUE 작업은 텍스트 간 연역, 질문-답변 연역, 문장 재구성, 질문 재구성, 텍스트 유사도, 감성 분석, 문장 수용성 등을 다루며, SQuAD는 질문에 대한 정확한 답변을 선택하는 작업이다. 사전 학습은 BERT 데이터를 사용하고, 일부 모델은 XLNet 데이터를 사용한다. 사전 학습과 평가는 주로 영어 데이터를 기반으로 하지만, 향후 다국어 데이터에도 적용할 수 있다.&lt;/p>
@@ -1124,21 +1232,25 @@ data-flex-grow="313"
 data-flex-basis="753px"
 >&lt;/p>
 &lt;p>ELECTRA는 빠른 학습뿐만 아니라 다른 이점들로 인해 All-Tokens MLM에 비해 개선되었다. 작은 모델일수록 ELECTRA의 이득이 커지며, 완전히 학습된 경우 BERT보다 더 높은 정확도를 보여준다. ELECTRA는 parameter를 더 효율적으로 사용하여 BERT보다 성능을 높일 수 있다. 그러나 ELECTRA의 parameter 효율성을 완전히 이해하기 위해서는 추가적인 분석이 필요하다.&lt;/p>
+&lt;hr>
 &lt;h2 id="related-work">Related Work&lt;/h2>
 &lt;p>&lt;strong>Self-Supervised Pre-training for NLP&lt;/strong> Self-supervised learning은 단어 및 문맥 표현을 학습하는 데 사용된다. BERT는 masked-language modeling 작업을 통해 Transformer를 사전 학습한다. BERT를 확장한 모델들이 있으며, ELECTRA는 BERT와 비교하여 효율적인 사전 학습을 제공한다. 최근에는 BERT를 작은 모델로 축소하는 연구도 진행되고 있다. ELECTRA-Small은 사전 학습 속도에 초점을 맞춰 처음부터 학습되었다.&lt;/p>
 &lt;p>&lt;strong>Generative Adversarial Networks&lt;/strong> GAN은 고품질 가짜 데이터 생성에 효과적이며, 이 논문의 방법과 유사한 방식으로 GAN의 판별자를 후속 작업에 활용할 수 있다. 텍스트 데이터에도 GAN을 적용할 수 있지만, 최신 기법은 standard maximum-likelihood 학습에 비해 아직 성능이 낮다. 생성자는 MaskGAN과 유사하게 삭제된 토큰을 채우는 방식으로 학습된다.&lt;/p>
 &lt;p>&lt;strong>Contrastive Learning&lt;/strong> contrastive learning은 관찰된 데이터와 가짜 음성 샘플을 구분하는 방법이다. 이 방법은 텍스트, 이미지, 비디오 데이터 등 다양한 모달리티에 적용될 수 있다. ELECTRA는 Noise-Contrastive Estimation (NCE)와 관련이 있는데, 이 방법은 실제와 가짜 데이터를 구별하기 위해 이진 분류기를 학습시킨다.&lt;/p>
 &lt;p>Word2Vec은 NLP의 초기 사전 학습 방법 중 하나로 contrastive learning을 사용한ㄴ다. ELECTRA는 CBOW와 Negative Sampling의 대규모 버전으로 볼 수 있다. CBOW는 주변 문맥을 통해 입력 토큰을 예측하고, Negative Sampling은 이진 분류 작업으로 재구성한다. CBOW는 bag-of-vectors 인코더와 단순한 제안 분포를 사용한다.&lt;/p>
+&lt;hr>
 &lt;h2 id="conclusion">Conclusion&lt;/h2>
 &lt;p>대체 토큰 감지라는 새로운 자기 지도 학습 작업을 제안하였다. 이 작업은 텍스트 인코더를 학습시켜 입력 토큰과 고품질 부정 샘플을 구별하게 한다. 계산 효율성이 우수하며 하위 작업에서 더 좋은 성능을 보인다.&lt;/p>
+&lt;hr>
 &lt;h2 id="reference">Reference&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2003.10555.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/google-research/electra" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>T5</title><link>https://kurtkim.github.io/p/t5/</link><pubDate>Wed, 10 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/t5/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;/ul></description></item><item><title>T5</title><link>https://kurtkim.github.io/p/t5/</link><pubDate>Mon, 18 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/t5/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>전이 학습은 데이터가 풍부한 작업에서 먼저 모델을 사전 훈련시킨 후, 이를 downstream task에 미세 조정하는 방식으로, 자연어 처리(NLP)에서 중요한 기법이다. 이 논문에서는 모든 텍스트 기반 언어 문제를 텍스트-텍스트 형식으로 변환하는 통합 프레임워크를 통해 NLP를 위한 전이 학습 기법을 탐색한다. 이 연구에서는 사전 훈련 목표, 아키텍처, 라벨이 없는 데이터셋, 전이 접근법 등 다양한 요소를 비교 분석하여, 요약, 질문 응답, 텍스트 분류 등 여러 분야에서 state-of-the-art를 달성하였다. 또한, 이러한 연구를 통한 데이터셋, 사전 훈련된 모델, 코드를 공개하여, NLP를 위한 전이 학습 연구를 더욱 촉진시키고자 한다.&lt;/p>
+&lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>자연어 처리(NLP) 머신러닝 모델 훈련은 모델이 텍스트를 이해하고 적절하게 처리하는 능력을 개발하는 것을 목표로 하며, 이는 단어의 철자와 의미부터 고수준의 지식까지 다양한 요소를 포함한다. 최근에는 데이터가 풍부한 작업에서 모델을 사전 학습하는 것이 일반적이며, 이를 통해 모델은 다양한 작업에 활용할 수 있는 일반적인 능력과 지식을 개발하게 된다. 특히 NLP에서는 레이블이 없는 대량의 텍스트 데이터를 이용한 비지도 학습으로 사전 학습이 진행되며, 이 방법은 주요 NLP 벤치마크에서 state-of-the-art를 달성하는 데 사용되었다.&lt;/p>
 &lt;p>자연어 처리(NLP)에서의 전이 학습에 대한 최근 연구는 다양한 사전 학습 목표와 레이블 없는 데이터 세트, 벤치마크 등을 개발했다. 이 분야는 빠르게 발전하고 있지만, 그로 인해 다양한 기법을 비교하거나 이해하는 것이 어려워졌다.&lt;/p>
@@ -1152,6 +1264,7 @@ data-flex-grow="274"
 data-flex-basis="659px"
 >&lt;/p>
 &lt;p>모든 텍스트 처리 문제를 &amp;ldquo;Text-to-Text&amp;quot;의 일관된 문제로 바라보며, 이를 통해 다양한 NLP 문제에 대한 성능을 평가하고 전이 학습의 한계를 탐색하고자 한다. 이 연구의 목표는 새로운 방법을 제안하는 것이 아니라, 현재 이 분야가 어디에 서 있는지를 종합적으로 이해하는 것이다. 이를 위해 &amp;ldquo;Colossal Clean Crawled Corpus(C4)&amp;ldquo;라는 웹에서 수집한 영어 텍스트 데이터 세트를 사용한다. 또한, 데이터가 부족한 환경에서의 전이 학습의 중요성을 인식하여, 코드, 데이터 세트, 그리고 사전 학습된 모델을 공개한다.&lt;/p>
+&lt;hr>
 &lt;h2 id="setup">Setup&lt;/h2>
 &lt;p>모든 문제를 &amp;ldquo;Text-to-Text&amp;rdquo; 변환하는 접근법과 레이블 없는 텍스트 데이터를 구성한 &amp;ldquo;Colossal Clean Crawled Corpus(C4)&amp;ldquo;를 제안한다. 모델과 프레임워크의 이름은 &amp;ldquo;Text-to-Text Transfer Transformer(T5)&amp;ldquo;이다.&lt;/p>
 &lt;h3 id="model">Model&lt;/h3>
@@ -1197,6 +1310,7 @@ data-flex-basis="659px"
 &lt;p>대부분의 작업을 text-to-text 형식으로 쉽게 변환했으며, 유사성 점수를 예측하는 STS-B는 점수를 반올림하고 숫자 문자열로 변환하여 처리하였다. 이를 통해 STS-B 회귀 문제를 21 클래스 분류 문제로 재구성하였다.&lt;/p>
 &lt;p>또한, Winograd 작업과 WSC 작업에서는 모호한 대명사를 강조하고, 모델이 대명사가 가리키는 명사를 예측하도록 훈련시켰다. DPR 데이터 세트는 대략 1,000개의 대명사 해결 예제를 추가하여 사용하였다.&lt;/p>
 &lt;p>WNLI의 훈련 및 검증 세트는 WSC와 많이 중복되므로, 훈련 데이터로의 유출을 방지하기 위해 WNLI에서 훈련하지 않았으며, 평균 GLUE 점수에도 포함시키지 않았다.&lt;/p>
+&lt;hr>
 &lt;h2 id="experiments">Experiments&lt;/h2>
 &lt;p>한 번에 하나씩 설정을 변경하면서 체계적으로 기여도를 연구하였다. 예를 들어, 나머지 실험 파이프라인을 고정하고 다양한 비지도 목표의 성능을 측정했다. 이 방법은 이차 효과를 놓칠 수 있지만, 모든 요인의 조합을 탐색하는 것은 비용이 많이 든다. 미래의 연구에서는 다양한 접근법의 조합을 더 철저하게 고려하는 것이 유익할 것으로 예상된다.&lt;/p>
 &lt;p>이 논문의 목표는 다양한 작업에 대해 다양한 접근법을 비교하는 것으로, 가능한 한 많은 요소를 고정하려고 한다. 이를 위해, 기존의 접근법을 정확하게 따르지는 않았다. 예를 들어, BERT와 같은 encoder-only 모델은 생성 작업에는 적합하지 않다. 따라서 우리가 고려하는 모델 중 어느 것도 BERT와 정확히 같지 않다. 대신, BERT의 목표와 유사한 목표를 고려하고, BERT와 유사하게 작동하는 모델 아키텍처를 고려하였다.&lt;/p>
@@ -1498,6 +1612,7 @@ data-flex-grow="535"
 data-flex-basis="1284px"
 >&lt;/p>
 &lt;p>세 가지 모델 구성의 성능은 T5-Base가 모든 downstream task에서 baseline-1T을 월등히 능가함을 보여준다. 이는 T5의 성공에 크기 뿐만 아니라 다른 비확장 요소들도 기여하고 있음을 나타낸다. 추가적인 사전 학습은 모델의 성능을 향상시키는 데 도움이 된다.&lt;/p>
+&lt;hr>
 &lt;h2 id="reflection">Reflection&lt;/h2>
 &lt;p>이 분야의 더 나은 발전을 위해 효과적인 접근법을 제안하고자 한다.&lt;/p>
 &lt;h3 id="takeaways">Takeaways&lt;/h3>
@@ -1514,188 +1629,16 @@ data-flex-basis="1284px"
 &lt;p>&lt;strong>Formalizing the similarity between tasks&lt;/strong> 도메인 데이터에 대한 사전 학습이 downstream task의 성능을 향상시키는 것을 확인하였다. 레이블이 없는 데이터 소스를 선택하는 데에 더 원칙적인 접근을 가능하게 하기 위해, 사전 학습과 downstream task 사이의 &amp;ldquo;similarity&amp;quot;에 대한 엄밀한 개념을 정립하는 것이 필요하다. 이는 컴퓨터 비전 분야에서 이미 일부 연구가 이루어지고 있다. 또한, 작업 간의 관련성에 대한 더 나은 이해는 지도 사전 학습 작업을 선택하는 데에도 도움이 될 수 있다.&lt;/p>
 &lt;p>&lt;strong>Language-agnostic models&lt;/strong> 영어로만 사전 학습한 결과가 번역 작업에서 최고 수준의 성과를 내지 못하였다. 이를 해결하기 위해, 어떤 언어의 텍스트든 좋은 성능으로 NLP 작업을 수행할 수 있는 언어에 구애받지 않는 모델을 더 연구하려고 한다. 이는 세계 인구 대다수의 모국어가 영어가 아닌 점을 고려하면 매우 중요한 이슈이다.&lt;/p>
 &lt;p>이 논문은 최근 NLP에 대한 전이 학습에 대해 연구하였다. 이 연구가 시작되기 전, 학습 기반 방법이 효율성을 증명받지 못 한 상황에서 이러한 진보가 돌파구를 만들어 주었으며, 특히 전이 학습에 어려운 SuperGLUE 벤치마크에서 거의 인간 수준의 성능을 달성하였다. 이 결과는 우리의 text-to-text 프레임워크, 새로운 C4 데이터셋, 그리고 체계적인 연구에서의 통찰력의 결합에서 비롯된다.&lt;/p>
+&lt;hr>
 &lt;h2 id="reference">Reference&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/1910.10683.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/google-research/text-to-text-transfer-transformer" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>XLNet</title><link>https://kurtkim.github.io/p/xlnet/</link><pubDate>Mon, 08 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/xlnet/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>BERT와 같은 denoising autoencoding 기반 사전 학습은 양방향 컨텍스트를 학습할 수 있지만, 마스크를 사용하여 입력을 변조함으로써 의존성을 무시하고 사전 학습과 미세 조정 사이의 괴리를 겪는다. 이를 해결하기 위해, XLNet이라는 새로운 사전 학습 방법을 제안한다. 이 방법은 모든 순열에 대한 기대 가능도를 최대화하여 양방향 컨텍스트를 학습하고, autoregressive 형식을 통해 BERT의 제한을 극복한다. 실험결과 XLNet은 여러 작업에서 BERT를 능가하는 결과를 보여주었다.&lt;/p>
-&lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>자연어 처리 분야에서 Unsupervised representation learning은 큰 성공을 거두었다. 이 방법은 대규모의 레이블이 없는 텍스트 코퍼스에서 신경망을 사전 학습하고, 이를 특정 작업에 맞게 미세 조정하는 방식이다. 이에 대한 연구 중, autoregressive(AR)와 autoencoding(AE)이 가장 좋은 결과를 보여주었다.&lt;/p>
-&lt;p>AR 언어 모델링은 텍스트 시퀀스의 확률 분포를 추정하기 위해 autoregressive 모델을 사용한다. 텍스트 시퀀스 $x = (x_1, &amp;hellip;, x_T)$가 주어지면, AR 언어 모델링은 가능성을 순방향 곱인 $p(x) = \prod_{t=1}^T p(x_t | X_{&amp;lt;t})$ 또는 역방향 곱인 $p(x) = \prod_{t=T}^1 p(x_t | X_{&amp;gt;t})$로 분해하며, 각 조건부 분포를 모델링하기 위해 신경망 같은 매개변수 모델을 훈련한다. 그러나 AR 언어 모델은 단방향 컨텍스트만 인코딩하므로 깊은 양방향 컨텍스트를 모델링하는데는 비효율적이다. 이는 언어 이해 작업에서 필요한 양방향 컨텍스트 정보와의 간극을 만든다.&lt;/p>
-&lt;p>AE 기반 사전 학습, 예를 들면 BERT는 손상된 입력에서 원본 데이터를 재구성하는 것을 목표로 한다. 입력 토큰의 일부가 [MASK] 같은 특수 기호로 대체되고, 이를 원래 토큰으로 복구하도록 모델이 학습된다. BERT는 양방향 컨텍스트를 사용해 재구성할 수 있으므로, AR 언어 모델링의 양방향 정보 간극을 해결하고 성능을 향상시킬 수 있다. 하지만, BERT가 사전 훈련 중에 사용하는 인위적인 기호들은 미세 조정 시 실제 데이터에는 존재하지 않아, 사전 학습과 미세 조정 사이의 불일치를 초래하며, 예측된 토큰 간의 상호 의존성을 과도하게 단순화한다.&lt;/p>
-&lt;p>XLNet은 AR 언어 모델링과 AE의 장점을 모두 활용하면서 단점은 피하는 generalized autoregressive 방법이다.&lt;/p>
-&lt;ul>
-&lt;li>XLNet은 고정된 순방향이나 역방향 분해 순서를 사용하는 대신, 모든 가능한 분해 순서의 순열에 대한 시퀀스의 기대 log-likelihood를 최대화한다. 이로 인해 각 위치의 컨텍스트는 왼쪽과 오른쪽의 토큰들로 구성될 수 있으며, 모든 위치의 컨텍스트 정보를 활용하며 양방향 컨텍스트를 포착한다.&lt;/li>
-&lt;li>XLNet은 generalized AR 언어 모델로서, 데이터 손상에 의존하지 않아 BERT의 사전 학습과 미세 조정 간의 불일치 문제를 겪지 않는다. 또한, autoregressive 목표는 예측된 토큰의 joint probability를 분해하는데 곱셈 규칙을 사용하므로, BERT의 독립 가정을 제거한다.&lt;/li>
-&lt;/ul>
-&lt;p>추가적으로, XLNet은 사전 학습을 위한 architecture design을 개선하였다.&lt;/p>
-&lt;ul>
-&lt;li>XLNet은 Transformer-XL의 segment recurrence mechanism과 relative encoding scheme를 사전 학습에 통합하여, 긴 텍스트 시퀀스를 다루는 작업의 성능을 향상시켰다.&lt;/li>
-&lt;li>Transformer-XL architecture를 naive하게 적용하는 것은 어렵기 때문에, Transformer-XL network를 reparameterize해서 사용하였다.&lt;/li>
-&lt;/ul>
-&lt;p>같은 실험 환경에서, XLNet은 언어 이해, 읽기 이해, 텍스트 분류, 문서 랭킹 등 다양한 작업에서 BERT를 능가하는 성능을 보여주었다.&lt;/p>
-&lt;h3 id="related-work">Related Work&lt;/h3>
-&lt;p>순열 기반 AR 모델링은 이전에도 연구되었지만, XLNet은 언어 모델이 양방향 컨텍스트를 학습하는 것을 목표로 하고, 이를 위해 two-stream attention을 통해 목표 위치를 hidden state에 통합한다. 이전 모델들과는 다르게, &amp;ldquo;순서 없음&amp;quot;은 입력 시퀀스가 무작위로 순열될 수 있다는 의미가 아니라, 모델이 분포의 다양한 분해 순서를 허용한다는 것을 의미한다.&lt;/p>
-&lt;p>다른 관련 아이디어로는 텍스트 생성에서 autoregressive denoising을 수행하는 것이 있다. 이 방법은 고정된 순서만을 고려하고 있다.&lt;/p>
-&lt;h2 id="proposed-method">Proposed Method&lt;/h2>
-&lt;h3 id="background">Background&lt;/h3>
-&lt;p>전통적인 AR 언어 모델링과 BERT를 비교하며, 텍스트 시퀀스가 주어지면 AR 언어 모델링은 forward autoregressive factorization을 통해 likelihood를 최대화하여 사전 학습을 수행한다:&lt;/p>
-&lt;p>$$ \underset{\theta}{max} \quad log \ p_{\theta}(x) = \sum_{t=1}^{T} log \ p{\theta}(x_t | x &amp;lt; t) = \sum_{t=1}^{T} log \ {{exp(h_{\theta}(x_{1:t-1})^\intercal e(x_t))}\over{\sum_{x&amp;rsquo;} exp(h_{\theta}(x_{1:t-1})^\intercal e(x&amp;rsquo;))}} $$&lt;/p>
-&lt;p>$h_θ(x_{1:t−1})$는 RNN이나 Transformer와 같은 신경 모델로 생성된 컨텍스트 표현이며, $e(x)$는 $x$의 임베딩이다. 반면에, BERT는 노이즈 제거 자동 인코딩에 기반하며, 텍스트 시퀀스 $x$의 일부 토큰을 특수 심볼 [MASK]로 바꿔 손상된 버전 $x$를 만든다. 이후의 훈련 목표는 $x$로부터 마스크된 토큰을 재구성하는 것이다.&lt;/p>
-&lt;p>$$ \underset{\theta}{max} \quad log \ p_{\theta}(\bar{x}|\hat{x}) \approx \sum_{t=1}^{T} m_t \ log \ p{\theta}(x_t | \hat{x}) = \sum_{t=1}^{T} m_t \ log \ {{exp(H_{\theta}(\hat{x})^\intercal_t e(x_t))}\over{\sum_{x&amp;rsquo;} exp(H_{\theta}(\hat{x})^\intercal_t e(x&amp;rsquo;))}} $$&lt;/p>
-&lt;p>$m_t = 1$은 $x_t$가 마스크되었음을 나타내며, $H_{\theta}$는 텍스트 시퀀스 $x$를 숨겨진 벡터의 시퀀스로 변환하는 Transformer이다. 두 사전 학습 목표의 장단점은 다음에서 비교된다:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Independence Assumption&lt;/strong>: BERT는 모든 마스크된 토큰이 독립적으로 재구성된다는 가정 하에 결합 조건 확률 $p(\bar{x}|\hat{x})$을 분해한다. 반면, AR 언어 모델링은 독립 가정 없이 곱셈 법칙을 사용하여 확률 $p_{\theta}(x)$을 분해한다.&lt;/li>
-&lt;li>&lt;strong>Input noise&lt;/strong>: BERT의 입력에는 [MASK]와 같은 인공적인 심볼이 포함되어 있어 사전 학습과 미세 조정간의 불일치가 발생한다. [MASK]를 원래 토큰으로 대체해도 문제가 해결되지 않는다. 반면, AR 언어 모델링은 입력 손상에 의존하지 않아 이 문제가 없다.&lt;/li>
-&lt;li>&lt;strong>Context dependency&lt;/strong>: AR 표현 $h_θ(x_{1:t−1})$은 위치 $t$까지의 토큰에만 의존하는 반면, BERT 표현은 양쪽의 문맥 정보에 접근할 수 있다. 따라서, BERT는 양방향 문맥을 더 잘 포착하도록 사전 학습된다.&lt;/li>
-&lt;/ul>
-&lt;h3 id="objective-permutation-language-modeling">Objective: Permutation Language Modeling&lt;/h3>
-&lt;p>orderless NADE에서 아이디어를 차용하여, AR 모델의 장점을 유지하면서 양방향 문맥을 포착하는 순열 언어 모델링을 제안한다. 모델 파라미터가 모든 분해 순서에 공유되면, 모델은 양쪽 모든 위치에서 정보를 수집하도록 학습할 수 있다.&lt;/p>
-&lt;p>길이가 $T$인 인덱스 시퀀스의 모든 가능한 순열 집합을 $Z_T$라고 할때, $z_t$와 $z &amp;lt; t$는 순열 $z$의 $t$번째 요소와 첫 $t−1$개 요소를 나타낸다. 그러면, 순열 언어 모델링 목표는 다음과 같이 표현될 수 있다:&lt;/p>
-&lt;p>$$ \underset{\theta}{max} \quad \mathbb{E_{\mathbf{z} \sim \mathbf{Z_T}}} \big[ \sum_{t=1}^{T} \ log \ p{\theta}(x_{z_t} | x_{z_{&amp;lt;t}}) \big] $$&lt;/p>
-&lt;p>텍스트 시퀀스 $x$에 대해, 인수분해 순서 $z$를 샘플링하고, 이 순서에 따라 가능성 $p_{\theta}(x)$을 분해한다. 모델 파라미터가 모든 인수분해 순서에 공유되므로, $x_t$는 시퀀스 내의 모든 가능한 요소를 볼 수 있어 양방향 문맥을 포착할 수 있다. 또한, AR 프레임워크에 적합하여 독립 가정과 사전 학습-미세조정 차이를 피할 수 있다.&lt;/p>
-&lt;h3 id="remark-on-permutation">Remark on Permutation&lt;/h3>
-&lt;p>인수분해 순서만을 바꾸며, 시퀀스 순서는 그대로 유지한다. 원래 시퀀스에 대응하는 positional encoding을 사용하고, Transformer의 적절한 attention mask를 활용한다. 이 방법은 모델이 미세 조정 동안 자연스러운 순서의 텍스트 시퀀스를 만나기 때문에 필요하다.&lt;/p>
-&lt;h2 id="architecture-two-stream-self-attnetion-for-target-aware-representations">Architecture: Two-Stream Self-Attnetion for Target-Aware Representations&lt;/h2>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/figure1.png"
-width="1032"
-height="486"
-srcset="https://kurtkim.github.io/p/xlnet/images/figure1_hu64f0e34f291245cd02d7461e9fe0c5ea_114301_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/figure1_hu64f0e34f291245cd02d7461e9fe0c5ea_114301_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="212"
-data-flex-basis="509px"
->&lt;/p>
-&lt;p>순열 언어 모델링 목표는 원하는 속성을 가지지만, 표준 Transformer 파라미터화를 사용한 단순한 구현은 문제가 있다. Softmax를 사용하여 다음 토큰 분포를 파라미터화하면:&lt;/p>
-&lt;p>$$ p_{\theta}(X_{z_t} = x | x_{z_{&amp;lt; t}}) = {{exp(e(x)^\intercal h_{\theta}(x_{z_t}))}\over{\sum_{x&amp;rsquo;} exp(e(x&amp;rsquo;)^\intercal h_{\theta}(x_{z_t})}} $$&lt;/p>
-&lt;p>예측할 위치에 따라 표현이 달라지지 않는다. 이로 인해 대상 위치에 상관없이 동일한 분포가 예측되어 유용한 표현을 학습할 수 없다. 이 문제를 해결하기 위해, 다음 토큰 분포를 대상 위치를 인식하도록 re-parameterize 하는 것을 제안한다:&lt;/p>
-&lt;p>$$ p_{\theta}(X_{z_t} = x | x_{z_{&amp;lt; t}}) = {{exp(e(x)^\intercal g_{\theta}(x_{z_t}, z_t))}\over{\sum_{x&amp;rsquo;} exp(e(x&amp;rsquo;)^\intercal g_{\theta}(x_{z_t}, z_t)}} $$&lt;/p>
-&lt;p>$g_{\theta}(x_{z_t}, z_t)$는 대상 위치 $z_t$를 입력으로 추가로 받는 새로운 유형의 표현을 나타낸다.&lt;/p>
-&lt;h3 id="two-stream-self-attention">Two-Stream Self-Attention&lt;/h3>
-&lt;p>target-aware representation의 개념은 대상 예측의 불명확성을 제거하지만, $g_{\theta}(x_{z_t}, z_t)$를 어떻게 형성할 것인지는 복잡한 문제이다. 대상 위치에서 정보를 수집하는 것을 제안하며, 이를 위해 두 가지 요구사항이 필요하다:&lt;/p>
-&lt;ul>
-&lt;li>토큰 $x_{z_t}$를 예측하기 위해, $g_{\theta}(x_{z_{&amp;lt;t}}, z_t)$는 위치 $z_t$만 사용하고 내용 $x_{z_t}$는 사용하지 않아야 한다.&lt;/li>
-&lt;li>다른 토큰 $x_{z_j}$를 예측하기 위해 $(j &amp;gt; t)$, $g_{\theta}(x_{z_{&amp;lt;t}}, z_t)$는 전체 컨텍스트 정보를 제공하기 위해 내용 $x_{z_t}$도 인코딩해야 한다.&lt;/li>
-&lt;/ul>
-&lt;p>이 모순을 해결하기 위해, 하나 대신 두 세트의 숨겨진 표현을 사용한다.&lt;/p>
-&lt;ul>
-&lt;li>content representation $h_{\theta}(x_{z_{&amp;lt;t}})$는 컨텍스트와 $x_{z_t}$ 자체를 인코딩하는 Transformer의 standard hidden states와 유사한 역할을 한다.&lt;/li>
-&lt;li>query representation $g_{\theta}(x_{z_t}, z_t)$는 컨텍스트 정보와 위치에만 접근할 수 있으며, 내용 $x_{z_t}$에는 접근할 수 없다.&lt;/li>
-&lt;/ul>
-&lt;p>첫번째 layer query stream은 학습 가능한 벡터로 초기화된다. (i.e $\ g^{(0)}_i = w$)
-반면에 content stream은 해당 단어 임베딩으로 설정된다. (i.e $\ h^{(0)}_i = e(x_i)$)
-self-attention layer $m = 1, &amp;hellip;, M$에 대해, two-streams의 표현은 공유된 파라미터 세트로 다음과 같이 업데이트된다.&lt;/p>
-&lt;p>$$ g_{z_t}^{(m)} \leftarrow Attention(Q = g_{z_t}^{(m-1)}, KV = h_{z_{&amp;lt;t}}^{(m-1)}; \theta) $$
-$$ h_{z_t}^{(m)} \leftarrow Attention(Q = h_{z_t}^{(m-1)}, KV = h_{z_{\leq t}}^{(m-1)}; \theta) $$&lt;/p>
-&lt;p>여기서 Q, K, V는 attention 연산에서의 query, key, value를 나타낸다. content representation의 업데이트 규칙은 standard self-attention과 같으므로, 미세 조정 중에 query stream을 중단하고 content stream을 일반 Transformer-XL로 사용할 수 있다. last-layer query representation $g_{z_t}^{(m)}$를 사용하여 $p_{\theta}(X_{z_t} = x | x_{z_{&amp;lt; t}})$를 계산할 수 있다.&lt;/p>
-&lt;h3 id="partial-prediction">Partial Prediction&lt;/h3>
-&lt;p>순열 언어 모델링은 여러 이점이 있지만, 순열로 인해 최적화가 어려워 수렴이 느리다. 이를 해결하기 위해, 분해 순서에서 마지막 토큰만 예측하도록 선택하였다. 즉, 전체를 목표가 아닌 부분과 목표 부분으로 나누고, 목표가 아닌 부분에 따른 목표 부분의 log-likelihood를 최대화한다.&lt;/p>
-&lt;p>$$ \underset{\theta}{max} \quad \mathbb{E_{\mathbf{z} \sim \mathbf{Z_T}}} \big[ log \ p{\theta}(x_{z_{&amp;gt;c}} | x_{z_{\geq t}}) \big] = \mathbb{E_{\mathbf{z} \sim \mathbf{Z_T}}} \big[ \sum_{t=c+1}^{|z|} \ log \ p{\theta}(x_{z_t} | x_{z_{&amp;lt; t}}) $$&lt;/p>
-&lt;p>분해 순서에 따라 가장 긴 컨텍스트를 가진 부분이 목표로 선택되며, hyperparameter $K$는 약 $1/K$ 토큰이 예측에 선택되도록 사용된다. (i.e $|z| / (|z| - c) \approx K$) 선택되지 않은 토큰들의 query representation을 계산할 필요가 없어, 메모리를 아끼고 속도를 향상시킬 수 있다.&lt;/p>
-&lt;h3 id="incorporating-ideas-from-transformer-xl">Incorporating Ideas from Transformer-XL&lt;/h3>
-&lt;p>Transformer-XL의 relative positional encoding scheme과 segment recurrence mechasnism을 통합하였으며, 이를 통해 모델이 이전 세그먼트의 hidden state를 재사용하게 할 수 있다. 긴 시퀀스에서 두 세그먼트를 가지고, 첫 번째 세그먼트를 처리한 후 얻은 내용을 캐시하고, 다음 세그먼트에 대해 attention을 업데이트한다.&lt;/p>
-&lt;p>$$ h_{z_t}^{(m)} \leftarrow Attention(Q = h_{z_t}^{(m-1)}, KV = \big[ \tilde{h}^{(m-1)}, h_{z_{\leq t}}^{(m-1)} \big]; \theta) $$&lt;/p>
-&lt;p>positional encoding은 원래 시퀀스의 실제 위치에만 의존하므로, 얻어진 표현이 있으면 attention 업데이트는 순열에 독립적이다. 이를 통해 이전 세그먼트의 분해 순서를 알지 못해도 메모리를 캐시하고 재사용할 수 있다. 모델은 마지막 세그먼트의 모든 분해 순서에 대해 메모리를 활용하는 방법을 학습하며, query stream도 같은 방식으로 계산된다.&lt;/p>
-&lt;h3 id="modeling-multiple-segments">Modeling Multiple Segments&lt;/h3>
-&lt;p>다양한 작업에서 여러 입력 세그먼트가 필요하다. XLNet의 사전 학습 과정에서는 이를 고려하여 두 세그먼트를 무작위로 샘플링하고, 이를 하나의 시퀀스로 연결하여 순열 언어 모델링을 수행한다. 동일한 문맥에서만 메모리를 재사용하며, 이 과정은 BERT의 입력 형식 [CLS, A, SEP, B, SEP]을 따른다. 그러나 XLNet-Large는 일관된 성능 향상을 보이지 않아 다음 next sentence prediction를 사용하지 않습니다.&lt;/p>
-&lt;h3 id="relative-segment-encodings">Relative Segment Encodings&lt;/h3>
-&lt;p>구조적으로, BERT와 달리 XLNet은 Transformer-XL의 relative encoding 개념을 확장하여 세그먼트를 인코딩한다. 두 위치가 같은 세그먼트에 있는지 여부만 고려하여, 세그먼트 인코딩을 이용해 attention 가중치를 계산한다. relative segment encoding을 사용하면 일반화를 개선하고 두 개 이상의 입력 세그먼트를 가진 작업에서 미세 조정할 수 있는 가능성이 있다.&lt;/p>
-&lt;h3 id="discussion">Discussion&lt;/h3>
-&lt;p>BERT와 XLNet 모두 일부 토큰만 예측하는 부분적 예측을 수행한다. 이는 의미 있는 예측을 위해 필요하며, 충분한 문맥을 가진 토큰만 예측함으로써 최적화의 어려움을 줄인다. 그러나 BERT는 대상 간의 종속성을 모델링할 수 없다.&lt;/p>
-&lt;p>BERT와 XLNet의 차이점을 이해하기 위해 예시 [New, York, is, a, city]에 대해 비교 해 보면, 예시에서 [New, York] 두 개의 token을 예측하고 $log \ p(\text{New York} | \text{is a city})$를 maximize한다고 가정한다. 또한, XLNet의 인수분해 순서는 [is, a, city, New, York]이라고 가정한다. BERT와 XLNet의 object는 다음과 같다.&lt;/p>
-&lt;p>$$ \mathbf{J}_{BERT} = log \ p(\text{New} | \text{is a city}) + log \ p(\text{York} | \text{is a city}) $$&lt;/p>
-&lt;p>$$ \mathbf{J}_{XLNet} = log \ p(\text{New} | \text{is a city}) + log \ p(\text{York} | \text{New, is a city}) $$&lt;/p>
-&lt;p>XLNet은 BERT가 생략하는 &amp;lsquo;New&amp;rsquo;와 &amp;lsquo;York&amp;rsquo; 사이의 종속성을 포착할 수 있다. 동일한 대상이 주어진 상황에서 XLNet은 더 많은 종속성 쌍을 학습하며, 더 밀도 높은 훈련 신호를 포함하고 있다.&lt;/p>
-&lt;h2 id="experiments">Experiments&lt;/h2>
-&lt;h3 id="pretraining-and-implementation">Pretraining and Implementation&lt;/h3>
-&lt;p>BooksCorpus와 영어 Wikipedia를 사전 학습 데이터로 사용하고, 추가로 Giga5, ClueWeb 2012-B, 그리고 Common Crawl을 포함시켰다. 이 데이터들은 공격적인 필터링을 통해 짧거나 저품질의 기사를 제거한 후, 총 32.89B의 subword pieces로 토큰화하였다.&lt;/p>
-&lt;p>XLNet-Large 모델은 BERT-Large와 같은 아키텍처를 가지고 있다. 사전 학습 동안 시퀀스 길이 512를 사용하였고, BERT와 비교하기 위해 BooksCorpus와 위키백과만을 이용해 훈련을 진행하였다. 그 후, 앞서 설명한 모든 데이터셋을 사용해 훈련을 확장하였고, 마지막으로, XLNet-Base-wikibooks를 기반으로 ablation study를 수행하였다.&lt;/p>
-&lt;p>recurrence mechanism이 도입된 XLNet-Large 학습에서는 양방향 데이터 입력 파이프라인을 사용하고, 전방향과 후방향이 각각 배치 크기의 절반을 차지한다. prediction constant $K$는 6으로 설정되었으며, 미세 조정 절차는 BERT를 따른다. 추가로, 특정 길이의 토큰을 예측 대상으로 선택하는 span-based 예측 방법을 사용하였다.&lt;/p>
-&lt;h3 id="fair-comparison-with-bert">Fair Comparison with BERT&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/table1.png"
-width="1067"
-height="178"
-srcset="https://kurtkim.github.io/p/xlnet/images/table1_hue3d17fe4c9e720db712837542685989d_41995_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/table1_hue3d17fe4c9e720db712837542685989d_41995_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="599"
-data-flex-basis="1438px"
->&lt;/p>
-&lt;p>같은 데이터와 하이퍼파라미터로 훈련된 XLNet은 모든 고려된 데이터셋에서 BERT를 크게 앞서는 것으로 나타났다.&lt;/p>
-&lt;h3 id="comparison-with-roberta-scaling-up">Comparison with RoBERTa: Scaling Up&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/table2.png"
-width="992"
-height="210"
-srcset="https://kurtkim.github.io/p/xlnet/images/table2_hub13544945018193398b025049834fd0f_54793_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/table2_hub13544945018193398b025049834fd0f_54793_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="472"
-data-flex-basis="1133px"
->&lt;/p>
-&lt;p>ALBERT는 계산량을 크게 증가시키므로 과학적 결론을 도출하기 어려워, 다음 결과에서 제외되었다. 반면, RoBERTa는 전체 데이터를 기반으로 하고, RoBERTa의 하이퍼파라미터를 재사용하는 실험을 진행하였다.&lt;/p>
-&lt;p>XLNet은 일반적으로 BERT와 RoBERTa를 능가하는 성능을 보여주었다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/table3.png"
-width="768"
-height="292"
-srcset="https://kurtkim.github.io/p/xlnet/images/table3_huf0364417c329187e97368cd7119f3806_68026_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/table3_huf0364417c329187e97368cd7119f3806_68026_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="263"
-data-flex-basis="631px"
->&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/table4.png"
-width="996"
-height="236"
-srcset="https://kurtkim.github.io/p/xlnet/images/table4_hu6dfeb6a8f3889ccef2d4baa438dff1a6_53953_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/table4_hu6dfeb6a8f3889ccef2d4baa438dff1a6_53953_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="422"
-data-flex-basis="1012px"
->&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/table5.png"
-width="1068"
-height="287"
-srcset="https://kurtkim.github.io/p/xlnet/images/table5_hu4a2fea34ca197f53779b5bdc901342e3_83274_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/table5_hu4a2fea34ca197f53779b5bdc901342e3_83274_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="372"
-data-flex-basis="893px"
->&lt;/p>
-&lt;ul>
-&lt;li>SQuAD와 RACE와 같이 더 긴 컨텍스트를 다루는 명확한 추론 작업에 대해, XLNet의 성능 향상이 더 크다. 이러한 더 긴 컨텍스트를 다루는 능력은 XLNet의 Transformer-XL 기반 구조에서 나올 수 있다.&lt;/li>
-&lt;li>MNLI(&amp;gt;390K), Yelp(&amp;gt;560K), Amazon(&amp;gt;3M)과 같이 이미 충분한 예제가 있는 분류 작업에 대해서도, XLNet은 큰 성능 향상을 보여주었다.&lt;/li>
-&lt;/ul>
-&lt;h2 id="ablation-study">Ablation Study&lt;/h2>
-&lt;p>다양한 특성을 가진 네 가지 데이터셋을 기반으로 각 설계 선택의 중요성을 이해하기 위한 ablation study를 수행한다. 구체적으로, 연구하고자 하는 세 가지 주요 측면으로는 다음과 같다:&lt;/p>
-&lt;ul>
-&lt;li>순열 언어 모델링 목표의 효과, 특히 BERT에서 사용하는 denoising auto-encoding 목표와 비교&lt;/li>
-&lt;li>Transformer-XL을 백본 아키텍처로 사용하는 것의 중요성&lt;/li>
-&lt;li>범위 기반 예측, 양방향 입력 파이프라인, 그리고 다음 문장 예측을 포함한 일부 구현 세부사항의 필요성&lt;/li>
-&lt;/ul>
-&lt;p>다양한 구현 세부 사항을 가진 6개의 XLNet-Base 변형, 원래의 BERT-Base 모델, 그리고 BERT에서 사용된 denoising auto-encoding 목표로 훈련된 Transformer-XL 기준선을 비교한다. 모든 모델은 공평한 비교를 위해 BERT-Base와 동일한 모델 hyperparameter를 가진 12-layer 아키텍처를 기반으로 하며, Wikipedia와 BooksCorpus에서만 학습하였다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/table6.png"
-width="828"
-height="302"
-srcset="https://kurtkim.github.io/p/xlnet/images/table6_hu1098c6cce6ee530c011695b38df4e119_77715_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/table6_hu1098c6cce6ee530c011695b38df4e119_77715_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="274"
-data-flex-basis="658px"
->&lt;/p>
-&lt;p>Transformer-XL과 순열 언어 모델링이 XLNet의 성능 향상에 크게 기여한다는 것을 알 수 있다. 메모리 캐싱 메커니즘을 제거하면 성능이 특히 떨어지며, 범위 기반 예측과 양방향 입력 파이프라인이 중요한 역할을 한다. 또한, BERT에서 제안된 다음 문장 예측 목표가 반드시 성능 향상을 가져오지 않으므로, 이를 XLNet에서 제외하였다.&lt;/p>
-&lt;h2 id="conclusions">Conclusions&lt;/h2>
-&lt;p>XLNet은 AR과 AE 방법의 이점을 결합하는 순열 언어 모델링을 사용하는 사전 학습 방법이다. Transformer-XL을 통합하고 two-stream attention mechanism을 설계하여 AR 목표와 원활하게 작동하도록 하였다. XLNet은 다양한 작업에서 이전 사전 학습 방법들 보다 큰 성능 개선을 보여주었다.&lt;/p>
-&lt;h2 id="reference">Reference&lt;/h2>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://arxiv.org/abs/1906.08237" target="_blank" rel="noopener"
->Paper&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://github.com/zihangdai/xlnet" target="_blank" rel="noopener"
->Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>ALBERT</title><link>https://kurtkim.github.io/p/albert/</link><pubDate>Thu, 04 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/albert/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;/ul></description></item><item><title>ALBERT</title><link>https://kurtkim.github.io/p/albert/</link><pubDate>Thu, 14 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/albert/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>자연어 표현을 사전 학습할 때 모델 크기를 늘리면 종종 성능이 향상되지만, GPU/TPU 메모리 한계와 학습 시간이 길어지는 문제가 있다. 이를 해결하기 위해, BERT의 메모리 소비를 줄이고 훈련 속도를 높이는 두 가지 기법을 제시하였다. 이 기법은 원래의 BERT보다 훨씬 더 잘 확장되는 모델을 만들며, 문장 간 일관성을 모델링하는 self-supervised loss를 사용하여 다문장 입력 작업에 도움이 된다. 결과적으로, BERT-large보다 parameter가 적은 ALBERT 모델은 GLUE, RACE, SQuAD benchmark에서 state-of-the-art를 달성하였다.&lt;/p>
+&lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>Full network pre-training는 언어 학습에서 중요한 돌파구를 이끌어내었다. 이를 통해 학습 데이터가 제한된 NLP 작업들이 큰 도움을 받았다. 중국의 영어 시험을 위한 RACE 테스트에서 기계 성능은 초기 44.1%에서 최근에는 83.2%로 상승하였다. 이 연구를 통해 성능은 더욱 향상되어 89.4%에 이르렀다. 이는 주로 고성능 사전 학습 언어 표현 능력의 발전 덕분이다.&lt;/p>
 &lt;p>이러한 개선사항들은 큰 네트워크가 state-of-the-art를 달성하는 데 중요함을 보여준다. 이제는 큰 모델을 사전 학습하고 작은 모델로 축소하는 것이 일반적인 방법이다. 그래서 이 연구에서는 &amp;ldquo;더 나은 NLP 모델을 가지는 것이 큰 모델을 가지는 것만큼 쉬운 것인지&amp;quot;라는 질문을 던지게 된다.&lt;/p>
@@ -1704,6 +1647,7 @@ data-flex-basis="658px"
 &lt;p>ALBERT는 사전 학습된 모델 확장의 주요 장애물을 제거하는 두 가지 parameter 축소 기법을 사용한다. 첫 번째는 큰 어휘 임베딩 행렬을 작은 행렬로 분해하는 것, 두 번째는 네트워크 깊이에 따른 parameter 증가를 방지하는 것이다. 이 두 기법은 BERT의 매개변수 수를 크게 줄이고, BERT-large와 유사한 ALBERT 구성은 매개변수가 18배 더 적고, 약 1.7배 더 빠르게 훈련될 수 있게 한다. 이 기법들은 훈련을 안정화시키고 일반화에 도움을 주는 정규화 역할도 한다.&lt;/p>
 &lt;p>ALBERT의 성능을 더욱 향상시키기 위해, sentence-order prediction(SOP)을 위한 self-supervised loss도 도입하였다. SOP는 주로 문장 간의 일관성에 초점을 맞추고 있으며, 원래 BERT에서 제안된 다음 next sentence prediction(NSP) loss의 비효율성을 해결하도록 설계되었다.&lt;/p>
 &lt;p>그 결과, BERT-large보다 parameter는 더 적지만 성능은 훨씬 뛰어난 더 큰 ALBERT 구성으로 확장할 수 있었다. 그리고 자연 언어 이해를 위한 잘 알려진 GLUE, SQuAD, RACE 벤치마크에서 state-of-the-art를 달성하였다.&lt;/p>
+&lt;hr>
 &lt;h2 id="related-work">Related Work&lt;/h2>
 &lt;h3 id="scaling-up-representation-learning-for-natural-language">Scaling up Representation Learning for Natural Language&lt;/h3>
 &lt;p>자연 언어의 표현 학습은 다양한 NLP 작업에 유용하며 널리 채택되어왔다. 최근 가장 큰 변화는 단어 임베딩의 사전 학습에서, 전체 네트워크의 사전 학습 후 작업 특정 미세 조정으로 전환되었다는 것이다. 이러한 연구에서는 더 큰 모델 크기가 성능을 향상시키는 것이 종종 보여졌다. 하지만, 모델 크기와 계산 비용 문제로 인해 hidden size 는 1024에서 멈추게 되었다.&lt;/p>
@@ -1712,6 +1656,7 @@ data-flex-basis="658px"
 &lt;p>cross-layer parameter sharing의 아이디어는 이전에 Transformer 아키텍처에서 제안되었다. 하지만 이전 연구는 표준 인코더-디코더 작업에 초점을 맞추어져있었다. Dehghani et al. (2018)은 cross-layer parameter sharing를 가진 네트워크가 언어 모델링에서 더 나은 성능을 낸다고 보여주었다. 최근에는, Bai et al. (2019)이 Transformer 네트워크를 위한 Deep Equilibrium Model을 제안하였다. Hao et al. (2019)은 parameter-sharing transformer와 standard transformer를 결합하여 parameter 수를 늘렸다.&lt;/p>
 &lt;h3 id="sentence-ordering-objectives">Sentence Ordering Objectives&lt;/h3>
 &lt;p>ALBERT는 두 연속된 텍스트 세그먼트의 순서를 예측하는 사전 학습 loss를 사용한다. 이는 담화의 일관성에 관련된 다른 사전 학습 목표와 유사하다. 대부분의 효과적인 목표는 매우 단순하며, 이웃하는 문장의 단어를 예측하는 것에 기반한다. loss는 두 연속된 문장의 순서를 결정하기 위해 학습된 문장 임베딩과 가장 관련이 있다. 하지만, loss는 문장이 아닌 텍스트 세그먼트에 적용된다. BERT는 한 쌍에서 두 번째 세그먼트가 다른 문서의 세그먼트와 바뀌었는지 예측하는 loss을 사용하고, 이는 NSP가 더 도전적인 사전 학습 작업이며 특정 downstream task에 더 유용하다는 것을 보여준다.&lt;/p>
+&lt;hr>
 &lt;h2 id="the-elements-of-albert">The Elements of ALBERT&lt;/h2>
 &lt;p>ALBERT의 설계 결정사항을 제시하고, BERT 아키텍처와 비교한다.&lt;/p>
 &lt;h3 id="model-architecture-choices">Model Architecture Choices&lt;/h3>
@@ -1750,12 +1695,14 @@ data-flex-grow="415"
 data-flex-basis="996px"
 >&lt;/p>
 &lt;p>ALBERT 모델은 설계 선택 때문에 BERT 모델보다 parameter 크기가 훨씬 작다. 예를 들어, ALBERT-large는 BERT-large보다 parameter가 약 18배 작다. 이런 parameter 효율성 향상은 ALBERT의 설계 선택에서 가장 중요한 장점이다.&lt;/p>
+&lt;hr>
 &lt;h2 id="experimental-results">Experimental Results&lt;/h2>
 &lt;h3 id="experimental-setup">Experimental Setup&lt;/h3>
 &lt;p>의미 있는 비교를 위해, BERT 설정을 따라서 사전 훈련 기본 모델에 대해 Book Corpus와 영문 Wikipedia를 사용한다. 이 두 말뭉치는 압축되지 않은 텍스트로 약 16GB를 구성한다. 입력은 $[CLS] x_1 [SEP] x_2 [SEP]$ 와 같은 포멧이며, 최대 512 길이로 제한한다. 그리고 10%의 확률로 512보다 짧은 입력 시퀀스를 무작위로 생성한다. BERT와 같이, 30,000의 어휘 크기를 가지며, XLNet처럼 SentencePiece를 사용하여 토큰화한다.&lt;/p>
 &lt;p>각 n-gram 마스크의 길이를 무작위로 선택하여 n-gram 마스킹을 사용해 MLM 목표를 위한 마스크된 입력을 생성한다. 길이 n에 대한 확률은 다음과 같이 주어진다:&lt;/p>
 &lt;p>$$p(n) = {{1/n}\over{\sum_{k=1}^{N}1/k}} $$&lt;/p>
 &lt;p>n-gram의 최대 길이는 3으로 설정하며, 이는 MLM 목표가 최대 3-gram 단어로 구성될 수 있음을 의미한다. 모든 모델 업데이트는 배치 크기 4096과 학습률 0.00176의 $L_{AMB}$ optimizer를 사용하며, 모든 모델은 125,000 step 동안 학습된다. 훈련은 Cloud TPU V3에서 이루어졌으며, 사용된 TPU의 수는 모델 크기에 따라 64에서 512까지 다양했다. 이 실험 설정은 우리가 만든 모든 BERT 버전과 ALBERT 모델에 사용되었다.&lt;/p>
+&lt;hr>
 &lt;h2 id="evaluation-benchmarks">Evaluation Benchmarks&lt;/h2>
 &lt;h3 id="intrinsic-evalutation">Intrinsic Evalutation&lt;/h3>
 &lt;p>학습 상황을 확인하기 위해, SQuAD와 RACE의 개발 세트를 기반으로 개발 세트를 만들었다. MLM과 문장 분류 작업의 정확도를 보고한다. 이 세트는 모델의 수렴 상태를 확인하는데만 사용되며, 모델 선택과 같은 방식으로 downstream evaluation의 성능에 영향을 주지 않는다.&lt;/p>
@@ -1875,18 +1822,22 @@ data-flex-grow="233"
 data-flex-basis="561px"
 >&lt;/p>
 &lt;p>단일 모델과 앙상블 모델 모두 ALBERT가 모든 벤치마크에서 상당히 향상된 성능을 보여준다. GLUE 점수는 89.4, SQuAD 2.0 테스트 F1 점수는 92.2, RACE 테스트 정확도는 89.4에 달하며, 이는 BERT, XLNet, RoBERTa, 그리고 DCMI+ 등에 비해 큰 향상을 보여준다. 또한, 단일 모델은 86.5%의 정확도를 달성하여, state-of-the-art 앙상블 모델보다 2.4% 더 높다.&lt;/p>
+&lt;hr>
 &lt;h2 id="discussion">Discussion&lt;/h2>
 &lt;p>ALBERT-xxlarge는 BERT-large보다 parameter가 적지만 더 좋은 성능을 보인다. 하지만, 큰 구조 때문에 계산 비용이 더 많이 들어간다. 따라서, 다음 단계는 sparse attention와 block attention 등의 방법을 통해 ALBERT의 학습과 추론 속도를 높이는 것이다. 어려운 예제 채굴과 더 효율적인 언어 모델링 훈련 등 별개의 연구 방향이 추가적인 표현력을 제공할 수 있다. 또한, 문장 순서 예측이 더 나은 언어 표현을 이끌어내는 좋은 학습 작업이지만, 추가적인 표현력을 만들어낼 수 있는 현재 자기 self-supervised loss에 포착되지 않은 다른 차원이 있을 수 있다는 가설이 있다.&lt;/p>
+&lt;hr>
 &lt;h2 id="reference">Reference&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/1909.11942.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/google-research/ALBERT" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>RoBERTa</title><link>https://kurtkim.github.io/p/roberta/</link><pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/roberta/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;/ul></description></item><item><title>RoBERTa</title><link>https://kurtkim.github.io/p/roberta/</link><pubDate>Tue, 12 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/roberta/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>언어 모델의 사전 학습은 큰 성능 향상을 가져왔지만, 다른 접근법 간의 비교는 어렵다. 학습 과정은 비용이 많이 들며, hyperparameter 선택이 결과에 큰 영향을 미친다. 이 연구는 BERT 학습을 재현하고, 핵심 hyperparameter와 학습 데이터 크기의 영향을 측정하는데, 이를 통해 BERT가 undertrained 상태였으며, 그 이후의 모든 모델의 성능을 맞추거나 능가할 수 있다는 것을 발견했다. RoBERTa는 여러 테스트에서 state-of-the-art를 달성하였고, 이는 이전에 간과된 설계의 중요성을 보여준다.&lt;/p>
+&lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>이 연구는 BERT의 사전 학습 방법을 재현하고, 그 효과를 평가했다. 연구 결과 BERT는 상당히 학습이 부족했으며, 이를 개선하기 위한 새로운 학습 방법 RoBERTa를 제안했다. RoBERTa는 더 큰 배치와 더 많은 데이터에서 모델을 더 오래 학습시키고, 다음 문장 예측 목표를 제거하며, 더 긴 시퀀스에서 학습시키고, 학습 데이터에 적용되는 마스킹 패턴을 동적으로 변경한다. 이 개선된 학습 방법은 GLUE와 SQuAD에서 BERT의 성능을 뛰어넘었다. 또한, 새로운 데이터셋인 CCN EWS를 사용하고, 사전 학습에 더 많은 데이터를 사용하면 성능이 더욱 향상된다는 것을 확인하였다.&lt;/p>
+&lt;hr>
 &lt;h2 id="background">Background&lt;/h2>
 &lt;p>BERT의 사전 학습 방식과 실험적으로 검토할 학습 선택 사항에 대해 간단히 소개한다.&lt;/p>
 &lt;h3 id="setup">Setup&lt;/h3>
@@ -1903,6 +1854,7 @@ data-flex-basis="561px"
 &lt;p>BERT는 Adam 최적화를 사용하며, learning rate는 처음 10,000 step 동안 서서히 높아진 후 선형적으로 감소한다. 모든 레이어와 attention weights에 대해 0.1의 dropout을 사용하고, GELU 활성화 함수를 활용한다. 모델은 1,000,000 업데이트 동안 사전 학습되며, 최대 512 토큰의 256 시퀀스를 포함하는 미니배치를 사용한다.&lt;/p>
 &lt;h3 id="data">Data&lt;/h3>
 &lt;p>BERT는 총 16GB의 압축되지 않은 텍스트인 BOOK CORPUS와 영어 WIKIPEDIA 조합으로 학습된다.&lt;/p>
+&lt;hr>
 &lt;h2 id="experimental-setup">Experimental Setup&lt;/h2>
 &lt;p>BERT의 복제 연구에 대한 실험적 설정을 설명한다.&lt;/p>
 &lt;h3 id="implementation">Implementation&lt;/h3>
@@ -1925,6 +1877,7 @@ data-flex-basis="561px"
 &lt;p>SQuAD V1.1에서는 BERT와 같은 방법으로 범위를 예측하며, SQuAD V2.0에서는 추가적인 이진 분류기를 사용하여 질문이 답변 가능한지를 예측한다. 이는 분류와 span loss terms를 합산하여 훈련되며, 평가 시 답변 가능으로 분류된 쌍에만 범위 인덱스를 예측한다.&lt;/p>
 &lt;h4 id="race">RACE&lt;/h4>
 &lt;p>ReAding Comprehension from Examinations(RACE)은 28,000개 이상의 지문과 100,000개 가까운 질문을 포함한 대규모 독해 dataset이다. 이 dataset은 중국의 중고등학생들을 대상으로 한 영어 시험에서 수집되었다. RACE에서는 각 지문에 대해 여러 질문을 풀고, 네 가지 선택지 중 정답을 고르는 작업을 수행한ㄴ다. RACE는 다른 dataset에 비해 긴 문맥을 가지고 있으며, 대부분의 질문에서 추론 능력을 요구한다.&lt;/p>
+&lt;hr>
 &lt;h2 id="training-procedure-analysis">Training Procedure Analysis&lt;/h2>
 &lt;p>BERT 모델을 성공적으로 사전 학습하기 위해 중요한 선택 사항들을 탐색하고 정량화한다. $BERT_{BASE}$와 동일한 구성 (L = 12, H = 768, A = 12, 110M params)으로 BERT 모델을 학습한다.&lt;/p>
 &lt;h3 id="static-vs-dynamic-masking">Static vs. Dynamic Masking&lt;/h3>
@@ -1976,6 +1929,7 @@ data-flex-basis="747px"
 &lt;p>Byte-Pair Encoding(BPE)는 자연어 말뭉치의 큰 어휘를 처리하기 위해 문자와 단어 수준 표현의 중간 형태를 사용한다. BPE는 훈련 말뭉치의 통계 분석을 통해 추출된 subword unit를 사용한다. byte를 사용한 BPE는, Unknown 토큰 없이도, 50K units의 서브워드 사전으로 학습을 진행할 수 있다.&lt;/p>
 &lt;p>기존의 BERT는 character level의 BPE를 사용했다. RoBERTa는 추가 전처리나 토크나이징 없이 larger byte-level BPE로 학습을 진행한다.&lt;/p>
 &lt;p>Byte level BPE는 몇 개의 태스크에서 성능이 떨어진다는 단점이 있지만, 성능 하락폭이 크지 않고 universal 인코딩의 장점이 있다고 판단하여 본 연구에서 Byte level BPE를 적용하였다.&lt;/p>
+&lt;hr>
 &lt;h2 id="roberta">RoBERTa&lt;/h2>
 &lt;p>BERT 사전 학습 절차를 수정하여 end-task 성능을 향상시키는 방안을 제안한다. 이를 모두 합쳐서 그 효과를 평가한 결과, RoBERTa라는 새로운 설정이 만들어졌다. RoBERTa는 동적 마스킹, NSP loss 없는 전체 문장, 큰 미니 배치, 더 큰 바이트 수준 BPE를 사용하여 학습된다.&lt;/p>
 &lt;p>또한, 사전 학습에 사용된 데이터와 데이터를 통한 학습 통과 횟수라는 두 가지 중요한 요소를 조사했다. 이를 검증하기 위해 $BERT_{LARGE}$ 아키텍처를 따라 RoBERTa를 훈련시켰고, BOOK CORPUS와 WIKIPEDIA dataset을 사용하여 100K 단계 동안 사전 학습 하였다.&lt;/p>
@@ -2029,18 +1983,203 @@ data-flex-grow="225"
 data-flex-basis="541px"
 >&lt;/p>
 &lt;p>RACE 테스트 세트에서의 결과는 RoBERTa가 중학교와 고등학교 환경 모두에서 state-of-the-art를 달성하였다.&lt;/p>
+&lt;hr>
 &lt;h2 id="related-work">Related Work&lt;/h2>
 &lt;p>다양한 사전 학습 방법들은 언어 모델링, 기계 번역, 마스킹된 언어 모델링 등의 목표를 가지고 설계되었다. 최근 연구에서는 마스킹된 언어 모델 목표를 사용해 사전 학습하고, 각 작업에 대해 모델을 미세 조정하는 방법을 사용하였다. 그러나 새로운 방법들은 다중 작업 미세 조정, 엔티티 임베딩 통합, 범위 예측, 자동회귀 사전 학습의 변형 등을 통해 성능을 향상시켰다. 일반적으로, 더 큰 모델을 더 많은 데이터로 훈련함으로써 성능이 향상되었다.&lt;/p>
+&lt;hr>
 &lt;h2 id="conclusion">Conclusion&lt;/h2>
 &lt;p>BERT 모델을 사전 학습시키는데 있어 다양한 디자인 결정을 신중하게 평가했다. 모델을 더 오래 훈련하고, 더 큰 배치로 더 많은 데이터를 사용하며, 다음 문장 예측 목표를 제거하고, 더 긴 시퀀스를 훈련하며, 훈련 데이터에 적용된 마스킹 패턴을 동적으로 변경하면 성능이 크게 향상됨을 발견했다. 이러한 개선된 사전 학습 절차를 RoBERTa라 부르며, GLUE, RACE, SQuAD에서 state-of-the-art를 달성하였다.&lt;/p>
+&lt;hr>
 &lt;h2 id="reference">Reference&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/1907.11692.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/facebookresearch/fairseq" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>GPT-2</title><link>https://kurtkim.github.io/p/gpt-2/</link><pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/gpt-2/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;/ul></description></item><item><title>XLNet</title><link>https://kurtkim.github.io/p/xlnet/</link><pubDate>Sun, 10 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/xlnet/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>BERT와 같은 denoising autoencoding 기반 사전 학습은 양방향 컨텍스트를 학습할 수 있지만, 마스크를 사용하여 입력을 변조함으로써 의존성을 무시하고 사전 학습과 미세 조정 사이의 괴리를 겪는다. 이를 해결하기 위해, XLNet이라는 새로운 사전 학습 방법을 제안한다. 이 방법은 모든 순열에 대한 기대 가능도를 최대화하여 양방향 컨텍스트를 학습하고, autoregressive 형식을 통해 BERT의 제한을 극복한다. 실험결과 XLNet은 여러 작업에서 BERT를 능가하는 결과를 보여주었다.&lt;/p>
+&lt;hr>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>자연어 처리 분야에서 Unsupervised representation learning은 큰 성공을 거두었다. 이 방법은 대규모의 레이블이 없는 텍스트 코퍼스에서 신경망을 사전 학습하고, 이를 특정 작업에 맞게 미세 조정하는 방식이다. 이에 대한 연구 중, autoregressive(AR)와 autoencoding(AE)이 가장 좋은 결과를 보여주었다.&lt;/p>
+&lt;p>AR 언어 모델링은 텍스트 시퀀스의 확률 분포를 추정하기 위해 autoregressive 모델을 사용한다. 텍스트 시퀀스 $x = (x_1, &amp;hellip;, x_T)$가 주어지면, AR 언어 모델링은 가능성을 순방향 곱인 $p(x) = \prod_{t=1}^T p(x_t | X_{&amp;lt;t})$ 또는 역방향 곱인 $p(x) = \prod_{t=T}^1 p(x_t | X_{&amp;gt;t})$로 분해하며, 각 조건부 분포를 모델링하기 위해 신경망 같은 매개변수 모델을 훈련한다. 그러나 AR 언어 모델은 단방향 컨텍스트만 인코딩하므로 깊은 양방향 컨텍스트를 모델링하는데는 비효율적이다. 이는 언어 이해 작업에서 필요한 양방향 컨텍스트 정보와의 간극을 만든다.&lt;/p>
+&lt;p>AE 기반 사전 학습, 예를 들면 BERT는 손상된 입력에서 원본 데이터를 재구성하는 것을 목표로 한다. 입력 토큰의 일부가 [MASK] 같은 특수 기호로 대체되고, 이를 원래 토큰으로 복구하도록 모델이 학습된다. BERT는 양방향 컨텍스트를 사용해 재구성할 수 있으므로, AR 언어 모델링의 양방향 정보 간극을 해결하고 성능을 향상시킬 수 있다. 하지만, BERT가 사전 훈련 중에 사용하는 인위적인 기호들은 미세 조정 시 실제 데이터에는 존재하지 않아, 사전 학습과 미세 조정 사이의 불일치를 초래하며, 예측된 토큰 간의 상호 의존성을 과도하게 단순화한다.&lt;/p>
+&lt;p>XLNet은 AR 언어 모델링과 AE의 장점을 모두 활용하면서 단점은 피하는 generalized autoregressive 방법이다.&lt;/p>
+&lt;ul>
+&lt;li>XLNet은 고정된 순방향이나 역방향 분해 순서를 사용하는 대신, 모든 가능한 분해 순서의 순열에 대한 시퀀스의 기대 log-likelihood를 최대화한다. 이로 인해 각 위치의 컨텍스트는 왼쪽과 오른쪽의 토큰들로 구성될 수 있으며, 모든 위치의 컨텍스트 정보를 활용하며 양방향 컨텍스트를 포착한다.&lt;/li>
+&lt;li>XLNet은 generalized AR 언어 모델로서, 데이터 손상에 의존하지 않아 BERT의 사전 학습과 미세 조정 간의 불일치 문제를 겪지 않는다. 또한, autoregressive 목표는 예측된 토큰의 joint probability를 분해하는데 곱셈 규칙을 사용하므로, BERT의 독립 가정을 제거한다.&lt;/li>
+&lt;/ul>
+&lt;p>추가적으로, XLNet은 사전 학습을 위한 architecture design을 개선하였다.&lt;/p>
+&lt;ul>
+&lt;li>XLNet은 Transformer-XL의 segment recurrence mechanism과 relative encoding scheme를 사전 학습에 통합하여, 긴 텍스트 시퀀스를 다루는 작업의 성능을 향상시켰다.&lt;/li>
+&lt;li>Transformer-XL architecture를 naive하게 적용하는 것은 어렵기 때문에, Transformer-XL network를 reparameterize해서 사용하였다.&lt;/li>
+&lt;/ul>
+&lt;p>같은 실험 환경에서, XLNet은 언어 이해, 읽기 이해, 텍스트 분류, 문서 랭킹 등 다양한 작업에서 BERT를 능가하는 성능을 보여주었다.&lt;/p>
+&lt;h3 id="related-work">Related Work&lt;/h3>
+&lt;p>순열 기반 AR 모델링은 이전에도 연구되었지만, XLNet은 언어 모델이 양방향 컨텍스트를 학습하는 것을 목표로 하고, 이를 위해 two-stream attention을 통해 목표 위치를 hidden state에 통합한다. 이전 모델들과는 다르게, &amp;ldquo;순서 없음&amp;quot;은 입력 시퀀스가 무작위로 순열될 수 있다는 의미가 아니라, 모델이 분포의 다양한 분해 순서를 허용한다는 것을 의미한다.&lt;/p>
+&lt;p>다른 관련 아이디어로는 텍스트 생성에서 autoregressive denoising을 수행하는 것이 있다. 이 방법은 고정된 순서만을 고려하고 있다.&lt;/p>
+&lt;hr>
+&lt;h2 id="proposed-method">Proposed Method&lt;/h2>
+&lt;h3 id="background">Background&lt;/h3>
+&lt;p>전통적인 AR 언어 모델링과 BERT를 비교하며, 텍스트 시퀀스가 주어지면 AR 언어 모델링은 forward autoregressive factorization을 통해 likelihood를 최대화하여 사전 학습을 수행한다:&lt;/p>
+&lt;p>$$ \underset{\theta}{max} \quad log \ p_{\theta}(x) = \sum_{t=1}^{T} log \ p{\theta}(x_t | x &amp;lt; t) = \sum_{t=1}^{T} log \ {{exp(h_{\theta}(x_{1:t-1})^\intercal e(x_t))}\over{\sum_{x&amp;rsquo;} exp(h_{\theta}(x_{1:t-1})^\intercal e(x&amp;rsquo;))}} $$&lt;/p>
+&lt;p>$h_θ(x_{1:t−1})$는 RNN이나 Transformer와 같은 신경 모델로 생성된 컨텍스트 표현이며, $e(x)$는 $x$의 임베딩이다. 반면에, BERT는 노이즈 제거 자동 인코딩에 기반하며, 텍스트 시퀀스 $x$의 일부 토큰을 특수 심볼 [MASK]로 바꿔 손상된 버전 $x$를 만든다. 이후의 훈련 목표는 $x$로부터 마스크된 토큰을 재구성하는 것이다.&lt;/p>
+&lt;p>$$ \underset{\theta}{max} \quad log \ p_{\theta}(\bar{x}|\hat{x}) \approx \sum_{t=1}^{T} m_t \ log \ p{\theta}(x_t | \hat{x}) = \sum_{t=1}^{T} m_t \ log \ {{exp(H_{\theta}(\hat{x})^\intercal_t e(x_t))}\over{\sum_{x&amp;rsquo;} exp(H_{\theta}(\hat{x})^\intercal_t e(x&amp;rsquo;))}} $$&lt;/p>
+&lt;p>$m_t = 1$은 $x_t$가 마스크되었음을 나타내며, $H_{\theta}$는 텍스트 시퀀스 $x$를 숨겨진 벡터의 시퀀스로 변환하는 Transformer이다. 두 사전 학습 목표의 장단점은 다음에서 비교된다:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Independence Assumption&lt;/strong>: BERT는 모든 마스크된 토큰이 독립적으로 재구성된다는 가정 하에 결합 조건 확률 $p(\bar{x}|\hat{x})$을 분해한다. 반면, AR 언어 모델링은 독립 가정 없이 곱셈 법칙을 사용하여 확률 $p_{\theta}(x)$을 분해한다.&lt;/li>
+&lt;li>&lt;strong>Input noise&lt;/strong>: BERT의 입력에는 [MASK]와 같은 인공적인 심볼이 포함되어 있어 사전 학습과 미세 조정간의 불일치가 발생한다. [MASK]를 원래 토큰으로 대체해도 문제가 해결되지 않는다. 반면, AR 언어 모델링은 입력 손상에 의존하지 않아 이 문제가 없다.&lt;/li>
+&lt;li>&lt;strong>Context dependency&lt;/strong>: AR 표현 $h_θ(x_{1:t−1})$은 위치 $t$까지의 토큰에만 의존하는 반면, BERT 표현은 양쪽의 문맥 정보에 접근할 수 있다. 따라서, BERT는 양방향 문맥을 더 잘 포착하도록 사전 학습된다.&lt;/li>
+&lt;/ul>
+&lt;h3 id="objective-permutation-language-modeling">Objective: Permutation Language Modeling&lt;/h3>
+&lt;p>orderless NADE에서 아이디어를 차용하여, AR 모델의 장점을 유지하면서 양방향 문맥을 포착하는 순열 언어 모델링을 제안한다. 모델 파라미터가 모든 분해 순서에 공유되면, 모델은 양쪽 모든 위치에서 정보를 수집하도록 학습할 수 있다.&lt;/p>
+&lt;p>길이가 $T$인 인덱스 시퀀스의 모든 가능한 순열 집합을 $Z_T$라고 할때, $z_t$와 $z &amp;lt; t$는 순열 $z$의 $t$번째 요소와 첫 $t−1$개 요소를 나타낸다. 그러면, 순열 언어 모델링 목표는 다음과 같이 표현될 수 있다:&lt;/p>
+&lt;p>$$ \underset{\theta}{max} \quad \mathbb{E_{\mathbf{z} \sim \mathbf{Z_T}}} \big[ \sum_{t=1}^{T} \ log \ p{\theta}(x_{z_t} | x_{z_{&amp;lt;t}}) \big] $$&lt;/p>
+&lt;p>텍스트 시퀀스 $x$에 대해, 인수분해 순서 $z$를 샘플링하고, 이 순서에 따라 가능성 $p_{\theta}(x)$을 분해한다. 모델 파라미터가 모든 인수분해 순서에 공유되므로, $x_t$는 시퀀스 내의 모든 가능한 요소를 볼 수 있어 양방향 문맥을 포착할 수 있다. 또한, AR 프레임워크에 적합하여 독립 가정과 사전 학습-미세조정 차이를 피할 수 있다.&lt;/p>
+&lt;h3 id="remark-on-permutation">Remark on Permutation&lt;/h3>
+&lt;p>인수분해 순서만을 바꾸며, 시퀀스 순서는 그대로 유지한다. 원래 시퀀스에 대응하는 positional encoding을 사용하고, Transformer의 적절한 attention mask를 활용한다. 이 방법은 모델이 미세 조정 동안 자연스러운 순서의 텍스트 시퀀스를 만나기 때문에 필요하다.&lt;/p>
+&lt;hr>
+&lt;h2 id="architecture-two-stream-self-attnetion-for-target-aware-representations">Architecture: Two-Stream Self-Attnetion for Target-Aware Representations&lt;/h2>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/figure1.png"
+width="1032"
+height="486"
+srcset="https://kurtkim.github.io/p/xlnet/images/figure1_hu64f0e34f291245cd02d7461e9fe0c5ea_114301_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/figure1_hu64f0e34f291245cd02d7461e9fe0c5ea_114301_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="212"
+data-flex-basis="509px"
+>&lt;/p>
+&lt;p>순열 언어 모델링 목표는 원하는 속성을 가지지만, 표준 Transformer 파라미터화를 사용한 단순한 구현은 문제가 있다. Softmax를 사용하여 다음 토큰 분포를 파라미터화하면:&lt;/p>
+&lt;p>$$ p_{\theta}(X_{z_t} = x | x_{z_{&amp;lt; t}}) = {{exp(e(x)^\intercal h_{\theta}(x_{z_t}))}\over{\sum_{x&amp;rsquo;} exp(e(x&amp;rsquo;)^\intercal h_{\theta}(x_{z_t})}} $$&lt;/p>
+&lt;p>예측할 위치에 따라 표현이 달라지지 않는다. 이로 인해 대상 위치에 상관없이 동일한 분포가 예측되어 유용한 표현을 학습할 수 없다. 이 문제를 해결하기 위해, 다음 토큰 분포를 대상 위치를 인식하도록 re-parameterize 하는 것을 제안한다:&lt;/p>
+&lt;p>$$ p_{\theta}(X_{z_t} = x | x_{z_{&amp;lt; t}}) = {{exp(e(x)^\intercal g_{\theta}(x_{z_t}, z_t))}\over{\sum_{x&amp;rsquo;} exp(e(x&amp;rsquo;)^\intercal g_{\theta}(x_{z_t}, z_t)}} $$&lt;/p>
+&lt;p>$g_{\theta}(x_{z_t}, z_t)$는 대상 위치 $z_t$를 입력으로 추가로 받는 새로운 유형의 표현을 나타낸다.&lt;/p>
+&lt;h3 id="two-stream-self-attention">Two-Stream Self-Attention&lt;/h3>
+&lt;p>target-aware representation의 개념은 대상 예측의 불명확성을 제거하지만, $g_{\theta}(x_{z_t}, z_t)$를 어떻게 형성할 것인지는 복잡한 문제이다. 대상 위치에서 정보를 수집하는 것을 제안하며, 이를 위해 두 가지 요구사항이 필요하다:&lt;/p>
+&lt;ul>
+&lt;li>토큰 $x_{z_t}$를 예측하기 위해, $g_{\theta}(x_{z_{&amp;lt;t}}, z_t)$는 위치 $z_t$만 사용하고 내용 $x_{z_t}$는 사용하지 않아야 한다.&lt;/li>
+&lt;li>다른 토큰 $x_{z_j}$를 예측하기 위해 $(j &amp;gt; t)$, $g_{\theta}(x_{z_{&amp;lt;t}}, z_t)$는 전체 컨텍스트 정보를 제공하기 위해 내용 $x_{z_t}$도 인코딩해야 한다.&lt;/li>
+&lt;/ul>
+&lt;p>이 모순을 해결하기 위해, 하나 대신 두 세트의 숨겨진 표현을 사용한다.&lt;/p>
+&lt;ul>
+&lt;li>content representation $h_{\theta}(x_{z_{&amp;lt;t}})$는 컨텍스트와 $x_{z_t}$ 자체를 인코딩하는 Transformer의 standard hidden states와 유사한 역할을 한다.&lt;/li>
+&lt;li>query representation $g_{\theta}(x_{z_t}, z_t)$는 컨텍스트 정보와 위치에만 접근할 수 있으며, 내용 $x_{z_t}$에는 접근할 수 없다.&lt;/li>
+&lt;/ul>
+&lt;p>첫번째 layer query stream은 학습 가능한 벡터로 초기화된다. (i.e $\ g^{(0)}_i = w$)
+반면에 content stream은 해당 단어 임베딩으로 설정된다. (i.e $\ h^{(0)}_i = e(x_i)$)
+self-attention layer $m = 1, &amp;hellip;, M$에 대해, two-streams의 표현은 공유된 파라미터 세트로 다음과 같이 업데이트된다.&lt;/p>
+&lt;p>$$ g_{z_t}^{(m)} \leftarrow Attention(Q = g_{z_t}^{(m-1)}, KV = h_{z_{&amp;lt;t}}^{(m-1)}; \theta) $$
+$$ h_{z_t}^{(m)} \leftarrow Attention(Q = h_{z_t}^{(m-1)}, KV = h_{z_{\leq t}}^{(m-1)}; \theta) $$&lt;/p>
+&lt;p>여기서 Q, K, V는 attention 연산에서의 query, key, value를 나타낸다. content representation의 업데이트 규칙은 standard self-attention과 같으므로, 미세 조정 중에 query stream을 중단하고 content stream을 일반 Transformer-XL로 사용할 수 있다. last-layer query representation $g_{z_t}^{(m)}$를 사용하여 $p_{\theta}(X_{z_t} = x | x_{z_{&amp;lt; t}})$를 계산할 수 있다.&lt;/p>
+&lt;h3 id="partial-prediction">Partial Prediction&lt;/h3>
+&lt;p>순열 언어 모델링은 여러 이점이 있지만, 순열로 인해 최적화가 어려워 수렴이 느리다. 이를 해결하기 위해, 분해 순서에서 마지막 토큰만 예측하도록 선택하였다. 즉, 전체를 목표가 아닌 부분과 목표 부분으로 나누고, 목표가 아닌 부분에 따른 목표 부분의 log-likelihood를 최대화한다.&lt;/p>
+&lt;p>$$ \underset{\theta}{max} \quad \mathbb{E_{\mathbf{z} \sim \mathbf{Z_T}}} \big[ log \ p{\theta}(x_{z_{&amp;gt;c}} | x_{z_{\geq t}}) \big] = \mathbb{E_{\mathbf{z} \sim \mathbf{Z_T}}} \big[ \sum_{t=c+1}^{|z|} \ log \ p{\theta}(x_{z_t} | x_{z_{&amp;lt; t}}) $$&lt;/p>
+&lt;p>분해 순서에 따라 가장 긴 컨텍스트를 가진 부분이 목표로 선택되며, hyperparameter $K$는 약 $1/K$ 토큰이 예측에 선택되도록 사용된다. (i.e $|z| / (|z| - c) \approx K$) 선택되지 않은 토큰들의 query representation을 계산할 필요가 없어, 메모리를 아끼고 속도를 향상시킬 수 있다.&lt;/p>
+&lt;h3 id="incorporating-ideas-from-transformer-xl">Incorporating Ideas from Transformer-XL&lt;/h3>
+&lt;p>Transformer-XL의 relative positional encoding scheme과 segment recurrence mechasnism을 통합하였으며, 이를 통해 모델이 이전 세그먼트의 hidden state를 재사용하게 할 수 있다. 긴 시퀀스에서 두 세그먼트를 가지고, 첫 번째 세그먼트를 처리한 후 얻은 내용을 캐시하고, 다음 세그먼트에 대해 attention을 업데이트한다.&lt;/p>
+&lt;p>$$ h_{z_t}^{(m)} \leftarrow Attention(Q = h_{z_t}^{(m-1)}, KV = \big[ \tilde{h}^{(m-1)}, h_{z_{\leq t}}^{(m-1)} \big]; \theta) $$&lt;/p>
+&lt;p>positional encoding은 원래 시퀀스의 실제 위치에만 의존하므로, 얻어진 표현이 있으면 attention 업데이트는 순열에 독립적이다. 이를 통해 이전 세그먼트의 분해 순서를 알지 못해도 메모리를 캐시하고 재사용할 수 있다. 모델은 마지막 세그먼트의 모든 분해 순서에 대해 메모리를 활용하는 방법을 학습하며, query stream도 같은 방식으로 계산된다.&lt;/p>
+&lt;h3 id="modeling-multiple-segments">Modeling Multiple Segments&lt;/h3>
+&lt;p>다양한 작업에서 여러 입력 세그먼트가 필요하다. XLNet의 사전 학습 과정에서는 이를 고려하여 두 세그먼트를 무작위로 샘플링하고, 이를 하나의 시퀀스로 연결하여 순열 언어 모델링을 수행한다. 동일한 문맥에서만 메모리를 재사용하며, 이 과정은 BERT의 입력 형식 [CLS, A, SEP, B, SEP]을 따른다. 그러나 XLNet-Large는 일관된 성능 향상을 보이지 않아 다음 next sentence prediction를 사용하지 않습니다.&lt;/p>
+&lt;h3 id="relative-segment-encodings">Relative Segment Encodings&lt;/h3>
+&lt;p>구조적으로, BERT와 달리 XLNet은 Transformer-XL의 relative encoding 개념을 확장하여 세그먼트를 인코딩한다. 두 위치가 같은 세그먼트에 있는지 여부만 고려하여, 세그먼트 인코딩을 이용해 attention 가중치를 계산한다. relative segment encoding을 사용하면 일반화를 개선하고 두 개 이상의 입력 세그먼트를 가진 작업에서 미세 조정할 수 있는 가능성이 있다.&lt;/p>
+&lt;h3 id="discussion">Discussion&lt;/h3>
+&lt;p>BERT와 XLNet 모두 일부 토큰만 예측하는 부분적 예측을 수행한다. 이는 의미 있는 예측을 위해 필요하며, 충분한 문맥을 가진 토큰만 예측함으로써 최적화의 어려움을 줄인다. 그러나 BERT는 대상 간의 종속성을 모델링할 수 없다.&lt;/p>
+&lt;p>BERT와 XLNet의 차이점을 이해하기 위해 예시 [New, York, is, a, city]에 대해 비교 해 보면, 예시에서 [New, York] 두 개의 token을 예측하고 $log \ p(\text{New York} | \text{is a city})$를 maximize한다고 가정한다. 또한, XLNet의 인수분해 순서는 [is, a, city, New, York]이라고 가정한다. BERT와 XLNet의 object는 다음과 같다.&lt;/p>
+&lt;p>$$ \mathbf{J}_{BERT} = log \ p(\text{New} | \text{is a city}) + log \ p(\text{York} | \text{is a city}) $$&lt;/p>
+&lt;p>$$ \mathbf{J}_{XLNet} = log \ p(\text{New} | \text{is a city}) + log \ p(\text{York} | \text{New, is a city}) $$&lt;/p>
+&lt;p>XLNet은 BERT가 생략하는 &amp;lsquo;New&amp;rsquo;와 &amp;lsquo;York&amp;rsquo; 사이의 종속성을 포착할 수 있다. 동일한 대상이 주어진 상황에서 XLNet은 더 많은 종속성 쌍을 학습하며, 더 밀도 높은 훈련 신호를 포함하고 있다.&lt;/p>
+&lt;hr>
+&lt;h2 id="experiments">Experiments&lt;/h2>
+&lt;h3 id="pretraining-and-implementation">Pretraining and Implementation&lt;/h3>
+&lt;p>BooksCorpus와 영어 Wikipedia를 사전 학습 데이터로 사용하고, 추가로 Giga5, ClueWeb 2012-B, 그리고 Common Crawl을 포함시켰다. 이 데이터들은 공격적인 필터링을 통해 짧거나 저품질의 기사를 제거한 후, 총 32.89B의 subword pieces로 토큰화하였다.&lt;/p>
+&lt;p>XLNet-Large 모델은 BERT-Large와 같은 아키텍처를 가지고 있다. 사전 학습 동안 시퀀스 길이 512를 사용하였고, BERT와 비교하기 위해 BooksCorpus와 위키백과만을 이용해 훈련을 진행하였다. 그 후, 앞서 설명한 모든 데이터셋을 사용해 훈련을 확장하였고, 마지막으로, XLNet-Base-wikibooks를 기반으로 ablation study를 수행하였다.&lt;/p>
+&lt;p>recurrence mechanism이 도입된 XLNet-Large 학습에서는 양방향 데이터 입력 파이프라인을 사용하고, 전방향과 후방향이 각각 배치 크기의 절반을 차지한다. prediction constant $K$는 6으로 설정되었으며, 미세 조정 절차는 BERT를 따른다. 추가로, 특정 길이의 토큰을 예측 대상으로 선택하는 span-based 예측 방법을 사용하였다.&lt;/p>
+&lt;h3 id="fair-comparison-with-bert">Fair Comparison with BERT&lt;/h3>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/table1.png"
+width="1067"
+height="178"
+srcset="https://kurtkim.github.io/p/xlnet/images/table1_hue3d17fe4c9e720db712837542685989d_41995_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/table1_hue3d17fe4c9e720db712837542685989d_41995_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="599"
+data-flex-basis="1438px"
+>&lt;/p>
+&lt;p>같은 데이터와 하이퍼파라미터로 훈련된 XLNet은 모든 고려된 데이터셋에서 BERT를 크게 앞서는 것으로 나타났다.&lt;/p>
+&lt;h3 id="comparison-with-roberta-scaling-up">Comparison with RoBERTa: Scaling Up&lt;/h3>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/table2.png"
+width="992"
+height="210"
+srcset="https://kurtkim.github.io/p/xlnet/images/table2_hub13544945018193398b025049834fd0f_54793_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/table2_hub13544945018193398b025049834fd0f_54793_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="472"
+data-flex-basis="1133px"
+>&lt;/p>
+&lt;p>ALBERT는 계산량을 크게 증가시키므로 과학적 결론을 도출하기 어려워, 다음 결과에서 제외되었다. 반면, RoBERTa는 전체 데이터를 기반으로 하고, RoBERTa의 하이퍼파라미터를 재사용하는 실험을 진행하였다.&lt;/p>
+&lt;p>XLNet은 일반적으로 BERT와 RoBERTa를 능가하는 성능을 보여주었다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/table3.png"
+width="768"
+height="292"
+srcset="https://kurtkim.github.io/p/xlnet/images/table3_huf0364417c329187e97368cd7119f3806_68026_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/table3_huf0364417c329187e97368cd7119f3806_68026_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="263"
+data-flex-basis="631px"
+>&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/table4.png"
+width="996"
+height="236"
+srcset="https://kurtkim.github.io/p/xlnet/images/table4_hu6dfeb6a8f3889ccef2d4baa438dff1a6_53953_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/table4_hu6dfeb6a8f3889ccef2d4baa438dff1a6_53953_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="422"
+data-flex-basis="1012px"
+>&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/table5.png"
+width="1068"
+height="287"
+srcset="https://kurtkim.github.io/p/xlnet/images/table5_hu4a2fea34ca197f53779b5bdc901342e3_83274_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/table5_hu4a2fea34ca197f53779b5bdc901342e3_83274_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="372"
+data-flex-basis="893px"
+>&lt;/p>
+&lt;ul>
+&lt;li>SQuAD와 RACE와 같이 더 긴 컨텍스트를 다루는 명확한 추론 작업에 대해, XLNet의 성능 향상이 더 크다. 이러한 더 긴 컨텍스트를 다루는 능력은 XLNet의 Transformer-XL 기반 구조에서 나올 수 있다.&lt;/li>
+&lt;li>MNLI(&amp;gt;390K), Yelp(&amp;gt;560K), Amazon(&amp;gt;3M)과 같이 이미 충분한 예제가 있는 분류 작업에 대해서도, XLNet은 큰 성능 향상을 보여주었다.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="ablation-study">Ablation Study&lt;/h2>
+&lt;p>다양한 특성을 가진 네 가지 데이터셋을 기반으로 각 설계 선택의 중요성을 이해하기 위한 ablation study를 수행한다. 구체적으로, 연구하고자 하는 세 가지 주요 측면으로는 다음과 같다:&lt;/p>
+&lt;ul>
+&lt;li>순열 언어 모델링 목표의 효과, 특히 BERT에서 사용하는 denoising auto-encoding 목표와 비교&lt;/li>
+&lt;li>Transformer-XL을 백본 아키텍처로 사용하는 것의 중요성&lt;/li>
+&lt;li>범위 기반 예측, 양방향 입력 파이프라인, 그리고 다음 문장 예측을 포함한 일부 구현 세부사항의 필요성&lt;/li>
+&lt;/ul>
+&lt;p>다양한 구현 세부 사항을 가진 6개의 XLNet-Base 변형, 원래의 BERT-Base 모델, 그리고 BERT에서 사용된 denoising auto-encoding 목표로 훈련된 Transformer-XL 기준선을 비교한다. 모든 모델은 공평한 비교를 위해 BERT-Base와 동일한 모델 hyperparameter를 가진 12-layer 아키텍처를 기반으로 하며, Wikipedia와 BooksCorpus에서만 학습하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/xlnet/images/table6.png"
+width="828"
+height="302"
+srcset="https://kurtkim.github.io/p/xlnet/images/table6_hu1098c6cce6ee530c011695b38df4e119_77715_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/xlnet/images/table6_hu1098c6cce6ee530c011695b38df4e119_77715_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="274"
+data-flex-basis="658px"
+>&lt;/p>
+&lt;p>Transformer-XL과 순열 언어 모델링이 XLNet의 성능 향상에 크게 기여한다는 것을 알 수 있다. 메모리 캐싱 메커니즘을 제거하면 성능이 특히 떨어지며, 범위 기반 예측과 양방향 입력 파이프라인이 중요한 역할을 한다. 또한, BERT에서 제안된 다음 문장 예측 목표가 반드시 성능 향상을 가져오지 않으므로, 이를 XLNet에서 제외하였다.&lt;/p>
+&lt;hr>
+&lt;h2 id="conclusions">Conclusions&lt;/h2>
+&lt;p>XLNet은 AR과 AE 방법의 이점을 결합하는 순열 언어 모델링을 사용하는 사전 학습 방법이다. Transformer-XL을 통합하고 two-stream attention mechanism을 설계하여 AR 목표와 원활하게 작동하도록 하였다. XLNet은 다양한 작업에서 이전 사전 학습 방법들 보다 큰 성능 개선을 보여주었다.&lt;/p>
+&lt;hr>
+&lt;h2 id="reference">Reference&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://arxiv.org/abs/1906.08237" target="_blank" rel="noopener"
+>Paper&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://github.com/zihangdai/xlnet" target="_blank" rel="noopener"
+>Github&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>GPT-2</title><link>https://kurtkim.github.io/p/gpt-2/</link><pubDate>Fri, 08 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/gpt-2/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>언어 모델은 웹페이지로 구성된 새로운 데이터셋인 &amp;lsquo;WebText&amp;rsquo;으로 학습 함으로써, 질문 응답, 기계 번역 등의 작업을 명시적인 지도 없이 배우기 시작한다는 것을 발견하였다. 특히, GPT-2는 웹텍스트에 대해 underfitting이지만, zero-shot 환경에서 8개 테스트 언어 모델링 데이터셋 중 7개에서 state-of-the-art를 달성하였다. 즉, 언어 처리 시스템이 자연적 설명으로부터 과제수행능력을 배우는 언어처리모델을 개발할 수 있는 방법을 제안하였다.&lt;/p>
+&lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>기계 학습 시스템은 대규모 데이터셋, 고용량 모델, 지도 학습을 이용해 학습된 작업에서 우수한 성과를 보이지만, 데이터 분포의 작은 변화나 작업 정의에 민감하게 반응하고,매우 좁은 범위의 문제에서만 뛰어난 성능을 보여주고 있다. 그래서 보다 일반적인 문제 해결 능력을 갖춘 범용적인 모델 개발이 필요하며, 이는 결국 각각의 작업에 대해 훈련 데이터셋을 수동으로 생성하고 라벨링할 필요 없이 다양한 작업을 수행할 수 있는 모델을 의미한다.&lt;/p>
 &lt;p>기계 학습 시스템을 만드는 주요한 방법은 훈련 예제를 수집하여 시스템을 학습시키고, independent and identically distributed (IID)에서 성능을 테스트하는 것이다. 이 방법은 좁은 범위의 과제에서는 잘 작동하지만, 범용적인 이해를 필요로 하는 캡션 모델, 독해, 이미지 분류 등에서 높은 성능을 내지 못했으며, 이 방법의 한계를 보여주었다.&lt;/p>
@@ -2049,6 +2188,7 @@ data-flex-basis="541px"
 &lt;p>현재 언어 작업에서 최고 성능을 보이는 모델은 사전 학습과 지도 학습을 결합한 방식을 사용한다. 이 접근법은 오랜 역사를 가지고 있으며, transfer 방식이 점차 유연해지고 있다. 초기에는 단어 벡터가 학습되어 특정 작업에 적용되었고, 그 다음으로는 순환 네트워크의 문맥 표현이 transfer 되었다. 최근 연구에서는 특정 작업에 특화된 아키텍처가 필요 없으며, 대신 self-attention block만으로 충분하다고 제안하고 있다.&lt;/p>
 &lt;p>현재의 방법들은 작업 수행을 위해 여전히 지도 학습이 필요하다. 하지만 지도 데이터가 거의 없거나 전혀 없을 때, 언어 모델이 상식적인 추론이나 감성 분석 등의 특정 작업을 수행하는 데 잠재력이 있다는 것이 다른 연구에서 보여져 왔다.&lt;/p>
 &lt;p>이 논문에서는 언어 모델이 parameter나 아키텍처 변경 없이 zero-shot setting에서 다양한 작업을 수행할 수 있는 능력을 보여준다. 이 접근법은 전이 학습의 일반화 추세를 이어가며, 작업에 따라 유망한 결과와 경쟁력 있는 성과, 그리고 state-of-the-art를 달성하는 잠재력을 보여준다.&lt;/p>
+&lt;hr>
 &lt;h2 id="approach">Approach&lt;/h2>
 &lt;p>핵심은 언어 모델링(language modeling)이며, 이는 각 원소가 일련의 symbol $(s_1, s_2, &amp;hellip;, s_n)$ 으로 구성된 예제 $(x_1, x_2, &amp;hellip;, x_n)$ 에서 비지도분포 추정을 하는 것으로 정의된다. 언어의 순차적 특성 때문에 기호들에 대한 결합 확률은 조건부 확률의 곱으로 분해하는 것이 일반적이다.&lt;/p>
 &lt;p>$$p(x) = \prod_{i=1}^n p(s_n | s_1, s_2, &amp;hellip;, s_{n-1}) $$&lt;/p>
@@ -2067,6 +2207,7 @@ data-flex-basis="541px"
 &lt;p>이 입력 표현법은 단어 수준 언어 모델의 이점과 byte 수준 접근법의 범용성을 결합시킨다. 이러한 접근법은 어떤 unicode 문자열에도 확률을 부여할 수 있으므로, 사전 처리, 토큰화, 어휘 크기와 관계없이 모든 데이터셋에서 언어 모델을 평가할 수 있다.&lt;/p>
 &lt;h3 id="model">Model&lt;/h3>
 &lt;p>Transformer 기반 아키텍처를 사용하며, 이는 주로 OpenAI GPT 모델을 따른다. 몇 가지 수정사항은 레이어 정규화의 위치 변경, 추가적인 레이어 정규화의 삽입, 모델 깊이를 고려한 초기화 방식의 수정, 그리고 잔여 레이어 가중치의 스케일링이다. 또한, 어휘는 50,257개로 확장되었고, 맥락 크기와 배치 크기도 각각 1024 토큰과 512로 증가시켰다.&lt;/p>
+&lt;hr>
 &lt;h2 id="experiments">Experiments&lt;/h2>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/gpt-2/images/table2.png"
 width="356"
@@ -2133,6 +2274,7 @@ data-flex-basis="581px"
 &lt;p>번역 능력은 WMT-14 English-French dataset을 사용해서, 영어-프랑스어, 프랑스어-영어 두가지 경우에서 비교가 진행되었다. 번역 성능은 다른 Task에 비해 좋지 상대적으로 좋지 않다. 영어-프랑스어 테스트에서 5 BLEU를, 프랑스어-영어 테스트에서는 11.5 BLEU를 달성했다.&lt;/p>
 &lt;h3 id="question-answering">Question Answering&lt;/h3>
 &lt;p>언어 모델에 얼마나 많은 정보가 들어있는지 테스트하기 위해 factoid-style의 질문에 얼마나 정확한 답을 생성하는지 평가한다. Natural Questions dataset을 이용해 GPT-2의 성능을 평가하였고 &amp;lsquo;정확히 일치 하는지&amp;rsquo; 여부(exact match metric)를 지표로 비교한다. 질문의 4.1%에 대해 올바르게 답을 하였고, 이는 기존의 모델들보다 5.3배 높은 정확도이다. 매우 작은 모델들은 대체로 1%를 넘지 못하는 성능을 보였는데, 아직까지는 모델의 크기가 QA에 있어서 매우 중요한 요인이라는 것을 확인할 수 있었다. 또한, 가장 확신하는 1%의 질문에 대해 63.1%의 정확도를 보였지만, 이는 여전히 정보 검색과 문서 질문 답변 추출을 결합한 시스템의 30%에서 50% 범위의 성능보다 훨씬 떨어진다.&lt;/p>
+&lt;hr>
 &lt;h2 id="generalization-vs-memorization">Generalization vs Memorization&lt;/h2>
 &lt;p>최근 연구에 따르면, 일반적인 이미지 데이터셋에는 상당한 양의 중복된 이미지가 포함되어 있어, 기계 학습 시스템의 일반화 성능을 과대평가하게 만든다. 데이터셋의 크기가 커질수록 이 문제는 더욱 심화될 가능성이 있으며, 이는 테스트 데이터가 얼마나 훈련 데이터에도 포함되어 있는지 분석하는 것이 중요함을 의미한다.&lt;/p>
 &lt;p>이를 연구하기 위해, WebText 훈련 데이터의 8-gram을 포함하는 Bloom 필터를 생성하였고, 주어진 데이터셋에 대해 그 데이터셋의 8-gram 중 얼마나 많은 비율이 WebText 훈련 세트에도 포함되어 있는지를 계산하였다.&lt;/p>
@@ -2158,22 +2300,26 @@ data-flex-basis="262px"
 >&lt;/p>
 &lt;p>또한, WebText 언어 모델의 성능이 기억력에 의존하는지를 확인하기 위해 해당 모델이 자체 테스트 세트에서 어떤 성능을 보이는지 검사하였다. 이 결과, 모델 크기가 커짐에 따라 훈련 세트와 테스트 세트에서의 성능이 함께 향상되는 경향을 보였으며, 이로부터 GPT-2가 WebText에 대해 완벽하게 적합하지 않음을 추측할 수 있다.&lt;/p>
 &lt;p>마지막으로, GPT-2가 말하는 유니콘의 발견에 대한 뉴스 기사를 작성하는 능력을 보여주었다. 이는 GPT-2의 창의성을 보여주는 한 예로 볼 수 있다.&lt;/p>
+&lt;hr>
 &lt;h2 id="related-work">Related Work&lt;/h2>
 &lt;p>이 연구는 더 큰 dataset에서 학습된 큰 언어 모델의 성능을 측정하는 데 중점을 두었다. 이 연구는 이전 연구와 비슷한 방향성을 가지고 있으며, 우리의 실험 결과는 주어진 목표의 세부 작업에 대한 추세가 큰 파라미터 범위로도 지속되는 것을 확인하였다.&lt;/p>
 &lt;p>생성 모델에서는 RNN 언어 모델이 줄 너비를 추적하고 인용문이나 댓글을 감지하는 등의 흥미로운 기능을 배우는 것이 확인되었다. 또한, 위키백과 기사를 생성하도록 훈련된 모델이 언어 간 이름 번역을 배울 수 있음이 관찰되었다.&lt;/p>
 &lt;p>iWeb Corpus같이 웹 페이지의 대형 텍스트 말뭉치를 필터링하고 구성하는 다양한 방법, 모든 단어 벡터 표현 학습을 확대하거나, 기계 번역 모델에서 파생된 표현의 사용을 탐색하는 사전학습 방법, seq2seq 모델 등이 연구 되었고, 언어모델의 사전학습이 잡담이나 대화 같은 어려운 생성문제에 맞춰 미세조정할 때 도움이 된다는 것을 밝혀내었다.&lt;/p>
+&lt;hr>
 &lt;h2 id="discussion">Discussion&lt;/h2>
 &lt;p>비지도 사전 학습 방법의 표현에 대한 많은 연구가 있었으며, 이는 비지도 학습이 유망한 연구 영역임을 시사한다. GPT-2는 독해에 대해 경쟁력 있는 성능을 보였지만, 요약 등의 작업에 대해서는 아직 기본적인 수준에 불과하다. 많은 NLP 작업에서 GPT-2의 제로샷 성능을 연구했지만, 아직 많은 실용적인 작업에서는 성능이 무작위 수준에 불과한 경우가 많다. 제로샷 성능은 GPT-2의 잠재적 성능의 기준을 설정하지만, 미세 조정을 통한 성능의 상한선은 아직 불분명하다. 더욱이, GPT-2의 추가 훈련 데이터와 용량이 단방향 표현의 비효율성을 극복하기에 충분한지는 아직 불확실하다.&lt;/p>
 &lt;p>decaNLP나 GLUE와 갈은 benchmark에서 미세조정 할 것을 계획하고 있으며, GPT-2의 학습데이터와 그 크기가 BERT에서 말한 단방향 표현의 비효율성을 극복할 수 있을 만큼 충분한지도 확실치 않다고 한다.&lt;/p>
+&lt;hr>
 &lt;h2 id="conclusion">Conclusion&lt;/h2>
 &lt;p>충분히 크고 다양한 dataset으로 학습된 큰 언어 모델인 GPT-2는 여러 도메인과 데이터셋에서 잘 수행하며, 테스트된 8개 언어 모델링 dataset 중 7개에서 state-of-the-art를 달성하였다. 이는 고용량 모델이 다양한 텍스트에 대한 가능성을 극대화하는 훈련을 통해, 명확한 지도 없이도 많은 작업을 수행하는 법을 배우기 시작한다는 것을 시사한다.&lt;/p>
+&lt;hr>
 &lt;h2 id="reference">Reference&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/openai/gpt-2" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>BERT</title><link>https://kurtkim.github.io/p/bert/</link><pubDate>Sat, 30 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/bert/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;/ul></description></item><item><title>BERT</title><link>https://kurtkim.github.io/p/bert/</link><pubDate>Mon, 04 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/bert/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>BERT(Bidirectional Encoder Representations from Transformers)는 Transformer의 양방향 인코더 표현을 사용하는 언어모델로, BERT는 레이블이 없는 텍스트에서 깊은 양방향 표현을 사전 학습함으로써, 하나의 출력 레이어만을 추가해서 다양한 작업에 맞게 미세조정 할 수 있다. 이 모델은 개념적으로 단순하면서도 실증적으로 강력하며, 다양한 자연어 처리 작업에서 새로운 최고 수준의 결과를 달성하였다.&lt;/p>
 &lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
@@ -2365,7 +2511,7 @@ data-flex-basis="288px"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/google-research/bert" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>GPT-1</title><link>https://kurtkim.github.io/p/gpt-1/</link><pubDate>Thu, 28 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/gpt-1/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;/ul></description></item><item><title>GPT-1</title><link>https://kurtkim.github.io/p/gpt-1/</link><pubDate>Sat, 02 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/gpt-1/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>자연어 이해는 텍스트의 함축, 질문에 대한 답변, 의미의 유사성 평가, 문서 분류 등 다양한 작업으로 구성되어 있다. 레이블이 지정된 데이터가 부족한 상황에서, 이 논문은 레이블이 없는 텍스트 데이터에 대해 언어 모델을 (생성적) 사전학습(generative pre-training)하고, 이를 특정 작업에 미세조정(fine-tuning)하는 방식을 제안한다. 이 방법은 모델 아키텍처에 최소한의 변경만을 요구하면서도 효과적인 전이를 달성하였고, 다양한 자연어 이해 벤치마크에서 우수한 성능을 보여주었다. 이 모델은 각 작업에 특별히 설계된 모델을 능가하며, 12개의 작업 중 9개에서 최고 성능을 달성하였다.&lt;/p>
 &lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
