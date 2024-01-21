@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "GPT-1"
-date = "2023-12-28"
+date = "2023-12-02"
 description = "Improving Language Understanding by Generative Pre-Training"
 categories = [
     "Paper Review"

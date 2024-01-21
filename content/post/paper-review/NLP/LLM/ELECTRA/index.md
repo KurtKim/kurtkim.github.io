@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "ELECTRA"
-date = "2024-01-12"
+date = "2023-12-24"
 description = "Pre-training Text Encoders as Discriminators Rather Than Generators"
 categories = [
     "Paper Review"
@@ -16,6 +16,8 @@ tags = [
 
 BERT와 같은 masked language modeling(MLM) 방법은 일부 토큰을 [MASK]로 바꿔 원래 토큰을 재구성하는 모델을 훈련하지만, 이를 효과적으로 하려면 많은 계산이 필요하다. 대신에, replaced token detection 라는 더 효율적인 사전 학습 작업을 제안한다. 이 방법은 일부 토큰을 가능성 있는 다른 토큰으로 바꾸는 방식으로 입력을 변형하고, 변형된 토큰의 원래 값을 예측하는 대신 각 토큰이 생성자 샘플로 대체되었는지 여부를 예측하는 모델을 학습시킨다. 이 방법은 모든 입력 토큰에 대해 작업을 정의하므로 MLM보다 효율적이다. 결과적으로, 이 방식으로 학습한 컨텍스트 표현은 동일한 모델 크기, 데이터, 계산량을 가진 BERT보다 월등히 높은 성능을 보여준다. 특히, 작은 모델에서는 GLUE 자연어 이해 벤치마크에서 GPT를 능가하는 모델을 한 GPU에서 4일 동안 훈련할 수 있다. 대규모에서도 이 방법은 RoBERTa와 XLNet의 성능에 비교할 수 있으며, 더 적은 계산량을 사용하면서도 동일한 계산량을 사용할 때 그 모델들을 능가한다.
 
+---
+
 ## Introduction
 
 현재 state-of-the-art의 언어 표현 학습 방법은 denoising autoencoder이다. 이 방법은 일부 토큰을 마스킹하거나 어텐션을 적용하여 네트워크가 원래 입력을 복원하도록 학습한다. 하지만 이러한 masked language modeling (MLM)은 효과적이지만 상당한 계산 비용을 요구한다.
@@ -27,6 +29,8 @@ ELECTRA는 효율적으로 토큰 대체를 정확하게 분류하는 encoder를
 ![](images/figure1.png)
 
 ELECTRA는 다른 사전 학습 방법에 비해 계산 및 parameter를 더 효율적으로 사용하여 더 나은 성능을 보여준다. GLUE 벤치마크에서, ELECTRA-Small 모델은 BERT보다 5점 더 높은 성능을 보여주었고, ELECTRA-Large 모델은 RoBERTa와 XLNet과 비슷한 성능을 보이지만 훨씬 적은 계산량을 사용한다. ELECTRA-Large는 GLUE에서 ALBERT보다 우수한 결과를 얻었고, SQuAD 2.0에서 새로운 state-of-the-art를 달성하였다. ELECTRA는 언어 표현 학습에 있어서 계산 및 parameter 효율성이 뛰어난 판별적인 방법이다.
+
+---
 
 ## Method
 
@@ -58,6 +62,8 @@ GAN과 유사하지만 몇 가지 주요한 차이점이 있다. 생성자가 �
 $$ \underset{\theta_G, \theta_D}{min} \sum\_{x \in \mathbf{X}} \mathbf{L}_{MLM}(x, \theta_G) + \lambda \mathbf{L}\_{Disc}(x, \theta_D) $$
 
 대규모의 원시 텍스트 데이터에 대해 결합 손실을 최소화한다. 손실의 기대값을 단일 샘플로 근사화하고, 생성자의 손실은 판별자로 역전파하지 않는다. 사전 학습 후에는 생성자를 버리고 판별자를 downstream task에서 세밀하게 조정한다.
+
+---
 
 ## Experiments
 
@@ -130,6 +136,8 @@ ELECTRA는 모든 입력 토큰에 대한 손실을 가지는 것이 성능 향�
 
 ELECTRA는 빠른 학습뿐만 아니라 다른 이점들로 인해 All-Tokens MLM에 비해 개선되었다. 작은 모델일수록 ELECTRA의 이득이 커지며, 완전히 학습된 경우 BERT보다 더 높은 정확도를 보여준다. ELECTRA는 parameter를 더 효율적으로 사용하여 BERT보다 성능을 높일 수 있다. 그러나 ELECTRA의 parameter 효율성을 완전히 이해하기 위해서는 추가적인 분석이 필요하다.
 
+---
+
 ## Related Work
 
 **Self-Supervised Pre-training for NLP** Self-supervised learning은 단어 및 문맥 표현을 학습하는 데 사용된다. BERT는 masked-language modeling 작업을 통해 Transformer를 사전 학습한다. BERT를 확장한 모델들이 있으며, ELECTRA는 BERT와 비교하여 효율적인 사전 학습을 제공한다. 최근에는 BERT를 작은 모델로 축소하는 연구도 진행되고 있다. ELECTRA-Small은 사전 학습 속도에 초점을 맞춰 처음부터 학습되었다.
@@ -140,9 +148,13 @@ ELECTRA는 빠른 학습뿐만 아니라 다른 이점들로 인해 All-Tokens M
 
 Word2Vec은 NLP의 초기 사전 학습 방법 중 하나로 contrastive learning을 사용한ㄴ다. ELECTRA는 CBOW와 Negative Sampling의 대규모 버전으로 볼 수 있다. CBOW는 주변 문맥을 통해 입력 토큰을 예측하고, Negative Sampling은 이진 분류 작업으로 재구성한다. CBOW는 bag-of-vectors 인코더와 단순한 제안 분포를 사용한다.
 
+---
+
 ## Conclusion
 
 대체 토큰 감지라는 새로운 자기 지도 학습 작업을 제안하였다. 이 작업은 텍스트 인코더를 학습시켜 입력 토큰과 고품질 부정 샘플을 구별하게 한다. 계산 효율성이 우수하며 하위 작업에서 더 좋은 성능을 보인다. 
+
+---
 
 ## Reference
 

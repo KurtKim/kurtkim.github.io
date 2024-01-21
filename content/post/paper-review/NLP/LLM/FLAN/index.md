@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "FLAN"
-date = "2024-01-15"
+date = "2024-01-03"
 description = "Finetuned Language Models Are Zero-Shot Learners"
 categories = [
     "Paper Review",
@@ -18,6 +18,8 @@ tags = [
 
 137B 개의 parameter를 가진 사전 학습된 언어 모델을 60개 이상의 NLP 데이터셋에 대한 instruction tuning을 통해, 이 모델인 FLAN은 보이지 않는 작업 유형에서 월등한 성능을 보여준다. FLAN은 여러 데이터셋에서 zero-shot GPT-3를 능가하고, 몇몇 작업에서는 few-shot GPT-3를 크게 앞선다.
 
+---
+
 ## Introduction
 
 대규모 언어 모델은 few-shot 학습을 잘 수행하지만, zero-shot 학습에서는 성공적이지 못하며, 이는 사전 학습 데이터와 비슷하지 않은 프롬프트에서 모델이 작업을 수행하기 어렵기 때문일 수 있다.
@@ -33,6 +35,8 @@ FLAN은 기본 137B-parameter 모델의 zero-shot 성능을 크게 향상시키�
 ![](images/figure2.png)
 
 instruction tuning은 언어 모델이 추론 시 텍스트 상호작용에 더 잘 응답하도록 미세조정을 통한 지도학습을 사용하는 간단한 방법이다. 이 방법은 언어 모델이 지시문만을 통해 작업을 수행하는 능력을 보여준다.
+
+---
 
 ## FLAN: Instruction Tuning Improves Zero-Shot Learning
 
@@ -86,6 +90,8 @@ instruction tuning은 NLI, QA, translation, struct-to-text 등의 과제에 효�
 
 **Additional tasks.** instruction tuning은 많은 언어 모델링 과제의 성능을 향상시키지 못하는 한계가 있다. 7개의 상식 추론 및 공통 참조 해결 과제 중 FLAN은 3개 과제에서만 LaMDA-PT를 능가하였다. 하지만, zero-shot FLAN은 일반적으로 zero-shot LaMDA-PT를 능가하며, few-shot LaMDA-PT와 비슷하거나 더 나은 성능을 보여주었다.
 
+---
+
 ## Ablation Studies & Further Analysis
 
 ### Number Of Instruction Turning Clusters
@@ -128,6 +134,8 @@ instruction tuning이 모델의 지시문에 대한 반응 능력을 향상시�
 
 모든 시나리오에서 프롬프트 튜닝은 LaMDA-PT보다 FLAN에서 더 잘 작동하였다. 특히 low-resource 설정에서는, FLAN에서의 프롬프트 튜닝이 LaMDA-PT에서의 것보다 10% 이상 성능이 향상되었다. 이 결과는 instruction tuning이 NLP 과제를 수행하는 데 더 바람직한 모델을 만드는 데 어떻게 기여할 수 있는지를 보여준다.
 
+---
+
 ## Related Work
 
 이 논문은 zero-shot 학습, 프롬프팅, 다중 과제 학습, NLP 응용 프로그램을 위한 언어 모델 등 여러 넓은 연구 영역과 관련이 있다. 이러한 넓은 영역에 대한 이전 연구를 확장된 관련 연구 섹션에서 설명하고, 이 논문의 연구와 가장 밀접하게 연관된 범위가 좁은 두 개의 하위 영역을 설명하였다.
@@ -135,6 +143,8 @@ instruction tuning이 모델의 지시문에 대한 반응 능력을 향상시�
 모델에 지시문에 대한 반응을 요청하는 방식은 QA 기반 과제 구성과 유사하며, 이는 NLP 과제를 통일하는 것을 목표로 한다. 이 방법들은 주로 다중 과제 학습에 초점을 맞추며, 사전 학습된 LMs의 기존 지식을 사용하는 것에 크게 기반하지 않는다. 이 연구의 작업은 모델 규모와 과제 범위 모두에서 최근의 일부 연구를 초월한다.
 
 언어 모델의 성공으로 모델이 지시문을 따르는 능력에 대한 연구가 진행되고 있다. 최근 연구에서는 지시문과 few-shot 예시를 이용해 BART를 미세 조정하고, 이를 통해 보이지 않는 과제에 대한 few-shot 성능을 향상시킬 수 있음을 보여주었다. 또한, T5를 미세 조정하는 등의 방법으로 zero-shot 학습을 개선하고, 미세 조정과 강화 학습을 병행하여 인간 평가자가 선호하는 출력을 생성하는 연구도 있다.
+
+---
 
 ## Discussion
 
@@ -144,9 +154,13 @@ instruction tuning이 모델의 지시문에 대한 반응 능력을 향상시�
 
 이 연구의 한계점은 과제를 클러스터에 할당하는 데 있는 주관성과 짧은 지시문의 사용에 대한 연구의 한정성이다. 개별 예시가 모델의 사전 훈련 데이터에 포함되어 있을 수 있지만, 이것이 결과에 크게 영향을 미쳤다는 증거는 찾지 못하였다. 또한, FLAN 137B의 규모는 그것을 서비스하는 데 비용이 많이 든다. 향후 instruction tuning 연구는 더 많은 과제 클러스터를 수집하고, 다언어 실험을 진행하며, downstream classiﬁer 학습 데이터를 생성하고, 편향과 공정성에 대한 모델 행동을 개선하는 방향으로 진행될 수 있다.
 
+---
+
 ## Conclusions
 
 이 논문은 지시문에 기반한 zero-shot 과제를 수행하는 대규모 언어 모델의 능력을 향상시키는 간단한 방법을 연구하였다. FLAN은 GPT-3에 비해 더 우수한 결과를 보여주며, 대규모 언어 모델이 지시문을 따를 수 있는 잠재력을 보여주었다.
+
+---
 
 ## Reference
 

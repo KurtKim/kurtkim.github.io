@@ -182,28 +182,28 @@ menu:
 
     social:
         - identifier: github
-          name: GitHub
+          name: 1
           url: https://github.com/kurtkim/
           params:
               icon: github
 
         - identifier: linkedin
-          name: Linkedin
+          name: 2
           url: https://www.linkedin.com/in/kyeong-hun-kim-430ba075/
           params:
               icon: linkedin
 
         - identifier: instagram
-          name: Instagram
+          name: 3
           url: https://www.instagram.com/kurt_k2h/
           params:
               icon: instagram
 
-        # - identifier: facebook
-        #   name: Facebook
-        #   url: https://www.facebook.com/StudioK2H/
-        #   params:
-        #       icon: facebook
+        - identifier: brunch
+          name: 4
+          url: https://brunch.co.kr/@bigevlt
+          params:
+              icon: pen
 
 
 related:

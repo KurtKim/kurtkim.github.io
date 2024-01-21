@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "XLNet"
-date = "2024-01-08"
+date = "2023-12-10"
 description = "Generalized Autoregressive Pretraining for Language Understanding"
 categories = [
     "Paper Review"
@@ -15,6 +15,8 @@ tags = [
 ## Abstract
 
 BERT와 같은 denoising autoencoding 기반 사전 학습은 양방향 컨텍스트를 학습할 수 있지만, 마스크를 사용하여 입력을 변조함으로써 의존성을 무시하고 사전 학습과 미세 조정 사이의 괴리를 겪는다. 이를 해결하기 위해, XLNet이라는 새로운 사전 학습 방법을 제안한다. 이 방법은 모든 순열에 대한 기대 가능도를 최대화하여 양방향 컨텍스트를 학습하고, autoregressive 형식을 통해 BERT의 제한을 극복한다. 실험결과 XLNet은 여러 작업에서 BERT를 능가하는 결과를 보여주었다.
+
+---
 
 ## Introduction
 
@@ -41,6 +43,8 @@ XLNet은 AR 언어 모델링과 AE의 장점을 모두 활용하면서 단점은
 순열 기반 AR 모델링은 이전에도 연구되었지만, XLNet은 언어 모델이 양방향 컨텍스트를 학습하는 것을 목표로 하고, 이를 위해 two-stream attention을 통해 목표 위치를 hidden state에 통합한다. 이전 모델들과는 다르게, "순서 없음"은 입력 시퀀스가 무작위로 순열될 수 있다는 의미가 아니라, 모델이 분포의 다양한 분해 순서를 허용한다는 것을 의미한다.
 
 다른 관련 아이디어로는 텍스트 생성에서 autoregressive denoising을 수행하는 것이 있다. 이 방법은 고정된 순서만을 고려하고 있다.
+
+---
 
 ## Proposed Method
 
@@ -73,6 +77,8 @@ $$ \underset{\theta}{max} \quad \mathbb{E_{\mathbf{z} \sim \mathbf{Z_T}}} \big[ 
 ### Remark on Permutation
 
 인수분해 순서만을 바꾸며, 시퀀스 순서는 그대로 유지한다. 원래 시퀀스에 대응하는 positional encoding을 사용하고, Transformer의 적절한 attention mask를 활용한다. 이 방법은 모델이 미세 조정 동안 자연스러운 순서의 텍스트 시퀀스를 만나기 때문에 필요하다.
+
+---
 
 ## Architecture: Two-Stream Self-Attnetion for Target-Aware Representations
 
@@ -145,6 +151,8 @@ $$ \mathbf{J}_{XLNet} = log \ p(\text{New} | \text{is a city}) + log \ p(\text{Y
 
 XLNet은 BERT가 생략하는 'New'와 'York' 사이의 종속성을 포착할 수 있다. 동일한 대상이 주어진 상황에서 XLNet은 더 많은 종속성 쌍을 학습하며, 더 밀도 높은 훈련 신호를 포함하고 있다.
 
+---
+
 ## Experiments
 
 ### Pretraining and Implementation
@@ -178,6 +186,8 @@ XLNet은 일반적으로 BERT와 RoBERTa를 능가하는 성능을 보여주었�
 * SQuAD와 RACE와 같이 더 긴 컨텍스트를 다루는 명확한 추론 작업에 대해, XLNet의 성능 향상이 더 크다. 이러한 더 긴 컨텍스트를 다루는 능력은 XLNet의 Transformer-XL 기반 구조에서 나올 수 있다.
 * MNLI(>390K), Yelp(>560K), Amazon(>3M)과 같이 이미 충분한 예제가 있는 분류 작업에 대해서도, XLNet은 큰 성능 향상을 보여주었다.
 
+---
+
 ## Ablation Study
 
 다양한 특성을 가진 네 가지 데이터셋을 기반으로 각 설계 선택의 중요성을 이해하기 위한 ablation study를 수행한다. 구체적으로, 연구하고자 하는 세 가지 주요 측면으로는 다음과 같다:
@@ -192,9 +202,13 @@ XLNet은 일반적으로 BERT와 RoBERTa를 능가하는 성능을 보여주었�
 
 Transformer-XL과 순열 언어 모델링이 XLNet의 성능 향상에 크게 기여한다는 것을 알 수 있다. 메모리 캐싱 메커니즘을 제거하면 성능이 특히 떨어지며, 범위 기반 예측과 양방향 입력 파이프라인이 중요한 역할을 한다. 또한, BERT에서 제안된 다음 문장 예측 목표가 반드시 성능 향상을 가져오지 않으므로, 이를 XLNet에서 제외하였다.
 
+---
+
 ## Conclusions
 
 XLNet은 AR과 AE 방법의 이점을 결합하는 순열 언어 모델링을 사용하는 사전 학습 방법이다. Transformer-XL을 통합하고 two-stream attention mechanism을 설계하여 AR 목표와 원활하게 작동하도록 하였다. XLNet은 다양한 작업에서 이전 사전 학습 방법들 보다 큰 성능 개선을 보여주었다.
+
+---
 
 ## Reference
 

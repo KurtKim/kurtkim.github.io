@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "Transformer-XL"
-date = "2024-01-06"
+date = "2023-12-06"
 description = "Attentive Language Models Beyond a Fixed-Length Context"
 categories = [
     "Paper Review"

@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "RoBERTa"
-date = "2024-01-03"
+date = "2023-12-12"
 description = "A Robustly Optimized BERT Pretraining Approach"
 categories = [
     "Paper Review"
@@ -16,9 +16,13 @@ tags = [
 
 언어 모델의 사전 학습은 큰 성능 향상을 가져왔지만, 다른 접근법 간의 비교는 어렵다. 학습 과정은 비용이 많이 들며, hyperparameter 선택이 결과에 큰 영향을 미친다. 이 연구는 BERT 학습을 재현하고, 핵심 hyperparameter와 학습 데이터 크기의 영향을 측정하는데, 이를 통해 BERT가 undertrained 상태였으며, 그 이후의 모든 모델의 성능을 맞추거나 능가할 수 있다는 것을 발견했다. RoBERTa는 여러 테스트에서 state-of-the-art를 달성하였고, 이는 이전에 간과된 설계의 중요성을 보여준다.
 
+---
+
 ## Introduction
 
 이 연구는 BERT의 사전 학습 방법을 재현하고, 그 효과를 평가했다. 연구 결과 BERT는 상당히 학습이 부족했으며, 이를 개선하기 위한 새로운 학습 방법 RoBERTa를 제안했다. RoBERTa는 더 큰 배치와 더 많은 데이터에서 모델을 더 오래 학습시키고, 다음 문장 예측 목표를 제거하며, 더 긴 시퀀스에서 학습시키고, 학습 데이터에 적용되는 마스킹 패턴을 동적으로 변경한다. 이 개선된 학습 방법은 GLUE와 SQuAD에서 BERT의 성능을 뛰어넘었다. 또한, 새로운 데이터셋인 CCN EWS를 사용하고, 사전 학습에 더 많은 데이터를 사용하면 성능이 더욱 향상된다는 것을 확인하였다.
+
+---
 
 ## Background
 
@@ -51,6 +55,8 @@ BERT는 Adam 최적화를 사용하며, learning rate는 처음 10,000 step 동�
 ### Data
 
 BERT는 총 16GB의 압축되지 않은 텍스트인 BOOK CORPUS와 영어 WIKIPEDIA 조합으로 학습된다.
+
+---
 
 ## Experimental Setup
 
@@ -88,6 +94,8 @@ SQuAD V1.1에서는 BERT와 같은 방법으로 범위를 예측하며, SQuAD V2
 #### RACE
 
 ReAding Comprehension from Examinations(RACE)은 28,000개 이상의 지문과 100,000개 가까운 질문을 포함한 대규모 독해 dataset이다. 이 dataset은 중국의 중고등학생들을 대상으로 한 영어 시험에서 수집되었다. RACE에서는 각 지문에 대해 여러 질문을 풀고, 네 가지 선택지 중 정답을 고르는 작업을 수행한ㄴ다. RACE는 다른 dataset에 비해 긴 문맥을 가지고 있으며, 대부분의 질문에서 추론 능력을 요구한다.
+
+---
 
 ## Training Procedure Analysis
 
@@ -136,6 +144,8 @@ Byte-Pair Encoding(BPE)는 자연어 말뭉치의 큰 어휘를 처리하기 위
 
 Byte level BPE는 몇 개의 태스크에서 성능이 떨어진다는 단점이 있지만, 성능 하락폭이 크지 않고 universal 인코딩의 장점이 있다고 판단하여 본 연구에서 Byte level BPE를 적용하였다.
 
+---
+
 ## RoBERTa
 
 BERT 사전 학습 절차를 수정하여 end-task 성능을 향상시키는 방안을 제안한다. 이를 모두 합쳐서 그 효과를 평가한 결과, RoBERTa라는 새로운 설정이 만들어졌다. RoBERTa는 동적 마스킹, NSP loss 없는 전체 문장, 큰 미니 배치, 더 큰 바이트 수준 BPE를 사용하여 학습된다.
@@ -178,13 +188,19 @@ RACE에서는 텍스트, 관련 질문, 네 개의 후보 답변이 제공되며
 
 RACE 테스트 세트에서의 결과는 RoBERTa가 중학교와 고등학교 환경 모두에서 state-of-the-art를 달성하였다.
 
+---
+
 ## Related Work
 
 다양한 사전 학습 방법들은 언어 모델링, 기계 번역, 마스킹된 언어 모델링 등의 목표를 가지고 설계되었다. 최근 연구에서는 마스킹된 언어 모델 목표를 사용해 사전 학습하고, 각 작업에 대해 모델을 미세 조정하는 방법을 사용하였다. 그러나 새로운 방법들은 다중 작업 미세 조정, 엔티티 임베딩 통합, 범위 예측, 자동회귀 사전 학습의 변형 등을 통해 성능을 향상시켰다. 일반적으로, 더 큰 모델을 더 많은 데이터로 훈련함으로써 성능이 향상되었다.
 
+---
+
 ## Conclusion
 
 BERT 모델을 사전 학습시키는데 있어 다양한 디자인 결정을 신중하게 평가했다. 모델을 더 오래 훈련하고, 더 큰 배치로 더 많은 데이터를 사용하며, 다음 문장 예측 목표를 제거하고, 더 긴 시퀀스를 훈련하며, 훈련 데이터에 적용된 마스킹 패턴을 동적으로 변경하면 성능이 크게 향상됨을 발견했다. 이러한 개선된 사전 학습 절차를 RoBERTa라 부르며, GLUE, RACE, SQuAD에서 state-of-the-art를 달성하였다. 
+
+---
 
 ## Reference
 

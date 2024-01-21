@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "CLAP"
-date = "2024-01-17"
+date = "2024-01-16"
 description = "Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation"
 categories = [
     "Paper Review"
@@ -15,6 +15,8 @@ tags = [
 ## Abstract
 
 이 연구에서는 contrastive learning을 통해 자연어 설명과 오디오 데이터를 결합한 오디오 표현을 개발하는 방법을 제안한다. 이를 위해 633,526개의 오디오-텍스트 쌍을 모은 LAION-Audio-630K를 공개하고, 이를 활용해 오디오와 텍스트를 처리하는 모델을 구축하였다. 이 모델은 텍스트-오디오 검색에서 우수한 성능을 보였고, zero-shot 오디오 분류에서는 state-of-the-art를 달성하였다.
+
+---
 
 ## Introduction
 
@@ -32,6 +34,8 @@ Contrastive learning 방식은 인터넷에서 모아진 대규모 노이즈 데
 * 이 논문에서는 대조적 언어-오디오 사전 학습 파이프라인을 구축하고, 이를 위해 두 개의 오디오 인코더와 세 개의 텍스트 인코더를 선택하였다. 또한, 성능 향상과 variable-length inputs 처리를 위해 feature fusion mechanism을 활용하였다.
 * 이 논문에서는 텍스트-오디오 검색과 zero-shot 및 지도 오디오 분류와 같은 downstream task에 대한 모델의 포괄적인 실험을 수행하였다. 데이터셋의 확장, keyword-to-caption augmentation, feature fusion이 모델 성능을 향상시키는 데 도움이 된다는 것을 보여주었다. 이를 통해 텍스트-오디오 검색과 오디오 분류 작업에서 state-of-the-art를 달성하였다.
 
+---
+
 ## LAION-Audio-630K And Training Dataset
 
 ### LAION-Audio-630K
@@ -47,6 +51,8 @@ LAION-Audio-630K는 총 4,325.39시간에 걸친 633,526쌍의 오디오-텍스�
 ### Dataset Format and Preprocessing
 
 이 작업에서 사용된 모든 오디오 파일은 48kHz sample rate의 mono channel로 전처리되었다. 레이블만 있는 데이터셋의 경우, 템플릿이나 키워드-캡션 모델을 사용해 레이블을 캡션으로 확장하였다. 이를 통해 대조적 언어-오디오 사전 학습 모델의 학습에 더 많은 데이터를 활용할 수 있게 되었고, 총 오디오 샘플 수는 2.5M개로 증가하였다.
+
+---
 
 ## Model Architecture
 
@@ -101,6 +107,8 @@ $$ X_{fusion}^a = \alpha X_{global}^a + (1 - \alpha)X_{local}^a $$
 
 일부 데이터셋에서는 오디오에 대응하는 키워드로 레이블이나 태그를 사용한다. 이러한 키워드를 바탕으로 사전 학습된 언어 모델 T5를 사용하여 캡션을 생성하며, output 문장에서 편향을 제거하는 후처리를 진행한다. 예를 들어, "여성"과 "남성"을 "사람"으로 교체하여 성별 편향을 제거한다.
 
+---
+
 ## Experiments
 
 제안한 모델에 대해 세 가지 실험을 수행한다. 다양한 encoder를 사용해 최적의 조합을 찾고, 다양한 데이터셋 크기에서 특징 결합과 keyword-to-caption augmentation을 적용해 효과를 검증하며, 오디오-텍스트 검색과 텍스트-오디오 검색에서의 성능을 평가한다. 마지막으로 최적의 모델로 zero-shot과 지도 오디오 분류 실험을 수행한다.
@@ -140,6 +148,8 @@ HTSAT 오디오 encoder는 PANN보다 더 좋은 성능을 보이고, 텍스트 
 ### Conclusion And Futrue Work
 
 이 논문에서는 대규모 오디오-텍스트 데이터셋을 제안하고 언어-오디오 contrastive learning 패러다임을 개선하였다. LAION-Audio-630, keyword-tocaption augmentation가 있는 AudioSet, 그리고 feature fusion이 오디오 이해와 작업 성능을 향상시키며 가변 길이 데이터에서의 효과적인 학습을 가능하게 함을 보여주었다. 미래 연구는 더 큰 학습 데이터 수집과 오디오 합성, 분리 등의 downstream task 적용을 고려하고 있다.
+
+---
 
 ## Reference
 

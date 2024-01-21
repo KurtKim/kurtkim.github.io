@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "ALBERT"
-date = "2024-01-04"
+date = "2023-12-14"
 description = "A Lite BERT for Self-supervised Learning of Language Representations"
 categories = [
     "Paper Review"
@@ -15,6 +15,8 @@ tags = [
 ## Abstract
 
 자연어 표현을 사전 학습할 때 모델 크기를 늘리면 종종 성능이 향상되지만, GPU/TPU 메모리 한계와 학습 시간이 길어지는 문제가 있다. 이를 해결하기 위해, BERT의 메모리 소비를 줄이고 훈련 속도를 높이는 두 가지 기법을 제시하였다. 이 기법은 원래의 BERT보다 훨씬 더 잘 확장되는 모델을 만들며, 문장 간 일관성을 모델링하는 self-supervised loss를 사용하여 다문장 입력 작업에 도움이 된다. 결과적으로, BERT-large보다 parameter가 적은 ALBERT 모델은 GLUE, RACE, SQuAD benchmark에서 state-of-the-art를 달성하였다.
+
+---
 
 ## Introduction
 
@@ -32,6 +34,8 @@ ALBERT의 성능을 더욱 향상시키기 위해, sentence-order prediction(SOP
 
 그 결과, BERT-large보다 parameter는 더 적지만 성능은 훨씬 뛰어난 더 큰 ALBERT 구성으로 확장할 수 있었다. 그리고 자연 언어 이해를 위한 잘 알려진 GLUE, SQuAD, RACE 벤치마크에서 state-of-the-art를 달성하였다.
 
+---
+
 ## Related Work
 
 ### Scaling up Representation Learning for Natural Language
@@ -47,6 +51,8 @@ cross-layer parameter sharing의 아이디어는 이전에 Transformer 아키텍
 ### Sentence Ordering Objectives
 
 ALBERT는 두 연속된 텍스트 세그먼트의 순서를 예측하는 사전 학습 loss를 사용한다. 이는 담화의 일관성에 관련된 다른 사전 학습 목표와 유사하다. 대부분의 효과적인 목표는 매우 단순하며, 이웃하는 문장의 단어를 예측하는 것에 기반한다. loss는 두 연속된 문장의 순서를 결정하기 위해 학습된 문장 임베딩과 가장 관련이 있다. 하지만, loss는 문장이 아닌 텍스트 세그먼트에 적용된다. BERT는 한 쌍에서 두 번째 세그먼트가 다른 문서의 세그먼트와 바뀌었는지 예측하는 loss을 사용하고, 이는 NSP가 더 도전적인 사전 학습 작업이며 특정 downstream task에 더 유용하다는 것을 보여준다. 
+
+---
 
 ## The Elements of ALBERT
 
@@ -92,6 +98,8 @@ NSP의 비효율성 뒤에 있는 주요 이유는 MLM과 비교했을 때 작�
 
 ALBERT 모델은 설계 선택 때문에 BERT 모델보다 parameter 크기가 훨씬 작다. 예를 들어, ALBERT-large는 BERT-large보다 parameter가 약 18배 작다. 이런 parameter 효율성 향상은 ALBERT의 설계 선택에서 가장 중요한 장점이다.
 
+---
+
 ## Experimental Results
 
 ### Experimental Setup
@@ -103,6 +111,8 @@ ALBERT 모델은 설계 선택 때문에 BERT 모델보다 parameter 크기가 �
 $$p(n) = {{1/n}\over{\sum_{k=1}^{N}1/k}} $$
 
 n-gram의 최대 길이는 3으로 설정하며, 이는 MLM 목표가 최대 3-gram 단어로 구성될 수 있음을 의미한다. 모든 모델 업데이트는 배치 크기 4096과 학습률 0.00176의 $L_{AMB}$ optimizer를 사용하며, 모든 모델은 125,000 step 동안 학습된다. 훈련은 Cloud TPU V3에서 이루어졌으며, 사용된 TPU의 수는 모델 크기에 따라 64에서 512까지 다양했다. 이 실험 설정은 우리가 만든 모든 BERT 버전과 ALBERT 모델에 사용되었다.
+
+---
 
 ## Evaluation Benchmarks
 
@@ -182,9 +192,13 @@ ALBERT-xxlarge의 중간 평가에서도 드롭아웃 제거가 downstream task�
 
 단일 모델과 앙상블 모델 모두 ALBERT가 모든 벤치마크에서 상당히 향상된 성능을 보여준다. GLUE 점수는 89.4, SQuAD 2.0 테스트 F1 점수는 92.2, RACE 테스트 정확도는 89.4에 달하며, 이는 BERT, XLNet, RoBERTa, 그리고 DCMI+ 등에 비해 큰 향상을 보여준다. 또한, 단일 모델은 86.5%의 정확도를 달성하여, state-of-the-art 앙상블 모델보다 2.4% 더 높다.
 
+---
+
 ## Discussion
 
 ALBERT-xxlarge는 BERT-large보다 parameter가 적지만 더 좋은 성능을 보인다. 하지만, 큰 구조 때문에 계산 비용이 더 많이 들어간다. 따라서, 다음 단계는 sparse attention와 block attention 등의 방법을 통해 ALBERT의 학습과 추론 속도를 높이는 것이다. 어려운 예제 채굴과 더 효율적인 언어 모델링 훈련 등 별개의 연구 방향이 추가적인 표현력을 제공할 수 있다. 또한, 문장 순서 예측이 더 나은 언어 표현을 이끌어내는 좋은 학습 작업이지만, 추가적인 표현력을 만들어낼 수 있는 현재 자기 self-supervised loss에 포착되지 않은 다른 차원이 있을 수 있다는 가설이 있다.
+
+---
 
 ## Reference
 

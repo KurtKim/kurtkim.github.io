@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "BERT"
-date = "2023-12-30"
+date = "2023-12-04"
 description = "Pre-training of Deep Bidirectional Transformers for Language Understanding"
 categories = [
     "Paper Review"
