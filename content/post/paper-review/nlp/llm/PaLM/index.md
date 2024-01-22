@@ -108,9 +108,29 @@ two-way pod-level 데이터 병렬성의 도전적인 측면은 cross-pod gradie
 
 ### Training Eﬃciency
 
-언어 모델의 accelerator 효율성은 대게 하드웨어 FLOPs 이용률로 측정된다. 이는 주어진 장치에서 관찰된 FLOPs와 이론적인 최대 FLOPs 사이의 비율을 나타낸다. 하지만 이 방법에는 문제가 있다. 첫째, 실행된 하드웨어 FLOPs의 수는 시스템과 구현에 따라 달라진다. 둘째, 하드웨어 FLOPs 측정은 그것들을 세거나 추적하는 방법에 의존적이다. 결국, 학습 시스템의 목표는 가능한 많은 하드웨어 FLOPs를 사용하는 것이 아니라 초당 토큰의 높은 처리량을 달성하는 것이다.
+언어 모델의 accelerator 효율성은 대게 hardware FLOPs utilization(HFU)로 측정된다. 이는 주어진 장치에서 관찰된 FLOPs와 이론적인 최대 FLOPs 사이의 비율을 나타낸다. 하지만 이 방법에는 문제가 있다. 첫째, 실행된 하드웨어 FLOPs의 수는 시스템과 구현에 따라 달라진다. 둘째, 하드웨어 FLOPs 측정은 그것들을 세거나 추적하는 방법에 의존적이다. 결국, 학습 시스템의 목표는 가능한 많은 하드웨어 FLOPs를 사용하는 것이 아니라 초당 토큰의 높은 처리량을 달성하는 것이다.
 
+HFU는 LLM 학습 효율성에 대한 일관된 척도가 아니라는 문제점을 인식하였다. 따라서, model FLOPs utilization(MFU)이라는 새로운 효율성 척도를 제안한다. MFU는 관찰된 처리량이 피크 FLOPs에서 운영하는 시스템의 이론적 최대 처리량에 대한 비율이다. 이 척도는 다양한 시스템에서의 학습을 공정하게 비교할 수 있게 해준다.
 
+![](images/figure3.png)
+
+PaLM 540B 모델의 model FLOPs utilization(MFU)을 제시하고, 이전의 큰 모델들과 비교하였다. MFU는 다양한 모델 parameter 수, 아키텍처, 모델 품질의 맥락에서 모델과 시스템을 비교하는데 유용하다.
+
+GPT-3의 MFU는 21.3%, Gopher는 32.5%, Megatron–Turing NLG 530B는 self-attention 없이 29.7%, 있으면 30.2%이다. 반면, PaLM 540B는 self-attention 없이 45.7%, 있으면 46.2%의 MFU를 달성하였다.
+
+PaLM은 병렬성 전략과 XLA TPU 컴파일러 최적화, 그리고 "parallel layers"의 사용 등으로 인해 높은 accelerator 이용률을 달성하였다. 이로써 PaLM은 LLM 학습 효율성에서 중요한 진전을 나타내는 것으로 보여진다.
+
+---
+
+## Training Setup
+
+모델 학습은 large transformer 언어 모델에 대한 상당히 표준적인 설정을 따랐다:
+
+* **Weight initialization** 커널 가중치는 "fan-in variance scaling"을 사용하여 초기화하며, 입력 임베딩은 layer normalization가 적용되지 않기 때문에 $E ∼ N(0, 1)$으로 초기화된다. 입력과 출력 임베딩 레이어가 공유되므로, pre-softmax 출력 logit은 임베딩 크기의 제곱근의 역수로 스케일링된다.
+
+* **Optimizer** 이 모델은 Adafactor optimizer를 사용하여 학습되었으며, 이는 parameter 행렬의 평균 제곱근으로 learning rate을 조정하는 Adam과 사실상 동일하다. 가중치 초기화가 ${{1}\over{\sqrt{n}}}$에 비례하기 때문에, 이는 learning rate를 수동으로 축소하는 것과 비슷한 효과를 가진다. 하지만, 다른 스케일에서 작동하는 parameter 행렬들이 동일한 비율로 learning rate을 축소하지 않게 하는 이점이 있다.
+
+---
 
 ## Reference
 
