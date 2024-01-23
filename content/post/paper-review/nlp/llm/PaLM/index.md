@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "PaLM"
-date = "2024-01-25"
+date = "2024-01-27"
 description = "Scaling Language Modeling with Pathways"
 categories = [
     "Paper Review"
@@ -129,6 +129,30 @@ PaLM은 병렬성 전략과 XLA TPU 컴파일러 최적화, 그리고 "parallel 
 * **Weight initialization** 커널 가중치는 "fan-in variance scaling"을 사용하여 초기화하며, 입력 임베딩은 layer normalization가 적용되지 않기 때문에 $E ∼ N(0, 1)$으로 초기화된다. 입력과 출력 임베딩 레이어가 공유되므로, pre-softmax 출력 logit은 임베딩 크기의 제곱근의 역수로 스케일링된다.
 
 * **Optimizer** 이 모델은 Adafactor optimizer를 사용하여 학습되었으며, 이는 parameter 행렬의 평균 제곱근으로 learning rate을 조정하는 Adam과 사실상 동일하다. 가중치 초기화가 ${{1}\over{\sqrt{n}}}$에 비례하기 때문에, 이는 learning rate를 수동으로 축소하는 것과 비슷한 효과를 가진다. 하지만, 다른 스케일에서 작동하는 parameter 행렬들이 동일한 비율로 learning rate을 축소하지 않게 하는 이점이 있다.
+
+* **Optimization hyperparameters** 처음 10,000 단계에는 $10^{-2}$의 Adafactor learning rate을 사용하고, 이후에는 단계 번호에 따라 learning rate을 감소시킨다. 모멘텀은 $\beta_1 = 0.9$로 설정하고, 두 번째 순서 모멘트 보간 값은 $\beta_2 = 1.0 - k^{-0.8}$로 계산된다. 이 방법은 희귀 임베딩 토큰의 두 번째 순간을 더 정확하게 추정할 수 있어 안정적이다. 그리고, 모든 모델에서 1.0의 global norm gradient clipping을 사용하며, 학습 중에는 현재 learning rate의 2배에 해당하는 dynamic weight decay를 사용한다.
+
+* **Loss function** 이 모델은 표준 언어 모델링 손실 함수, 즉 모든 토큰의 average log probability를 사용하여 학습된다. 또한, softmax normalizer 값인 $log(Z)$가 0에 가깝게 만드는 auxiliary loss인 $z$ 손실을 사용하며, 이는 학습 안정성을 높이는 데 도움이 된다.
+
+* **Sequence length** 모든 모델은 2048 토큰의 시퀀스 길이로 작동하며, 입력 예제들은 이 길이에 맞춰 연결되고 분할된다. 각 예제는 특별한 [eod] 토큰으로 구분되며 패딩 토큰은 사용되지 않는다.
+
+* **Batch size** 학습 도중 모든 모델의 배치 크기를 점진적으로 증가시킨다. 큰 모델의 경우, 초기에는 배치 크기를 512로 설정하고, 학습이 진행됨에 따라 이를 2048까지 늘린다. 이런 방식은 학습 초기에는 작은 배치 크기가, 후반에는 큰 배치 크기가 더 효율적이기 때문이며, 또한 큰 배치 크기는 TPU 효율성을 높이는데 도움이 된다.
+
+* **Bitwise determinism** 이 모델은 체크포인트에서 완전 재현이 가능하며, 이는 JAX+XLA+T5X가 제공하는 비트 단위 결정적 모델링 프레임워크와, 단계 번호만으로 학습 배치의 내용을 결정하는 결정적 데이터셋 파이프라인 덕분이다. 따라서 모델이 한 번의 실행에서 특정 단계까지 학습되었다면, 그 체크포인트에서 다시 시작해도 동일한 결과를 보장한다.
+
+* **Dropout** 이 모델은 드롭아웃 없이 학습되었지만, 대부분의 경우에는 0.1의 드롭아웃을 사용하여 미세조정 한다.
+
+### Training Instability
+
+가장 큰 모델을 학습하면서 gradient clipping이 적용되어 있음에도 불구하고, 불규칙한 간격으로 20번가량 손실이 급증하는 현상을 관찰하였다. 이는 작은 모델에서는 발견되지 않았으며, 큰 모델의 학습 비용 때문에 이 문제를 완화하기 위한 명확한 전략을 세우지 못하였다.
+
+손실 증가 문제를 완화하기 위해, 손실 증가가 시작되기 전 체크포인트에서 학습을 재시작하고, 손실 증가가 관찰된 데이터 배치를 건너뛰는 전략을 사용했다. 이 방법은 손실 증가가 특정 데이터 배치와 모델 파라미터의 특정 상태의 조합으로 발생한다는 것을 보여주며, "bad data" 때문이 아님을 확인하였다.
+
+---
+
+## Evaluation
+
+### English NLP tasks
 
 ---
 
