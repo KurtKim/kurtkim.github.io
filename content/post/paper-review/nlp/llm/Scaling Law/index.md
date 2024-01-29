@@ -10,7 +10,7 @@ tags = [
     "NLP",
     "LLM",
 ]
-draft = true
+#draft = true
 +++
 
 ## Abstract
@@ -124,6 +124,18 @@ Transformer 아키텍처는 $n_{layer}$(number of layers), $d_{model}$(dimension
 
 $$ N \approx 2 d_{model} \ n_{layer} (2 d_{attn} + d_{ff} ) = 12 n_{layer} \ d_{model} $$
 $$ \text{with the standard} \ \ d_{attn} = d_{ff} / 4 = d_{model} $$
+
+embedding matrix $n_{vocab} \ d_{model}$과 positional embedding $n_{ctx} \ d_{model}$에 대한 parameter를 가지고 있지만, "모델 크기"를 논의할 때는 이들을 포함하지 않는다. 이 방식은 더욱 깔끔한 스케일링 법칙을 제공한다.
+
+transformer의 forward pass를 평가하는 것은 다음과 같은 과정을 포함한다.
+
+$$ C_{forward} \approx 2N + 2 n_{layer} \ n_{ctx} \ d_{model} $$
+
+add-multiply 연산을 포함하며, 이 중 2배에 해당하는 부분은 행렬 곱셈에 사용되는 multiply-accumulate 연산에서 나온다. 
+
+![](images/table1.png)
+
+
 
 ---
 
