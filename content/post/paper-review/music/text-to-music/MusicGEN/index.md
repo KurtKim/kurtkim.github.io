@@ -10,7 +10,6 @@ tags = [
     "Music",
     "Text-to-Music",
 ]
-#draft = true
 +++
 
 ## Abstract
