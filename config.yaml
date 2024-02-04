@@ -2,7 +2,7 @@ baseurl: https://kurtkim.github.io/
 languageCode: ko-kr
 theme: hugo-theme-stack
 paginate: 5
-title: K2H Blog
+title: K2H'log
 
 enableRobotsTXT: true
 
