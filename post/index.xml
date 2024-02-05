@@ -5056,7 +5056,7 @@ data-flex-basis="561px"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/google-research/ALBERT" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>RoBERTa</title><link>https://kurtkim.github.io/p/roberta/</link><pubDate>Mon, 11 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/roberta/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;/ul></description></item><item><title>RoBERTa</title><link>https://kurtkim.github.io/p/roberta/</link><pubDate>Tue, 12 Dec 2023 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/roberta/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>언어 모델의 사전 학습은 큰 성능 향상을 가져왔지만, 다른 접근법 간의 비교는 어렵다. 학습 과정은 비용이 많이 들며, hyperparameter 선택이 결과에 큰 영향을 미친다. 이 연구는 BERT 학습을 재현하고, 핵심 hyperparameter와 학습 데이터 크기의 영향을 측정하는데, 이를 통해 BERT가 undertrained 상태였으며, 그 이후의 모든 모델의 성능을 맞추거나 능가할 수 있다는 것을 발견했다. RoBERTa는 여러 테스트에서 state-of-the-art를 달성하였고, 이는 이전에 간과된 설계의 중요성을 보여준다.&lt;/p>
 &lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
