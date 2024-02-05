@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "BIG-bench"
-date = "2024-02-03"
+date = "2024-02-06"
 description = "Beyond the Imitation Game: Quantifying and extrapolating the capabilities of language models"
 categories = [
     "Paper Review"
