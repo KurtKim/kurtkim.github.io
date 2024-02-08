@@ -208,23 +208,17 @@ LaMDA는 가능한 한 확인 가능한 출처와 연결된 응답을 생성하�
 
 The course of Gascoigne’s artistic life is an inspiration for those who are only able to devote themselves to their chosen calling late in life. She ﬁrst exhibited her art . . .
 
-https://artsearch.nga.gov.au/detail.cfm?irn=8774&pictaus=true
-
 검색 스니펫의 구두점과 생략 부호는 모델이 보는 그대로이다. "Research" 단계에서는 또 다른 쿼리를 발행한다:
 
 **LAMDA - RESEARCH :** TS, Miró and Gascoigne
 
 **TS :** (**Gascoigne** had been a practitioner of wild, avant-garde ikebana – Japanese ﬂower arrangement – before turning late in life to sculpture.) The two-way alternation of visual ﬂow creates a pleasing tension, like an electric charge. There are other tensions too, of class and gender.
 
-https://artsearch.nga.gov.au/detail.cfm?irn=8774&pictaus=true
-
 동일한 쿼리를 반복하면, 모델은 더 많은 세부 정보를 포함한 두 번째로 순위가 매겨진 결과를 받게 된다. 이를 통해 더 정확한 정보를 얻을 수 있다.
 
 "Research" 단계는 사용자에게 출력을 생성합니다. 이는 "Base" 응답의 톤과 비슷하지만, 검증되지 않은 주장을 TS로 찾은 소스를 기반으로 한 새로운 문장으로 대체한다. 이는 더 정확한 정보를 제공하기 위함이다.
 
 **LAMDA :** Oh wow, her life course is so inspiring. Did you know she was a practitioner of Japanese ﬂower arrangement before turning to sculpture?
-
-https://artsearch.nga.gov.au/detail.cfm?irn=8774&pictaus=true
 
 ![](images/figure3.png)
 

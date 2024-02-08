@@ -17,5 +17,5 @@ menu:
 - Ph.D. student
 - Ai Research Engineer
 - Guitarist
-  - [Preta, 2019](https://music.apple.com/kr/album/preta-single/1452969578)
-  - [OBSCURE, 2016](https://music.apple.com/kr/album/obscure-ep/1546588615)
+  - [Preta, 2019](https://www.melon.com/album/detail.htm?albumId=10250152)
+  - [OBSCURE, 2016](https://www.melon.com/album/detail.htm?albumId=10023293)
