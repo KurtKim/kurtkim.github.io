@@ -15,8 +15,14 @@
 &lt;hr>
 &lt;h2 id="model">Model&lt;/h2>
 &lt;p>오디오 신호의 기간이 $d$라면, 이 신호는 $x \in [−1, 1]^{C_a \times T}$ 시퀀스로 표현될 수 있다. 여기서 $C_a$는 오디오 채널의 수이고, $T = d \cdot f_{sr}$는 주어진 샘플 비율 $f_{sr}$에서의 오디오 샘플 수이다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/images/figure1.png"
+&lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/figure1.png"
+width="1366"
+height="608"
+srcset="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/figure1_hu93b04515f5473038596df8394bd78148_284692_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/figure1_hu93b04515f5473038596df8394bd78148_284692_1024x0_resize_box_3.png 1024w"
 loading="lazy"
+class="gallery-image"
+data-flex-grow="224"
+data-flex-basis="539px"
 >&lt;/p>
 &lt;p>EnCodec 모델은 오디오 신호를 처리하는 세 가지 주요 요소로 구성된다. 첫째, encoder 네트워크 $E$는 오디오를 latent representation $z$로 변환한다. 둘째, quantization layer $Q$는 vector quantization 를 이용해 압축된 표현 $z_q$를 생성한다. 셋째, decoder 네트워크 $G$는 compressed latent representation $z_q$을 원래의 시간 도메인 신호 $x$로 재구성한다. 이 시스템은 시간과 주파수 도메인에서의 reconstruction 손실 최소화를 목표로 학습되며, 이 과정에는 다른 해상도에서 작동하는 판별자의 discriminator 손실이 포함된다.&lt;/p>
 &lt;h3 id="encoder--decoder-architecture">Encoder &amp;amp; Decoder Architecture&lt;/h3>
@@ -36,8 +42,14 @@ loading="lazy"
 &lt;p>&lt;strong>Reconstruction Loss.&lt;/strong> reconstruction loss term은 시간 도메인과 주파수 도메인의 손실 항으로 이루어진다. 시간 도메인에서는 목표 오디오와 압축 오디오 사이의 L1 거리를 최소화하고, 주파수 도메인에서는 mel-spectrogram에서의 L1과 L2 손실의 선형 조합을 사용한다.&lt;/p>
 &lt;p>$$ l_f(x, \hat{x}) = {{1}\over{|\alpha| \cdot |s|}} \sum_{\alpha_i \in \alpha} \sum_{i \in e} \parallel S_i(X) - S_i(\hat{x}) \parallel_1 + \alpha \parallel S_i(X) - S_i(\hat{x}) \parallel_2 $$&lt;/p>
 &lt;p>$S_i$는 window size가 $2^i$ 이고 hop length가 $2^i/4$인 normalized STFT를 사용한 64-bins mel-spectrogram이다. $e = 5, &amp;hellip;, 11$은 스케일의 집합을 나타내고, $\alpha$$는 L1과 L2 항 사이의 균형을 맞추는 스칼라 계수의 집합이다. 단, 이 논문에서는 $\alpha_i = 1$을 선택하였다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/images/figure2.png"
+&lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/figure2.png"
+width="1228"
+height="364"
+srcset="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/figure2_hu25e8a1a1e6db1cb982324c308cf16f9a_97901_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/figure2_hu25e8a1a1e6db1cb982324c308cf16f9a_97901_1024x0_resize_box_3.png 1024w"
 loading="lazy"
+class="gallery-image"
+data-flex-grow="337"
+data-flex-basis="809px"
 >&lt;/p>
 &lt;p>&lt;strong>Discriminative Loss.&lt;/strong> 생성된 샘플의 품질을 향상시키기 위해, multi-scale STFT-based (MS-STFT) discriminator에 기반한 perceptual 손실 항을 도입하였다. 이 discriminator는 audio signal의 다양한 구조를 포착하도록 설계되었으며, 복소수 값을 가진 multi-scale STFT에서 작동하는 동일 구조의 네트워크로 구성되어 있다. 각 하위 네트워크는 2D convolutional layer, 팽창율이 증가하는 2D convolution, 그리고 주파수 축에서 스트라이드를 가지고 있다. 이 discriminator는 STFT window length가 다양한 5개의 스케일을 사용하며, 오디오의 샘플링 레이트에 따라 window size를 조정한다. LeakyReLU 활성화 함수와 weight normalization을 사용한다.&lt;/p>
 &lt;p>generator에 대한 adversarial 손실은 discriminator의 수(K)에 따라 구성되며, 이는 $l_g(\hat{x}) = {{1}\over{K}} \sum_k max(0, 1 − D_k(\hat{x}))$ 공식으로 표현된다. 또한, 이전 neural vocoder 연구와 같이, generator에 대한 상대적 특징 매칭 손실을 추가적으로 포함한다.&lt;/p>
@@ -65,35 +77,71 @@ loading="lazy"
 &lt;h3 id="training">Training&lt;/h3>
 &lt;p>모든 모델은 Adam optimizer를 사용하여 300 epoch 동안 학습되고, 각 epoch는 1초당 64개의 예제로 구성된 batch로 2,000번의 업데이트를 포함한다. 모델은 8개의 A100 GPU를 사용하여 학습되며, 특정 가중치가 적용된 balancer를 사용한다. 가중치는 24kHz 모델의 경우 λt = 0.1, λf = 1, λg = 3, λfeat = 3 이고, 48kHz 모델은 서로 다른 가중치를 사용한다.&lt;/p>
 &lt;h3 id="results">Results&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/images/figure3.png"
+&lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/figure3.png"
+width="1318"
+height="472"
+srcset="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/figure3_hu6acc880db562e567b4095ddc4a8ce71e_84409_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/figure3_hu6acc880db562e567b4095ddc4a8ce71e_84409_1024x0_resize_box_3.png 1024w"
 loading="lazy"
+class="gallery-image"
+data-flex-grow="279"
+data-flex-basis="670px"
 >&lt;/p>
 &lt;p>다양한 bandwidth을 가진 EnCodec의 결과를 베이스라인과 비교하였다. Gumbel-Softmax와 DiffQ와 같은 다른 양자화기를 탐색했지만, 이들이 비슷하거나 더 나쁜 결과를 보여주어 보고하지 않았다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/images/table1.png"
+&lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table1.png"
+width="1272"
+height="490"
+srcset="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table1_hu29e81f7405dfee94c4dc5b1c29f38ce2_144576_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table1_hu29e81f7405dfee94c4dc5b1c29f38ce2_144576_1024x0_resize_box_3.png 1024w"
 loading="lazy"
+class="gallery-image"
+data-flex-grow="259"
+data-flex-basis="623px"
 >&lt;/p>
 &lt;p>동일한 bandwidth을 고려하면, EnCodec는 모든 베이스라인보다 우수한 성능을 보여준다. 추가적인 언어 모델을 적용하면 bandwidth을 약 25-40% 줄일 수 있다. 하지만 높은 bandwidth에서는 압축 비율이 낮아지는 것을 관찰할 수 있는데, 이는 사용된 Transformer 모델의 크기가 작아서 모든 코드북을 함께 모델링하기 어렵기 때문일 수 있다.&lt;/p>
 &lt;h4 id="ablation-study">Ablation study&lt;/h4>
 &lt;p>다음으로, discriminator 설정, streaming, multitarget bandwidth, balancer의 효과를 더 잘 평가하기 위해 ablation 연구를 수행한다.&lt;/p>
 &lt;p>&lt;strong>The eﬀect of discriminators setup.&lt;/strong> 이전 연구에서는 생성된 오디오의 perceptual 품질을 향상시키기 위해 여러 discriminator를 제안하였다. Multi-Scale Discriminator(MSD) 모델은 다양한 해상도에서 raw waveform에 작용한다. Kong et al. 은 Multi-Period Discriminator(MPD) 모델을 추가로 제안했는데, 이는 waveform을 여러 주기를 가진 2D 입력으로 변환한다. 그리고 STFT Discriminator(Mono-STFTD) 모델은 complex-valued STFT에 작용하는 단일 네트워크이다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/images/table2.png"
+&lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table2.png"
+width="722"
+height="236"
+srcset="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table2_hu9223290a02f4c74eded16762d914f148_47075_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table2_hu9223290a02f4c74eded16762d914f148_47075_1024x0_resize_box_3.png 1024w"
 loading="lazy"
+class="gallery-image"
+data-flex-grow="305"
+data-flex-basis="734px"
 >&lt;/p>
 &lt;p>MS-STFTD discriminator는 MSD+MonoSTFTD, MPD only, MS-STFTD only, MS-STFTD+MPD와 같은 세 가지 다른 설정과 비교되었다. 결과는 MS-STFTD와 같은 multi-scale STFT-based discriminator만을 사용하는 것이 오디오의 고품질을 생성하는 데 충분하며, 모델 학습을 단순화하고 학습 시간을 줄인다는 것을 보여준다. MPD 판별자를 추가하면 MUSHRA 점수가 약간 향상되었다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/images/table3.png"
+&lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table3.png"
+width="622"
+height="222"
+srcset="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table3_hu902f2b842537c031dd581455f48490f8_37562_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table3_hu902f2b842537c031dd581455f48490f8_37562_1024x0_resize_box_3.png 1024w"
 loading="lazy"
+class="gallery-image"
+data-flex-grow="280"
+data-flex-basis="672px"
 >&lt;/p>
 &lt;p>&lt;strong>The eﬀect of the streamable modeling.&lt;/strong> streamable 설정과 non-streamable 설정을 비교한 결과, 예상대로 non-streamable 설정에서 streamable 설정으로 전환하면 성능이 약간 저하되지만, 스트리밍 추론이 가능해지면서도 성능이 강하게 유지된다.&lt;/p>
 &lt;p>&lt;strong>The eﬀect of the balancer.&lt;/strong> balancer의 영향을 평가하는 결과를 제시했다. balancer의 유무와 상관없이 다양한 값들을 고려하여 EnCodec 모델을 학습시켰고, 예상대로 balancer가 학습 과정을 크게 안정화시키는 것을 확인하였다.&lt;/p>
 &lt;h4 id="stereo-evaluation">Stereo Evaluation&lt;/h4>
 &lt;p>이전의 모든 결과는 monophonic 설정만을 고려하였다. 그러나 음악 데이터의 경우 스테레오 compression이 중요하므로, discriminator 설정을 수정하여 현재 설정을 스테레오로 변경하였다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/images/table4.png"
+&lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table4.png"
+width="926"
+height="336"
+srcset="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table4_hu6b695076b4e9fd83468cd13cfa20d3b4_80376_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table4_hu6b695076b4e9fd83468cd13cfa20d3b4_80376_1024x0_resize_box_3.png 1024w"
 loading="lazy"
+class="gallery-image"
+data-flex-grow="275"
+data-flex-basis="661px"
 >&lt;/p>
 &lt;p>6 kbps에서 작동하는 EnCodec은 Opus를 크게 능가하고, 64 kbps MP3와 비슷한 성능을 보여준다. 12 kbps에서의 EnCodec은 24 kbps에서의 EnCodec와 비교 가능한 성능을 보여준다. 언어 모델과 entropy coding을 사용하면 20%에서 30%의 가변 이득을 얻을 수 있다.&lt;/p>
 &lt;h3 id="latency-and-computation-time">Latency and computation time&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/images/table5.png"
+&lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table5.png"
+width="944"
+height="250"
+srcset="https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table5_hu2beba8ea81e367bfe5ad26acea09aeb6_48294_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/encodec/post/paper-review/audio/codec/EnCodec/images/table5_hu2beba8ea81e367bfe5ad26acea09aeb6_48294_1024x0_resize_box_3.png 1024w"
 loading="lazy"
+class="gallery-image"
+data-flex-grow="377"
+data-flex-basis="906px"
 >&lt;/p>
 &lt;p>실시간 요소는 오디오의 지속 시간과 처리 시간의 비율로, 방법이 실시간보다 빠를 때 1보다 크다. 이는 6 kbps에서 MacBook Pro 2019 CPU의 단일 스레드에서 모든 모델을 분석한 결과이다.&lt;/p>
 &lt;p>&lt;strong>Initial latency.&lt;/strong> 24 kHz streaming EnCodec 모델은 initial latency 시간이 13.3ms이다. 반면, 48 kHz non-streaming 버전은 사용된 normalization으로 인해 initial latency 시간이 1초이다. entropy coding 사용시 오버헤드를 줄이기 위해 각 프레임마다 스트림을 플러시할 수 없어 initial latency 시간이 증가하며, 이로 인해 지연 시간이 13ms 증가한다.&lt;/p>
