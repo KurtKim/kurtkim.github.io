@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "Chinchilla"
-date = "2024-01-25"
+date = "2024-01-27"
 description = "Training Compute-Optimal Large Language Models"
 categories = [
     "Paper Review"

@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "PaLM"
-date = "2024-01-27"
+date = "2024-01-25"
 description = "Scaling Language Modeling with Pathways"
 categories = [
     "Paper Review"
