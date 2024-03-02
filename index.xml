@@ -1,4 +1,477 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K2H'log</title><link>https://kurtkim.github.io/</link><description>Recent content on K2H'log</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Sat, 02 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>BLOOM</title><link>https://kurtkim.github.io/p/bloom/</link><pubDate>Wed, 28 Feb 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/bloom/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K2H'log</title><link>https://kurtkim.github.io/</link><description>Recent content on K2H'log</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Mon, 04 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Galactica</title><link>https://kurtkim.github.io/p/galactica/</link><pubDate>Sat, 02 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/galactica/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>정보 과부하는 과학의 진전을 방해하는 주요 장애물이다. 이 논문에서는 과학 지식을 저장하고, 결합하며 추론할 수 있는 대형 언어 모델인 Galactica를 소개한다. 이 모델은 대규모 과학 코퍼스를 학습에 활용하였으며, 다양한 과학적 과제에서 기존 모델들을 능가하는 성능을 보여주었다. Galactica는 일반 코퍼스에 대해 학습되지 않았음에도 불구하고, BIG-bench에서 다른 모델들을 능가하였다. 이 모델은 과학에 대한 새로운 인터페이스로서 언어 모델의 잠재력을 보여준다. 이 모델은 과학 커뮤니티의 이익을 위해 오픈 소스로 공개되었다.&lt;/p>
+&lt;hr>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>1945년에 반네바 부시는 과학에서 정보 과부하를 해결하는 것이 컴퓨팅의 원래 목표라고 주장하였다. 그는 출판의 확장이 우리의 기록 활용 능력을 넘어섰다고 지적하며, 이를 관리하는 해결책으로 컴퓨터를 제안했다. 이후 리클라이더는 인간과 기계 사이의 공생관계를 통해 이 아이디어를 확장, 컴퓨터가 저장, 검색 등 일상적인 작업을 처리하며 과학적 사고에서의 통찰력과 결정을 준비하게 될 것이라고 주장했다.&lt;/p>
+&lt;p>컴퓨팅은 연구 방식을 혁신했지만, 정보 과부하 문제는 여전히 큰 도전적이다. 2022년 5월에는 하루에 평균 516편의 논문이 arXiv에 제출되었고, 과학적 데이터의 증가 속도는 우리의 처리능력을 훨씬 초과하고 있다. 2022년 8월, NCBI GenBank에는 1.49 × 10 12개의 핵산 염기가 포함되어 있어, 한 사람이 특정 분야의 모든 논문을 읽거나, 과학적 현상에 대한 데이터를 정리하는 것은 거의 불가능하다.&lt;/p>
+&lt;p>현재 과학적 지식에 접근하는 주요 인터페이스는 검색 엔진이지만, 이들은 지식을 직접 정리하지 않고 위키백과, UniProt, PubChem Compound 등의 보조 계층을 통해 정보를 제공한다. 이런 자원들은 문헌 리뷰 작성, 백과사전 글 작성, 단백질 주석처리 등 비용이 많이 드는 인간의 기여를 필요로 하며, 이로 인해 연구자들은 강력한 검색 도구에도 불구하고 정보 과부하에 압도적으로 느낄 수 있다.&lt;/p>
+&lt;p>이 논문에서는 대형 언어 모델이 과학적 지식을 저장, 결합, 추론하는 능력을 통해 정보 접근 방식을 개선할 수 있음을 주장한다. 문헌에 대해 훈련된 모델은 숨겨진 연구 간 연결을 찾아내고, 문헌 리뷰나 백과사전 글 등의 보조 콘텐츠를 자동으로 생성할 수 있다. 또한, 논문과 코드, 단백질 시퀀스와 화합물, 이론과 LaTeX 등을 연결하는 등 다양한 형식을 조직화할 수 있다. 궁극적인 목표는 과학적 작업을 지원하는 신경망을 개발하는 것이며, 이것이 과학적 지식에 접근하는 새로운 인터페이스가 될 것이라고 믿는다.&lt;/p>
+&lt;h3 id="our-contribution">Our Contribution&lt;/h3>
+&lt;p>과학을 자동으로 정리하는 새로운 대형 언어 모델인 Galactica(GAL)를 소개한다. Galactica는 4800만 편 이상의 논문, 교과서, 강의 노트, 수백만 개의 화합물과 단백질, 과학 웹사이트, 백과사전 등을 포함한 인류의 과학적 지식의 크고 정제된 말뭉치로 학습되었다. 이 말뭉치는 고품질이며 정교하게 정리되어 있어, 과적합 없이 여러 번의 학습을 거치며 성능이 개선된다.&lt;/p>
+&lt;p>이 접근법은 고품질 데이터셋을 정리하고 지식과 상호작용하는 인터페이스를 설계하는 것에 중점을 두고 있다. 모든 데이터는 공통 마크다운 형식으로 처리되며, 작업 특화형 데이터셋이 사전 학습에 포함되어 새로운 작업 문맥으로 지식을 구성하는데 도움을 준다. 인터페이스는 다양한 지식 유형을 지원하며, 인용문, 단계별 추론, SMILES와 단백질 시퀀스 등을 특별한 토큰으로 처리하여 연구자가 자연어를 사용해 상호작용할 수 있게 한다. 이러한 방법을 통해 다양한 과학적 작업에서 최고 수준의 결과를 달성하였다.&lt;/p>
+&lt;p>추론 작업에서 Galactica는 MMLU와 MATH 같은 벤치마크에서 기존 언어 모델들을 능가하였다. 추론 토큰 방식을 통해, 수학 MMLU에서 평균 41.3%의 점수로 Chinchilla를 능가하였고, MATH에서는 20.4%의 점수로 PaLM 540B를 능가하였다. 또한, parameter가 PaLM 540B의 1/18인 30B 모델도 이 작업에서 PaLM 540B를 능가하였다. 이를 통해, 우리는 딥러닝 툴킷에 새로운 추론 방법을 추가하였다고 믿는다.&lt;/p>
+&lt;p>Galactica는 지식 집약적인 과학 작업에서 뛰어난 성능을 보여준다. 방정식, 화학 반응 등의 과학적 지식에 대한 세부적인 탐사에서, Galactica는 최신 GPT-3와 같은 일반 언어 모델을 크게 능가한다. 특히, LaTeX 방정식에서는 68.2%의 점수로 GPT-3의 49.0%를 능가하였다. 또한, Galactica는 downstream 과학 작업에서도 높은 성능을 보여, PubMedQA와 MedMCQA dev에서 새로운 최고 기록을 세웠다.&lt;/p>
+&lt;p>Galactica의 인터페이스를 통해 새로운 기능을 보여준다. 인용문 예측 능력은 규모와 함께 점차 향상되며, 모델은 인용문의 기본 분포를 더 잘 모델링하게 된다. 더욱이, 이 방법은 인용문 예측을 위한 튜닝된 희소 및 밀집 검색 방법들을 능가한다는 것을 발견하였다. 이 결과들은 언어 모델이 그들의 컨텍스트 연관 메모리 능력을 통해 문서 저장과 검색의 기존 패러다임을 대체할 가능성을 보여준다.&lt;/p>
+&lt;p>Galactica는 SMILES 화학 공식과 단백질 시퀀스와 같은 다중 모달 작업을 수행할 수 있다. 약물 발견 작업을 텍스트 프롬프트로 구성하였으며, 약하게 감독된 설정에서 성능이 향상되는 것을 확인하였다. 또한, Galactica는 기능 그룹과 같은 해석 가능한 속성에 주목하여 IUPAC 이름 예측과 같은 작업을 자가 감독 방식으로 학습하였다. 마지막으로, Galactica는 단백질 시퀀스를 자연어로 주석 처리하며 기능 키워드를 예측할 수 있다.&lt;/p>
+&lt;p>이 논문 작성에 Galactica가 활용되었으며, 인용문 추천, 논의할 주제 추천, 추가 연구 제안, 그리고 초록 및 결론 작성을 도와주었다.&lt;/p>
+&lt;hr>
+&lt;h2 id="related-work">Related Work&lt;/h2>
+&lt;p>&lt;strong>Large Language Models (LLMs)&lt;/strong> 최근 대규모 언어 모델은 NLP 작업에서 뛰어난 성능을 보여주고 있다. 이 모델들은 크고 다양한 말뭉치로 self-supervision 학습을 받아 수백 가지 작업을 잘 수행하며, 이에는 과학적 지식 작업도 포함된다. 소수의 학습 예를 통해 문맥에 따라 학습하는 능력을 가지고 있으며, 이 능력은 모델의 규모가 커짐에 따라 증가한다. 최근의 연구에서는 적절한 프롬프트 전략을 통해 더 큰 규모에서의 추론 능력을 강조하였다.&lt;/p>
+&lt;p>self-supervision 학습의 한 가지 단점은 검열되지 않은 데이터를 사용한다는 것이다. 이로 인해 모델은 말뭉치의 오류나 편견을 반영할 수 있다. 이는 진실을 중요시하는 과학적 작업에는 바람직하지 않다. 또한, 검열되지 않은 데이터는 목표 사용 사례에 대한 전송 가치가 제한된 토큰을 많이 포함하므로 계산 예산이 낭비될 수 있다. 예를 들어, PaLM 말뭉치의 절반은 과학적 작업에 제한적인 소셜 미디어 대화를 포함하고 있다. 일반 말뭉치와 토크나이저는 과학적 텍스트의 특징을 반영하지 못해 비효율적일 수 있다. 이 작업에서는 데이터셋 선택에 대한 규범적 접근법이 대규모 모델 패러다임과 어떻게 작동하는지를 탐구한다.&lt;/p>
+&lt;p>&lt;strong>Scientiﬁc Language Models&lt;/strong> SciBERT, BioLM 등의 연구는 정제된 과학적 말뭉치의 이점을 보여주었다. 그러나 이들 데이터셋과 모델들은 일반적으로 규모와 범위가 작았다. 단백질 시퀀스와 SMILES에 대한 transformer는 자연적인 표현을 학습하는 잠재력을 보여주었지만, SMILES와 같은 시퀀스는 화학 구조를 표현하는데 있어서 제한이 있다. 이 연구에서는 대형 다중 모달 과학 말뭉치가 표현 학습에 도움이 될 수 있는지를 탐구한다.&lt;/p>
+&lt;p>&lt;strong>Scaling Laws&lt;/strong> &amp;ldquo;scaling laws&amp;quot;이라는 개념은 모델 크기, 데이터셋 크기, 그리고 학습 계산량에 따라 손실이 지수법칙으로 스케일링된다는 것을 보여주었다. 그러나 이것이 항상 downstream 성능과 상관관계가 있는 것은 아니었다. 최적의 데이터 양을 고려하는 새로운 분석은 기존의 언어 모델들이 학습이 덜 된 상태라는 것을 제안하였다. 이 연구에서는 반복 토큰에 대해 학습함으로써 성능을 향상시킬 수 있다는 것을 보여준다.&lt;/p>
+&lt;p>&lt;strong>Language Models as Knowledge Bases&lt;/strong> 정보를 가중치에 저장하는 것은 모델이 정보를 혼합하거나 환상을 만들어낼 수 있지만, 표현 공간을 통해 정보를 연결하는 데는 유연성을 가진다. 대형 언어 모델은 암묵적인 지식 기반으로 작용하며, 외부 검색 메커니즘이 없어도 일반 지식이나 전문 지식과 같은 지식 중심적인 작업에서 잘 수행될 수 있다는 증거가 있다.&lt;/p>
+&lt;p>네트워크 지식 업데이트와 생성의 신뢰성 향상은 여전히 활발한 연구 주제이다. 이러한 제한 사항에도 불구하고, 경험을 통해 대형 모델의 비용이 저렴해져, 과학적 지식의 큰 부분이 학습과 재학습 비용 감소에 따라 가중치 메모리에 포함될 것이다. 이 연구에서는 Galactica의 지식 깊이를 조사하고, 과학적 지식 흡수 능력이 규모에 따라 부드럽게 향상된다는 것을 보여준다.&lt;/p>
+&lt;p>&lt;strong>Retrieval-Augmented Models&lt;/strong> 검색 기능이 강화된 모델들은 가중치 메모리의 단점을 완화하려 한다. 이런 모델들은 덜한 용량을 요구하는 장점이 있지만, 검색 지원 인프라가 필요하다는 단점이 있다. 지식은 종종 세분화되므로, 큰 모델들에서도 미래에는 검색이 필요할 것으로 보인다. 이 연구는 모델 가중치만을 사용하여 어디까지 갈 수 있는지에 초점을 맞추며, 미래 연구를 위해 검색 기능 강화 사용의 중요성을 언급한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="dataset">Dataset&lt;/h2>
+&lt;blockquote>
+&lt;p>&lt;em>“Nature is written in that great book which ever is before our eyes – I mean the universe but we cannot understand it if we do not ﬁrst learn the language and grasp the symbols in which it is written.&amp;rdquo;&lt;/em> (Galileo Galilei, The Assayer)&lt;/p>
+&lt;/blockquote>
+&lt;p>자연을 이해하는 데 언어를 사용하는 아이디어는 오래된 전통을 가지고 있다. 딥러닝은 최근에 단백질과 분자와 같은 자연 현상을 표현하는 데 사용되었다. 아미노산, 원자, 결합 등은 각각 단백질 구조와 분자의 언어를 이룬다. 더 높은 수준에서는, 과학적 텍스트에 대해 학습된 많은 연구를 통해 자연 언어로 지식을 구조화한다. Galactica를 통해, 대규모 과학 말뭉치에 신경망을 학습시켜 과학의 다양한 언어를 학습한다.&lt;/p>
+&lt;p>말뭉치는 과학적 자료, 논문, 참고 자료 등에서 추출한 106B 개의 토큰으로 이루어져 있으며, 이는 자연어와 자연 시퀀스를 결합한 것이다. LaTeX 및 학술적 코드도 포함하여 컴퓨터 과학을 캡처한다.&lt;/p>
+&lt;p>이 연구는 작고 정제된 데이터셋을 이용해 LLM을 만들 수 있는지를 살펴본다. 만약 가능하다면, 말뭉치의 구성을 명확히 이해함으로써, 규범적인 표준을 가진 전문가 시스템과 유사하게 더욱 목적에 맞게 설계된 LLM을 만들 수 있을 것이다.&lt;/p>
+&lt;h3 id="tokenization">Tokenization&lt;/h3>
+&lt;p>토큰화는 데이터셋 설계의 핵심 부분으로, 예를 들어 단백질 시퀀스와 같은 경우 문자 기반 토큰화가 필요하다. 이를 위해 다양한 모달리티에 대해 특화된 토큰을 사용한다.&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>Citations:&lt;/strong> 인용구를 특별한 참조 토큰인 [START_REF]와 [END_REF]로 감싼다.&lt;/li>
+&lt;li>&lt;strong>Step-by-Step Reasoning:&lt;/strong> 단계별 추론을 작업 메모리 토큰인 $&amp;lt;$work$&amp;gt;$로 감싸, 내부 작업 메모리 컨텍스트를 모방한다.&lt;/li>
+&lt;li>&lt;strong>Mathematics:&lt;/strong> 수학적 내용에 대해, ASCII 연산을 개별 문자로 분리한다. 괄호는 숫자처럼 처리된다. 나머지 연산은 분할되지 않은 반복을 허용한다. 연산 문자는 !&amp;quot;#$%&amp;amp;’*+,-./:;&amp;lt;=&amp;gt;?^_‘|이고 괄호는 ()[]{}이다.&lt;/li>
+&lt;li>&lt;strong>Numbers:&lt;/strong> 숫자를 개별 토큰으로 분리한다.&lt;/li>
+&lt;li>&lt;strong>SMILES formula:&lt;/strong> 시퀀스를 [START_SMILES]와 [END_SMILES]로 감싸고 문자 기반 토큰화를 적용한다. 유사하게, 이성질체 SMILES가 표시된 경우에는 [START_I_SMILES]와 [END_I_SMILES]를 사용한다.&lt;/li>
+&lt;li>&lt;strong>Amino acid sequences:&lt;/strong> 시퀀스를 [START_AMINO]와 [END_AMINO]로 감싸고 문자 기반 토큰화를 적용하며, 각 아미노산 문자를 하나의 토큰으로 취급한다.&lt;/li>
+&lt;li>&lt;strong>DNA sequences:&lt;/strong> 각 뉴클레오티드 기본을 토큰으로 취급하는 문자 기반 토큰화를 적용하며, 시작 토큰은 [STARTNA]와 [END_DNA]이다.&lt;/li>
+&lt;/ol>
+&lt;p>특히 작업 메모리와 인용 토큰과 같이, 문헌에서 명확한 대응점이 없는 몇 가지 특수화된 토큰 접근법을 아래에서 다룬다.&lt;/p>
+&lt;h4 id="working-memory-token-work">Working Memory Token, $&amp;lt;$work$&amp;gt;$&lt;/h4>
+&lt;p>transformer 기반 아키텍처는 작업 메모리 기능이 없어 계산의 여러 단계를 처리하는 데 제한적이다. 이 문제를 해결하기 위해 transformer의 출력 컨텍스트를 외부 작업 메모리로 사용하는 방법이 제안되었다. 그러나 모델이 인간처럼 내부적으로 정보를 재정비하는 방식을 원한다.&lt;/p>
+&lt;p>chain-of-thought 방식은, 강력한 단계별 추론을 유도하는 적절한 프롬프트를 찾는 것에 의존하며, 이는 종종 컨텍스트 공간을 차지하는 몇 가지 예제에 의존한다. 또한, 인터넷의 단계별 추론에서는 인간이 내부 메모리를 사용하여 수행한 중간 단계를 종종 놓치는 문제가 있다. 이로 인해 쓰여진 텍스트 사이에 &amp;ldquo;missing data&amp;rdquo;, 즉 명시적으로 언급되지 않은 내부 메모리 단계가 존재한다.&lt;/p>
+&lt;p>chain-of-thought 방식은 신경망이 잘 수행하지 못하는 작업, 예를 들어 산수를 수행하는 데 사용된다. 이 문제를 해결하기 위한 한 가지 전략은 산수와 같은 작업을 신경망에서 외부 모듈로 옮기는 것이다. 그러나, 이는 신경망이 어디에서 작업을 옮겨야 하는지 식별하는 전략을 필요로 하며, 이는 특히 하위 계산 단계가 명시적으로 기술되지 않은 경우 복잡할 수 있다.&lt;/p>
+&lt;p>해결책은 $&amp;lt;$work$&amp;gt;$라는 작업 메모리 토큰을 사용하는 것으로, 단계별 추론을 $&amp;lt;$work$&amp;gt;$ $&amp;lt;$/work$&amp;gt;$로 감싸는 프롬프트 데이터셋을 만들었다. 이는 프로그래밍으로 생성하거나 온라인에서 찾거나 기존 데이터셋을 변환하여 수행했다. 인간이 내부적으로 수행할 수 없는 계산은 파이썬 스크립트로 오프로드하며, 이는 선택적으로 사용할 수 있다. 실험에서는 이 기능을 켜지 않아도 모델이 프로그램 실행 결과를 예측할 수 있었다.&lt;/p>
+&lt;p>장기적으로는 적응형 계산을 지원하기 위해 아키텍처가 변경될 필요가 있을 수 있다. 이 논문에서는 $&amp;lt;$work$&amp;gt;$라는 외부 작업 메모리 접근법을 탐구하였으며, 이는 다음 단계로의 중요한 다리 역할을 한다. $&amp;lt;$work$&amp;gt;$ 프롬프트 데이터셋은 크기나 다양성이 크지 않아, 이 접근법을 통해 더 큰 발전을 이룰 수 있을 것으로 보인다.&lt;/p>
+&lt;h4 id="citation-token">Citation Token&lt;/h4>
+&lt;p>학술 텍스트의 특징 중 하나인 인용을 표현하기 위해, 글로벌 식별자와 [START_REF], [END_REF] 토큰을 사용하여 인용이 일어나는 시점을 표시한ㄴ다. 이는 논문에서 인용이 처리된 텍스트의 예를 통해 확인할 수 있다.&lt;/p>
+&lt;p>논문 제목과 알파벳과 숫자로 이루어진 ID 두 가지 유형의 인용 식별자를 고려하였다. 실험 결과, 제목 기반 식별자가 ID보다 더 높은 인용 예측 정확도를 보였지만, 제목이 텍스트 기반 특성 때문에 오류에 더 취약하다는 것을 발견했다. 이 논문에서는 제목 처리를 선택했지만, 두 접근법 간의 타협점도 고려하였다.&lt;/p>
+&lt;h3 id="prompt-pre-training">Prompt Pre-Training&lt;/h3>
+&lt;p>일반 코퍼스와 함께 프롬프트를 사전 학습에 포함시키는 결정을 통해 기존의 언어 모델 연구와 중요한 차이를 두고 있다. 이 결정은 여러 관찰 결과에 기반을 두었다.&lt;/p>
+&lt;p>기존 연구에서는 학습 토큰 수의 중요성이 성능에 큰 영향을 미친다는 것을 보여주었다. Chinchilla 논문에서는 70bn 모델을 1.4T 토큰에 대해 학습하여 MMLU에서 최첨단 성능을 달성하였고, 이는 Gopher와 같은 큰 모델들을 능가하였다.&lt;/p>
+&lt;p>FLAN과 T0와 같은 연구들은 프롬프트 튜닝이 downstream 성능을 향상시킬 수 있음을 보여주었다. 그들의 전략은 작업을 텍스트 프롬프트로 변환하고, 프롬프트의 다양성을 활용하여 이 데이터셋에서 미세 조정하는 것이다. 이 접근법은 FLAN과 T0에서 성능을 향상시켜, 많은 작업에서 GPT-3를 능가하였다.&lt;/p>
+&lt;p>UniﬁedQA 접근법은 T5 모델을 질문 응답 데이터셋에 미세 조정함으로써 도메인 외 질문 응답 데이터셋에서의 성능을 향상시킨다. 이 모델은 크기가 16배 더 큰 GPT-3를 MMLU에서 능가한다.&lt;/p>
+&lt;p>첫 번째 연구는 전체 학습 토큰에 초점을 맞춰 성능을 향상시키는 반면, 두 번째 연구는 작업-문맥 토큰을 중심으로 성능을 향상시킨다. 작은 모델이 몇 번의 시도로 큰 모델을 이긴 것으로 보아, 작은 모델에는 세계 지식이 있지만, 작업-문맥 지식은 일반 코퍼스에서 본 작업-문맥 토큰의 수가 적어 부족할 수 있다.&lt;/p>
+&lt;p>이 논문에서는 작은 규모에서의 성능 향상을 위해 사전 학습 데이터에 더 많은 작업 프롬프트를 추가하는 것을 선택하였다. 이는 대규모 데이터나 모델이 필요 없게 하며, 가장 큰 120B 모델은 단일 NVIDIA A100 노드에서 작동한다. 또한, 미세 조정이 전문 지식을 필요로 하므로, 질문 응답 및 요약 등의 일반적인 작업에 대해 즉시 사용할 수 있는 모델을 만드는 것이 더 유용하다. 프롬프트를 일반 데이터와 함께 포함함으로써, 모델의 범용성을 최대화하면서 특정 작업의 성능을 향상시킨다.&lt;/p>
+&lt;p>이 접근법은 대형 언어 모델인 ExT5와 유사하다. 기계 학습 학습 데이터셋을 텍스트 형식으로 변환하고, 프롬프트의 다양성을 갖추어, 일반 코퍼스와 함께 사전 학습 세트에 포함시켰다.&lt;/p>
+&lt;p>프롬프트가 포함되어 있으므로, 사전 학습에 학습 데이터셋이 포함된 도메인 내 성능과 포함되지 않은 도메인 외 성능을 구분하는 것이 중요하다. 이 논문에서는 결과 부분에서 이를 명확히 표시하였다. 그리고 프롬프트 사전 학습을 instruction tuning의 대체품으로 보는 것이 아니며, Galactica에서의 instruction tuning은 관심 있는 여러 작업의 성능을 향상시킬 수 있어 유용한 후속 작업으로 보인다.&lt;/p>
+&lt;hr>
+&lt;h2 id="method">Method&lt;/h2>
+&lt;h3 id="architecture">Architecture&lt;/h3>
+&lt;p>Galactica는 몇 가지 수정 사항이 적용된 Transformer 아키텍처를 decoder-only 설정으로 사용한다.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>GeLU Activation -&lt;/strong> 모든 모델 크기에 대해 GeLU 활성화를 사용한다.&lt;/li>
+&lt;li>&lt;strong>Context Window -&lt;/strong> 모든 모델 크기에 대해 길이 2048의 컨텍스트 윈도우를 사용한다.&lt;/li>
+&lt;li>&lt;strong>Learned Positional Embeddings -&lt;/strong> 밀집된 커널이나 레이어 정규화에서 편향을 사용하지 않았다.&lt;/li>
+&lt;li>&lt;strong>Vocabulary -&lt;/strong> BPE를 사용하여 50k 토큰의 어휘를 구축한다. 어휘는 학습 데이터의 무작위로 선택된 2% 하위 집합에서 생성되었다.&lt;/li>
+&lt;/ul>
+&lt;h3 id="models">Models&lt;/h3>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table5.png"
+width="1234"
+height="246"
+srcset="https://kurtkim.github.io/p/galactica/images/table5_hu2bb986df3ee7837c51b025a0cae6d7e0_81210_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table5_hu2bb986df3ee7837c51b025a0cae6d7e0_81210_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="501"
+data-flex-basis="1203px"
+>&lt;/p>
+&lt;p>AdamW를 사용하여 $\beta_1 = 0.9$, $\beta_2 = 0.95$, 가중치 감소율 0.1로 학습하며, 기울기의 전역 norm을 1.0에서 잘라낸다. learning rate은 선형적으로 감소하며, dropout과 attention dropout은 $p = 0.1$을 사용한다. embedding dropout은 사용하지 않는다. 학습 초기에 가장 큰 모델에 대해 더 긴 워밍업이 중요하다는 것을 발견했으며, 이는 나쁜 초기화의 영향을 방지하고 학습을 늦추는데 도움이 된다.&lt;/p>
+&lt;h3 id="libraries-and-infrastructure">Libraries and Infrastructure&lt;/h3>
+&lt;p>가장 큰 120B 모델을 학습시키기 위해, 128개의 NVIDIA A100 80GB 노드를 사용하며, Galactica 120B의 추론에는 단일 A100 노드가 필요하다. 이 제약사항을 준수하면서도 모델의 크기를 최대로 설정하였고, 앞으로 몇 개월 동안 연구 커뮤니티의 접근성을 개선할 계획이다.&lt;/p>
+&lt;hr>
+&lt;h2 id="results">Results&lt;/h2>
+&lt;h3 id="repeated-tokens-considered-not-harmful">Repeated Tokens Considered Not Harmful&lt;/h3>
+&lt;p>이 모델을 약 4.25 epoch에 해당하는 450B 토큰 동안 학습시키며, 코퍼스를 여러 번 반복할 때마다 성능 향상을 확인하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/figure6.png"
+width="1352"
+height="724"
+srcset="https://kurtkim.github.io/p/galactica/images/figure6_hue7989b47c0805b7ef1650f0a0361927d_199218_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/figure6_hue7989b47c0805b7ef1650f0a0361927d_199218_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="186"
+data-flex-basis="448px"
+>&lt;/p>
+&lt;p>학습 과정 중 4 epoch까지 검증 손실이 지속적으로 감소하며, 가장 큰 120B 모델은 5번째 epoch에서 과적합이 시작되었다. 기존 연구와는 달리 반복 토큰이 성능을 해치지 않았다. 또한, 30B와 120B 모델에서는 검증 손실이 일시적으로 유지되거나 상승한 후에 감소하는 이중하강 현상을 보였고, 이 현상은 각 epoch이 진행됨에 따라 더욱 강해졌다.&lt;/p>
+&lt;p>검증 손실의 소스별 분석을 통해, 모든 소스에서 손실이 감소하는 것을 확인하였다. 이는 30B 모델에서도 동일하게 나타나고, 120B 모델에서도 모든 소스에서 검증 손실이 감소하는 추세를 보이지만, 5번째 epoch에서 모든 소스가 급증하는 것을 확인하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/figure8.png"
+width="1372"
+height="730"
+srcset="https://kurtkim.github.io/p/galactica/images/figure8_hud3369c7b6bc5b429787985a33d08b656_324942_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/figure8_hud3369c7b6bc5b429787985a33d08b656_324942_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="187"
+data-flex-basis="451px"
+>&lt;/p>
+&lt;p>이 트렌드가 downstream 성능과 도메인 외 일반화에도 적용되는지를 검증하기 위해, 주로 비과학적인 작업을 포함한 BIG-bench의 57개 작업 하위 집합을 사용하였다. 결과를 통해 반복 토큰의 사용이 upstream 성능 뿐만 아니라 downstream 성능도 향상시키며, 과적합의 징후는 보이지 않았다.&lt;/p>
+&lt;p>토큰 당 더 많은 가치를 추출하는 데는 코퍼스의 선별된 특성(품질 요인)과 과학 데이터의 특성(모달리티 요인)이 중요할 수 있다고 생각한다. 하지만 이 두 요인이 과적합 감소로 어떻게 이어지는지는 아직 알 수 없으며, 이에 대한 연구가 필요하다. 현재 대형 언어 모델 프로젝트가 &amp;ldquo;tokens → ∞&amp;ldquo;에 초점을 맞추는 것은 코퍼스의 품질 필터링의 중요성에 비해 과대평가되었을 수 있다.&lt;/p>
+&lt;p>다음 섹션에서는 Galactica의 과학적 능력을 평가하며, 특히 과학적 지식을 저장하고, 결합하며, 이에 대해 추론하는 대형 언어 모델을 구축하는 데 필요한 고수준 설계 목표에 초점을 맞춘다. 이는 새로운 과학 인터페이스를 만드는데 필요하다.&lt;/p>
+&lt;h3 id="knowledge-probes">Knowledge Probes&lt;/h3>
+&lt;p>먼저 Galactica가 얼마나 잘 과학적 지식을 흡수하는지를 평가한다. 이를 위해, Petroni et al. (2019)의 LAMA 접근법을 기반으로 한 지식 탐사 벤치마크를 설정하였고, 이는 코퍼스 내 지식 공백을 식별하고 코퍼스를 반복하는 방법을 결정하는 중요한 지표였다. 이 벤치마크는 Galactica와 일반 언어 모델의 지식 강점을 비교하는데 도움이 되며, 이 결과를 다운스트림 작업에 대해 논의하기 전에 소개한다.&lt;/p>
+&lt;h4 id="latex-equations">LaTeX Equations&lt;/h4>
+&lt;p>여러 과학 분야에서 자주 사용되는 LaTeX 방정식 데이터셋을 만들었다. 방정식 암기는 문제 해결 등의 다양한 작업에 필요하기 때문에 중요하며, 이를 테스트하기 위해 총 434개의 방정식을 사용하였다. Galactica의 결과는 특별히 언급되지 않는 한 zero-shot으로 보고된다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/figure9.png"
+width="1348"
+height="298"
+srcset="https://kurtkim.github.io/p/galactica/images/figure9_hu4cb8512dc51988e7166032272e705b3c_39782_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/figure9_hu4cb8512dc51988e7166032272e705b3c_39782_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="452"
+data-flex-basis="1085px"
+>&lt;/p>
+&lt;p>방정식 이름으로 프롬프트를 제공하고 LaTeX를 생성하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table6.png"
+width="1338"
+height="346"
+srcset="https://kurtkim.github.io/p/galactica/images/table6_hu7da81146324518f7b73ec90082318c68_102566_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table6_hu7da81146324518f7b73ec90082318c68_102566_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="386"
+data-flex-basis="928px"
+>&lt;/p>
+&lt;p>방정식 지식은 규모와 함께 부드럽게 증가한다. Galactica는 일반 코퍼스에서 학습된 더 큰 언어 모델들을 능가하며, 이는 선별된 데이터셋의 가치를 보여준다.&lt;/p>
+&lt;h4 id="domain-probes">Domain Probes&lt;/h4>
+&lt;p>특정 분야에 대한 전문 지식을 추적하기 위해 도메인 프로브를 설정하였다.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>AminoProbe:&lt;/strong> 20가지 일반 아미노산의 이름, 구조, 성질에 대한 데이터셋&lt;/li>
+&lt;li>&lt;strong>BioLAMA:&lt;/strong> 생물의학적 사실 지식 삼중 체에 대한 데이터셋&lt;/li>
+&lt;li>&lt;strong>Chemical Reactions:&lt;/strong> 화학 반응에 대한 데이터셋&lt;/li>
+&lt;li>&lt;strong>Galaxy Clusters:&lt;/strong> 은하단과 성단 분류에 대한 데이터셋&lt;/li>
+&lt;li>&lt;strong>Mineral Groups:&lt;/strong> 광물과 광물 그룹 분류에 대한 데이터셋&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/figure10.png"
+width="1344"
+height="326"
+srcset="https://kurtkim.github.io/p/galactica/images/figure10_huf020f044e97625435aec9951ae6d4939_46154_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/figure10_huf020f044e97625435aec9951ae6d4939_46154_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="412"
+data-flex-basis="989px"
+>&lt;/p>
+&lt;p>각 분야에 대해 지식을 테스트하는 프롬프트를 만들었다. 예를 들어, 화학 반응에 대해서는 Galactica에게 반응물을 바탕으로 생성물을 예측하도록 요청하였고, 생성물 정보는 마스킹 처리하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table7.png"
+width="1308"
+height="346"
+srcset="https://kurtkim.github.io/p/galactica/images/table7_hu4d59b907fcd1baf23d25662c85e4bfaf_105658_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table7_hu4d59b907fcd1baf23d25662c85e4bfaf_105658_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="378"
+data-flex-basis="907px"
+>&lt;/p>
+&lt;p>지식 탐사에서 대체로 안정적인 스케일링 행동을 보였으나, BioLAMA는 zero-shot 프롬프트의 난이도 때문에 예외적인 결과를 보였다. 특히, &amp;ldquo;ConstellationOf(GalaxyCluster)&amp;ldquo;와 같은 세부적인 사실 지식은 모델 크기에 따라 부드럽게 스케일링되는 것으로 나타났다.&lt;/p>
+&lt;h4 id="reasoning">Reasoning&lt;/h4>
+&lt;p>$&amp;lt;$work$&amp;gt;$ 토큰을 사용한 추론 능력을 평가하기 위해 MMLU 수학 벤치마크를 사용하였다. Galactica는 더 큰 기본 모델에 비해 뛰어난 성능을 보였고, $&amp;lt;$work$&amp;gt;$ 토큰의 사용은 작은 30B Galactica 모델에서도 Chinchilla에 비해 성능을 향상시켰다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table8.png"
+width="1254"
+height="534"
+srcset="https://kurtkim.github.io/p/galactica/images/table8_hucaee5c504fcb48d1dc2fb5a92e6debf0_166426_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table8_hucaee5c504fcb48d1dc2fb5a92e6debf0_166426_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="234"
+data-flex-basis="563px"
+>&lt;/p>
+&lt;p>Galactica의 추론 능력을 더욱 탐색하기 위해 MATH 데이터셋을 사용하였다. $&amp;lt;$work$&amp;gt;$ 토큰 프롬프트를 Minerva의 5-shot chain-of-thought 프롬프트인 mCoT와 비교하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table9.png"
+width="1364"
+height="454"
+srcset="https://kurtkim.github.io/p/galactica/images/table9_hu4b1c360295a9d6f3b3737a77c1fe7279_138983_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table9_hu4b1c360295a9d6f3b3737a77c1fe7279_138983_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="300"
+data-flex-basis="721px"
+>&lt;/p>
+&lt;p>Galactica는 chain-of-thought와 $&amp;lt;$work$&amp;gt;$ 프롬프트에서 기본 PaLM 모델을 크게 능가한다. 특히, 크기가 18배 작은 Galactica 30B 모델이 PaLM 540B를 능가함을 보여, 수학적 작업에 대한 미세 조정에 Galactica가 더 적합한 기본 모델일 수 있음을 보여준다.&lt;/p>
+&lt;p>완전성을 위해 LaTeX에 특화하여 미세 조정된 540B PaLM인 Minerva의 결과를 제시한다. Minerva는 기본 Galactica를 능가하지만, 성능 차이는 일정하지 않아, 이는 다른 수학 데이터 편향을 나타낸다. Minerva와의 직접 비교를 위해, Galactica를 LaTeX에 특화하여 미세 조정하려는 이들이 모델을 자유롭게 사용할 수 있다.&lt;/p>
+&lt;h3 id="downstream-scientiﬁc-nlp">Downstream Scientiﬁc NLP&lt;/h3>
+&lt;p>Galactica가 다른 작업 맥락에서 지식을 얼마나 잘 구성하는지 평가하기 위해 downstream 과학적 작업을 수행하였다. 이를 위해 MMLU 벤치마크와 다른 과학적 QA 벤치마크를 사용하였다. 특히, 지식 연관성을 테스트하기 위해 $&amp;lt;$work$&amp;gt;$ 없이 이전의 MMLU 결과를 포함하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table10.png"
+width="1378"
+height="856"
+srcset="https://kurtkim.github.io/p/galactica/images/table10_huc2cc019a35d7185f21aad2ef42f4629f_401968_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table10_huc2cc019a35d7185f21aad2ef42f4629f_401968_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="160"
+data-flex-basis="386px"
+>&lt;/p>
+&lt;p>Galactica가 질문-답변 작업에 지식을 효과적으로 통합하며, 다른 오픈 언어 모델들을 크게 능가하고, 대부분의 작업에서 더 큰 모델인 Gopher 280B를 능가하는 것을 확인할 수 있다. Chinchilla와의 성능은 일부 변동성이 있지만, 특히 고등학교 과목과 암기 중심의 작업에서는 Chinchilla가 더 강력해 보인다. 반면, Galactica는 수학적이고 대학원 수준의 작업에서 더 우수한 성능을 보인다.&lt;/p>
+&lt;p>결과에 대한 가설은 대부분 논문으로 이루어진 Galactica 코퍼스가 대학원 수준의 과학 지식에 편향되어 있어 고등학교 과목에서의 성능이 떨어진다는 것이다. 고등학교 수준의 내용은 백과사전, 교과서, 필터링된 CommonCrawl을 통해 어느 정도 수집하였지만, 이는 전체 토큰의 소수 부분에 불과하다. 이런 기본 과학 지식을 어떻게 더 많이 포착하고 선별하는 방법은 향후 연구 주제로 남겨두었다.&lt;/p>
+&lt;p>나머지 작업에서는 state-of-the-art를 달성하였다. PubMedQA에서는 77.6%의 점수를 얻어 기존 state-of-the-art인 72.2%를 능가했고, MedMCQA dev에서는 52.9%의 점수를 얻어 기존 state-of-the-art인 41.0%를 능가하였다. 또한, BioASQ와 MedQA-USMLE에서는 미세 조정된 모델의 state-of-the-art에 가까운 성능을 보여주었다.&lt;/p>
+&lt;h3 id="citation-prediction">Citation Prediction&lt;/h3>
+&lt;p>이 섹션에서는 Galactica의 인용 예측 능력을 평가하였다. 이는 과학 문헌을 조직화하는 능력을 테스트하는 중요한 단계이다. 결과적으로, 정확도와 분포 근사의 품질이 모델 규모와 함께 향상되는 것을 확인하였다.&lt;/p>
+&lt;h4 id="citation-accuracy">Citation Accuracy&lt;/h4>
+&lt;p>모델의 인용 능력을 평가하기 위해 세 가지 데이터셋을 구성하였다:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>PWC Citations:&lt;/strong> Papers with Code 4에서의 방법론(예: ResNet)과 데이터셋(예: ImageNet)으로 이루어진 머신러닝 개념과 그것들을 소개한 논문의 644쌍의 데이터셋&lt;/li>
+&lt;li>&lt;strong>Extended Citations:&lt;/strong> Kozac sequence와 Breit-Wigner distribution과 같은 머신러닝이 아닌 개념과 그것들을 소개한 논문의 110쌍의 데이터셋&lt;/li>
+&lt;li>&lt;strong>Contextual Citations:&lt;/strong> arXiv 검증 세트에서 참조와 맥락의 1,869쌍으로 이루어진 데이터셋. 데이터셋은 무작위로 1,000개의 참조를 샘플링하고 그들의 맥락을 수집함으로써 구성되었다.&lt;/li>
+&lt;/ul>
+&lt;p>PWC 인용과 확장 인용 데이터셋에서는 텍스트 생성 작업으로 인용 예측 작업이 설정되며, 모델에 특정 프롬프트가 주어져 해당 개념에 대한 예측을 생성한다. 반면 맥락적 인용에서는 입력 맥락 후에 프롬프트를 제공하여 인용을 예측한다.&lt;/p>
+&lt;p>이 작업에서 Galactica를 sparse 및 dense retrieval-based 접근법과 비교한다.&lt;/p>
+&lt;p>sparse 기준선에 대해, 모든 참조의 제목, 초록, 그리고 그들이 포함된 맥락의 짧은 텍스트에 대한 ElasticSearch 인덱스를 만들고, 텍스트 쿼리가 주어질 때, 선택된 모든 필드에 대한 일치 점수의 합으로 상위 참조를 검색한다.&lt;/p>
+&lt;p>dense retriever 기준선에 대해, 두 가지 Contriever 모델을 평가하였다. 첫 번째는 사전 학습된 모델이고, 두 번째는 코퍼스에서 무작위로 선택된 1000만 개의 맥락/논문 쌍에 대해 미세 조정된 모델이다. dense retrieval은 각 참조를 모델로 인코딩하고, 텍스트 쿼리를 인코딩하여 쿼리와 일치하는 참조를 반환하는 방식으로 진행되며, 이 과정은 FAISS 인덱스를 사용한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table11.png"
+width="1384"
+height="346"
+srcset="https://kurtkim.github.io/p/galactica/images/table11_hu94f164ed718216039a8a2067094d058c_97867_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table11_hu94f164ed718216039a8a2067094d058c_97867_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="400"
+data-flex-basis="960px"
+>&lt;/p>
+&lt;p>모든 평가 세트에서 성능은 규모와 함께 증가하며, 큰 규모에서 Galactica는 맥락-연관성 능력 향상으로 인해 검색 기반 접근법을 능가한다. 이는 언어 모델의 능력이 발전함에 따라 문헌 탐색에 있어 새로운 도구로 활용될 가능성을 보여준다.&lt;/p>
+&lt;h4 id="citation-distributional-analysis">Citation Distributional Analysis&lt;/h4>
+&lt;p>Galactica가 경험적 인용 분포를 얼마나 잘 모델링할 수 있는지 살펴본다. 이 분석에서는 맥락적 인용 데이터셋을 사용하며, 프롬프트는 인용 이전의 맥락을 가져와 프롬프트로 사용하여 논문에서 추출된다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/figure12.png"
+width="1342"
+height="422"
+srcset="https://kurtkim.github.io/p/galactica/images/figure12_hu3ffdce3ded4db559b2ee97dbfb2b2685_115986_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/figure12_hu3ffdce3ded4db559b2ee97dbfb2b2685_115986_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="318"
+data-flex-basis="763px"
+>&lt;/p>
+&lt;p>맥락 내 인용 데이터를 사용하여 예측된 논문 수와 실제 논문 수의 분포 차이를 분석하였다. 이를 통해 인기 있는 논문을 예측하는 모델의 경향을 평가했다. 각 맥락의 실제 참조와 예측된 참조의 횟수를 계산하고, 이를 Kolmogorov-Smirnov 거리를 사용하여 비교하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/figure11.png"
+width="1366"
+height="654"
+srcset="https://kurtkim.github.io/p/galactica/images/figure11_hu1faeee86880f04fe332a62a6210e637e_198738_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/figure11_hu1faeee86880f04fe332a62a6210e637e_198738_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="208"
+data-flex-basis="501px"
+>&lt;/p>
+&lt;p>실제 논문 인용 분포와 예측된 논문 인용 분포 간의 차이가 줄어드는 것을 보여주며, 모델 크기가 커짐에 따라 예측된 논문의 인용 횟수 분포가 실제 값에 접근한다. 모델의 크기가 작을 때는 인기 있는 논문을 예측하는 경향이 더 크지만, 이는 모델 크기가 커짐에 따라 감소한다.&lt;/p>
+&lt;h3 id="general-capabilities">General Capabilities&lt;/h3>
+&lt;p>Galactica의 과학적 능력을 분석하였고, 이는 과학적 작업에서 일반 모델들을 능가하는 전문 과학 모델이다. 더 놀라운 점은, 이 모델이 일반 NLP 작업에서도 일반 모델을 능가한다는 것이다.&lt;/p>
+&lt;p>57개의 BIG-bench 작업을 통해 Galactica를 평가하였고, 이 작업들은 대체로 과학적이지 않은 일반적인 언어 능력을 테스트한다. 평가는 항상 5-shot으로 진행되며, BIG-Bench의 기본 프롬프트 스타일을 사용한다. 이 평가는 사전 학습에 프롬프트 스타일이 포함되지 않으므로, Galactica와 다른 모델들 간의 비교 가능한 5-shot 평가이다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table12.png"
+width="736"
+height="270"
+srcset="https://kurtkim.github.io/p/galactica/images/table12_hu21c896706aae7c18ef48249e9b569999_60012_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table12_hu21c896706aae7c18ef48249e9b569999_60012_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="272"
+data-flex-basis="654px"
+>&lt;/p>
+&lt;p>30B와 120B 크기의 Galactica 모델은 더 큰 OPT와 BLOOM 일반 모델보다 더 우수한 성능을 보여주었는데, 이는 과학적 작업에 특화되도록 설계된 Galactica가 일반적인 작업에서도 뛰어난 성능을 보인 것이 놀라운 결과이다.&lt;/p>
+&lt;p>이 결과는 Galactica 코퍼스의 높은 품질이 반영된 것으로, 이는 큐레이션되고 주로 학문적 텍스트로 구성되었기 때문이다. 이전의 오픈 LLM 노력은 규모에 과도하게 집중하고 데이터 필터링에는 충분히 주목하지 않았을 수 있다. 이 논문에서는 높은 품질의 토큰과 반복적인 학습에 초점을 맞추었지만, Chinchilla의 통찰력이 유효하며, 아직 활용하지 못한 많은 과학적 텍스트가 있다는 사실을 인지하고 있다.&lt;/p>
+&lt;h4 id="iupac-name-prediction">IUPAC Name Prediction&lt;/h4>
+&lt;p>SMILES는 화학 구조를 문자로 표현하는 방법이다. Galactica 코퍼스에서는 이 SMILES 공식이 문서 정보와 함께 제공되며, 이를 통해 언어 모델은 암시적으로 다중 작업 학습을 수행한다. 즉, 모델은 다음 SMILES 토큰을 예측하는 동시에, SMILES를 사용하여 문서의 다른 정보를 예측할 수 있다.&lt;/p>
+&lt;p>초기 테스트로, SMILES 공식 입력을 바탕으로 화합물을 IUPAC 명명법에 따라 명명하는 작업을 설정했다. IUPAC 명명법은 복잡한 알고리즘에 따라 유기 화합물을 명명하는 방법이며, 이는 표준 화학정보학 툴킷에서 누락되어 있어 자동화하기 어렵다.&lt;/p>
+&lt;p>이전 연구들(STOUT, Struct2IUPAC 등)에서는 이 작업에 RNN과 Transformer를 사용한 경우를 탐색하였다. 이번 섹션에서는 self-supervised 학습 환경에서 Galactica가 SMILES 명세를 IUPAC 이름으로 번역할 수 있는지를 검토한다. 이를 위해 PubChem 구조를 기반으로 한 프롬프트를 설계하였고, SMILES를 입력으로 하여 IUPAC 이름을 예측하는 것을 목표로 한다.&lt;/p>
+&lt;p>17,052개의 화합물 검증 세트를 사용하여 SMILES 공식을 프롬프트로 하고 IUPAC 이름을 예측하였다. 정확도는 생성된 IUPAC 이름을 SMILES로 변환하고 정규화한 후, 이를 목표 SMILES와 비교하여 계산하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table13.png"
+width="748"
+height="242"
+srcset="https://kurtkim.github.io/p/galactica/images/table13_hu0bad96242dcf787ebab15fce38b6344f_49961_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table13_hu0bad96242dcf787ebab15fce38b6344f_49961_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="309"
+data-flex-basis="741px"
+>&lt;/p>
+&lt;p>모델의 정확도는 규모가 커질수록 부드럽게 증가하며, 코퍼스를 200만 분자로 제한했지만 더 많은 분자에 대해 학습하거나 미세 조정하면 더욱 뛰어난 성능을 얻을 수 있을 것이다. 이 모델은 후속 작업을 원하는 사람들이 자유롭게 사용할 수 있다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/figure13.png"
+width="864"
+height="1082"
+srcset="https://kurtkim.github.io/p/galactica/images/figure13_hufd72d14fd8fbb2af2fdc3bcb907143fc_280583_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/figure13_hufd72d14fd8fbb2af2fdc3bcb907143fc_280583_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="79"
+data-flex-basis="191px"
+>&lt;/p>
+&lt;p>실제로 Galactica가 어떤 것을 배우는지 분석하기 위해, 예측의 각 단계에서 평균 원자 주의를 시각화하였다. 결과적으로 Galactica는 이름을 예측할 때 올바른 화학 그룹에 주목하는 것으로 나타났다. 예를 들어 &amp;ldquo;아미노&amp;quot;에 대해 주로 $-NH_2$ 치환체에 주목하였다.&lt;/p>
+&lt;h4 id="moleculenet">MoleculeNet&lt;/h4>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table14.png"
+width="788"
+height="282"
+srcset="https://kurtkim.github.io/p/galactica/images/table14_hu04763946eca04abe962a1d4d3f07ffa8_64276_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table14_hu04763946eca04abe962a1d4d3f07ffa8_64276_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="279"
+data-flex-basis="670px"
+>&lt;/p>
+&lt;p>전통적인 약물 발견 작업을 자연어 형식으로 변환하고, 이에 여러 방식을 결합할 수 있는지를 탐색하고 있다. 자연어와 과학적 모델인 SMILES 사이의 인터페이스를 학습하는 것은 화학 공간 탐색의 새로운 도구가 될 수 있다. 이에 대한 답변을 위해, MoleculeNet 분류 벤치마크를 사용하였다.&lt;/p>
+&lt;p>평가를 위해 학습 세트를 텍스트 형식으로 변환하여 사전 학습에 포함시키고, 질문이 제기되는 방식을 다양화하는 프롬프트 무작위화를 사용한다. 이러한 예시들은 학습 과정에서 다른 말뭉치들과 함께 사용되며, 각 예시는 대략 4회 이상 보여진다. 이 방법은 사전 학습 데이터의 다양성 때문에 직접적인 미세 조정이나 감독과는 다르며, 약한 감독의 형태로 볼 수 있다.&lt;/p>
+&lt;p>일부 MoleculeNet 데이터셋에서는 다른 방식이 암시적으로 포함되어 있다. 예를 들어, Tox21 데이터셋의 생물학적 분석은 특정 수용체, 예를 들어 안드로겐 수용체(AR)와 관련이 있다.&lt;/p>
+&lt;p>SMILES를 Kekulize하여 PubChem 표현과 일치시키며, 평가를 위해 DeepChem 라이브러리의 권장 분할을 사용한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table15.png"
+width="1258"
+height="332"
+srcset="https://kurtkim.github.io/p/galactica/images/table15_hu06c543836c0298713b0d7cd01d9ee117_102926_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table15_hu06c543836c0298713b0d7cd01d9ee117_102926_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="378"
+data-flex-basis="909px"
+>&lt;/p>
+&lt;p>모델의 성능은 모델 크기와 비례하여 증가한다. 하지만 이 증가 속도는 QA와 같은 작업보다 느리고, 기본 모델은 3D 정보와 10배 이상의 분자를 포함한 전문 모델에 비해 성능이 떨어진다. 이 작업에는 미세 조정과 더 많은 분자 데이터가 필요하며, 이를 위한 모델이 준비되어 있다.&lt;/p>
+&lt;p>이 연구는 자연어 프롬프트를 통해 약물 발견 작업을 배울 수 있음을 시사한다. 이 관계를 신호 밀도가 높은 문서(예: 온라인 화학 데이터베이스)에서 자동으로 학습할 수 있다면, 감독된 데이터셋에 대한 의존성을 줄일 수 있을 것이다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/figure16.png"
+width="1380"
+height="802"
+srcset="https://kurtkim.github.io/p/galactica/images/figure16_hu6ecfe6849c71f6d12858079529199c39_488274_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/figure16_hu6ecfe6849c71f6d12858079529199c39_488274_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="172"
+data-flex-basis="412px"
+>&lt;/p>
+&lt;p>최종적으로, Galactica의 주의 헤드를 계층별로 평균화하여, 모델이 SMILES 시퀀스에서 어디를 주시하는지(원자 주의) 시각화하였다.&lt;/p>
+&lt;h3 id="biological-understanding">Biological Understanding&lt;/h3>
+&lt;p>Galactica의 생물학적 방식과의 인터페이스 능력을 검토한다. 언어 모델은 새로 시퀀스된 단백질에 기능 정보를 주석 처리하는 등의 데이터 자동화에 활용될 수 있다. 여기서는 이러한 인터페이스의 가능성을 탐색한다.&lt;/p>
+&lt;p>UniProt의 단백질 시퀀스 중 일부를 사전 학습에 포함시키며, 이는 모델이 자연어보다 자연 시퀀스를 과도하게 학습하는 것을 방지하기 위함이다. 이 제약은 미래의 연구에서 완화될 수 있으며, 이를 통해 말뭉치를 크게 확장할 수 있다. 현재는 단일 모델이 다중 모달 설정에서 효과적으로 학습할 수 있는지에 초점을 맞추고 있다.&lt;/p>
+&lt;p>언어 모델이 시퀀스 유사성의 암시적인 측정치를 학습하여 기능 주석과 설명과 같은 작업에 사용할 수 있음을 발견하였다.&lt;/p>
+&lt;h4 id="sequence-validation-perplexity">Sequence Validation Perplexity&lt;/h4>
+&lt;p>Galactica는 단백질의 3D 구조를 직접 모델링하지 않지만, 선형 아미노산 시퀀스에는 특정 구조를 결정하는 정보가 포함되어 있다. 단백질 시퀀스의 perplexity를 평가하여 성능을 테스트하며, 데이터 유출을 방지하기 위해 검증 세트를 구성하는 것이 중요하다. 이를 위해 네 개의 보류 세트를 구성하여 학습과 일반화에 대한 확신을 더하였다.&lt;/p>
+&lt;p>학습 세트의 시퀀스에 BLAST를 수행하여 51개 CASP14 타겟 시퀀스와 50% 이상 동일한 시퀀스를 제거한다. 이는 ESMFold에서 사용된 테스트 시퀀스와 동일하다. 이 방법으로 총 167개 시퀀스를 제거하였고, 이를 CASPSimilarSeq라 부른다. 51개의 CASP14 타겟 시퀀스는 CASPSeq라고 명명했다.&lt;/p>
+&lt;p>생물 종 수준에서 보류를 진행하고, 코끼리, 코끼리쥐, 해우, 어덕 등의 Paenungulata 계통의 모든 시퀀스를 제거한다. 이는 Galactica가 이전에 접하지 않은 생물체의 시퀀스를 주석 처리할 수 있는지 테스트하기 위함이다. 이 방법으로 109개 시퀀스를 제거하였고, 이를 PaenSeq라 부른다. 이는 시퀀스 유사성 제약을 적용하지 않는 것으로, 학습 세트에는 매우 유사한 시퀀스가 있을 수 있다.&lt;/p>
+&lt;p>마지막으로, 5456개의 시퀀스로 이루어진 무작위 테스트 분할을 진행한다. 시퀀스 동일성 제약이 없어 기억력이 중요할 수 있지만, 모델이 얼마나 많은 시퀀스 지식을 흡수했는지에 대한 정보를 제공한다. 이 보류 세트를 UniProtSeq라고 부른다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table16.png"
+width="1034"
+height="290"
+srcset="https://kurtkim.github.io/p/galactica/images/table16_hu2c62013e5e81313a1f21516e46a82b66_69225_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table16_hu2c62013e5e81313a1f21516e46a82b66_69225_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="356"
+data-flex-basis="855px"
+>&lt;/p>
+&lt;p>세 검증 세트에서는 부드러운 스케일링을 보여주며, 이는 학습 세트의 시퀀스와 높은 유사성을 가질 가능성을 보여준다. 반면, 시퀀스 유사성 제약이 있는 CASP 세트는 수준이 떨어지는 것을 보여준다. 이는 550k 단백질 학습에서 얻은 이익이 빠르게 포화되는 것을 나타낸다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/figure17.png"
+width="1350"
+height="746"
+srcset="https://kurtkim.github.io/p/galactica/images/figure17_hueabfd86652685743bc622ec4a90d4e78_184957_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/figure17_hueabfd86652685743bc622ec4a90d4e78_184957_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="180"
+data-flex-basis="434px"
+>&lt;/p>
+&lt;p>더 자세히 조사하기 위해, 우리는 120B 모델의 학습 중에 CASPSeq 세트에서의 검증 혼돈도를 살펴보았다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/figure18.png"
+width="1372"
+height="736"
+srcset="https://kurtkim.github.io/p/galactica/images/figure18_hu4e47a21e6e0ac6e068801d241c14d212_126386_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/figure18_hu4e47a21e6e0ac6e068801d241c14d212_126386_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="186"
+data-flex-basis="447px"
+>&lt;/p>
+&lt;p>네 번째 epoch 시작까지 검증 혼돈도가 떨어지다가, 이 시점에서 이 특정 데이터셋에 대해 모델이 과적합하는 것을 관찰했다. 이는 Galactica가 테스트 세트와 크게 다른 도메인 외부의 단백질에서 성능이 떨어짐을 나타낼 수 있다. 미래의 작업에서는 반복을 줄이고 학습 데이터셋의 단백질 다양성을 증가시키는 것이 유익할 것으로 보인다.&lt;/p>
+&lt;h4 id="functional-keyword-prediction">Functional Keyword Prediction&lt;/h4>
+&lt;p>단백질 시퀀스에서 자연어로의 번역 능력을 테스트하며, 이는 단백질 주석 작업에 유용할 수 있다. 첫 번째 테스트로서, Galactica가 시퀀스에서 추론할 수 있는 UniProt 키워드를 살펴보았다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table17.png"
+width="884"
+height="286"
+srcset="https://kurtkim.github.io/p/galactica/images/table17_hu88242cfea3dbe9d79d4cdc78429a83a7_66593_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table17_hu88242cfea3dbe9d79d4cdc78429a83a7_66593_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="309"
+data-flex-basis="741px"
+>&lt;/p>
+&lt;p>F1 점수는 보류 세트에 따라 증가하며, 이는 Galactica가 시퀀스를 통해 키워드를 학습할 수 있음을 보여준다. 그러나 CASPSimSeq에서는 포화 상태를 보여주어, 이 기능이 학습 세트의 시퀀스와 얼마나 유사한지에 따라 달라질 수 있음을 나타낸다.&lt;/p>
+&lt;p>단백질 시퀀스에서의 주의를 시각화하려 했으나, 생물학적 해석(예: 도메인에 대한 주의)을 찾지 못했다. Galactica는 예측된 키워드를 연결하기 위해 시퀀스 유사성의 암묵적 척도를 학습했지만, 이는 주의를 기울이는 위치에서 직접적으로 해석할 수 없다는 가설을 세웠다. 이는 기본 원자 구조에 대한 주의를 통해 결과를 해석할 수 있었던 화학 분석과 다르다.&lt;/p>
+&lt;h4 id="protein-function-description">Protein Function Description&lt;/h4>
+&lt;p>다음 테스트에서는 시퀀스를 기반으로 단백질 기능에 대한 자유 형식의 설명을 생성하고, 이를 UniProt의 기능 설명과 비교한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table18.png"
+width="884"
+height="286"
+srcset="https://kurtkim.github.io/p/galactica/images/table18_hu88242cfea3dbe9d79d4cdc78429a83a7_61577_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table18_hu88242cfea3dbe9d79d4cdc78429a83a7_61577_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="309"
+data-flex-basis="741px"
+>&lt;/p>
+&lt;p>ROUGE-L 점수는 모든 보류 세트에서 부드럽게 증가한다. 학습 세트에서 가장 유사한 시퀀스는 83%의 시퀀스 유사성을 가진 pygmy hippopotamus(O03363)의 Cytochrome b 단백질입니다. 이 경우, 설명에서 완벽한 예측을 얻었다.&lt;/p>
+&lt;p>Galactica는 학습 과정에서 본 유사한 시퀀스와 일치시키는 방식으로 학습하고, 이를 바탕으로 설명을 형성하는 것으로 보인다. 이는 BLAST와 MMseqs2와 같은 기존 검색 방법 대신 단백질 시퀀스에 대한 언어 모델을 유용하게 사용할 수 있음을 보여준다.&lt;/p>
+&lt;hr>
+&lt;h2 id="toxicity-and-bias">Toxicity and Bias&lt;/h2>
+&lt;p>이 섹션에서는 Galactica 모델의 독성과 편향성을 연구하며, 스테레오타입, 독성, 오정보와 관련된 벤치마크를 통해 평가한다. 결과적으로, Galactica는 기존 언어 모델들보다 훨씬 덜 편향되고 독성이 낮다는 것을 확인하였다.&lt;/p>
+&lt;h3 id="bias-and-stereotypes">Bias and Stereotypes&lt;/h3>
+&lt;p>다음 평가에서는 널리 사용되는 네 가지 벤치마크를 사용하여 Galactica의 유해한 스테레오타입과 혐오 발언을 감지하고 생성하는 능력을 조사한다.&lt;/p>
+&lt;h4 id="crows-pairs">CrowS-Pairs&lt;/h4>
+&lt;p>CrowS-Pairs는 &amp;ldquo;더&amp;rdquo; 스테레오타입화된 문장과 &amp;ldquo;덜&amp;rdquo; 스테레오타입화된 문장의 1,508 쌍을 모아놓은 것으로, 다양한 특징들(인종, 종교, 사회경제적 지위, 나이, 장애, 국적, 성적 지향, 외모, 성별)을 포함하고 있다. 언어 모델의 스테레오타입 콘텐츠 선호도는 &amp;ldquo;더&amp;rdquo; 스테레오타입화된 문장이 선호되는 비율로 측정되며, 높은 점수는 더 큰 편향을 나타낸다. 편향이 없는 이상적인 모델은 50%를 점수로 받을 것이다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table19.png"
+width="950"
+height="438"
+srcset="https://kurtkim.github.io/p/galactica/images/table19_hu051ff6b3739bd5e84afecf297ca5954e_95661_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table19_hu051ff6b3739bd5e84afecf297ca5954e_95661_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="216"
+data-flex-basis="520px"
+>&lt;/p>
+&lt;p>Galactica는 최신 GPT-3와 OPT 175B와 비교했을 때 대부분의 카테고리에서 훨씬 낮은 스테레오타입 편향을 보여주며, 다른 모델들에 비해 더 나은 전체 점수인 60.5%를 얻었다. OPT와 같은 언어 모델은 주로 Reddit 말뭉치를 데이터 소스로 사용하여 더 많은 차별적 연관성을 학습하는 반면, Galactica는 스테레오타입과 차별적 텍스트의 발생률이 더 낮을 것으로 예상되는 과학 말뭉치에서 학습한다.&lt;/p>
+&lt;h4 id="stereoset">StereoSet&lt;/h4>
+&lt;p>StereoSet은 직업, 종교, 성별, 인종 등에 대한 스테레오타입 편향을 측정하는 것을 목표로 한다. 이 벤치마크에는 문장 내 작업과 문장 간 작업, 그리고 개발 세트에 각각 약 2,100개의 예제가 포함되어 있다.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Intrasentence Task:&lt;/strong> 스테레오타입과 관련 컨텍스트가 같은 문장에 있다.&lt;/li>
+&lt;li>&lt;strong>Intersentence Task:&lt;/strong> 컨텍스트와 스테레오타입이 다른(연속적인) 문장에 있다.&lt;/li>
+&lt;/ul>
+&lt;p>StereoSet의 각 예제에는 스테레오타입과 반-스테레오타입 문장 변형과 함께 관련 없는 문장이 포함되어 있다. 이는 언어 모델링 점수(LMS)와 스테레오타입 점수(SS)를 측정하기 위한 것이며, 이 두 지표는 편향 탐지와 언어 모델링을 균형있게 측정하는 이상적 컨텍스트 연관 테스트 점수(ICAT)를 형성한다. 이상적인 편향 없는 언어 모델은 LMS 100, SS 50, ICAT 100의 점수를 받는다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table20.png"
+width="956"
+height="598"
+srcset="https://kurtkim.github.io/p/galactica/images/table20_hu27d5155783ad068ba9fa2b16e5bef72a_134641_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table20_hu27d5155783ad068ba9fa2b16e5bef72a_134641_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="159"
+data-flex-basis="383px"
+>&lt;/p>
+&lt;p>Galactica는 전체 ICAT 점수에서 모든 카테고리에서 다른 모델들을 능가한다.&lt;/p>
+&lt;h4 id="toxicity">Toxicity&lt;/h4>
+&lt;p>독성 측정을 위해, Gehman et al. (2020)에서 제안한 RealToxicityPrompts (RTP) 벤치마크를 사용한다. RTP에서 무작위로 추출한 5000개의 프롬프트 각각에 대해 핵심 샘플링을 사용하여 20개 토큰의 25세대를 샘플링하고, 이를 바탕으로 시퀀스를 생성한다. 생성된 시퀀스는 Perspective API가 제공하는 독성 분류기에 의해 점수가 매겨진다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/figure22.png"
+width="1334"
+height="698"
+srcset="https://kurtkim.github.io/p/galactica/images/figure22_huc61dedb05b9ecb04288f09225380db0a_242544_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/figure22_huc61dedb05b9ecb04288f09225380db0a_242544_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="191"
+data-flex-basis="458px"
+>&lt;/p>
+&lt;p>원래 프롬프트의 독성 분포(x축)에 따른 연속적인 반응의 평균 독성 확률(y축)을 보여준다. 여기서 Galactica는 다른 모델들에 비해 훨씬 낮은 독성을 보여준다.&lt;/p>
+&lt;h3 id="truthfulqa">TruthfulQA&lt;/h3>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/galactica/images/table21.png"
+width="568"
+height="346"
+srcset="https://kurtkim.github.io/p/galactica/images/table21_huee2623947345d52669fe62b8550c0a33_54210_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/galactica/images/table21_huee2623947345d52669fe62b8550c0a33_54210_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="164"
+data-flex-basis="393px"
+>&lt;/p>
+&lt;p>TruthfulQA는 언어 모델의 답변의 진실성을 측정하는 벤치마크로, 건강, 법, 재무 등 다양한 카테고리의 817개의 질문으로 구성되어 있다. 결과에 따르면, Galactica는 이 벤치마크에서 다른 언어 모델들보다 더 뛰어난 성능을 보여주지만, 절대적인 성능은 여전히 낮다. 이는 데이터만으로는 언어 모델이 이 작업에서 어려움을 겪는 것을 야기하지 않는다는 것을 시사한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="limitations-and-future-work">Limitations and Future Work&lt;/h2>
+&lt;h3 id="limitations">Limitations&lt;/h3>
+&lt;p>&lt;strong>Corpus Limitations&lt;/strong> 말뭉치는 오픈 액세스 자원에 대한 제한과 같은 외부적인 제약과, 분자와 단백질의 수를 제한하는 내부적인 제약이 있다. 많은 과학적 지식이 오픈 액세스가 아니므로, 이러한 폐쇄적인 지식 소스에 접근하면 성능이 상당히 향상될 것으로 예상된다. 또한, 내부적인 제약 없이는 더 큰 말뭉치로 인해 성능이 크게 향상될 것으로 예상된다.&lt;/p>
+&lt;p>&lt;strong>Corpus Eﬀects vs Prompt Eﬀects&lt;/strong> 여러 벤치마크에서 기존 언어 모델에 비해 성능 향상을 보여주지만, 사전 학습에 포함된 프롬프트와 핵심 과학 말뭉치의 효과를 구분하지 않았다. 향후에는 프롬프트 부스팅 없이 과학 말뭉치만으로도 일반적인 언어 능력이 가능한지 확인하기 위해 이들을 분리해야 할 것으로 보인다.&lt;/p>
+&lt;p>&lt;strong>Citation Bias&lt;/strong> 모델이 크기에 따라 실제 인용 분포에 접근한다는 것을 보여주지만, 120B 규모의 모델에서는 인기 있는 논문에 대한 편향이 여전히 존재하므로, 제품 환경에서 사용하기 전에 모델을 증강하는 것이 필요할 것으로 보인다.&lt;/p>
+&lt;p>&lt;strong>Prompt Pre-Training vs Instruction Tuning&lt;/strong> 이 논문에서는 특정 접근법을 선택했지만, 이상적으로는 최근의 연구와 같은 방식으로 다른 접근법이 달성할 수 있는 것을 탐색해야 한다. 이 연구의 한계는 접근법 간의 타협점을 명확하게 하지 않는 직접적인 비교를 수행하지 않는다는 것이다.&lt;/p>
+&lt;p>&lt;strong>General Knowledge&lt;/strong> Galactica는 위키피디아 등을 통해 사회적 지식을 흡수하지만, 예를 들어 코타키나발루가 말레이시아의 사바 주의 수도라는 것을 알아도, 이러한 지식이 필요한 작업에는 사용하지 않는 것이 좋습니다. 이는 그것이 의도된 사용 사례가 아니기 때문입니다.&lt;/p>
+&lt;p>&lt;strong>Text as a Modality&lt;/strong> 텍스트 기반의 transformer가 과학적 표현에 강력하다는 것을 보여주었지만, 텍스트만이 충분하다는 해석은 조심해야 한다. 예를 들어, 화학에서는 기하학이 중요한 역할을 하지만, Galactica는 기하학적 개념, 예를 들어 원자의 3D 좌표 등을 이해하지 못한다.&lt;/p>
+&lt;h3 id="future-work">Future Work&lt;/h3>
+&lt;p>&lt;strong>New Objective Function&lt;/strong> U-PaLM의 최근 연구에 따르면, 노이즈 제거 학습의 혼합을 통해 더욱 향상된 결과를 얻을 수 있을 것으로 보인다. 이는 왼쪽에서 오른쪽으로의 LM 목표가 제한적인 단백질 시퀀스와 같은 과학적 분야에서 특히 도움이 될 것으로 예상된다.&lt;/p>
+&lt;p>&lt;strong>Larger Context Window&lt;/strong> 이 작업에서는 최대 2048 토큰의 컨텍스트 window size를 사용한다. 이를 확장하면 교과서와 같은 장문의 과학 문서나 긴 시퀀스를 가진 문서(예: 긴 단백질 시퀀스)의 이해에 도움이 될 것으로 예상된다.&lt;/p>
+&lt;p>&lt;strong>Extending to Images&lt;/strong> 이미지를 캡처하지 않고는 과학적 지식을 적절하게 포착할 수 없다. 이는 자연스럽게 이어지는 프로젝트이지만, 이를 잘 작동시키기 위해서는 아마도 일부 구조적 수정이 필요할 것이다. Alayrac et al. (2022)의 기존 연구가 이 방식으로 LLMs를 확장하는 방법을 보여주었다.&lt;/p>
+&lt;p>&lt;strong>More $&amp;lt;$work$&amp;gt;$ examples&lt;/strong> $&amp;lt;$work$&amp;gt;$가 일반적인 목적의 추론 토큰이 될 수 있다고 생각하며, 프롬프트의 다양성을 늘리고 더 많은 벤치마크에서의 성능을 탐색하는 등 이 방향으로 더 많은 투자를 하고 싶다.&lt;/p>
+&lt;p>&lt;strong>Veriﬁcation&lt;/strong> 언어 모델이 규모와 함께 더욱 정확해짐에도 불구하고, 그들의 생성물이 정확하고 사실적인지에 대한 확신이 필요하다. 이 계층을 개발하는 것은 과학적 응용 분야를 넘어 일반적인 언어 모델의 생산적인 응용에 있어 중요하다.&lt;/p>
+&lt;p>&lt;strong>Continual Learning&lt;/strong> 새로운 과학적 지식을 통합하기 위해 처음부터 다시 학습을 해야 할지, 아니면 이전 체크포인트에서 학습을 시작해야 할지는 여전히 미해결된 질문이다. 이 모델에 새로운 지식을 통합하는 가장 좋은 절차를 찾기 위해서는 추가적인 연구가 필요하다.&lt;/p>
+&lt;p>&lt;strong>Retrieval Augmentation&lt;/strong> 어떻게 큰 언어 모델이 큰 과학적 지식을 흡수하는지 보여주었지만, 세분화된 유형의 지식을 위한 검색은 여전히 중요하며, 이는 transformer의 유연한 가중치 메모리를 보완하기 위해 추구할 가치가 있는 방향이라고 생각한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="discussion-and-conclusion">Discussion and Conclusion&lt;/h2>
+&lt;p>과학적 지식에 접근하는 주요 방법은 오랫동안 저장하고 검색하는 방식이었다. 하지만 이 방법은 정보의 추론이나 조직화가 인간의 노력에 의존하므로 지식 처리량이 제한된다. 이 작업에서는 언어 모델이 이러한 패러다임을 어떻게 변화시키고 새로운 지식과의 인터페이스를 제공하는지를 탐구하였다.&lt;/p>
+&lt;p>언어 모델은 기술적 지식을 탁월하게 흡수하며, 이 능력은 모델 크기가 커질수록 더욱 강화된다. 이는 장기적으로 검색 엔진보다 더 큰 이점을 제공하며, 인용 예측 등의 작업에서 뛰어난 성능을 보인다. 언어 모델은 앞으로 문헌과 과학적 지식 탐색의 중요한 도구가 될 것으로 예상된다.&lt;/p>
+&lt;p>언어 모델은 지식 집중적인 질문 응답 작업에서 잘 수행하도록 지식을 단계별로 구성할 수 있다. 이를 통해 MMLU와 MATH 벤치마크에서 뛰어난 성능을 보여주었다. MATH와 같은 작업은 원칙적으로 언어 모델로 해결 가능하지만, 현재는 고품질의 단계별 데이터셋의 부족이 제한 요인이다. 그러나 언어 모델이 적응형 계산을 지원하는 구조적 변화를 가질 때까지는 인간처럼 작업을 수행하지는 않을 것이다.&lt;/p>
+&lt;p>LLM이 과학적 방식과 자연어를 연결하는 잠재력에 대한 초기 조사를 수행하였다. Galactica가 IUPAC 명명 등의 작업을 자체적으로 학습하고, 약물 발견 작업인 MoleculeNet을 자연어로 표현하여 뛰어난 결과를 얻을 수 있음을 보여주었다. 마지막으로, 자동 단백질 주석과 같은 작업의 가능성을 제시하였다. 결국, 자연어와 자연 순서를 연결하는 데이터셋을 늘리면 성능이 더욱 향상될 것으로 보인다.&lt;/p>
+&lt;p>언어 모델이 현재 인간의 전문 영역인 지식 작업을 수행할 강력한 잠재력이 있다고 느낀다. 모델을 공개하여 다른 사람들이 이 연구의 작업을 기반으로 발전시킬 수 있도록 하고, 이를 어떻게 발전시킬지에 대한 오픈 머신 러닝 커뮤니티의 참여를 기대하고 있다.&lt;/p>
+&lt;hr>
+&lt;h2 id="reference">Reference&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2211.09085.pdf" target="_blank" rel="noopener"
+>Paper&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>BLOOM</title><link>https://kurtkim.github.io/p/bloom/</link><pubDate>Wed, 28 Feb 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/bloom/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>거대 언어 모델(LLM)은 새로운 작업을 수행할 수 있는 능력을 보여주었다. 그러나 대부분은 자원이 풍부한 조직에 의해 개발되고 비공개 상태였다. 이를 민주화하기 위해, 176B-parameter의 공개 접근 언어 모델 BLOOM을 소개한다. 이는 다양한 언어를 포함하는 ROOTS 말뭉치에서 학습되었으며, 다양한 벤치마크에서 경쟁력 있는 성능을 보였다. 이 모델과 코드를 공개함으로써 LLM을 사용한 미래의 연구와 응용을 촉진한다.&lt;/p>
 &lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
@@ -3767,6 +4240,237 @@ data-flex-basis="613px"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/facebookresearch/metaseq" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Chinchilla</title><link>https://kurtkim.github.io/p/chinchilla/</link><pubDate>Sat, 27 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/chinchilla/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>주어진 컴퓨팅 예산 하에서 transformer 언어 모델을 학습시키기 위한 최적의 모델 크기와 토큰 수를 조사했다. 현재 대형 언어 모델들은 학습이 부족하며, 이는 학습 데이터의 양을 일정하게 유지하면서 모델을 확장하는 최근의 추세 때문이다. 모델 크기와 학습 토큰 수는 동일하게 확장되어야 하며, 이를 검증하기 위해 Gopher와 동일한 컴퓨팅 예산을 사용하는 Chinchilla 모델을 학습시켰다. Chinchilla는 다양한 평가 작업에서 뛰어난 성능을 보였으며, MMLU 벤치마크에서는 평균 정확도 67.5%를 달성하여 Gopher에 비해 7% 이상 향상되었다.&lt;/p>
+&lt;hr>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>최근에는 500B 개 이상의 parameter를 가진 대형 언어 모델들이 소개되었다. 이런 대형 autoregressive transformer들은 zero-shot, few-shot, 미세 조정 등 다양한 평가 방법을 통해 많은 작업에서 뛰어난 성능을 보여주었다.&lt;/p>
+&lt;p>대형 언어 모델 학습의 컴퓨팅 및 에너지 비용은 상당히 크며, 모델 크기 증가에 따라 더욱 증가한다. 학습에 할당된 컴퓨팅 예산은 대개 사전에 알려져 있고, 이런 대형 모델은 일반적으로 한 번만 학습시킬 수 있으므로, 주어진 예산에 대해 최적의 모델 hyperparameter를 정확하게 추정하는 것이 중요하다.&lt;/p>
+&lt;p>Kaplan et al. (2020)의 연구에 따르면, 언어 모델의 parameter 수와 성능 사이에는 지수법칙 관계가 있다. 이에 따라 모델이 커질수록 성능 향상을 기대한다. 그러나 대형 모델은 가장 낮은 손실로 학습시키지 않아야 한다는 결론에 도달하였다. 특히, 컴퓨팅 예산을 10배 늘릴 경우, 모델 크기와 학습 토큰 수는 동등한 비율로 증가해야 한다고 발견했다.&lt;/p>
+&lt;p>최근에 학습된 많은 대형 모델들은 Kaplan et al. (2020)과 GPT-3의 학습 방법을 따라, 컴퓨팅을 증가할 때 주로 모델 크기를 증가시키는 방식으로 약 3000억 개의 토큰에 대해 학습되었다.&lt;/p>
+&lt;p>이 연구에서는 주어진 FLOPs 예산 하에서 모델 크기와 학습 토큰 수 간의 균형을 어떻게 맞춰야 할지를 다시 살펴본다. 이를 위해 모델 parameter 수와 학습 토큰 수에 따른 최종 사전 학습 손실을 모델링하고, 이를 최소화하는 방향으로 연구를 진행하였다.&lt;/p>
+&lt;p>$$ N_{opt}(C), D_{opt}(C) = \underset{𝑁,𝐷 s.t. FLOPs(N, D) = C}{argmin} L(N, D) $$&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/figure1.png"
+width="1054"
+height="586"
+srcset="https://kurtkim.github.io/p/chinchilla/images/figure1_hu3aaac8bdef200121a35122c5c47f9699_121567_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/figure1_hu3aaac8bdef200121a35122c5c47f9699_121567_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="179"
+data-flex-basis="431px"
+>&lt;/p>
+&lt;p>컴퓨팅 예산의 최적 분배를 설명하는 함수를 400개 이상의 다양한 크기의 모델을 기반으로 추정하였다. 이 접근법은 Kaplan et al. (2020)의 결과와 크게 다르다.&lt;/p>
+&lt;p>추정에 따르면, Gopher를 학습시키는 데 사용된 컴퓨팅 예산으로는 크기가 4배 작고 토큰이 4배 더 많이 학습된 모델이 최적이라고 예측한다. 이를 확인하기 위해 1.4T 개의 토큰에 대해 더 최적화된 70B 모델인 Chinchilla를 학습시켰고, 이 모델은 크기가 더 큰 Gopher보다 더 뛰어난 성능을 보여주었다. 더 작은 모델의 이점은 개선된 성능 외에도 추론 비용 감소와 하드웨어 호환성 향상에 있다.&lt;/p>
+&lt;hr>
+&lt;h2 id="related-work">Related Work&lt;/h2>
+&lt;p>&lt;strong>Large language models.&lt;/strong> 최근 몇 년 동안 다양한 대형 언어 모델이 등장했고, 이는 dense transformer 모델과 mixture-of-expert (MoE) 모델을 포함한다. 가장 큰 dense transformer 모델은 500B 개의 parameter를 가지고 있다. 모델을 더욱 키우는 추세는 많은 언어 모델링 작업에서 state-of-the-art를 개선하는 데 기여했다. 그러나 대형 언어 모델은 계산 요구 사항과 고품질 학습 데이터 획득의 필요성 등의 도전과제에 직면하고 있다. 사실, 더 크고 고품질의 데이터셋이 언어 모델의 추가 확장에서 중요한 역할을 할 것이라는 것이 발견되었다.&lt;/p>
+&lt;p>&lt;strong>Modelling the scaling behavior.&lt;/strong> 언어 모델의 스케일링 행동과 전송 특성 이해는 최근 대형 모델 개발에 중요한 역할을 했다. Kaplan et al. 은 모델 크기와 손실 간의 예측 가능한 관계를 보여주었고, 이를 바탕으로 주어진 계산 예산에 대해 학습시킬 최적의 모델 크기를 선택하는 문제를 조사하였다. 그러나 이 연구는 여기서 몇 가지 중요한 차이점을 가지고 있다. 첫째, 모든 모델에 대해 고정된 학습 토큰과 learning rate 일정을 사용하는 대신, learning rate 일정을 학습 토큰 수와 대략 맞추는 것이 모델 크기에 관계없이 최선의 최종 손실을 가져다준다는 것을 발견하였다. 둘째, 최대 16B parameter를 가진 모델을 포함하였으며, 이는 분석에 사용된 모델의 대부분이 500M 개 이상의 parameter를 가지고 있음을 반영하는 것이다. 이는 Kaplan et al. 의 연구와 대조적으로, 그들의 대부분의 실행이 100M parameter 미만이었다.&lt;/p>
+&lt;p>최근 Clark et al. (2022)은 MoE 언어 모델의 스케일링 특성을 조사하였고, 이 결과 모델 크기가 증가함에 따라 expert 수의 스케일링이 줄어든다는 것을 발견하였다. 그러나 이 분석은 고정된 학습 토큰 수를 사용하여 수행되었기 때문에, 분기의 향상을 과소평가할 수 있다.&lt;/p>
+&lt;p>&lt;strong>Estimating hyperparameters for large models.&lt;/strong> 언어 모델을 선택하고 학습하는 데는 모델 크기와 학습 토큰 수 외에도 learning rate, learning rate 일정, batch size, optimiser, width-to-depth ratio 등이 중요하다. 이 연구에서는, 모델 크기와 학습 단계 수에 집중하며, 기타 필요한 hyperparameter는 기존 연구와 실험적 휴리스틱을 바탕으로 결정하였다. 일부 연구에서는 batch size와 모델 크기 사이에 약한 관계를 찾았으며, 더 큰 batch size 사용 가능성을 제안하였다. 또한, 하드웨어에서 더 나은 성능을 위해 제안된 것보다 약간 덜 깊은 모델을 사용하였다.&lt;/p>
+&lt;p>&lt;strong>Improved model architectures.&lt;/strong> 최근에는 전통적인 변환기에 대한 다양한 대안이 제안되었다. 이 중 큰 MoE 모델들은 상대적으로 적은 계산력을 사용하면서도 큰 모델 크기를 제공한다. 그러나 매우 큰 모델에서는 이러한 모델의 계산적 이점이 줄어드는 것으로 보인다. 언어 모델을 개선하는 또 다른 방법은 transformer에 명시적 검색 메커니즘을 추가하는 것이며, 이는 학습 중에 볼 수 있는 데이터 토큰의 수를 효과적으로 증가시킨다. 이로 인해 언어 모델의 성능이 학습 데이터 크기에 더 크게 의존할 수 있음을 암시한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="estimating-the-optimal-parametertraining-tokens-allocation">Estimating the optimal parameter/training tokens allocation&lt;/h2>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/table2.png"
+width="1138"
+height="246"
+srcset="https://kurtkim.github.io/p/chinchilla/images/table2_hu4f870f2284985066da6a25730a93d289_66926_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/table2_hu4f870f2284985066da6a25730a93d289_66926_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="462"
+data-flex-basis="1110px"
+>&lt;/p>
+&lt;p>이 연구는 고정된 FLOP 예산이 주어졌을 때, 모델 크기와 학습 토큰 수 사이에서 어떻게 균형을 맞출 것인지에 대한 질문에 대해 세 가지 다른 접근법을 제시한다. 모든 접근법은 모델 크기와 학습 토큰 수를 다양하게 하여 모델을 학습시키고, 그 결과를 바탕으로 스케일링 방법을 추정한다. 결과적으로, 더 많은 계산을 통해 parameter 수와 학습 토큰 수를 동등하게 증가시켜야 한다는 결론을 도출하였으며, 이는 이전 연구와는 대조적이다.&lt;/p>
+&lt;h3 id="approach-1-fix-model-sizes-and-vary-number-of-training-tokens">Approach 1: Fix model sizes and vary number of training tokens&lt;/h3>
+&lt;p>첫 번째 접근법에서는 70M에서 10B 이상의 parameter 범위를 가진 고정된 모델 패밀리에 대해 학습 단계 수를 변경하며, 각 모델을 4 가지 다른 학습 시퀀스 수에 대해 학습시킨다. 이를 통해 학습 FLOP 수에 따른 최소 손실을 직접 추정한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/figure2.png"
+width="1208"
+height="354"
+srcset="https://kurtkim.github.io/p/chinchilla/images/figure2_hu904c573af1f7249f95d98d16f001aa1f_135765_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/figure2_hu904c573af1f7249f95d98d16f001aa1f_135765_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="341"
+data-flex-basis="818px"
+>&lt;/p>
+&lt;p>각 parameter 수 $N$에 대해 4가지 다른 모델을 학습하면서 learning rate와 학습 토큰 수를 변화시켰다. 각 실행에 대한 학습 손실 곡선을 부드럽게 만들고 보간하여, FLOP 수에 따른 학습 손실을 매핑하였다. 이를 통해, 주어진 FLOP 수 $C$에서 가장 효율적인 모델 크기 $N$과 학습 토큰 수 $D$를 찾아냈다. 이를 통해 주어진 계산량에 대한 최적의 모델 크기와 학습 토큰 수를 추정하였으며, $a = 0.50$, $b = 0.50$이라는 결과를 얻었다. 이 결과는 이전 연구와 비교했을 때 이 연구에서 예측한 모델 크기가 더 우수하다는 것을 보여준다.&lt;/p>
+&lt;h3 id="approach-2-isoflop-proﬁles">Approach 2: IsoFLOP proﬁles&lt;/h3>
+&lt;p>두 번째 접근법에서는 특정 학습 FLOP 수 범위에 대해 모델 크기를 변화시키고, 각 경우에 대한 최종 학습 손실을 고려한다. 이 접근법은 전체 학습 과정에서의 점들을 고려하는 첫 번째 접근법과는 대비된다. 이를 통해 주어진 FLOP 예산에 대해 최적의 parameter 수는 무엇인지 직접적으로 파악할 수 있다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/figure3.png"
+width="1222"
+height="370"
+srcset="https://kurtkim.github.io/p/chinchilla/images/figure3_huaac211c52fae9b9a45a1563599564ddb_124512_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/figure3_huaac211c52fae9b9a45a1563599564ddb_124512_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="330"
+data-flex-basis="792px"
+>&lt;/p>
+&lt;p>각 FLOP 예산에 대해, 최종 손실을 parameter 수에 대해 그래프로 그려, 손실에서 명확한 최소값을 찾아내었다. 이를 통해 최소 손실이 달성되는 모델 크기를 직접적으로 추정하였다. 이전 접근법과 마찬가지로, FLOPs와 최적 모델 크기 및 학습 토큰 수 사이에 제곱 법칙을 적합시켰으며, $a = 0.49$, $b = 0.51$이라는 결과를 얻었다.&lt;/p>
+&lt;h3 id="approach-3-fitting-a-parametric-loss-function">Approach 3: Fitting a parametric loss function&lt;/h3>
+&lt;p>접근법 1 &amp;amp; 2의 모든 실험에서 얻은 최종 손실을 모델 parameter 수와 본 토큰 수에 대한 함수로 모델링하고, 이를 위해 고전적인 위험 분해 방식을 사용하였다.&lt;/p>
+&lt;p>$$ \hat{L} (N, D) \triangleq E + {{A}\over{N^{\alpha}}} + {{B}\over{D^{\beta}}} $$&lt;/p>
+&lt;p>첫 번째 항은 이상적인 생성 과정의 손실을, 두 번째 항은 완벽하게 학습된 transformer의 한계를, 마지막 항은 transformer가 완전히 수렴하지 않았음을 각각 나타낸다. 이는 데이터셋의 일부에 대해 한정된 최적화 단계만 수행하기 때문이다.&lt;/p>
+&lt;p>&lt;strong>Model ﬁtting.&lt;/strong> $(A, B, E, \alpha, \beta)$ 추정을 위해, L-BFGS 알고리즘을 사용하여 예측된 log 손실과 실제 log 손실 사이의 Huber 손실을 최소화한다.&lt;/p>
+&lt;p>$$ \underset{A, B, E, \alpha, \beta}{min} \sum_{\text{Runs} i} \text{Huber}_{\delta} (log \hat{L} (N_i, D_i) - log \ L_i) $$&lt;/p>
+&lt;p>가능한 지역 최소값을 고려하여 최적의 적합을 찾기 위해, 다양한 초기값에서 시작한다. 이상치에 강한 Huber 손실 $(\delta = 10^{-3})$을 사용하며, 이는 보류된 데이터 포인트에 대한 예측 성능 향상에 중요하다.&lt;/p>
+&lt;p>&lt;strong>Eﬃcient frontier.&lt;/strong> 특정 제약 하에서 parameter 손실을 최소화함으로써, 함수 $N_{opt}$와 $D_{opt}$를 근사화할 수 있다. 이 결과값들은 모델 크기와 데이터에 의존하는 두 항을 균형있게 만들며, 구조적으로 제곱 법칙 형태를 갖는다.&lt;/p>
+&lt;p>$$ N_{opt}(C) = G {{C}\over{6}}^a, $D_{opt}(C) = G^{-1} {{C}\over{6}}^b, \ \text{where} \ G = {{\alpha A}\over{\beta B}}^{{1}\over{\alpha + \beta}}, \ a = {{\beta}\over{\alpha + \beta}}, \text{and} \ b = {{\alpha}\over{\alpha + \beta}} $$&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/figure4.png"
+width="1260"
+height="554"
+srcset="https://kurtkim.github.io/p/chinchilla/images/figure4_hu68259ad9b74b8e8ce85f28b437435c59_514936_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/figure4_hu68259ad9b74b8e8ce85f28b437435c59_514936_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="227"
+data-flex-basis="545px"
+>&lt;/p>
+&lt;p>이 접근법을 통해 $a = 0.46$, $b = 0.54$ 값을 얻었다.&lt;/p>
+&lt;h3 id="optimal-model-scaling">Optimal model scaling&lt;/h3>
+&lt;p>세 가지 접근법은 모두 계산 예산이 증가함에 따라, 모델 크기와 학습 데이터 양이 대략 비례하여 증가해야 한다고 제안한다. 첫 번째와 두 번째 접근법은 최적 모델 크기에 대해 유사한 예측을 제공하며, 세 번째 접근법은 더 큰 계산 예산에서 더 작은 모델이 최적이라고 예측한다. 이는 더 낮은 계산 예산을 가진 점들이 더 큰 계산 예산을 가진 점들보다 큰 오차를 가지고 있기 때문이다. 이 결과는 적합된 모델이 더 많은 계산량을 가진 점에 더 큰 가중치를 주며, 더 낮은 계산 예산을 가진 점들을 이상치로 간주하는 경향이 있음을 보여준다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/table3.png"
+width="860"
+height="406"
+srcset="https://kurtkim.github.io/p/chinchilla/images/table3_hu08a1e2169060538ba10d7ae0dbbb7f1d_90056_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/table3_hu08a1e2169060538ba10d7ae0dbbb7f1d_90056_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="211"
+data-flex-basis="508px"
+>&lt;/p>
+&lt;p>현재의 대형 언어 모델들은 각자의 계산 예산을 고려하면 과대평가된 것으로 보인다. 예를 들어, 175B 개의 parameter 모델은 $4.41 × 10^{24}$ FLOPs의 계산 예산과 4.2T 개의 토큰으로 학습되어야 하며, 280B 개의 모델은 대략 $10^{25}$ FLOPs의 계산 예산과 6.8T 개의 토큰으로 학습되어야 한다. 현재 대형 모델을 학습하는데 필요한 데이터 양은 현재 사용되는 것보다 훨씬 많다. 이는 모델 규모를 허용하는 엔지니어링 개선과 데이터셋 수집의 중요성을 강조하고 있다. 결론적으로, 현재 대부분의 언어 모델은 더 작은 모델을 더 많은 토큰으로 학습하여 더 효율적인 모델을 얻어야 한다는 것을 이 연구의 분석이 제안하고 있다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/figure1.png"
+width="1054"
+height="586"
+srcset="https://kurtkim.github.io/p/chinchilla/images/figure1_hu3aaac8bdef200121a35122c5c47f9699_121567_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/figure1_hu3aaac8bdef200121a35122c5c47f9699_121567_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="179"
+data-flex-basis="431px"
+>&lt;/p>
+&lt;p>추가로 분석한 C4와 GitHub 코드 데이터셋에서도 모델 크기와 학습 토큰 수는 동등한 비율로 확대되어야 한다는 결론을 확인하였다.&lt;/p>
+&lt;hr>
+&lt;h2 id="chinchilla">Chinchilla&lt;/h2>
+&lt;p>Gopher 계산 예산에 가장 적합한 모델 크기는 약 40B 에서 70B parameter이다. 이를 검증하기 위해 데이터셋과 계산 효율성을 고려하여 70B parameter 모델을 1.4T 토큰으로 학습시켜 보았고, 이를 Chinchilla라고 부른다. Chinchilla와 Gopher는 같은 수의 FLOPs를 사용하였지만 모델 크기와 학습 토큰 수에 차이가 있다.&lt;/p>
+&lt;p>대형 언어 모델의 사전 학습은 큰 계산 비용을 발생시키지만, 미세 조정과 추론도 상당한 계산량을 차지한다. Gopher보다 4배 작은 Chinchilla는 메모리 사용량과 추론 비용이 더 적다.&lt;/p>
+&lt;h3 id="model-and-training-details">Model and training details&lt;/h3>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/table4.png"
+width="1230"
+height="158"
+srcset="https://kurtkim.github.io/p/chinchilla/images/table4_hu600a7ec2f5a3a3c4cb88b62626321527_45170_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/table4_hu600a7ec2f5a3a3c4cb88b62626321527_45170_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="778"
+data-flex-basis="1868px"
+>&lt;/p>
+&lt;p>몇 가지 차이를 제외하고, Chinchilla는 Gopher와 동일한 모델 구조와 학습 구성을 사용한다.&lt;/p>
+&lt;ul>
+&lt;li>Chinchilla는 Gopher와 동일한 데이터셋인 MassiveText에서 학습되었으며, 학습 토큰 수의 증가를 고려하여 약간 다른 부분집합 분포를 사용하였다.&lt;/li>
+&lt;li>Chinchilla는 언어 모델링 손실과 미세 조정 후의 성능 향상을 위해 Adam 대신 AdamW를 사용한다.&lt;/li>
+&lt;li>NFKC 정규화를 적용하지 않는 수정된 SentencePiece 토크나이저로 Chinchilla를 학습시켰다. 사용된 단어장은 Gopher 학습에 사용된 것과 94.15%가 동일하며, 이는 특히 수학과 화학 표현에 도움이 되었다.&lt;/li>
+&lt;li>forward 및 backward pass는 bfloat16에서 처리되며, 분산형 최적화 상태에서는 가중치의 float32 복사본을 보관한다.&lt;/li>
+&lt;/ul>
+&lt;h3 id="results">Results&lt;/h3>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/table5.png"
+width="1254"
+height="302"
+srcset="https://kurtkim.github.io/p/chinchilla/images/table5_hua935e8cc340607d83dda0234306b0637_97254_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/table5_hua935e8cc340607d83dda0234306b0637_97254_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="415"
+data-flex-basis="996px"
+>&lt;/p>
+&lt;p>다양한 대형 언어 모델과 비교하여 Chinchilla를 광범위하게 평가히얐다. Rae et al. (2021)에서 제시된 작업의 큰 부분집합에 대해 평가하였고, 이를 통해 최적의 모델 스케일링에 초점을 맞추었다. 더 나은 비교를 위해 몇 가지 새로운 평가를 도입하였다. 모든 작업의 평가 방법은 Rae et al. (2021)에서 설명한 것과 같다.&lt;/p>
+&lt;h4 id="language-modelling">Language modelling&lt;/h4>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/figure5.png"
+width="1028"
+height="556"
+srcset="https://kurtkim.github.io/p/chinchilla/images/figure5_hue18e25da7293310679235130c11dd897_95426_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/figure5_hue18e25da7293310679235130c11dd897_95426_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="443px"
+>&lt;/p>
+&lt;p>Chinchilla는 The Pile의 모든 평가 부분집합에서 Gopher를 크게 앞선다. Jurassic-1에 비해 Chinchilla는 대부분의 부분집합에서 더 높은 성능을 보이며, Wikitext103에서는 Gopher보다 낮은 perplexity를 달성한다. 하지만, Chinchilla가 Gopher보다 4배 더 많은 데이터로 학습되었으므로, 학습/테스트 세트 유출로 인한 결과 왜곡에 주의해야 한다. 따라서, MMLU, BIG-bench 등 유출 문제가 덜 걱정되는 다른 작업들에 더 많은 중점을 두고 있다.&lt;/p>
+&lt;h4 id="mmlu">MMLU&lt;/h4>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/table6.png"
+width="610"
+height="332"
+srcset="https://kurtkim.github.io/p/chinchilla/images/table6_huf8d52b9326d4e77bf1072f459690b665_62259_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/table6_huf8d52b9326d4e77bf1072f459690b665_62259_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="183"
+data-flex-basis="440px"
+>&lt;/p>
+&lt;p>Massive Multitask Language Understanding (MMLU) 벤치마크에서 킨칠라 모델이 뛰어난 성능을 보여주었다. 이 모델은 작지만 Gopher를 7.6%나 앞서는 67.6%의 평균 정확도를 가지며, 2023년 6월 전문가 예측치인 63.4%를 능가한다. 또한, 4가지 개별 작업에서 90% 이상의 정확도를 달성하였으며, 이는 다른 모델에서 볼 수 없는 결과이다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/figure6.png"
+width="1160"
+height="622"
+srcset="https://kurtkim.github.io/p/chinchilla/images/figure6_hu8bf3afbb3439dd2fc8fcc68f98e37285_168148_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/figure6_hu8bf3afbb3439dd2fc8fcc68f98e37285_168148_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="186"
+data-flex-basis="447px"
+>&lt;/p>
+&lt;p>Chinchilla는 대부분의 과제에서 성능이 향상되었다. 그러나 &amp;lsquo;college_mathematics&amp;rsquo;, &amp;rsquo;econometrics&amp;rsquo;, &amp;lsquo;moral_scenarios&amp;rsquo;, &amp;lsquo;formal_logic&amp;rsquo; 4가지 과제에서는 Gopher보다 성능이 낮았고, 두 가지 과제에서는 성능 변화가 없었다.&lt;/p>
+&lt;h4 id="reading-comprehension">Reading comprehension&lt;/h4>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/table7.png"
+width="890"
+height="192"
+srcset="https://kurtkim.github.io/p/chinchilla/images/table7_hu8671727ac7212aa2dd700b6f3dc1ef49_43125_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/table7_hu8671727ac7212aa2dd700b6f3dc1ef49_43125_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="463"
+data-flex-basis="1112px"
+>&lt;/p>
+&lt;p>최종 단어 예측 데이터셋 LAMBADA에서 Chinchilla는 77.4%의 정확도로 Gopher의 74.5%와 MT-NLG 530B의 76.6%를 능가하였다. 또한, RACE-h와 RACE-m에서는 Chinchilla가 Gopher보다 10% 이상 높은 정확도를 보였다.&lt;/p>
+&lt;h4 id="big-bench">BIG-bench&lt;/h4>
+&lt;p>BIG-bench 작업들에 대한 분석에서 Chinchilla는 대부분의 작업에서 Gopher를 능가하며 평균 성능을 10.7% 향상시켰다. 특히, Chinchilla의 정확도는 65.1%로 Gopher의 54.4%보다 더 높았다. 하지만 &amp;lsquo;crash_blossom&amp;rsquo;, &amp;lsquo;dark_humor_detection&amp;rsquo;, &amp;lsquo;mathematical_induction&amp;rsquo;, &amp;rsquo;logical_args&amp;rsquo; 등 4가지 작업에서는 Gopher보다 성능이 떨어졌다.&lt;/p>
+&lt;h4 id="common-sense">Common sense&lt;/h4>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/table8.png"
+width="1032"
+height="266"
+srcset="https://kurtkim.github.io/p/chinchilla/images/table8_huc144175a6b1d565dd43c00d46bdb899c_68454_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/table8_huc144175a6b1d565dd43c00d46bdb899c_68454_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="387"
+data-flex-basis="931px"
+>&lt;/p>
+&lt;p>다양한 상식 벤치마크에서 Chinchilla의 평가 결과, 모든 작업에서 Gopher와 GPT-3를 능가하며, 하나의 작업을 제외하고는 MT-NLG 530B를 능가하는 성과를 보여주었다.&lt;/p>
+&lt;p>TruthfulQA에서 Chinchilla는 0-shot으로 43.6%, 5-shot으로 58.5%, 10-shot으로 66.7%의 정확도를 보여주었다. 반면 Gopher는 0-shot에서 29.5%, 10-shot에서 43.7%의 정확도를 기록했다. Chinchilla의 큰 성능 향상은 사전 학습 데이터의 더 나은 모델링만으로도 벤치마크에서 상당한 향상을 이룰 수 있음을 보여준다.&lt;/p>
+&lt;h4 id="closed-book-question-answering">Closed-book question answering&lt;/h4>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/table9.png"
+width="1146"
+height="432"
+srcset="https://kurtkim.github.io/p/chinchilla/images/table9_huccca253a7b64dbeef23efd12f1b04f44_101118_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/table9_huccca253a7b64dbeef23efd12f1b04f44_101118_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="265"
+data-flex-basis="636px"
+>&lt;/p>
+&lt;p>closed-book 질문 답변 벤치마크에서 Chinchilla는 Natural Questions 데이터셋에서 새로운 최고 기록을 달성했다. 5-shot에서 31.5%, 64-shot에서 35.5%의 정확도를 보여주었다. 이는 Gopher의 21%와 28%에 비해 높은 수치이다. 또한, TriviaQA에서는 Chinchilla가 필터링된 세트와 필터되지 않은 세트 모두에서 Gopher를 크게 앞섰다. 필터링된 세트에서는 최고 기록에 7.9% 차이로 뒤따르며, 필터되지 않은 세트에서는 GPT-3를 능가하였다.&lt;/p>
+&lt;h4 id="gender-bias-and-toxicity">Gender bias and toxicity&lt;/h4>
+&lt;p>대형 언어 모델은 공격적인 언어 사용이나 사회적 편향 전파, 개인 정보 유출 등의 위험을 가진다. Chinchilla도 비슷한 데이터와 아키텍처로 학습되었으므로 Gopher와 유사한 위험을 갖는다. 특히 성과 직업에 대한 편향, 독성 언어 생성 등 문제를 살펴봤지만, 대형 언어 모델의 위험을 완전히 이해하고 평가하고 완화하기 위해서는 아직 많은 연구가 필요하다는 점을 강조한다.&lt;/p>
+&lt;p>&lt;strong>Gender bias.&lt;/strong> 대형 언어 모델은 훈련 데이터셋의 현대적이고 역사적인 담론을 반영하며, Chinchilla도 마찬가지일 것으로 예상된다. 여기서 Winogender 데이터셋을 사용하여 성별 및 직업 편향이 공익결정에 불공정한 결과를 초래하는지 zero-shot 설정에서 테스트한다. Winogender는 모델이 대명사가 참조하는 직업 단어를 정확히 판별하는지를 테스트하며, 편향이 없는 모델은 성별에 관계없이 대명사가 참조하는 단어를 정확히 예측할 것이다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/chinchilla/images/table10.png"
+width="1136"
+height="240"
+srcset="https://kurtkim.github.io/p/chinchilla/images/table10_hu7bc9bf6d23f72db5b31e6ddd45d2d2a6_63723_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/chinchilla/images/table10_hu7bc9bf6d23f72db5b31e6ddd45d2d2a6_63723_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="473"
+data-flex-basis="1136px"
+>&lt;/p>
+&lt;p>Chinchilla는 모든 그룹에서 Gopher보다 대명사를 더 자주 올바르게 해석한다. 특히, 남성 대명사보다 여성 또는 중립 대명사에서 성능 향상이 더 크다. 성별 스테레오타입에 반하는 gotcha 예제에서도 Chinchilla는 Gopher보다 대명사를 더 정확하게 해석한다. 가장 큰 개선은 여성 gotcha 예제에서 보였으며, 이는 더 계산 최적화된 모델을 사용하면 불균등한 개선을 가져올 수 있음을 보여준다.&lt;/p>
+&lt;p>&lt;strong>Sample toxicity.&lt;/strong> 언어 모델은 독성 언어를 생성할 수 있지만, 자동 분류기 점수는 언어 모델이 생성하는 해로운 텍스트의 수준을 나타낼 수 있다. Rae et al. (2021)의 연구에 따르면, 모델 parameter의 수를 늘려 언어 모델링 손실을 개선하는 것은 독성 텍스트 생성에 거의 영향을 미치지 않는다. 이와 유사하게, Chinchilla에서 생성한 텍스트와 Gopher에서 생성한 텍스트의 독성 점수 분포를 비교한 결과, 두 모델 간의 차이는 무시할 수 있을 정도였다. 이는 무조건적인 텍스트 생성에서의 독성 수준이 모델 품질과 크게 독립적임을 보여주며, 학습 데이터셋의 더 나은 모델이 반드시 더 독성이 높지 않음을 시사한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="discussion--conclusion">Discussion &amp;amp; Conclusion&lt;/h2>
+&lt;p>대형 언어 모델 학습의 추세는 모델 크기를 증가시키는 것이지만, 이는 종종 학습 토큰의 수를 증가시키지 않는다. 가장 큰 모델인 MT-NLG 530B는 GPT-3보다 3배 이상 크지만, 대부분의 대형 모델들은 비슷한 수의 토큰을 학습하였다. 이런 메가 모델을 학습하기 위한 열망은 엔지니어링 혁신을 이끌어냈지만, 점점 더 큰 모델을 학습하려는 경쟁이 같은 컴퓨팅 예산으로 달성할 수 있는 것에 비해 미달하고 있다는 가설을 세웠다.&lt;/p>
+&lt;p>400번 이상의 학습을 바탕으로 모델 크기와 학습 기간을 최적으로 설정하는 세 가지 예측 방법을 제안하였다. 이 방법들은 모두 Gopher가 과대화되어 있으며, 같은 컴퓨팅 예산으로 더 많은 데이터를 학습한 작은 모델이 더 나은 성능을 보일 것으로 예측한다. 이 가설을 검증하기 위해 70B parameter의 모델인 Chinchilla를 학습시켜보았고, 이 모델이 거의 모든 평가 작업에서 Gopher와 더 큰 모델들을 능가함을 확인하였다.&lt;/p>
+&lt;p>이 연구의 방법론은 추가 컴퓨팅을 통해 대형 모델을 어떻게 확장할지 예측하는 데 도움이 되지만, 몇 가지 한계가 있다. 대형 모델 학습 비용과 데이터의 부족으로 인해 대규모 학습 실행은 두 번만 가능했다. 컴퓨팅 예산, 모델 크기, 학습 토큰 수 사이의 관계가 멱함수 관계를 따른다고 가정했지만, 일부 볼록성을 관찰하여 대형 모델의 최적 크기를 과대평가하고 있을 수 있다. 또한, 분석에 사용된 모든 학습은 데이터의 1 epoch 미만으로 학습되었다. 이런 한계에도 불구하고, 같은 컴퓨팅 예산으로 더 나은 모델을 학습시키는 성능 예측이 Chinchilla와 Gopher의 비교를 통해 확인되었다.&lt;/p>
+&lt;p>더 큰 모델을 학습하는 최근의 연구에도 불구하고, 이 연구의 분석은 데이터셋 확장에 더욱 집중해야 한다는 것을 보여준다. 가설적으로, 데이터가 고품질일 때만 더 큰 데이터셋으로 확장하는 것이 유익하다고 생각한다. 이는 고품질의 데이터셋을 책임감 있게 수집해야 함을 의미한다. 또한, 수조 개의 토큰을 학습하는 것은 윤리적, 개인정보 보호 문제를 일으킨다. 웹에서 스크랩된 큰 데이터셋은 독성 언어, 편향, 개인 정보를 포함하게 되므로, 데이터셋 검사의 중요성이 증가한다. Chinchilla는 편향과 독성에 영향을 받지만, Gopher보다는 덜한 것으로 보인다. 대형 언어 모델의 성능과 독성 간의 상호작용을 더 이해하는 것이 중요한 미래 연구 주제이다.&lt;/p>
+&lt;p>이 연구의 방법론은 auto-regressive 언어 모델 학습에 적용되었지만, 다른 방식에서도 모델 크기와 데이터 양 사이의 트레이드오프가 존재할 것으로 예상한다. 대형 모델 학습의 비용이 크기 때문에, 사전에 최적의 모델 크기와 학습 단계를 결정하는 것이 필요하며, 제안하는 방법들은 새로운 환경에서도 쉽게 재현할 수 있다.&lt;/p>
+&lt;hr>
+&lt;h2 id="reference">Reference&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2203.15556.pdf" target="_blank" rel="noopener"
+>Paper&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>PaLM</title><link>https://kurtkim.github.io/p/palm/</link><pubDate>Thu, 25 Jan 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/palm/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>few-shot learning 예제를 사용하는 대형 언어 모델은 다양한 자연어 작업에서 뛰어난 성능을 보여준다. 이를 더 깊이 이해하기 위해, 540B parameter의 densely activated transformer 언어 모델인 Pathways Language Model(PaLM)을 학습시켰다.&lt;/p>
 &lt;p>새로운 ML 시스템인 Pathways를 사용해 PaLM을 학습시키고, 수백 개의 언어 이해 및 생성 벤치마크에서 state-of-the-art의 few-shot learning 결과를 달성하였다. PaLM 540B는 다단계 추론 작업과 BIG-bench 벤치마크에서 인간 평균 성능을 능가하는 성과를 보여주었다. 모델 규모가 커짐에 따라 성능이 급격히 향상된 작업도 있었다. 또한 PaLM은 다국어 작업과 소스 코드 생성에서도 강력한 능력을 가지고 있다. bias와 toxicity 대한 분석과 함께, 거대 언어 모델과 관련된 윤리적 고려 사항에 대해 논의하였다.&lt;/p>
