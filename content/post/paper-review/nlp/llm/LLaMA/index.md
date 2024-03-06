@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "LLaMA"
-date = "2024-01-18"
+date = "2024-03-10"
 description = "Open and Efficient Foundation Language Models"
 categories = [
     "Paper Review"
@@ -28,6 +28,12 @@ Hoffmann et al.의 연구는 학습 예산에 따라 데이터셋과 모델 크�
 이 연구는 일반적으로 사용하는 것보다 더 많은 토큰으로 학습하여 다양한 추론 예산에서 최고의 성능을 달성하는 언어 모델, LLaMA를 개발했다. 이 모델은 7B에서 65B의 parameter를 가지며, 기존 최고의 언어 모델과 경쟁력이 있다. 예를 들어, 10배 작은 LLaMA-13B는 대부분의 벤치마크에서 GPT-3를 능가한다. 이 모델은 단일 GPU에서 실행될 수 있어 언어 모델의 접근성과 연구를 민주화(democratize)하는데 도움이 될 것이다. 또한, 65B parameter 모델은 최고의 거대 언어 모델과도 경쟁력이 있다.
 
 이 연구는 공개적으로 이용 가능한 데이터만을 사용하여 Chinchilla, PaLM, GPT-3와 달리 오픈 소스와 호환성이 있다. 대부분의 기존 모델들은 공개적으로 이용 가능하지 않거나 문서화되지 않은 데이터에 의존한다. OPT, GPT-NeoX, BLOOM, GLM 등의 일부 예외가 있지만, 이들 중 어느 것도 PaLM-62B나 Chinchilla와 경쟁력이 없다.
+
+이 논문에서는 transformer 아키텍처에 가한 수정 사항과 학습 방법을 소개하고, 이 모델의 성능을 표준 벤치마크와 비교한다. 또한, 책임감 있는 AI 커뮤니티의 최근 벤치마크를 사용하여 모델의 편향과 독성을 분석한다.
+
+---
+
+## Approach
 
 
 ---
