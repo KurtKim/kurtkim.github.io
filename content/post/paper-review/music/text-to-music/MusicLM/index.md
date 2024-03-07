@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "MusicLM"
-date = "2024-03-04"
+date = "2024-03-06"
 description = "Generating Music From Text"
 categories = [
     "Paper Review"

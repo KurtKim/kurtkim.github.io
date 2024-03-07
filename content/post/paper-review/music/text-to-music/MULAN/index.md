@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "MuLan"
-date = "2024-03-06"
+date = "2024-03-04"
 description = "A Joint Embedding of Music Audio and Natural Language"
 categories = [
     "Paper Review"
