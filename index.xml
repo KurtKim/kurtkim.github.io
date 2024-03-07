@@ -1,131 +1,267 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K2H'log</title><link>https://kurtkim.github.io/</link><description>Recent content on K2H'log</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Sun, 10 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>MuLan</title><link>https://kurtkim.github.io/p/mulan/</link><pubDate>Wed, 06 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/mulan/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>이 논문은 &amp;ldquo;MuLan&amp;quot;이라는 새로운 음향 모델을 소개한다. MuLan은 44M 개의 음악 녹음과 자유 형식의 텍스트 주석을 학습하여 음악 오디오를 제한 없는 자연어 음악 설명과 직접 연결한다. 이 모델은 다양한 음악 장르와 텍스트 스타일과 호환되며, 오디오-텍스트 표현은 기존의 ontologie를 포함하면서 zero-shot 기능으로 발전하였다. 이 모델의 유연성은 전송 학습, zero-shot 음악 태깅, 음악 분야의 언어 이해 및 크로스-모달 검색 애플리케이션 등의 실험을 통해 입증되었다.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K2H'log</title><link>https://kurtkim.github.io/</link><description>Recent content on K2H'log</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Sun, 10 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Flan 2022 Collection</title><link>https://kurtkim.github.io/p/flan-2022-collection/</link><pubDate>Thu, 07 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/flan-2022-collection/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>이 논문에서는 공개된 instruction tuning 방법의 설계를 연구하고, Flan 2022 모델의 개발을 분석한다. 특히, 작업 균형 및 풍부화 기법이 instruction tuning에 중요하며, 다양한 프롬프트 설정으로 학습하면 모든 설정에서 성능이 향상된다는 것을 발견하였다. 추가 실험에서는 Flan-T5 모델이 T5 모델보다 빠르게 수렴하며, 새로운 작업에 대한 더 효율적인 시작점이 될 수 있음을 보여준다. 마지막으로, instruction tuning 연구를 가속화하기 위해 Flan 2022 데이터셋, 템플릿, 방법들을 공개하였다.&lt;/p>
 &lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>분류기는 보통 사전에 정의된 클래스 목록으로 예제들을 레이블링하도록 학습되며, 이는 클래스 간 관계를 나타내는 구조화된 체계로 지정된다. 최근 신경 언어 모델링의 발전으로, 연구자들은 원시 콘텐츠 정보에 접근하기 위한 자연어 인터페이스를 탐색하고 있다. 이는 주로 시각과 오디오 이벤트 분야에서 이루어지며, 미디어 콘텐츠와 자연어 캡션을 함께 임베딩하는 것이 전이 학습, 크로스-모달 검색, 자동 캡셔닝, zero-shot 분류 등에서 효과적임을 보여주었다.&lt;/p>
-&lt;p>이러한 연구의 성공은 대규모 학습 자료와 언어와 다른 모드 사이의 복잡한 관계를 모델링 할 수 있는 유연한 신경망 구조에 크게 의존한다. 특히, 시각 분야는 웹에서 대량의 캡션 이미지를 사용할 수 있어 이점을 얻었다. 그러나 환경 오디오 분야에서는 대규모 오디오-캡션 쌍이 덜 접근 가능하며, 이에 따라 작은 캡션 데이터셋에 의존하였다. 이러한 데이터셋들은 사운드를 묘사하는 언어의 다양성을 충분히 담지 못하며, zero-shot 설정에서의 성공은 여전히 부족하다.&lt;/p>
-&lt;p>이 논문은 오디오와 자연어를 함께 임베딩하는 작업에 대해 다루되, 특히 음악 분야에 초점을 맞춘다. 목표는 모든 음악 개념을 관련 음악 오디오와 연결할 수 있는 유연한 언어 인터페이스를 제작하는 것이다. 이를 위해, 메타데이터, 댓글, 플레이리스트 데이터에서 추출한 텍스트 주석을 44M 개 이상의 인터넷 음악 비디오 학습 세트에 매핑하는 전략을 사용한다. 하지만 텍스트 데이터가 음악 콘텐츠를 정확히 참조하는 경우는 일부에 불과하므로, 음악 설명을 식별하기 위해 별도로 학습된 텍스트 분류기를 사용한 텍스트 사전 필터링을 탐색한다.&lt;/p>
-&lt;p>이 논문에서는 대규모 데이터셋을 사용하여 자연어 인터페이스가 탑재된 새로운 세대의 음악 오디오 임베딩 모델인 &amp;ldquo;MuLan&amp;quot;을 학습시킨다. MuLan은 음악 오디오와 텍스트 간의 공유 임베딩 공간을 만들어내는 two-tower parallel encoder 구조를 사용한다. 이 모델은 다양한 음악 정보 검색 작업에서 최고 수준의 성능을 보이며, 텍스트에서 음악으로의 크로스-모달 검색, zero-shot 음악 태깅, 음악 도메인의 언어 이해 등의 기능을 가능하게 한다.&lt;/p>
+&lt;p>PaLM, Chinchilla, ChatGPT 등의 대형 언어 모델은 지시문을 읽는 자연어 처리(NLP) 작업에 새로운 능력을 보여주었다. 이전의 연구에서는 instruction tuning 이라는 방법으로 언어 모델을 미세 조정함으로써, 지시문에 따라 보이지 않는 작업을 수행하는 능력이 강화될 수 있음을 입증하였다.&lt;/p>
+&lt;p>이 연구에서는 오픈 소스의 지시문 일반화 방법과 결과를 평가하고, 미세 조정 기법과 방법을 비교한다. 특히, &amp;ldquo;Flan 2022 Collection&amp;quot;에서의 방법론적 개선사항을 식별하고 평가하며, 이는 데이터 수집 및 증강, 지시문 튜닝을 위한 첫 번째 구현이다. 이 연구는 instruction tuning 방법의 세부사항에 초점을 맞추고, 개별 요소를 제거하며, 사전 학습된 모델 크기와 체크포인트를 유지하여 이전 연구와 직접 비교한다.&lt;/p>
+&lt;p>Flan 2022 Collection은 instruction tuning을 위한 가장 포괄적인 공개 작업 세트와 방법을 제공하며, 추가로 고품질 템플릿, 다양한 형식 패턴, 데이터 증강을 포함한다. 이 컬렉션에서 학습된 모델은 모든 테스트 평가 벤치마크에서 다른 공개 컬렉션을 능가한다. 이는 동일 크기의 모델에 대해 MMLU와 BIG-Bench Hard 평가 벤치마크에서 각각 4.2%, 8.5%의 성능 개선을 보여준다.&lt;/p>
+&lt;p>Flan 2022 방법의 성능은 더 크고 다양한 작업 세트와 간단한 미세 조정 및 데이터 증강 기법 덕분이다. zero-shot, few-shot, chain-of-thought 프롬프트로 템플릿화된 예시 혼합 학습은 모든 설정에서 성능을 향상시킨다. 10%의 few-shot 프롬프트 추가만으로도 zero-shot 결과가 2% 이상 개선되며, 작업 다양성을 풍부하게 하는 것과 작업 소스 균형이 성능에 결정적이다. 결과적으로, Flan-T5 모델은 더 빠르게 수렴하고 높은 성능을 보여, downstream 응용 프로그램에 더 효율적인 시작점을 제공한다.&lt;/p>
+&lt;p>이 연구의 결과와 자원을 공개함으로써, instruction tuning 관련 자원을 통합하고, 더 다목적인 언어 모델 연구를 촉진할 것으로 기대하고 있다. 이 연구의 주요 기여를 다음과 같이 요약할 수 있다:&lt;/p>
+&lt;ul>
+&lt;li>Methodological: zero-shot과 few-shot 프롬프트를 혼합하여 학습시키는 것이 두 설정에서 모두 훨씬 더 좋은 성능을 내는 것을 보여준다.&lt;/li>
+&lt;li>Methodological: 효과적인 instruction tuning에 필요한 중요한 기을 측정하고 보여준다: 확장, 입력 반전을 통한 작업 다양성 풍부화, chain-of-thought 학습 데이터 추가, 그리고 다른 데이터 소스의 균형 조정.&lt;/li>
+&lt;li>Results: 이러한 기술 선택이 기존의 오픈 소스 지시문 튜닝 컬렉션에 비해 3-17%의 Held-Out 작업 개선을 가져오는 것을 보여준다.&lt;/li>
+&lt;li>Results: Flan-T5가 단일 작업 미세 조정에 대한 더 강력하고 계산 효율적인 시작 체크포인트 역할을 하는 것을 보여준다.&lt;/li>
+&lt;li>새로운 Flan 2022 작업 컬렉션, 템플릿, 그리고 공개 연구를 위한 방법을 오픈 소스화한다.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="public-instruction-tuning-collections">Public Instruction Tuning Collections&lt;/h2>
+&lt;p>&lt;strong>Large Language Models&lt;/strong> instruction tuning은 대형 언어 모델을 대화와 기능적 작업에 더 유용하게 만드는 도구로 부상했다. 이전 연구들은 대규모 다작업 미세조정을 실험했지만 지시문 프롬프트는 사용하지 않았다. 반면에, UniﬁedQA와 다른 연구들은 다양한 NLP 작업을 하나의 생성적 질문 응답 형식으로 통합하고, 이를 위해 다작업 미세조정과 평가에 프롬프트 지시문을 사용하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan-2022-collection/images/figure2.png"
+width="1338"
+height="840"
+srcset="https://kurtkim.github.io/p/flan-2022-collection/images/figure2_hu0e73b25139e8ed230f4e1191e67f61f7_351554_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan-2022-collection/images/figure2_hu0e73b25139e8ed230f4e1191e67f61f7_351554_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="159"
+data-flex-basis="382px"
+>&lt;/p>
+&lt;p>&lt;strong>The First Wave&lt;/strong> 2020년 이후 다양한 instruction tuning 작업 컬렉션이 출시되었다. 이들은 대규모 NLP 작업 컬렉션을 모아 지시문으로 템플릿화하여 모델이 보이지 않는 지시문에 일반화하도록 미세조정하는데 사용하였다. 또한, 다른 작업 컬렉션을 통합하여 모델이 작업을 컨텍스트 안에서 배우도록 학습시키는 연구도 있었다. 이들 모두 작업과 템플릿 다양성의 확장 이점을 확인하였고, 일부는 입력과 출력을 뒤집어 새 작업 생성에서 큰 이점을 보고하였다.&lt;/p>
+&lt;p>&lt;strong>The Second Wave&lt;/strong> instruction tuning 컬렉션의 두 번째 단계에서는 Super-Natural Instructions, OPT-IML 등과 같이 더 많은 데이터셋과 작업을 통합하였고, xP3에서는 다국어 instruction tuning을, Flan 2022에서는 chain-of-thought 학습 프롬프트를 추가하였다. Flan 컬렉션과 OPT-IML은 이전 컬렉션의 대부분 작업을 포함하고 있다. 이 연구의 작업은 이러한 컬렉션들을 통합하며, 이것이 미래 오픈 소스 작업의 강력한 시작점으로 작용하게 된다.&lt;/p>
+&lt;p>&lt;strong>New Directions&lt;/strong> 동시 및 미래의 연구는 작업 다양성을 더욱 적극적으로 확장하고, 특히 창의적이고 개방된 대화를 위한 합성 데이터 생성을 탐구하고 있다. 또한, 모델 응답에 대한 인간의 피드백 신호 제공도 탐구하고 있다. 이러한 새로운 방향들은 대부분 instruction tuning 방법의 기반에 추가될 것으로 보인다.&lt;/p>
+&lt;p>&lt;strong>Tuning with Human Feedback&lt;/strong> 인간의 피드백에 대한 instruction tuning은 개방형 작업에서 강력한 결과를 보여주지만, 이는 전통적인 NLP 작업의 성능을 희생하는 대가였다. 이 연구는 인간의 피드백 없이 지시문 일반화에 집중하며, 이는 인간이 선호하는 개방형 작업 응답을 향상시키고 전통적인 NLP 지표를 개선하는 데 큰 가능성을 보인다. 비싼 인간 응답 데모나 평가 없이도 얼마나 많은 진전을 이룰 수 있는지는 여전히 미결된 문제이며, 이는 공개 연구와 비공개 연구 간의 격차를 줄이는 중요한 과제이다.&lt;/p>
+&lt;p>&lt;strong>The Importance of Open Source&lt;/strong> GPT-3 등과 같은 고프로파일 연구가 점점 비공개 데이터에 의해 주도되고 있다. 이러한 자원의 접근 불가능성은 연구 커뮤니티가 이러한 방법을 공개 도메인에서 분석하고 개선하는 능력을 저해한다. 이 연구의 접근성을 민주화하는 목표에 의해 동기를 부여받아, 오픈 소스 및 접근 가능한 데이터 컬렉션에 대한 관찰 범위를 좁혔다.&lt;/p>
+&lt;hr>
+&lt;h2 id="flan-2022-instruction-tuning-experiments">Flan 2022 Instruction Tuning Experiments&lt;/h2>
+&lt;p>최근의 연구는 다양한 작업, 모델 크기, 대상 입력 형식을 다루면서도 통합된 기술 세트로 결집하지 못하고 있다. Flan 2022라는 새로운 컬렉션을 오픈 소스로 제공하며, 이는 Flan 2021, P3++ 3, Super-Natural Instructions 등과 몇 가지 추가 데이터셋을 통합한 것이다. 이 작업에서는 방법론적 개선 사항을 깊게 살펴보고, 동일한 모델 크기의 기존 컬렉션과 비교한다.&lt;/p>
+&lt;p>이 섹션에서는 Flan의 설계 결정 사항을 평가하고, instruction tuning에 큰 개선을 가져다주는 네 가지 주요 사항을 논의한다. 이들은 학습 시 혼합 zero-shot, few-shot, chain-of-thought 템플릿 사용, T5 크기의 모델을 1800+ 작업으로 확장, 작업을 풍부하게 만드는 입력 반전, 그리고 작업 조합의 균형을 맞추는 것이다. 이러한 각 요소의 가치를 측정하고, 최종 모델을 다른 instruction tuning 컬렉션과 비교한다.&lt;/p>
+&lt;p>&lt;strong>Experimental Setup&lt;/strong> 일관성을 위해 모든 모델에 대해 T5-LM을 미세 조정하며, 이는 큰 규모의 체계적 애블레이션을 실행하면서도 일반적인 결론을 내리는 데 충분히 크다고 판단된 XL 크기를 사용한다. 학습 작업 컬렉션 내의 8개 작업, chain-of-thought 작업, 그리고 MMLU와 BBH 벤치마크를 평가한다. 이들은 Flan 2022의 미세 조정 부분에 포함되지 않는다. BBH는 PaLM이 인간 평가자보다 성능이 떨어지는 BIG-Bench의 23개 도전적인 작업을 포함한다.&lt;/p>
+&lt;h3 id="ablation-studies">Ablation Studies&lt;/h3>
+&lt;p>각각의 방법을 제외함으로써 보유된 작업, 보유되지 않은 작업, chain-of-thought 작업에 대한 평균 기여도를 요약한다. 이 방법들은 mixture weight balancing, chain-of-thought 작업, 혼합 프롬프트 설정, 그리고 입력 반전을 포함한다. Flan-T5 XL은 이들을 모두 활용하며, 비교를 위해 다른 컬렉션에도 T5-XL-LM을 미세 조정한다.&lt;/p>
+&lt;p>Flan의 각 구성 요소는 다른 측정 항목에 개선을 가져온다: chain-of-thought 학습은 chain-of-thought 평가에, 입력 반전은 보유되지 않은 평가에, few-shot 프롬프트 학습은 few-shot 평가에, 그리고 mixture balancing은 모든 측정 항목에 기여한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan-2022-collection/images/table1.png"
+width="1112"
+height="502"
+srcset="https://kurtkim.github.io/p/flan-2022-collection/images/table1_hu073ac4fbf354e3623613e4c6fad31d19_156615_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan-2022-collection/images/table1_hu073ac4fbf354e3623613e4c6fad31d19_156615_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="221"
+data-flex-basis="531px"
+>&lt;/p>
+&lt;p>alternative instruction tuning 컬렉션에 학습된 다른 모델들과 비교해보면, Flan은 거의 모든 설정에서 더 우수한 성능을 보인다. Flan-T5 XL은 zero-shot 또는 few-shot 프롬프트에 대해 튜닝되었으며, 이로 인해 zero-shot 설정에서 +3-10%, few-shot 설정에서 8-17%의 성능 향상을 보였다. 가장 인상적으로, Flan 2022는 OPT-IML-Max의 훨씬 큰 모델들을 능가하였다. 다음 단계에서는 Flan 2022의 각 개별 방법을 분리하여 그 이점을 검토할 예정이다.&lt;/p>
+&lt;h3 id="training-with-mixed-prompt-settings">Training with Mixed Prompt Settings&lt;/h3>
+&lt;p>이전 연구들은 각 작업에 따른 다양한 입력 템플릿 사용이 성능 향상에 도움이 된다는 것을 보여주었다. 하지만 대부분의 이전 언어 모델들은 템플릿의 표현방식과는 별개로, 특정 프롬프트 설정에 맞춘 템플릿 세트를 튜닝하는데 초점을 두었다. 이는 주로 zero-shot 프롬프팅이나 few-shot 프롬프팅에 대한 연구였다.&lt;/p>
+&lt;p>InstructGPT의 설계에서 간과된 부분은 각 프롬프트 설정에 대한 학습 템플릿을 혼합하는 것이었다. 그러나 이 선택의 효과를 검토하지 않아, zero-shot이나 few-shot 프롬프팅 성능의 미세조정에서 성능 저하를 예상하였다. 그런데 zero-shot과 few-shot 프롬프트를 혼합하여 학습하면 두 설정에서 모두 성능이 크게 향상되는 것을 발견하였다. 놀랍게도 이는 단 3B 개의 parameter를 가진 모델에서도 마찬가지였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan-2022-collection/images/figure3.png"
+width="1346"
+height="606"
+srcset="https://kurtkim.github.io/p/flan-2022-collection/images/figure3_hueec74ab6a37137cd1c5fa496aaa7ec1c_159449_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan-2022-collection/images/figure3_hueec74ab6a37137cd1c5fa496aaa7ec1c_159449_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="222"
+data-flex-basis="533px"
+>&lt;/p>
+&lt;p>few-shot 학습 템플릿을 5%만 추가하면 zero-shot 성능이 크게 향상되고, zero-sshot 데이터를 10% 이상 추가하면 few-shot 성능도 향상된다는 것을 보여준다. few-shot 데이터의 10-90% 범위에서 모든 작업이 최고 성능을 보이며, 이는 한 가지 프롬프트 설정만을 이용한 학습보다 일관되게 높다.&lt;/p>
+&lt;h3 id="scaling-small-models-to-18k-tasks">Scaling Small Models to 1.8k+ Tasks&lt;/h3>
+&lt;p>최근의 instruction tuning 작업들, 예를 들어 Flan 2022는 수천 개의 작업에서 학습하지만 다른 작업 구성과 학습 방법을 사용한다. Flan 2022 컬렉션의 모델 크기와 작업 확장의 영향을 평가하기 위해, 무작위로 선택된 작업 하위 집합에서 T5-LM 적응 모델을 미세조정 하였다. 모든 미세조정은 이미 본 작업에 대한 성능을 유지하는 모델의 능력에 작업 확장이 어떻게 영향을 미치는지 추정하기 위해 Held-In 작업을 포함한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan-2022-collection/images/figure4.png"
+width="1342"
+height="584"
+srcset="https://kurtkim.github.io/p/flan-2022-collection/images/figure4_hu8111882d06a42802f8a290117ec92495_160351_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan-2022-collection/images/figure4_hu8111882d06a42802f8a290117ec92495_160351_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="229"
+data-flex-basis="551px"
+>&lt;/p>
+&lt;p>수백 개의 미세조정 작업을 추가하면 Held-In 및 Held-Out 작업 모두에서 성능 향상이 이루어진다는 것을 보여준다. Held-In 작업의 성능은 총 200개 작업에서 정점을 찍고, 추가 작업이 늘어남에 따라 성능이 감소하지만, 큰 모델은 나중에 정점을 찍고 덜 감소한다. 반면, Held-Out 작업 성능은 작업 수가 증가함에 따라 log-linearly 하게 증가하며, 모든 작업을 사용했을 때 가장 높은 성능을 보인다.&lt;/p>
+&lt;p>놀랍게도 T5-Small만이 1836개 작업 전에 Held-Out 작업 성능을 초과하며, 큰 모델들은 계속해서 성능을 개선한다. 이는 T5-Base조차도 수천 개의 작업으로 용량을 다 사용하지 않았을 수 있으며, 큰 언어 모델들은 수천 개의 추가 작업을 통해 성능 향상을 볼 수 있음을 시사한다.&lt;/p>
+&lt;p>이 분석은 모든 작업이 동등하게 취급된다는 가정하에 이루어졌다. 하지만 모든 작업 출처가 학습에 동등하게 도움이 되지 않으며, 한 출처에서 너무 많은 작업이 주어지면 모델 성능이 포화 상태에 이를 수 있다는 것을 보여준다. 따라서 작업의 다양성과 품질에도 주의를 기울여야 1800개 이상의 작업 확장이 성능 향상으로 이어질 것이라는 결론을 내릴 수 있다.&lt;/p>
+&lt;h3 id="task-enrichment-with-input-inversion">Task Enrichment with Input Inversion&lt;/h3>
+&lt;p>이전의 instruction tuning 작업은 지도 학습 작업에서 입력-출력 쌍을 반전시키는 방법을 사용해 작업의 다양성을 높였다. 이 방법은 주어진 질문 x에 대한 답변 y를 생성하는 대신, 답변 y를 가지고 질문 x를 생성하도록 모델을 학습시키는 것이다. 이는 제한된 데이터 소스를 가진 상황에서 작업의 다양성을 늘리는 쉬운 방법이지만, 이미 수백 개의 데이터 소스와 수천 개의 작업이 가능한 상황에서 이 방법이 여전히 유용한지는 명확하지 않다.&lt;/p>
+&lt;p>입력을 반전시킨 작업을 추가하여 혼합물을 풍부하게 만들고 그 효과를 측정하였다. 결과적으로, 이 방법은 Held-In 성능에는 도움이 되지 않지만 Held-Out 성능에는 큰 이점을 가져다주었다. 이 결과는 모델이 사전 학습된 시간이 길어질수록 효과가 줄어드는 데이터 증강 기법에 대한 새로운 가능성을 제시한다.&lt;/p>
+&lt;h3 id="balancing-data-sources">Balancing Data Sources&lt;/h3>
+&lt;p>아키텍처 크기와 작업 수를 확장하는 것이 효과적이지만, 혼합물의 가중치 조정도 결과 최적화에 중요하다는 것을 이 연구가 제안하고 있다. 균형 잡힌 가중치를 찾기 위해, 여러 작업 소스 집합을 하나씩 제외하고 그들의 기여도를 MMLU 벤치마크에서 평가하였다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan-2022-collection/images/table2.png"
+width="708"
+height="418"
+srcset="https://kurtkim.github.io/p/flan-2022-collection/images/table2_hu39ff4c73fbf833db076442b05a236024_78480_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan-2022-collection/images/table2_hu39ff4c73fbf833db076442b05a236024_78480_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="169"
+data-flex-basis="406px"
+>&lt;/p>
+&lt;p>Flan 2021과 T0-SF는 가장 유익한 혼합물로, 뒤이어 Super-Natural Instructions와 Chain-of-Thought가 있으며, Dialog와 Program Synthesis는 마지막에 위치한다. Iyer et al. (2022)의 연구에서 이러한 결과가 확인되었으며, 특히 Flan 2021, T0-SF, T5 혼합물이 가장 유익하다고 결정하였다. 그들은 또한 Super-Natural Instructions의 유익성이 제한적이며, Chain-of-thought 미세조정이 모든 평가 설정에서 유익하게 작용하는 것으로 나타났다.&lt;/p>
+&lt;p>이러한 연구 결과를 바탕으로 mixture weights search space 범위를 크게 줄였고, practitioner’s intuition을 활용하였다.&lt;/p>
+&lt;h3 id="discussion">Discussion&lt;/h3>
+&lt;p>OPT-IML은 이 연구와 가장 비슷한 작업을 제시했지만, 그들의 작업 컬렉션은 공개되지 않아 비교가 어렵다. Iyer et al. (2022)은 Flan-T5-XL과 XXL이 OPT-IML-Max 175B를 능가한다고 보고하였다. 이런 차이는 사전 학습, 모델 아키텍처, instruction tuning 등의 조합에서 나올 수 있다. Flan 2022와 OPT-IML 사이에서 instruction tuning의 세부 사항들이 다를 수 있으며, 가능한 차이점으로는 예제 템플릿화, 학습 시 혼합된 입력 프롬프팅 절차 사용 방식, 작업 구성 등이 있다.&lt;/p>
+&lt;p>OPT-IML이 Flan 2022보다 더 많은 작업을 갖고 있지만, 약 94%의 작업이 Flan 2022에서도 사용되고 있다. 또한, 작업의 다양성에서 큰 차이는 없다고 볼 수 있다. 작업 혼합 비율은 Flan 2021, PromptSource/P3, Super-Natural Instructions 등의 비슷한 출처를 공유하며, OPT-IML의 다른 컬렉션들은 크게 가중치가 주어지지 않았다.&lt;/p>
+&lt;p>예제 템플릿화와 혼합된 프롬프트 형식이 OPTIML의 instruction tuning과 가장 큰 차이를 만들 것으로 생각한다. Flan 2021에서 업데이트된 템플릿 저장소는 명령어 및 다른 차원에서 다양성을 더했다. 템플릿화 절차는 명령어 배치, 프롬프트 사이의 간격, 다중 선택 예제의 답안 옵션 서식 등을 다르게 한다. 이 절차는 입력 다양성을 크게 늘리고 성능 향상을 반복적으로 보여주었다. 이 예제 템플릿화 절차는 검토와 미래 연구를 위해 공개되어 있다.&lt;/p>
+&lt;hr>
+&lt;h2 id="instruction-tuning-enhances-single-task-finetuning">Instruction Tuning Enhances Single-Task Finetuning&lt;/h2>
+&lt;p>응용 분야에서는 특정 목표 작업에 대해 미세 조정된 NLP 모델이 배포되는데, 이전 연구에서는 중간 단계 미세 조정이나 다중 작업 미세 조정의 이점이 보여졌지만, 명령어 instruction tuning에 대한 연구는 아직 충분하지 않다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan-2022-collection/images/figure5.png"
+width="1350"
+height="926"
+srcset="https://kurtkim.github.io/p/flan-2022-collection/images/figure5_huf51f8d44f0468286d11a850d8193ea47_154481_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan-2022-collection/images/figure5_huf51f8d44f0468286d11a850d8193ea47_154481_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="145"
+data-flex-basis="349px"
+>&lt;/p>
+&lt;p>Flan 2022의 instruction tuning을 단일 목표 미세 조정 전의 중간 단계로서 평가하였다. 이는 Flan-T5가 응용 전문가들에게 더 나은 시작점으로 적합한지를 알아보기 위한 것이다. 목표 작업에 대해 T5를 직접 미세 조정 하는 것, 추가 미세 조정 없이 Flan-T5를 사용하는 것, 그리고 Flan-T5를 목표 작업에 더 미세 조정하는 것, 이 세 가지 설정을 평가하였다.&lt;/p>
+&lt;p>&lt;strong>Pareto Improvements to Single Task Finetuning&lt;/strong> 검토된 모든 작업에서, Flan-T5를 미세 조정하는 것은 T5를 직접 미세 조정하는 것보다 더 나은 결과를 제공한다. 특히, 미세 조정 데이터가 제한적인 작업에서는, 추가 미세 조정 없이 Flan-T5를 사용하는 것이 T5의 성능을 능가한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/flan-2022-collection/images/figure6.png"
+width="1354"
+height="398"
+srcset="https://kurtkim.github.io/p/flan-2022-collection/images/figure6_hu60bd519d09f109fd15626cea2ce45291_133290_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/flan-2022-collection/images/figure6_hu60bd519d09f109fd15626cea2ce45291_133290_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="340"
+data-flex-basis="816px"
+>&lt;/p>
+&lt;p>&lt;strong>Faster Convergence &amp;amp; Computational Beneﬁts&lt;/strong> Flan-T5를 시작점으로 사용하면 학습 효율성이 향상된다. Flan-T5는 단일 목표 미세 조정 중에 T5보다 빠르게 수렴하며 높은 정확도를 보여준다. 이는 FlanT5 같은 명령어 instruction tuning이 단일 작업 미세 조정의 새로운 표준 시작점으로 채택되면, 다양한 작업에서 미세 조정 단계를 크게 줄일 수 있는 유망한 방법이라는 것을 보여준다. instruction tuning은 단일 작업 미세 조정 보다 비용이 많이 들지만, 이는 일회성 비용이다.&lt;/p>
 &lt;hr>
 &lt;h2 id="related-work">Related Work&lt;/h2>
-&lt;p>&lt;strong>Audio representation learning.&lt;/strong> 대규모로 일반적인 콘텐츠 표현을 사전 학습하여 전이 학습하는 방법이 여러 분야에서 주요 접근법이 되었다. 이는 오디오 표현 학습에도 적용되었으며, 일반 환경 오디오와 음악 오디오 모두에서 다양한 사전 훈련 메커니즘이 탐색되었다. ImageNet과 AudioSet에서 사전 학습된 오디오 스펙트로그램 변환기는 다양한 태깅 작업에서 최고의 성과를 보였으며, Million Song Database를 사용한 연구에서는 음악 오디오 표현 학습의 초기 기준선을 제시하였다.&lt;/p>
-&lt;p>비지도 및 자기 지도 사전 학습에서는 구별적 모델과 생성적 모델 모두 성공적이었다. 구별적 학습은 같은 녹음에서 추출된 오디오 세그먼트에 더 높은 유사성을 부여하는 표현을 학습하는 방식을 사용하였다. 이와 비슷하게, SSAST는 생성적인 마스크된 스펙트로그램 패치 모델링을 탐색하였다. 생성 모델의 중간 임베딩이 downstream 분류를 위한 강력한 오디오 표현을 제공한다는 것이 확인되었으며, 사용자 상호작용 통계와 시각적 단서 같은 약한 감독도 검토되었다.&lt;/p>
-&lt;p>이 연구는 음악 오디오와 약하게 연결된 풍부한 텍스트 주석을 활용한 크로스-모달 감독 방법을 개발하는 것에 집중하고 있다. 이를 통해 학습된 표현의 전이 학습 능력을 평가하고, 다양한 오디오 encoder 구조를 비교 분석하고 있다.&lt;/p>
-&lt;p>&lt;strong>Cross-modal contrastive learning.&lt;/strong> 대규모 데이터를 활용한 대조 학습의 성공에 기반하여, 이미지-텍스트 모델에 오디오 타워를 추가하고 크로스-모달 정렬을 강화하는 삼중 모드 구조를 제안하였다. 오디오 분야에서는 오디오의 잠재적 표현과 관련 태그를 정렬하기 위해 대조 학습이 사용되었다. 후속 연구에서는 사전 학습된 비문맥적 단어 임베딩 모델을 사용하여 태그를 넘어 새로운 용어로 일반화하는 능력을 지원하였다. 이 방법은 음악 도메인을 위한 오디오-텍스트 쌍의 대규모 컬렉션을 채굴하는데 초점을 맞추고 있으며, 이를 통해 처음으로 임의적인 zero-shot 음악 태깅과 검색이 가능해졌다.&lt;/p>
-&lt;p>&lt;strong>Music text joint embedding models.&lt;/strong> 콘텐츠 기반 음악 정보 검색은 풍부한 의미를 가진 텍스트와 음악의 광범위하고 세밀한 특성을 연결하는 것을 필요로 한다. 일반적인 접근법은 다중 레이블 분류 작업을 통해 텍스트 레이블 클래스의 의미를 음악에 적용하는 것이다. 이를 위해, 음악 비디오와 연관된 자연어 텍스트에서 대량의 어휘를 추출하고, 이를 통해 오디오 인코더를 학습시키며, 텍스트 레이블을 오디오 특성과 정렬시키는 방법이 사용되었다. 또한, 분류, 회귀, 메트릭 학습 등의 다양한 학습 작업을 통해 자유 형식의 텍스트와 음악 오디오를 정렬하는 방법이 탐색되었다.&lt;/p>
-&lt;p>이 논문의 작업은 MuLaP와 가장 유사하며, 이 연구에서는 제작 음악 라이브러리에서 250K의 오디오-캡션 쌍을 채굴하여 multimodal Transformer를 학습시켰다. 그러나 그들의 초기 융합 방식은 전이 학습 응용에 임베딩의 활용성을 제한한다. 반면, 이 접근법은 임의의 음악 오디오에 대한 자연어 인터페이스를 제공하는 공동 임베딩 공간을 만들어, 크로스-모달 검색, zero-shot 태깅, 언어 이해 등의 가능성을 열어냈다.&lt;/p>
-&lt;hr>
-&lt;h2 id="proposed-approach">Proposed Approach&lt;/h2>
-&lt;p>목표는 음악 오디오와 자유 형식의 자연어 텍스트에 대한 공유 임베딩 공간을 만드는 것으로, 이 공간에서는 근접성이 의미를 공유하는 지표로 작용한다. 이를 위해 크로스-모달 대조 학습과 두 타워 구조를 사용하며, 대규모의 (오디오, 텍스트) 쌍 훈련 데이터를 채굴하여 이 작업을 지원한다.&lt;/p>
-&lt;h3 id="learning-framework">Learning Framework&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/figure1.png"
-width="682"
-height="410"
-srcset="https://kurtkim.github.io/p/mulan/images/figure1_hu9b99b9c0e8c2595b9653bf7a0e387718_79893_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/figure1_hu9b99b9c0e8c2595b9653bf7a0e387718_79893_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="166"
-data-flex-basis="399px"
->&lt;/p>
-&lt;p>각 MuLan 모델은 오디오와 텍스트 입력 모달 각각에 대한 별도의 임베딩 네트워크로 구성된다. 이 두 네트워크는 가중치를 공유하지 않지만, 같은 차원의 $l_2$-normalized embedding space에서 종료한다. 오디오 임베딩 네트워크는 log mel spectrogram 컨텍스트 윈도우를, 텍스트 임베딩 네트워크는 널 패딩 텍스트 토큰 시퀀스를 입력으로 받는다.&lt;/p>
-&lt;p>음악 녹음과 관련 텍스트 요소를 가지고, (오디오, 텍스트) 쌍의 크로스-모달 학습 데이터셋을 구축한다. 각 녹음에서 log mel spectrogram을 계산하고, 텍스트 요소를 고정 길이로 조정한다. 그런 다음, 미니 배치는 무작위로 선택된 녹음과 그에 대응하는 텍스트 요소의 쌍으로 구성된다. 이 샘플링 방식은 학습 오디오와 모든 관련 텍스트를 전부 커버하기 위해 여러 에포크가 필요하다는 것을 의미한다. 각 예시에 대해 여러 텍스트 주석을 연결하는 실험도 진행했지만, 일반적으로는 잘 작동하지 않았다.&lt;/p>
-&lt;p>$$ \sum_{i=1}^{B} - log \big[ {{h[f(x^{(i)}), g(t^{(i)})]}\over{\sum_{j \neq i} h[f(x^{(i)}), g(t^{(j)})] + h[f(x^{(j)}), g(t^{(i)})] }} \big] $$&lt;/p>
-&lt;p>$h[a, b] = exp(a^T b/τ)$ 형태의 비평 함수 $h$는 $a, b ∈ \mathbb{R}^d$와 학습 가능한 온도 hyperparameter $τ ∈ (0, 1]$에 의존한다. 이 함수는 내적을 통해 코사인 유사도를 계산하며, 대상 오디오-텍스트 쌍에 대해 큰 값을, 비대상 쌍에 대해서는 0에 가까운 값을 생성하는 것이 목표이다. 또한, 1보다 작은 $τ$ 값은 $h$의 출력 범위를 확장한다. 이전 연구에 따르면, 대량의 배치 크기는 대조적 손실 최적화에 도움이 된다.&lt;/p>
-&lt;h3 id="audio-embedding-network">Audio Embedding Network&lt;/h3>
-&lt;p>오디오 임베딩에 검증된 Resnet-50 아키텍처를 적용하였다. 이를 위해 log mel spectrogram을 흑백 이미지로 처리하고, 학습 클립에서 무작위로 선택된 10초 윈도우를 입력으로 사용한다. 학습 중에는 SpecAugment를 적용하고, 마지막에는 시간과 mel 채널에 대한 평균 풀링과 L2 정규화된 linear fully connected layer를 적용한다. 이 모델은 AudioSet의 로지스틱 회귀를 사용하여 사전 학습되며, 최종 분류 계층은 미세 조정 전에 제거된다.&lt;/p>
-&lt;p>Audio Spectrogram Transformer (AST)는 log mel spectrogram에서 추출된 패치의 토큰 시퀀스에 12개의 Transformer 블록을 적용하는 아키텍처이다. 학습 중에는 SpecAugment를 적용하고, positional encoding과 [CLS] 토큰을 추가한다. [CLS] 토큰 위치에서의 최종 인코딩에 linear fully-connected layer과 L2 정규화를 적용하여 오디오 임베딩 네트워크의 출력을 형성한다. 이 모델은 공개된 AST 체크포인트를 사용하여 사전학습을 시작한다.&lt;/p>
-&lt;h3 id="text-embedding-network">Text Embedding Network&lt;/h3>
-&lt;p>텍스트 임베딩 모델로는 일반적으로 사용되는 BERT 아키텍처를 사용한다. 이는 텍스트 입력을 토큰 시퀀스로 변환하고, [CLS] 토큰 임베딩을 오디오-텍스트 임베딩 공간으로 변환하는 역할을 한다. 이 모델은 공개 체크포인트를 사용하여 사전학습을 시작한다.&lt;/p>
-&lt;h3 id="training-dataset-mining">Training Dataset Mining&lt;/h3>
-&lt;p>5000만 개의 인터넷 음악 비디오에서 30초 클립을 추출하여 MuLan 임베딩 모델을 학습시키는 데 사용한다. 음악 오디오 감지기를 통해 음악 컨텐츠가 절반 미만인 클립을 제거한 후, 약 4400만 개의 클립, 즉 대략 370K 시간의 오디오가 남는다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/table1.png"
-width="648"
-height="186"
-srcset="https://kurtkim.github.io/p/mulan/images/table1_huc988009fa7bb561c10195b33fcb9b7fd_48533_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/table1_huc988009fa7bb561c10195b33fcb9b7fd_48533_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="348"
-data-flex-basis="836px"
->&lt;/p>
-&lt;p>각 음악 비디오에 대해, 비디오 제목과 태그, 비디오 설명과 댓글, 그리고 데이터셋의 인터넷 음악 비디오에 연결된 재생목록 제목 등 노이즈가 많은 텍스트 데이터를 고려한다. 이러한 텍스트는 반드시 사운드트랙의 음악적 속성을 참조하고 있다는 것이 보장되지 않으며, 특히 댓글 데이터는 가장 많은 노이즈를 포함하고 있다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/table2.png"
-width="600"
-height="154"
-srcset="https://kurtkim.github.io/p/mulan/images/table2_hu12be41209accd48d06dcfc43168466a0_31265_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/table2_hu12be41209accd48d06dcfc43168466a0_31265_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="389"
-data-flex-basis="935px"
->&lt;/p>
-&lt;p>노이즈가 많은 텍스트를 고려하여, 음악 서술적 주석으로 필터링된 SF 및 LF 텍스트 데이터를 사용하여 MuLan을 학습시켰다. 이를 위해, 사전 학습된 BERT 모델을 미세 조정하고, 이를 통해 LF 주석을 필터링하였다. 또한, SF 주석을 정리하기 위한 규칙 기반 필터링도 적용하였다. 하지만, 재생목록 제목과 필터링된 장형 주석은 데이터셋의 총 녹음 중 일부분만 사용할 수 있다.&lt;/p>
-&lt;p>AudioSet을 오디오-텍스트 쌍의 세트로 변환하여, 이를 ASET으로 표기한다. 모든 예시를 포함시키고, 각 예시에 첨부된 레이블 문자열을 텍스트 주석으로 사용하여 약 2M 개의 10초 클립 학습 세트를 생성한다. 이 네 가지 다른 데이터 소스의 규모 불균형을 고려하여, SF:LF:PL:ASET을 2:2:1:1의 비율로 미니 배치를 구성한다. 이 방식으로, 규모가 작더라도 필터링된 LF 주석이 미니 배치의 1/3를 차지하게 된다.&lt;/p>
-&lt;hr>
-&lt;h2 id="experiments">Experiments&lt;/h2>
-&lt;p>Resnet-50과 AST 오디오 encoder를 사용하여 MuLan을 평가하며, 두 경우 모두 텍스트 encoder로 BERT-base-uncased를 사용한다. AudioSet, 단형 태그, 장형 문장, 재생목록 정보 등, 44M 음악 녹음에서 추출한 오디오-텍스트 쌍과 처리된 텍스트 레이블에 대해 모든 모델을 14 epoch 동안 학습시킨다. M-Resnet-50과 M-AST는 비슷한 성능을 보이므로, 더 나은 학습 효율성을 위해 M-Resnet-50을 선택적으로 사용한다.&lt;/p>
-&lt;h3 id="evaluation-tasks">Evaluation Tasks&lt;/h3>
-&lt;h4 id="zero-shot-music-tagging">Zero-shot Music Tagging&lt;/h4>
-&lt;p>음악 클립의 오디오 임베딩과 태그 텍스트의 임베딩 간 코사인 유사도를 이용해 예측 점수를 정의한다. 컨텍스트 텍스트 encoder를 사용하여 유연한 예측 공간을 만들고, 크로스-모달 대조 학습을 통해 언어의 의미를 오디오 표현에 연결함으로써 보이지 않는 타겟 레이블에도 적용할 수 있다.&lt;/p>
-&lt;p>MagnaTagATune과 AudioSet의 음악 부분을 이용한 두 가지 음악 태깅 벤치마크로 평가를 진행한다. MagnaTagATune에서는 상위 50개 태그 세트와 전체 188개 태그 세트를 고려하며, 각 오디오 클립을 10초짜리 3개 세그먼트로 분할해 클립 레벨 임베딩을 얻는다. AudioSet에서는 25개 장르 태깅 작업과 전체 음악 하위 트리를 포함한 141개 태깅 작업을 고려한다. 테스트 세트에서의 수신기 운영 특성 곡선(AUC-ROC)의 클래스 균형을 보고한다.&lt;/p>
-&lt;p>AudioSet은 대조학습에 포함되고, 일부 MTAT 클래스는 AudioSet 온톨로지와 겹친다. 이로 인해 AudioSet과 MTAT 평가는 완전한 zero-shot이 아니다. 하지만, MuLan 학습 중에는 다양한 자유 형식의 언어 감독이 AudioSet 감독을 희석시킨다. 따라서 MuLan 모델과 기존 AudioSet 분류기를 비교함으로써, AudioSet 온톨로지를 넘어서는 클래스를 지원하는 유연한 자연 언어 인터페이스로 넘어가는 비용을 측정할 수 있다.&lt;/p>
-&lt;h4 id="transfer-learning-with-linear-probes">Transfer Learning with Linear Probes&lt;/h4>
-&lt;p>zero-shot 실험 외에도, 오디오 encoder를 downstream 태깅 작업에 적용하는 일반적인 피처 추출기로 평가한다. MagnaTagATune과 AudioSet 벤치마크를 다시 사용하고, 학습 데이터셋을 이용해 고정된 128차원 오디오 임베딩 위에 독립적인 클래스별 로지스틱 회귀 계층을 학습시킨다. 이 방법은 이전 전이 학습 연구의 평가 프로토콜을 따르므로, 성능을 직접 비교할 수 있다.&lt;/p>
-&lt;h4 id="music-retrieval-from-text-queries">Music Retrieval from Text Queries&lt;/h4>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/table3.png"
-width="634"
-height="390"
-srcset="https://kurtkim.github.io/p/mulan/images/table3_hubf8d334ad104ab5b9e994323df780b47_99837_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/table3_hubf8d334ad104ab5b9e994323df780b47_99837_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="162"
-data-flex-basis="390px"
->&lt;/p>
-&lt;p>MuLan은 임베딩 공간에서 쿼리에 가장 가까운 음악 클립을 찾는 능력을 제공한다. 이는 컨텐츠 특징이 메타데이터 기반 방법보다 더 세밀하고 완전한 유사성 정보를 제공할 수 있는 음악 검색 애플리케이션에 중요하다. 전문가가 큐레이션한 7,000개의 재생 목록을 사용하여 평가하며, 각 재생 목록은 제목, 설명, 그리고 10-100개의 음악 녹음으로 구성되어 있다. 재생 목록 평가는 약 100K의 고유 녹음을 포함한다.&lt;/p>
-&lt;p>전문가 큐레이션 재생 목록 데이터를 사용해 제목과 설명을 쿼리로 하는 두 개의 크로스-모달 검색 평가 세트를 만든다. 각 데이터셋에 대해 해당 재생 목록에 속하는 녹음을 검색 대상으로 사용하고, 100K 녹음 전체를 후보군으로 사용한다. AUC-ROC과 평균 정밀도(mAP)를 보고하며, zero-shot 태깅과 같은 임베딩 평균화 및 코사인 유사도 기반 점수 매기기 사용한다. 재생 목록 정보는 음악 태깅 벤치마크의 태그와는 다르게, 보다 세밀한 정보를 담고 있어 음악 검색 엔진에 제시되는 쿼리와 유사하다.&lt;/p>
-&lt;h4 id="text-triplet-classiﬁcation">Text Triplet Classiﬁcation&lt;/h4>
-&lt;p>텍스트 encoder는 도메인 내 음악 데이터와 크로스-모달 대조 손실을 사용해 미세 조정되었다. 텍스트 encoder가 음악 관련 텍스트를 얼마나 잘 이해하는지 평가하기 위해, 트리플렛 분류 작업을 통해 텍스트 임베딩을 직접 평가한다. 각 트리플렛은 (앵커, 긍정, 부정) 형태의 텍스트로 이루어져 있습니다. AudioSet 온톨로지를 사용한 첫 번째 테스트 세트와 전문가 큐레이션 재생 목록 데이터를 사용한 두 번째 테스트 세트를 구성하였다.&lt;/p>
-&lt;h3 id="results-and-discussion">Results and Discussion&lt;/h3>
-&lt;h4 id="music-tagging">Music Tagging&lt;/h4>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/table4.png"
-width="646"
-height="630"
-srcset="https://kurtkim.github.io/p/mulan/images/table4_hu5a3de2cab49c8abeac5520f681303a61_139581_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/table4_hu5a3de2cab49c8abeac5520f681303a61_139581_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="102"
-data-flex-basis="246px"
->&lt;/p>
-&lt;p>zero-shot 태깅 메트릭에서 MResnet-50과 M-AST는 비슷한 성능을 보였다. 하지만 학습 텍스트의 레이블 의미와 태깅 평가의 레이블 의미 사이에는 큰 차이가 있을 수 있어, 성능이 저하될 수 있다. 특히, MTAT 간격은 AudioSet보다 크게 나타났으며, 이는 비특정적인 의미나 여러 가지 의미를 가진 태그와 간단한 부정을 포함하는 태그에서 매우 나쁜 성능 때문이다. 이는 BERT의 알려진 문제로, 부정된 개념의 의미를 적절하게 모델링하지 못한다(&amp;ldquo;not rock&amp;quot;의 임베딩은 &amp;ldquo;rock&amp;quot;과 비슷하다).&lt;/p>
-&lt;p>AudioSet만을 사용한 학습은 AudioSet 평가에서 가장 높은 AUC를 얻지만, 일반적으로 더 많은 데이터 소스를 포함하면 다른 모든 작업에서 성능이 향상된다. 무필터 데이터로의 학습은 필터링된 버전과 비슷한 성능을 달성하는데, 이는 원시 텍스트 데이터의 노이즈에도 불구하고 모델이 유용한 연관성을 학습하는 것을 보여준다. 텍스트 필터링이 너무 공격적이었을 수 있으며, 대비 학습의 높은 노이즈 허용성 때문에, 강하게 연결된 오디오-텍스트 쌍으로 제한하는 것의 이점이 유용한 쌍의 큰 세트를 잃는 것으로 상쇄되었을 수 있다.&lt;/p>
-&lt;p>MuLan 오디오 임베딩에 선형 프로브를 적용하면 모든 태깅 작업에서 최고 수준의 전이 학습 성능을 달성한다. 이는 MuLan의 사전 학습된 오디오 encoder가 고품질 음악 오디오 임베딩을 계속 생성하면서 새로운 자연어 응용 프로그램을 지원한다는 것을 입증한다. 또한, 종단간 학습 기준선에 비해 선형 프로브 결과는 대부분이 더 우수하며, 최고 수준의 AST AudioSet 분류기를 약간만 뒤따른다.&lt;/p>
-&lt;h4 id="music-retrieval-from-text-queries-1">Music Retrieval from Text Queries&lt;/h4>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/table5.png"
-width="566"
-height="258"
-srcset="https://kurtkim.github.io/p/mulan/images/table5_hu62430557e012f8c71275209d360899b6_54993_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/table5_hu62430557e012f8c71275209d360899b6_54993_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="219"
-data-flex-basis="526px"
->&lt;/p>
-&lt;p>MuLan 모델은 쿼리 검색 평가 작업에서 놀랍게도 강인한 성능을 보여준다. 대규모 언어 자원으로 사전 학습된 BERT를 기반으로 하지만, AudioSet 클립과 레이블 주석만으로 학습을 하면 음악에 대한 도메인 내 자연어를 연결하는 능력이 제한적이다. 그러나 인터넷에서 추출한 대규모 단형태 태그를 포함하면 모델이 더 세분화된 음악 개념을 배울 수 있게 되고, 댓글과 재생 목록 데이터를 추가하면 더 복잡한 쿼리를 연결하는 데 도움이 된다. 또한, 필터링되지 않은 학습 텍스트를 사용하여도 유사한 성능을 달성하는 것으로 보아, 주석 노이즈에 대한 훈련의 강인함이 확인된다.&lt;/p>
-&lt;h3 id="text-triplet-classiﬁcation-1">Text Triplet Classiﬁcation&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/table6.png"
-width="476"
-height="368"
-srcset="https://kurtkim.github.io/p/mulan/images/table6_hufba128f1e6743bcd07342508bb89e20b_70296_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/table6_hufba128f1e6743bcd07342508bb89e20b_70296_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="129"
-data-flex-basis="310px"
->&lt;/p>
-&lt;p>MuLan 텍스트 임베딩은 Sentence Transformer, SimCSE, Universal Sentence Embedding 등과 같은 기준선과 비교된다. 모든 기준선은 Transformer 기반 모델이며, MuLan 텍스트 encoder는 크로스-모달 손실로만 학습된다. 장형 텍스트 주석을 포함하면, 음악 도메인에 특화된 텍스트 임베딩 모델은 일반적인 문장 임베딩 모델을 능가한다. 놀랍게도, 텍스트 전용 미세 조정 손실을 사용하지 않아도 성공적인 특화가 이루어졌다.&lt;/p>
+&lt;p>&lt;strong>Large Language Models&lt;/strong> instruction tuning의 기초는 여러 하위 작업에 유용한 일반적인 언어 표현을 사전 학습하는 것으로, 이는 오래된 전통을 가지고 있다. 2018년에는 대규모 비지도 학습 코퍼스에서 대규모 모델을 사전 학습하는 방식이 확립되었고, 이로 인해 NLP 분야는 이러한 모델을 사용하여 모든 작업에서 사전 학습되지 않은 작업 특화 모델의 성능을 크게 능가하는 방향으로 발전하였다. 하지만, 사전 학습된 모델에 인코딩된 고품질의 지식에 접근하는 주된 방법은 추가적인 작업 특화 계층을 학습하는 것이었다. 그 후, Radford et al. 과 Raﬀel et al. 은 하위 작업들을 사전 학습된 LM head를 사용하여 자연어로 답변을 생성하는 방식으로 공동으로 학습할 수 있다는 개념을 널리 알렸고, 이는 다중 작업 전이 학습 연구의 선구자가 되어 instruction tuning의 첫 번째 파도를 이끌었다.&lt;/p>
+&lt;p>언어 모델의 사전 학습 코퍼스, 아키텍처, 그리고 학습 목표에 대한 연구의 지속적인 발전은 instruction tuning에 큰 영향을 미친다. 2022년 현재, decoder-only left-to-right causal Transformer가 대형 모델 시장을 지배하고 있다. 이들 모델은 더 나은 하드웨어와 소프트웨어 지원 덕분에 decoder만 사용하는 것으로 결정되었다. 그러나, 일관되게 left-to-right causal 언어 모델링은 최적의 목표가 아니며, 비순차적 목표의 혼합이 zero-shot과 few-shot 프롬팅을 가진 하위 작업에 훨씬 우수하다는 것이 발견되었다. 또한, 사전 학습 코퍼스, instruction tuning, 그리고 하위 능력 간의 관계는 아직 충분히 탐구되지 않은 상태이다. 일반적으로, 공개 모델들은 C4, The Pile, ROOTs 등의 공개 코퍼스에서 학습받는다.&lt;/p>
+&lt;p>&lt;strong>Instruction Tuning&lt;/strong> instruction tuning의 주요 발전 중 하나는 few-shot 인컨텍스트 학습을 보완하거나 대체할 수 있는 parameter-eﬃcient tuning이다. 이는 대형 모델의 표준 미세 조정에 필요한 많은 가속기와 비싼 비용을 줄일 수 있다. parameter-eﬃcient tuning은 모델 parameter의 일부만 업데이트해도 모든 parameter를 튜닝하는 것과 비슷한 성능을 얻을 수 있음을 보여준다. 특히, few-shot ICL의 긴 시퀀스 길이와 반복적인 추론 때문에, parameter-eﬃcient tuning은 인컨텍스트 학습보다 계산적으로 더 저렴하고 성능이 더 높을 수 있다. 또한, 단일 작업 및 다중 작업 parameter-eﬃcient tuning은 instruction tuning과 결합될 수 있으며, 이는 연구자들이 일반 도메인의 instruction tuning 모델을 기반으로 사용자 지정 instruction tuning 혼합을 수집하는 것을 쉽게 만든다.&lt;/p>
+&lt;p>&lt;strong>Problems Addressed by Instruction Tuning &amp;amp; Alignment Techniques&lt;/strong> instruction tuning은 언어 모델을 더 유용한 목표와 인간의 선호도에 맞추는 작업의 일부이다. 이 없이는 언어 모델이 악성 행동을 보이거나 비사실적인 정보를 생성하는 등의 문제가 있다. 이러한 문제를 분석하고 완화하는 것은 미래 연구의 유망한 방향이다. instruction tuning은 이미 NLP 편향 지표를 줄이는 데 효과적인 해결책으로 입증되었으므로, 더 많은 조사가 필요하다.&lt;/p>
 &lt;hr>
 &lt;h2 id="conclusions">Conclusions&lt;/h2>
-&lt;p>약하게 연결된 텍스트와 오디오 데이터를 이용해 학습된 음악 오디오와 자연어 공동 임베딩 모델을 제시하였다. 이 모델은 다양한 응용에서 자연어 인터페이스의 유연성을 보여주며, 음악 태깅 벤치마크에서 최고 수준의 전이 학습 성능을 보여준다. 이는 음악 오디오에 대한 자유형 자연어 인터페이스를 구축하는 첫 시도로, 약한 신호와 절대적인 노이즈를 더 잘 구분하는 개선된 텍스트 필터링 방법을 통해 더욱 발전될 수 있을 것이다.&lt;/p>
+&lt;p>새로운 Flan 2022 instruction tuning 컬렉션은 이전 공개 컬렉션과 방법을 통합하고, 새로운 템플릿과 혼합된 프롬프트 설정을 도입하여 향상된 성능을 보인다. 이 컬렉션은 다양한 작업에서 이전 모델들을 큰 차이로 능가하며, 새로운 지시사항에 일반화하거나, 새로운 작업에 미세 조정하는 연구자와 실무자들에게 더 경쟁력 있는 출발점을 제공한다.&lt;/p>
 &lt;hr>
 &lt;h2 id="reference">Reference&lt;/h2>
 &lt;ul>
-&lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2208.12415.pdf" target="_blank" rel="noopener"
+&lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2301.13688.pdf" target="_blank" rel="noopener"
+>Paper&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>MusicLM</title><link>https://kurtkim.github.io/p/musiclm/</link><pubDate>Wed, 06 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/musiclm/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>MusicLM은 &amp;ldquo;a calming violin melody backed by a distorted guitar riff&amp;quot;과 같은 텍스트 설명을 바탕으로 고품질의 음악을 생성하는 모델이다. 이 모델은 sequenceto-sequence 모델링을 통해 음악을 생성하며, 음질과 텍스트 설명의 정확성에서 이전 모델들을 능가한다. 또한, 텍스트와 멜로디 모두에 조건을 두어 휘파람과 허밍된 멜로디를 텍스트 캡션에 따라 변형할 수 있다. 이를 지원하기 위해, 5.5k의 음악-텍스트 쌍 데이터셋인 MusicCaps를 공개하였다.&lt;/p>
+&lt;hr>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>conditional neural 오디오 생성은 text-to-speech, lyrics-conditioned 음악 생성, MIDI 시퀀스로부터의 오디오 합성 등 다양한 분야에서 활용된다. 최근에는 text-to-image 생성 연구의 발전에 따라, 고수준의 캡션으로부터 오디오를 생성하는 연구가 진행되었다. 그러나 이러한 모델은 아직 단순한 음향 장면에 한정되어 있어, 풍부한 오디오 시퀀스를 생성하는 것은 여전히 도전 과제로 남아 있다.&lt;/p>
+&lt;p>최근에 소개된 AudioLM은 오디오 합성을 discrete representation 공간에서의 언어 모델링 작업으로 취급하여 고해상도와 장기 일관성을 동시에 달성한다. 오디오 신호의 내용에 대한 가정 없이 오디오 전용 말뭉치에서 현실적인 오디오를 생성하는 방법을 학습한다. 이러한 시스템이 적절한 데이터에 학습된다면 더 풍부한 출력을 생성할 수 있을 것으로 보인다.&lt;/p>
+&lt;p>고품질 오디오 합성의 본질적인 어려움 외에도, 오디오-텍스트 쌍 데이터의 부족이 주요 장애 요인이다. 이는 이미지 도메인과 대조적으로, 이미지 도메인에서는 대규모 데이터셋의 사용이 뛰어난 이미지 생성 품질에 크게 기여하였다. 또한, 오디오의 주요 특성을 단어로 명확하게 포착하거나 시퀀스 전체에 대한 캡션을 제공하는 것은 이미지를 설명하는 것보다 더욱 어렵다.&lt;/p>
+&lt;p>이 연구에서는 텍스트 설명으로 고해상도 음악을 생성하는 MusicLM 모델을 소개한다. MusicLM은 AudioLM의 multi-stage autoregressive 모델링을 활용하고, 텍스트 조건부를 추가한다. 쌍 데이터의 부족함을 해결하기 위해, 공동 music-text 모델인 MuLan을 활용하여 음악과 텍스트 설명을 임베딩 공간에서 가까운 표현으로 투영한다. 이렇게 하면 학습 시간에 캡션의 필요성을 제거하고, 대규모 오디오 말뭉치에서 학습할 수 있다. 학습 시에는 오디오에서 계산된 MuLan 임베딩을, 추론 시에는 텍스트 입력에서 계산된 MuLan 임베딩을 사용한다.&lt;/p>
+&lt;p>MusicLM은 라벨이 없는 대규모 음악 데이터셋에 학습되어 복잡한 텍스트 설명에 따른 일관성 있는 음악을 생성한다. 이를 평가하기 위해, 전문 음악가들이 준비한 5.5k의 예시를 포함하는 고품질 음악 캡션 데이터셋인 MusicCaps를 소개하고, 이를 공개하여 미래의 연구를 지원한다.&lt;/p>
+&lt;p>이 연구의 실험은 MusicLM이 품질과 캡션 준수 면에서 이전 시스템을 능가한다는 것을 보여준다. 또한, 음악의 일부 측면을 단어로 설명하는 것이 어렵거나 불가능한 경우에도, 이 방법이 텍스트를 넘어서는 조건부 신호를 지원한다. 특히, 오디오 형태의 추가적인 멜로디를 받아들여 원하는 멜로디를 따르는 음악 클립을 생성하는 확장된 MusicLM을 소개한다.&lt;/p>
+&lt;p>음악 생성과 관련된 위험성, 특히 창의적 콘텐츠의 부당한 사용을 인지하고 있다. 이에 따라, 대형 언어 모델에 대한 기억력 연구를 철저히 수행하였고, MuLan 임베딩을 MusicLM에 입력하면 생성된 토큰의 시퀀스가 학습 세트의 해당 시퀀스와 크게 다르다는 결과를 얻었다.&lt;/p>
+&lt;p>이 작업의 주요 기여는 다음과 같다:&lt;/p>
+&lt;ol>
+&lt;li>텍스트 조건부 신호에 충실하게 몇 분 동안 일관된 고품질 음악을 생성하는 MusicLM 모델을 소개한다.&lt;/li>
+&lt;li>멜로디와 같은 다른 조건부 신호로 방법을 확장하고, 텍스트 프롬프트에 따라 합성한다. 또한, 최대 5분 길이의 음악 클립을 일관되게 생성하는 것을 보여준다.&lt;/li>
+&lt;li>text-to-music 생성 작업을 위한 첫 번째 평가 데이터셋인 MusicCaps를 공개한다. 이는 음악가들이 준비한 5.5k의 음악-텍스트 쌍으로 구성된 고품질 데이터셋이다.&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h2 id="background-and-related-work">Background and Related Work&lt;/h2>
+&lt;p>다양한 도메인의 생성 모델링에서 Transformer 기반의 autoregressive 모델과 U-Net 기반의 diffusion 모델이 주도하고 있다. 이 섹션에서는 discrete 토큰을 다루는 autoregressive 생성 모델에 초점을 맞춰 MusicLM과 관련된 작업을 검토한다.&lt;/p>
+&lt;h3 id="quantization">Quantization&lt;/h3>
+&lt;p>자연어 처리, 이미지, 비디오 생성 등에서 autoregressively 하게 discrete 토큰의 시퀀스를 모델링하는 것이 효과적임이 입증되었다. 연속 신호에 대한 autoregressive 모델의 성공에는 양자화가 중요하며, 이는 컴팩트한 discrete 표현을 제공하면서도 높은 품질의 재구성을 가능하게 한다. VQ-VAEs는 다양한 도메인에서 낮은 비트레이트에서 뛰어난 재구성 품질을 보여주며, 많은 접근법의 기본 양자화 도구로 사용되었다.&lt;/p>
+&lt;p>SoundStream은 일반 오디오를 낮은 비트레이트로 압축하면서도 높은 재구성 품질을 유지하는 neural audio codec이다. 이를 위해 residual vector quantization(RVQ)를 사용하여 비트레이트와 품질을 높이는 데 큰 계산 비용 없이 확장성을 제공한다. RVQ는 대상 비트레이트가 증가함에 따른 코드북 크기의 급증을 방지하며, 각 양자화기가 계층적 구조를 가지게 된다. 이는 고품질 재구성에 유리하며, 생성에도 바람직한 속성이다. 이 작업에서는 24kHz 음악을 6kbps로 고품질로 재구성할 수 있는 SoundStream을 오디오 토크나이저로 사용한다.&lt;/p>
+&lt;h3 id="generative-models-for-audio">Generative Models for Audio&lt;/h3>
+&lt;p>장기적인 일관성을 유지하면서 고품질 오디오를 생성하는 것은 어려운 문제지만, 최근에는 Jukebox와 PerceiverAR 같은 일련의 방법론이 이 문제를 해결하려 노력하였다. Jukebox는 높은 시간적 일관성을 달성하기 위해 VQVAEs의 계층을 제안하지만, 생성된 음악에서 아티팩트가 나타났다. 반면 PerceiverAR은 고품질 오디오를 달성하지만, 장기적인 시간적 일관성을 저해하였다.&lt;/p>
+&lt;p>AudioLM은 계층적 토크나이징과 생성 체계를 사용하여 일관성과 고품질 합성 사이의 균형을 맞춘다. 이 방법은 의미 토큰과 음향 토큰 두 가지 유형을 구분하여 장기 구조를 모델링하고 미세한 음향 세부 사항을 포착한다. 이를 통해 AudioLM은 대본이나 기호적 음악 표현에 의존하지 않고도 일관되고 고품질의 음성과 피아노 음악을 생성할 수 있다.&lt;/p>
+&lt;p>MusicLM은 AudioLM을 기반으로 하되, 추가적으로 (1) 생성 과정을 설명적인 텍스트에 조절하는, (2) 이 조절을 멜로디와 같은 다른 신호로 확장하는, 그리고 (3) 피아노 음악을 넘어 다양한 음악 장르의 긴 시퀀스를 모델링하는 세 가지 기여를 한다.&lt;/p>
+&lt;h3 id="conditioned-audio-generation">Conditioned Audio Generation&lt;/h3>
+&lt;p>텍스트 설명에서 오디오를 생성하는 것은 최근 연구 주제로 다루어졌다. DiffSound는 텍스트 인코더로 CLIP을 사용하고, 확산 모델을 적용하여 텍스트 임베딩에 따른 양자화된 멜 스펙트로그램 특성을 예측한다. 반면 AudioGen은 T5 인코더를 텍스트 임베딩에 사용하고, autoregressive transformer decoder로 EnCodec에 의해 생성된 오디오 코드를 예측한다. 두 연구 모두 AudioSet과 AudioCaps 같은 적절한 양의 쌍을 이룬 학습 데이터에 의존한다.&lt;/p>
+&lt;p>텍스트에 기반한 음악 생성에 초점을 맞춘 연구 중, Mubert는 텍스트 프롬프트를 transformer로 임베딩하고, 이를 바탕으로 음악 태그를 선택하여 노래 생성 API에 쿼리한다. 반면 Riffusion은 안정적인 diffusion 모델을 음악-텍스트 데이터셋의 멜 스펙트로그램 음악 조각에 미세조정한다. 이 두 연구를 기준선으로 사용하여, 이 연구가 오디오 생성 품질과 텍스트 설명의 준수를 개선한다는 것을 보여준다.&lt;/p>
+&lt;p>음악의 기호적 표현(예: MIDI)이 강력한 조절 형태로서 생성 과정을 주도하는 것이 보여졌다. 그러나 MusicLM은 허밍된 멜로디와 같은 방법을 통해 더 자연스럽고 직관적인 조절 신호를 제공하며, 이는 텍스트 설명과 결합될 수 있다.&lt;/p>
+&lt;h3 id="text-conditioned-image-generation">Text-Conditioned Image Generation&lt;/h3>
+&lt;p>텍스트 조건의 이미지 생성 모델은 구조적 개선과 대량의 고품질 쌍 학습 데이터 덕분에 큰 진전을 이루었다. 이 방법은 transformer 기반의 autoregressive 접근법과 확산 기반 모델을 포함하며, 이는 텍스트 프롬프트에서 비디오를 생성하는 것으로 확장되어 왔습니다.&lt;/p>
+&lt;p>이 연구의 접근법은 DALL·E 2와 가장 유사하며, 둘 다 텍스트 인코딩을 위해 CLIP에 의존한다. 하지만, DALL·E 2가 diffusion 모델을 decoder로 사용하는 반면, 이 연구는 AudioLM을 기반으로 한 deocer를 사용한다. 또한, 오디오 전용 데이터셋에서 학습이 가능하도록 텍스트 임베딩을 음악 임베딩으로 매핑하는 사전 모델을 생략하고, 추론 시에 음악 임베딩을 텍스트 임베딩으로 단순히 대체한다.&lt;/p>
+&lt;h3 id="joint-embedding-models-for-music-and-text">Joint Embedding Models for Music and Text&lt;/h3>
+&lt;p>MuLan은 음악과 텍스트의 공동 임베딩 모델로, 각 모달리티에 대한 임베딩 탑을 포함한다. 이 탑들은 대조 학습을 통해 두 모달리티를 128차원의 공유 임베딩 공간으로 매핑한다. 텍스트 임베딩 네트워크는 대규모 텍스트 데이터에서 사전 학습된 BERT를 사용하며, 오디오 탑은 ResNet-50 변형을 사용한다.&lt;/p>
+&lt;p>MuLan은 음악 클립과 그에 대응하는 텍스트 주석의 쌍에 학습된다. 데이터 품질에 대한 요구가 낮아, 약한 연관성만 가진 음악-텍스트 쌍에서도 상호 연관성을 학습할 수 있다. 이로 인해 음악을 자연 언어 설명에 연결하여 검색이나 zero-shot 음악 태깅에 활용할 수 있다. 이 작업에서는 Huang et al. (2022)의 사전 학습된 모델을 사용한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="method">Method&lt;/h2>
+&lt;p>이 섹션에서는 MusicLM과 그 구성 요소에 대해 설명한다. 섹션 3.1은 오디오 표현을 제공하는 모델에 대해, 그리고 섹션 3.2는 이를 텍스트 조건의 음악 생성에 어떻게 활용하는지에 대해 다룬다.&lt;/p>
+&lt;h3 id="representation-and-tokenization-of-audio-and-text">Representation and Tokenization of Audio and Text&lt;/h3>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/musiclm/images/figure1.png"
+width="644"
+height="334"
+srcset="https://kurtkim.github.io/p/musiclm/images/figure1_hu6e041e7e12f30cda1cfeed8c59f97029_66923_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/musiclm/images/figure1_hu6e041e7e12f30cda1cfeed8c59f97029_66923_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="192"
+data-flex-basis="462px"
+>&lt;/p>
+&lt;p>conditional autoregressive 음악 생성을 위해 세 가지 모델을 사용해 오디오 표현을 추출한다. AudioLM의 접근법을 따라 SoundStream의 self-supervise 오디오 표현과 w2vBERT를 각각 음향 토큰과 의미 토큰으로 사용하며, 조절을 위해 MuLan의 음악 임베딩과 텍스트 임베딩을 활용한다. 이 모델들은 독립적으로 사전 학습되고 고정되어, sequence-to-sequence 모델링에 필요한 이산적인 오디오와 텍스트 표현을 제공한다.&lt;/p>
+&lt;p>&lt;strong>SoundStream.&lt;/strong> 24 kHz monophonic 오디오를 위해 스트라이딩 요소 480의 SoundStream 모델을 사용하며, 이로 인해 50 Hz의 임베딩이 생성된다. 이 임베딩들은 RVQ에 의해 학습된 양자화로 인해 6 kbps의 비트레이트를 가지게 되며, 1초의 오디오는 600개의 토큰으로 표현된다. 이 토큰들을 &amp;ldquo;acoustic token&amp;quot;이라 부르며, 이는 $A$로 표기된다.&lt;/p>
+&lt;p>&lt;strong>w2v-BERT.&lt;/strong> 600M parameter를 가진 w2v-BERT masked-language-modeling (MLM) 모듈의 중간 계층을 사용한다. 이 모델을 사전 학습하고 고정한 후, 7번째 계층에서 임베딩을 추출하고, 이를 k-means의 중심을 사용해 양자화한다. 결과적으로, 오디오의 모든 초당 25개의 의미 토큰을 생성하며, 이는 $S$로 표기된다.&lt;/p>
+&lt;p>&lt;strong>MuLan.&lt;/strong> MusicLM을 학습시키기 위해, MuLan의 오디오 임베딩 네트워크에서 오디오 시퀀스의 표현을 추출한다. 이 표현은 연속적이지만, 오디오와 조절 신호가 동질적인 이산 토큰 기반 표현을 가지도록 MuLan 임베딩을 양자화한다. 이는 조절 신호를 autoregressively 하게 모델링하는 연구를 지원한다.&lt;/p>
+&lt;p>MuLan은 10초 오디오 입력에 작동하며, 긴 오디오 시퀀스를 처리하기 위해 1초 간격으로 10초 윈도우에서 오디오 임베딩을 계산하고 평균화한다. 이후 1024 크기의 어휘를 가진 12개의 벡터 양자화기를 사용하는 RVQ로 이산화하여, 오디오 시퀀스에 대해 12개의 MuLan 오디오 토큰 $M_A$를 생성한다. 추론 시에는 텍스트 프롬프트에서 MuLan 텍스트 임베딩을 추출하고 같은 RVQ로 양자화하여 12개의 토큰 $M_T$를 얻는다.&lt;/p>
+&lt;p>학습 중에 $M_A$에 조건을 부여하는 것은 학습 데이터를 쉽게 확장할 수 있도록 하며, 대조적인 손실로 학습된 MuLan 같은 모델을 활용해 잡음이 많은 텍스트 설명에 대한 강건성을 높이는 두 가지 이점이 있다.&lt;/p>
+&lt;h3 id="hierarchical-modeling-of-audio-representations">Hierarchical Modeling of Audio Representations&lt;/h3>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/musiclm/images/figure2.png"
+width="1326"
+height="394"
+srcset="https://kurtkim.github.io/p/musiclm/images/figure2_hu5f857058def17e8cc3de10acbfba69e5_117180_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/musiclm/images/figure2_hu5f857058def17e8cc3de10acbfba69e5_117180_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="336"
+data-flex-basis="807px"
+>&lt;/p>
+&lt;p>discrete 오디오 표현을 AudioLM과 결합해 텍스트 조건의 음악 생성을 달성한다. 이를 위해, 각 단계가 decoder-only Transformer에 의해 autoregressively 하게 모델링되는 계층적인 sequenceto-sequence 모델링 작업을 제안한다.&lt;/p>
+&lt;p>첫 번째 단계는 의미 모델링 단계로, MuLan 오디오 토큰에서 의미 토큰 $S$로의 매핑을 학습한다. 이는 분포 $p(S_t | S_{&amp;lt;t}, M_A)$를 모델링함으로써 이루어지며, 여기서 $t$는 시간 단계에 해당하는 시퀀스 내의 위치이다. 두 번째 단계는 음향 모델링 단계로, 음향 토큰 $A_q$는 MuLan 오디오 토큰과 의미 토큰 모두에 의해 조건이 부여되어 예측되며, 이는 분포 $p(A_t | $A_{&amp;lt;t}, S, M_A)$를 모델링한다.&lt;/p>
+&lt;p>긴 토큰 시퀀스를 피하고자, AudioLM은 음향 모델링 단계를 대략적인 단계와 세부적인 단계로 분할하는 방법을 제안하였으며, 이 연구에서도 이를 따랐다. 대략적인 단계에서는 SoundStream RVQ의 첫 네 단계를, 세부적인 단계에서는 나머지 여덟 단계를 모델링한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="experimental-setup">Experimental Setup&lt;/h2>
+&lt;h3 id="models">Models&lt;/h3>
+&lt;p>AudioLM의 의미 단계와 음향 단계 모델링에 decoder-only Transformer를 사용한다. 이 모델은 24개 layer, 16개 attention head, 1024의 embedding dimension, 4096의 차원의 feed-forward layer, 0.1의 dropout, 그리고 relative positional embedding으로 구성되어 있으며, 각 단계는 430M의 parameter를 가진다.&lt;/p>
+&lt;h3 id="training-and-inference">Training and Inference&lt;/h3>
+&lt;p>MusicLM의 다른 구성 요소를 학습시키기 위해 사전 학습된 MuLan에 의존한다. SoundStream과 w2v-BERT는 FMA 데이터셋에서, 토크나이저와 의미 및 음향 모델링 단계의 모델은 24 kHz에서 280k시간의 음악을 포함하는 5M 개의 오디오 클립 데이터셋에서 학습된다. 각 단계는 학습 데이터를 여러 번 반복하여 학습하며, 의미와 음향 단계에서는 각각 30초와 10초의 임의 오디오를 사용한다. 세부적인 음향 모델링 단계는 3초 자르기에서 학습된다.&lt;/p>
+&lt;p>추론 시에는 MuLan이 학습한 오디오와 텍스트 사이의 임베딩 공간을 사용하며, $M_A$를 $M_T$로 대체한다. 그 후, $M_T$가 주어졌을 때 $A$를 얻기 위해 위에서 설명한 단계를 따른다. 모든 단계에서 autoregressive 샘플링을 위해 온도 샘플링을 사용하며, 의미 모델링 단계는 1.0, 대략적인 음향 모델링 단계는 0.95, 세밀한 음향 모델링 단계는 0.4의 온도를 사용한다. 이 값들은 생성된 음악의 다양성과 시간적 일관성 사이의 좋은 균형을 위해 선택되었다.&lt;/p>
+&lt;h3 id="evaluation-dataset">Evaluation Dataset&lt;/h3>
+&lt;p>MusicLM 평가를 위해 고품질 음악 캡션 데이터셋인 MusicCaps를 준비하였다. 이 데이터셋은 AudioSet의 5.5k 음악 클립과 전문 음악가들의 영어 설명이 포함되어 있다. 각 음악 클립에는 자유 형식의 캡션과 장르, 기분, 템포 등을 설명하는 음악 측면이 포함되어 있다.&lt;/p>
+&lt;p>MusicCaps는 AudioSet의 오디오 클립과 텍스트 설명을 포함한 AudioCaps를 보완한다. AudioCaps는 음악이 아닌 내용이 포함되어 있지만, MusicCaps는 전문가의 상세 주석이 포함된 음악에만 초점을 맞추고 있다. AudioSet의 학습 및 평가 분할로부터 다양한 장르의 예시를 추출하였으며, 1k 예시로 구성된 장르별 균형 분할도 제공한다.&lt;/p>
+&lt;h3 id="metrics">Metrics&lt;/h3>
+&lt;p>MusicLM을 평가하기 위해, 오디오 품질과 텍스트 설명 충실도라는 음악 생성의 두 가지 중요한 측면을 측정하는 다양한 메트릭을 사용한다.&lt;/p>
+&lt;p>&lt;strong>Fréchet Audio Distance (FAD).&lt;/strong>&lt;/p>
+&lt;p>Fréchet Audio Distance는 사람의 인식과 잘 맞는 오디오 품질 지표이다. 이 점수가 낮은 모델은 신뢰할 수 있는 오디오를 생성할 것으로 예상되지만, 생성된 샘플이 제공된 텍스트 설명을 반드시 따르는 것은 아니다.&lt;/p>
+&lt;p>공개적으로 사용 가능한 두 가지 오디오 임베딩 모델, 즉 음성 데이터에 학습된 Trill 2와 YouTube-8M 오디오 이벤트 데이터셋에 학습된 VGGish 3에 기반한 FAD를 보고한다. 학습 데이터의 차이로 인해, 이 두 모델은 오디오 품질의 다른 측면을 측정하게 될 것으로 예상한다.&lt;/p>
+&lt;p>&lt;strong>KL Divergence (KLD).&lt;/strong> 텍스트 설명과 음악 클립 사이에는 다대다 관계가 있어, 오디오 파형 수준에서 직접 비교는 불가능하다. 입력 텍스트 충실도를 평가하기 위해, AudioSet에서 다중 레이블 분류를 위해 학습된 LEAF 분류기를 사용하여 생성된 음악과 참조 음악의 클래스 예측을 계산하고, 이들 사이의 KL-Divergence를 측정한다. KL-Divergence가 낮으면, 생성된 음악은 분류기에 따라 참조 음악과 유사한 음향 특성을 가질 것으로 예상된다.&lt;/p>
+&lt;p>&lt;strong>MuLan Cycle Consistency (MCC).&lt;/strong> 음악-텍스트 임베딩 모델인 MuLan을 사용해 음악-텍스트 쌍의 유사성을 측정한다. MusicCaps의 텍스트 설명과 그에 기반한 생성된 음악에서 임베딩을 계산하고, 이들 간의 평균 코사인 유사성을 MCC 메트릭으로 정의한다.&lt;/p>
+&lt;p>&lt;strong>Qualitative evaluation.&lt;/strong> 생성된 샘플이 텍스트 설명을 얼마나 잘 따르는지 평가하기 위해 A대 B 인간 평가 작업을 설정하였다. 평가자들은 텍스트 설명과 두 가지 다른 모델에 의해 생성된 음악 샘플을 비교하며, 샘플에 대한 강한, 약한 또는 무관한 선호도를 선택한다. 음악 품질은 이미 FAD 메트릭으로 평가되었으므로, 이를 고려하지 않도록 지시받았다.&lt;/p>
+&lt;p>참조 음악과 n개의 다른 모델의 출력을 고려해 총 n + 1개의 조건을 설정하고, 이들 간의 쌍을 비교한다. 각 조건이 얼마나 선호되는지를 승리의 수로 계산하여 결과를 집계하고 순위를 매긴다. 샘플은 평가 데이터의 장르 균형 1k 부분 집합에서 선택된다.&lt;/p>
+&lt;p>&lt;strong>Training data memorization.&lt;/strong> 큰 언어 모델은 학습 데이터의 패턴을 기억할 수 있다. 이를 바탕으로 MusicLM이 음악 세그먼트를 얼마나 기억하는지 연구한다. 학습 세트에서 무작위로 선택한 예시에 대해, MuLan 오디오 토큰과 첫 번째 의미 토큰 시퀀스를 포함한 프롬프트를 모델에 제공한다. greedy decoding을 통해 의미 토큰의 연속을 생성하고, 이를 데이터셋의 대상 토큰과 비교한다. 생성된 토큰과 대상 토큰이 전체 샘플링 세그먼트에서 완전히 일치하는 예시의 비율을 측정한다.&lt;/p>
+&lt;p>음향적으로 유사한 오디오 세그먼트가 다른 토큰 시퀀스로 이어질 수 있다는 관찰을 기반으로, 근사치 일치를 감지하는 방법을 제안한다. 생성된 토큰과 대상 토큰의 의미 토큰 수 히스토그램을 계산하고, 이들 사이의 일치 비용을 측정한다. 이를 위해 먼저 의미 토큰 쌍 간의 거리 행렬을 계산하고, 그 후 Sinkhorn 알고리즘을 사용해 최적의 전송 문제를 해결한다. 부정 쌍을 구성하고 이들의 일치 비용 분포를 측정해 일치 임계값을 보정한다. 이 임계값은 0.01% 미만의 거짓 긍정 근사치 일치를 초래하는 0.85로 설정된다.&lt;/p>
+&lt;hr>
+&lt;h2 id="results">Results&lt;/h2>
+&lt;p>MusicLM을 평가하기 위해, 최근의 기준선인 Mubert와 Riffusion과 비교한다. Mubert API를 쿼리하고 Riffusion 모델에서 추론을 실행하여 오디오를 생성한다. 이 논문과 함께 공개적으로 발표하는 평가 데이터셋인 MusicCaps에서 평가를 수행한다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/musiclm/images/table1.png"
+width="600"
+height="170"
+srcset="https://kurtkim.github.io/p/musiclm/images/table1_hu932e6e5791924bf2b016ff6504760e37_25595_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/musiclm/images/table1_hu932e6e5791924bf2b016ff6504760e37_25595_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="352"
+data-flex-basis="847px"
+>&lt;/p>
+&lt;p>&lt;strong>Comparison to baselines.&lt;/strong> 오디오 품질을 측정하는 FAD 메트릭에 따르면, MusicLM은 Mubert와 Riffusion보다 더 나은 점수를 얻었다. 또한, 입력 텍스트 설명에 대한 충실도를 측정하는 KLD와 MCC에 따라, MusicLM은 기준선에 비해 텍스트 설명에서 더 많은 정보를 캡처하는 능력을 보여준다.&lt;/p>
+&lt;p>텍스트 충실도 평가를 보완하기 위해 인간 청취 테스트를 진행하였다. 참가자들은 두 개의 10초 클립과 텍스트 캡션을 보고, 어떤 클립이 캡션의 텍스트를 가장 잘 설명하는지 5점 척도로 평가한다. 총 1200개의 평가를 수집하였고, 각 소스는 600개의 쌍별 비교에 참여하였다. MusicLM은 두 가지 기준선에 비해 확실히 선호되지만, 실제 참조 음악과의 차이는 여전히 존재한다. 청취 연구의 자세한 내용은 부록 B에서 확인할 수 있다.&lt;/p>
+&lt;p>실제 참조가 MusicLM보다 선호되는 경우, 이는 주로 아래의 패턴 때문이다: (1) 캡션은 매우 상세하고, 여러 악기나 비음악적인 측면을 설명한다; (2) 캡션은 오디오의 재생 순서를 설명한다; (3) 부정적인 표현이 사용되는데, 이는 MuLan에 잘 반영되지 않는다.&lt;/p>
+&lt;p>결론적으로, 이 방법론은 MusicCaps의 자유형 텍스트 캡션에서 세부적인 정보를 잘 포착하며, KLD와 MCC 메트릭은 텍스트 설명에 대한 충실도를 정량적으로 측정하고, 이는 인간의 평가와 일치한다는 것을 확인하였다.&lt;/p>
+&lt;p>&lt;strong>Importance of semantic tokens.&lt;/strong> 의미론적 모델링과 음향 모델링을 분리하는 것의 유용성을 검증하기 위해, Transformer 모델을 학습시켜 MuLan 토큰에서 음향 토큰을 직접 예측하였다. FAD 메트릭은 비슷하지만, 의미론적 모델링 단계를 제거하면 KLD와 MCC 점수가 악화됨을 발견하였다. 이는 의미 토큰이 텍스트 설명에 따른 순응을 돕는다는 것을 나타낸다. 또한, 샘플을 들어보니 장기 구조에서의 저하가 관찰되었다.&lt;/p>
+&lt;p>&lt;strong>Information represented by audio tokens.&lt;/strong> 추가 실험을 통해 의미론적 토큰과 음향 토큰이 어떤 정보를 포착하는지 연구하였다. 첫 번째 실험에서는 텍스트 토큰과 의미론적 토큰을 고정하고, 음향 모델링 단계를 반복하여 샘플을 생성하였다. 결과적으로 샘플들은 다양했지만, 장르나 리듬, 멜로디 등에서 공통점을 보였습니다. 두 번째 실험에서는 텍스트 토큰만 고정하고 의미론적 토큰과 음향 토큰을 생성했을 때, 멜로디와 리듬에서 더 큰 다양성을 보였다. 이 연구의 샘플들은 동반 자료에서 확인할 수 있다.&lt;/p>
+&lt;p>&lt;strong>Memorization analysis.&lt;/strong> 의미론적 토큰 프롬프트의 길이를 변화시킬 때 일치도를 보고합니다. 정확한 일치의 비율은 매우 작은 것을 확인했으며, 근사치 일치(τ = 0.85 사용)의 경우, 프롬프트 길이가 증가함에 따라 일치하는 예시의 비율이 증가한다. 또한, 일치 점수가 낮은 시퀀스는 토큰 다양성이 낮은 것으로 확인되었다. 이러한 패턴은 의미론적 토큰이 정확하게 일치하더라도, 음향 모델링이 생성된 샘플에 추가적인 다양성을 도입한다는 것을 보여준다.&lt;/p>
+&lt;hr>
+&lt;h2 id="extensions">Extensions&lt;/h2>
+&lt;p>&lt;strong>Melody conditioning.&lt;/strong> MusicLM은 텍스트 설명과 함께 허밍, 노래, 휘파람, 악기 연주 등의 형태로 제공되는 멜로디에 기반한 음악을 생성할 수 있도록 확장되었다. 이를 위해, 멜로디는 같지만 음향이 다른 오디오 쌍으로 구성된 데이터셋을 만들고, 공통 임베딩 모델을 학습시켜 같은 멜로디를 가진 오디오 클립의 임베딩이 서로 가까워지도록 하였다.&lt;/p>
+&lt;p>MusicLM의 멜로디를 추출하기 위해, 멜로디 임베딩을 양자화하고 결과 토큰 시퀀스를 MuLan 오디오 토큰과 연결한다. 추론 과정에서는, 입력 오디오 클립에서 멜로디 토큰을 계산하고 이를 MuLan 텍스트 토큰과 연결한다. 이러한 방식으로, MusicLM은 입력 오디오 클립의 멜로디를 따르면서도 텍스트 설명을 준수하는 음악을 성공적으로 생성할 수 있다.&lt;/p>
+&lt;p>&lt;strong>Long generation and story mode.&lt;/strong> MusicLM은 시간 차원에서 자기회귀적 생성을 사용하여 학습 시 사용한 것보다 더 긴 시퀀스를 만들 수 있다. 의미론적 모델링은 30초 시퀀스에서 학습되며, 더 긴 시퀀스를 위해 15초 간격으로 진행하고, 15초를 접두사로 사용하여 추가적인 15초를 생성한다. 이 방법으로 몇 분 동안 일관성을 유지하는 긴 오디오 시퀀스를 생성할 수 있다.&lt;/p>
+&lt;p>소소한 수정을 통해 MusicLM은 시간이 지나면서 텍스트 설명이 변화하는 동안 긴 오디오 시퀀스를 생성할 수 있게 되었다. 이를 스토리 모드라고 부르며, 여러 텍스트 설명에서 $M_T$를 계산하고 15초마다 조건 신호를 변경한다. 이 방법으로, 모델은 텍스트 설명에 따라 음악 컨텍스트를 변경하면서도 템포가 일관되고 의미론적으로 타당한 부드러운 전환을 생성한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="conclusions">Conclusions&lt;/h2>
+&lt;p>MusicLM은 텍스트 조건에 충실하면서 몇 분 동안 일관된 24 kHz의 고품질 음악을 생성하는 모델이다. 이 모델은 뮤지션들이 준비한 5.5k 음악-텍스트 쌍의 고품질 데이터셋인 MusicCaps에서 기존 모델을 능가하는 성능을 보여준다.&lt;/p>
+&lt;p>이 방법의 한계 중 일부는 MuLan으로부터 비롯되며, 이는 모델이 부정을 잘못 이해하고 텍스트에 기술된 시간 순서를 정확하게 따르지 않는다는 점을 포함한다. 또한, 정량적 평가의 추가적인 개선이 필요하며, MCC 점수는 MuLan에 의존하기 때문에 이 방법에 유리하다.&lt;/p>
+&lt;p>미래의 연구는 가사 생성, 텍스트 조건화 및 보컬 품질 개선, 고수준 노래 구조(서론, 구절, 후렴구 등)의 모델링, 그리고 더 높은 샘플 속도에서 음악 모델링에 초점을 맞출 수 있다.&lt;/p>
+&lt;hr>
+&lt;h2 id="broader-impact">Broader Impact&lt;/h2>
+&lt;p>MusicLM은 텍스트를 기반으로 고품질 음악을 생성해 인간의 창의적 음악 작업을 돕지만, 여러 위험 요소가 있다. 학습 데이터의 편향이 생성된 샘플에 반영될 수 있으며, 이것은 대표성이 부족한 문화에 대한 음악 생성의 적절성과 문화적 강탈 문제를 불러일으킬 수 있다.&lt;/p>
+&lt;p>창의적 콘텐츠의 잘못된 사용 가능성을 인지하며, 책임있는 모델 개발 원칙에 따라 의미 모델링에 초점을 맞춘 연구를 수행하였다. 기억된 예시는 극히 적었고, 예시의 1%만 대략적으로 일치하였다. 음악 생성과 관련된 위험을 해결하기 위한 미래 연구의 필요성을 강조하며, 현재 모델 공개 계획은 없다.&lt;/p>
+&lt;hr>
+&lt;h2 id="reference">Reference&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2301.11325.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/lucidrains/musiclm-pytorch" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
@@ -430,134 +566,134 @@ data-flex-basis="248px"
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2212.12017.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>MusicLM</title><link>https://kurtkim.github.io/p/musiclm/</link><pubDate>Mon, 04 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/musiclm/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>MusicLM은 &amp;ldquo;a calming violin melody backed by a distorted guitar riff&amp;quot;과 같은 텍스트 설명을 바탕으로 고품질의 음악을 생성하는 모델이다. 이 모델은 sequenceto-sequence 모델링을 통해 음악을 생성하며, 음질과 텍스트 설명의 정확성에서 이전 모델들을 능가한다. 또한, 텍스트와 멜로디 모두에 조건을 두어 휘파람과 허밍된 멜로디를 텍스트 캡션에 따라 변형할 수 있다. 이를 지원하기 위해, 5.5k의 음악-텍스트 쌍 데이터셋인 MusicCaps를 공개하였다.&lt;/p>
+&lt;/ul></description></item><item><title>MuLan</title><link>https://kurtkim.github.io/p/mulan/</link><pubDate>Mon, 04 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/mulan/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>이 논문은 &amp;ldquo;MuLan&amp;quot;이라는 새로운 음향 모델을 소개한다. MuLan은 44M 개의 음악 녹음과 자유 형식의 텍스트 주석을 학습하여 음악 오디오를 제한 없는 자연어 음악 설명과 직접 연결한다. 이 모델은 다양한 음악 장르와 텍스트 스타일과 호환되며, 오디오-텍스트 표현은 기존의 ontologie를 포함하면서 zero-shot 기능으로 발전하였다. 이 모델의 유연성은 전송 학습, zero-shot 음악 태깅, 음악 분야의 언어 이해 및 크로스-모달 검색 애플리케이션 등의 실험을 통해 입증되었다.&lt;/p>
 &lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>conditional neural 오디오 생성은 text-to-speech, lyrics-conditioned 음악 생성, MIDI 시퀀스로부터의 오디오 합성 등 다양한 분야에서 활용된다. 최근에는 text-to-image 생성 연구의 발전에 따라, 고수준의 캡션으로부터 오디오를 생성하는 연구가 진행되었다. 그러나 이러한 모델은 아직 단순한 음향 장면에 한정되어 있어, 풍부한 오디오 시퀀스를 생성하는 것은 여전히 도전 과제로 남아 있다.&lt;/p>
-&lt;p>최근에 소개된 AudioLM은 오디오 합성을 discrete representation 공간에서의 언어 모델링 작업으로 취급하여 고해상도와 장기 일관성을 동시에 달성한다. 오디오 신호의 내용에 대한 가정 없이 오디오 전용 말뭉치에서 현실적인 오디오를 생성하는 방법을 학습한다. 이러한 시스템이 적절한 데이터에 학습된다면 더 풍부한 출력을 생성할 수 있을 것으로 보인다.&lt;/p>
-&lt;p>고품질 오디오 합성의 본질적인 어려움 외에도, 오디오-텍스트 쌍 데이터의 부족이 주요 장애 요인이다. 이는 이미지 도메인과 대조적으로, 이미지 도메인에서는 대규모 데이터셋의 사용이 뛰어난 이미지 생성 품질에 크게 기여하였다. 또한, 오디오의 주요 특성을 단어로 명확하게 포착하거나 시퀀스 전체에 대한 캡션을 제공하는 것은 이미지를 설명하는 것보다 더욱 어렵다.&lt;/p>
-&lt;p>이 연구에서는 텍스트 설명으로 고해상도 음악을 생성하는 MusicLM 모델을 소개한다. MusicLM은 AudioLM의 multi-stage autoregressive 모델링을 활용하고, 텍스트 조건부를 추가한다. 쌍 데이터의 부족함을 해결하기 위해, 공동 music-text 모델인 MuLan을 활용하여 음악과 텍스트 설명을 임베딩 공간에서 가까운 표현으로 투영한다. 이렇게 하면 학습 시간에 캡션의 필요성을 제거하고, 대규모 오디오 말뭉치에서 학습할 수 있다. 학습 시에는 오디오에서 계산된 MuLan 임베딩을, 추론 시에는 텍스트 입력에서 계산된 MuLan 임베딩을 사용한다.&lt;/p>
-&lt;p>MusicLM은 라벨이 없는 대규모 음악 데이터셋에 학습되어 복잡한 텍스트 설명에 따른 일관성 있는 음악을 생성한다. 이를 평가하기 위해, 전문 음악가들이 준비한 5.5k의 예시를 포함하는 고품질 음악 캡션 데이터셋인 MusicCaps를 소개하고, 이를 공개하여 미래의 연구를 지원한다.&lt;/p>
-&lt;p>이 연구의 실험은 MusicLM이 품질과 캡션 준수 면에서 이전 시스템을 능가한다는 것을 보여준다. 또한, 음악의 일부 측면을 단어로 설명하는 것이 어렵거나 불가능한 경우에도, 이 방법이 텍스트를 넘어서는 조건부 신호를 지원한다. 특히, 오디오 형태의 추가적인 멜로디를 받아들여 원하는 멜로디를 따르는 음악 클립을 생성하는 확장된 MusicLM을 소개한다.&lt;/p>
-&lt;p>음악 생성과 관련된 위험성, 특히 창의적 콘텐츠의 부당한 사용을 인지하고 있다. 이에 따라, 대형 언어 모델에 대한 기억력 연구를 철저히 수행하였고, MuLan 임베딩을 MusicLM에 입력하면 생성된 토큰의 시퀀스가 학습 세트의 해당 시퀀스와 크게 다르다는 결과를 얻었다.&lt;/p>
-&lt;p>이 작업의 주요 기여는 다음과 같다:&lt;/p>
-&lt;ol>
-&lt;li>텍스트 조건부 신호에 충실하게 몇 분 동안 일관된 고품질 음악을 생성하는 MusicLM 모델을 소개한다.&lt;/li>
-&lt;li>멜로디와 같은 다른 조건부 신호로 방법을 확장하고, 텍스트 프롬프트에 따라 합성한다. 또한, 최대 5분 길이의 음악 클립을 일관되게 생성하는 것을 보여준다.&lt;/li>
-&lt;li>text-to-music 생성 작업을 위한 첫 번째 평가 데이터셋인 MusicCaps를 공개한다. 이는 음악가들이 준비한 5.5k의 음악-텍스트 쌍으로 구성된 고품질 데이터셋이다.&lt;/li>
-&lt;/ol>
+&lt;p>분류기는 보통 사전에 정의된 클래스 목록으로 예제들을 레이블링하도록 학습되며, 이는 클래스 간 관계를 나타내는 구조화된 체계로 지정된다. 최근 신경 언어 모델링의 발전으로, 연구자들은 원시 콘텐츠 정보에 접근하기 위한 자연어 인터페이스를 탐색하고 있다. 이는 주로 시각과 오디오 이벤트 분야에서 이루어지며, 미디어 콘텐츠와 자연어 캡션을 함께 임베딩하는 것이 전이 학습, 크로스-모달 검색, 자동 캡셔닝, zero-shot 분류 등에서 효과적임을 보여주었다.&lt;/p>
+&lt;p>이러한 연구의 성공은 대규모 학습 자료와 언어와 다른 모드 사이의 복잡한 관계를 모델링 할 수 있는 유연한 신경망 구조에 크게 의존한다. 특히, 시각 분야는 웹에서 대량의 캡션 이미지를 사용할 수 있어 이점을 얻었다. 그러나 환경 오디오 분야에서는 대규모 오디오-캡션 쌍이 덜 접근 가능하며, 이에 따라 작은 캡션 데이터셋에 의존하였다. 이러한 데이터셋들은 사운드를 묘사하는 언어의 다양성을 충분히 담지 못하며, zero-shot 설정에서의 성공은 여전히 부족하다.&lt;/p>
+&lt;p>이 논문은 오디오와 자연어를 함께 임베딩하는 작업에 대해 다루되, 특히 음악 분야에 초점을 맞춘다. 목표는 모든 음악 개념을 관련 음악 오디오와 연결할 수 있는 유연한 언어 인터페이스를 제작하는 것이다. 이를 위해, 메타데이터, 댓글, 플레이리스트 데이터에서 추출한 텍스트 주석을 44M 개 이상의 인터넷 음악 비디오 학습 세트에 매핑하는 전략을 사용한다. 하지만 텍스트 데이터가 음악 콘텐츠를 정확히 참조하는 경우는 일부에 불과하므로, 음악 설명을 식별하기 위해 별도로 학습된 텍스트 분류기를 사용한 텍스트 사전 필터링을 탐색한다.&lt;/p>
+&lt;p>이 논문에서는 대규모 데이터셋을 사용하여 자연어 인터페이스가 탑재된 새로운 세대의 음악 오디오 임베딩 모델인 &amp;ldquo;MuLan&amp;quot;을 학습시킨다. MuLan은 음악 오디오와 텍스트 간의 공유 임베딩 공간을 만들어내는 two-tower parallel encoder 구조를 사용한다. 이 모델은 다양한 음악 정보 검색 작업에서 최고 수준의 성능을 보이며, 텍스트에서 음악으로의 크로스-모달 검색, zero-shot 음악 태깅, 음악 도메인의 언어 이해 등의 기능을 가능하게 한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="background-and-related-work">Background and Related Work&lt;/h2>
-&lt;p>다양한 도메인의 생성 모델링에서 Transformer 기반의 autoregressive 모델과 U-Net 기반의 diffusion 모델이 주도하고 있다. 이 섹션에서는 discrete 토큰을 다루는 autoregressive 생성 모델에 초점을 맞춰 MusicLM과 관련된 작업을 검토한다.&lt;/p>
-&lt;h3 id="quantization">Quantization&lt;/h3>
-&lt;p>자연어 처리, 이미지, 비디오 생성 등에서 autoregressively 하게 discrete 토큰의 시퀀스를 모델링하는 것이 효과적임이 입증되었다. 연속 신호에 대한 autoregressive 모델의 성공에는 양자화가 중요하며, 이는 컴팩트한 discrete 표현을 제공하면서도 높은 품질의 재구성을 가능하게 한다. VQ-VAEs는 다양한 도메인에서 낮은 비트레이트에서 뛰어난 재구성 품질을 보여주며, 많은 접근법의 기본 양자화 도구로 사용되었다.&lt;/p>
-&lt;p>SoundStream은 일반 오디오를 낮은 비트레이트로 압축하면서도 높은 재구성 품질을 유지하는 neural audio codec이다. 이를 위해 residual vector quantization(RVQ)를 사용하여 비트레이트와 품질을 높이는 데 큰 계산 비용 없이 확장성을 제공한다. RVQ는 대상 비트레이트가 증가함에 따른 코드북 크기의 급증을 방지하며, 각 양자화기가 계층적 구조를 가지게 된다. 이는 고품질 재구성에 유리하며, 생성에도 바람직한 속성이다. 이 작업에서는 24kHz 음악을 6kbps로 고품질로 재구성할 수 있는 SoundStream을 오디오 토크나이저로 사용한다.&lt;/p>
-&lt;h3 id="generative-models-for-audio">Generative Models for Audio&lt;/h3>
-&lt;p>장기적인 일관성을 유지하면서 고품질 오디오를 생성하는 것은 어려운 문제지만, 최근에는 Jukebox와 PerceiverAR 같은 일련의 방법론이 이 문제를 해결하려 노력하였다. Jukebox는 높은 시간적 일관성을 달성하기 위해 VQVAEs의 계층을 제안하지만, 생성된 음악에서 아티팩트가 나타났다. 반면 PerceiverAR은 고품질 오디오를 달성하지만, 장기적인 시간적 일관성을 저해하였다.&lt;/p>
-&lt;p>AudioLM은 계층적 토크나이징과 생성 체계를 사용하여 일관성과 고품질 합성 사이의 균형을 맞춘다. 이 방법은 의미 토큰과 음향 토큰 두 가지 유형을 구분하여 장기 구조를 모델링하고 미세한 음향 세부 사항을 포착한다. 이를 통해 AudioLM은 대본이나 기호적 음악 표현에 의존하지 않고도 일관되고 고품질의 음성과 피아노 음악을 생성할 수 있다.&lt;/p>
-&lt;p>MusicLM은 AudioLM을 기반으로 하되, 추가적으로 (1) 생성 과정을 설명적인 텍스트에 조절하는, (2) 이 조절을 멜로디와 같은 다른 신호로 확장하는, 그리고 (3) 피아노 음악을 넘어 다양한 음악 장르의 긴 시퀀스를 모델링하는 세 가지 기여를 한다.&lt;/p>
-&lt;h3 id="conditioned-audio-generation">Conditioned Audio Generation&lt;/h3>
-&lt;p>텍스트 설명에서 오디오를 생성하는 것은 최근 연구 주제로 다루어졌다. DiffSound는 텍스트 인코더로 CLIP을 사용하고, 확산 모델을 적용하여 텍스트 임베딩에 따른 양자화된 멜 스펙트로그램 특성을 예측한다. 반면 AudioGen은 T5 인코더를 텍스트 임베딩에 사용하고, autoregressive transformer decoder로 EnCodec에 의해 생성된 오디오 코드를 예측한다. 두 연구 모두 AudioSet과 AudioCaps 같은 적절한 양의 쌍을 이룬 학습 데이터에 의존한다.&lt;/p>
-&lt;p>텍스트에 기반한 음악 생성에 초점을 맞춘 연구 중, Mubert는 텍스트 프롬프트를 transformer로 임베딩하고, 이를 바탕으로 음악 태그를 선택하여 노래 생성 API에 쿼리한다. 반면 Riffusion은 안정적인 diffusion 모델을 음악-텍스트 데이터셋의 멜 스펙트로그램 음악 조각에 미세조정한다. 이 두 연구를 기준선으로 사용하여, 이 연구가 오디오 생성 품질과 텍스트 설명의 준수를 개선한다는 것을 보여준다.&lt;/p>
-&lt;p>음악의 기호적 표현(예: MIDI)이 강력한 조절 형태로서 생성 과정을 주도하는 것이 보여졌다. 그러나 MusicLM은 허밍된 멜로디와 같은 방법을 통해 더 자연스럽고 직관적인 조절 신호를 제공하며, 이는 텍스트 설명과 결합될 수 있다.&lt;/p>
-&lt;h3 id="text-conditioned-image-generation">Text-Conditioned Image Generation&lt;/h3>
-&lt;p>텍스트 조건의 이미지 생성 모델은 구조적 개선과 대량의 고품질 쌍 학습 데이터 덕분에 큰 진전을 이루었다. 이 방법은 transformer 기반의 autoregressive 접근법과 확산 기반 모델을 포함하며, 이는 텍스트 프롬프트에서 비디오를 생성하는 것으로 확장되어 왔습니다.&lt;/p>
-&lt;p>이 연구의 접근법은 DALL·E 2와 가장 유사하며, 둘 다 텍스트 인코딩을 위해 CLIP에 의존한다. 하지만, DALL·E 2가 diffusion 모델을 decoder로 사용하는 반면, 이 연구는 AudioLM을 기반으로 한 deocer를 사용한다. 또한, 오디오 전용 데이터셋에서 학습이 가능하도록 텍스트 임베딩을 음악 임베딩으로 매핑하는 사전 모델을 생략하고, 추론 시에 음악 임베딩을 텍스트 임베딩으로 단순히 대체한다.&lt;/p>
-&lt;h3 id="joint-embedding-models-for-music-and-text">Joint Embedding Models for Music and Text&lt;/h3>
-&lt;p>MuLan은 음악과 텍스트의 공동 임베딩 모델로, 각 모달리티에 대한 임베딩 탑을 포함한다. 이 탑들은 대조 학습을 통해 두 모달리티를 128차원의 공유 임베딩 공간으로 매핑한다. 텍스트 임베딩 네트워크는 대규모 텍스트 데이터에서 사전 학습된 BERT를 사용하며, 오디오 탑은 ResNet-50 변형을 사용한다.&lt;/p>
-&lt;p>MuLan은 음악 클립과 그에 대응하는 텍스트 주석의 쌍에 학습된다. 데이터 품질에 대한 요구가 낮아, 약한 연관성만 가진 음악-텍스트 쌍에서도 상호 연관성을 학습할 수 있다. 이로 인해 음악을 자연 언어 설명에 연결하여 검색이나 zero-shot 음악 태깅에 활용할 수 있다. 이 작업에서는 Huang et al. (2022)의 사전 학습된 모델을 사용한다.&lt;/p>
+&lt;h2 id="related-work">Related Work&lt;/h2>
+&lt;p>&lt;strong>Audio representation learning.&lt;/strong> 대규모로 일반적인 콘텐츠 표현을 사전 학습하여 전이 학습하는 방법이 여러 분야에서 주요 접근법이 되었다. 이는 오디오 표현 학습에도 적용되었으며, 일반 환경 오디오와 음악 오디오 모두에서 다양한 사전 훈련 메커니즘이 탐색되었다. ImageNet과 AudioSet에서 사전 학습된 오디오 스펙트로그램 변환기는 다양한 태깅 작업에서 최고의 성과를 보였으며, Million Song Database를 사용한 연구에서는 음악 오디오 표현 학습의 초기 기준선을 제시하였다.&lt;/p>
+&lt;p>비지도 및 자기 지도 사전 학습에서는 구별적 모델과 생성적 모델 모두 성공적이었다. 구별적 학습은 같은 녹음에서 추출된 오디오 세그먼트에 더 높은 유사성을 부여하는 표현을 학습하는 방식을 사용하였다. 이와 비슷하게, SSAST는 생성적인 마스크된 스펙트로그램 패치 모델링을 탐색하였다. 생성 모델의 중간 임베딩이 downstream 분류를 위한 강력한 오디오 표현을 제공한다는 것이 확인되었으며, 사용자 상호작용 통계와 시각적 단서 같은 약한 감독도 검토되었다.&lt;/p>
+&lt;p>이 연구는 음악 오디오와 약하게 연결된 풍부한 텍스트 주석을 활용한 크로스-모달 감독 방법을 개발하는 것에 집중하고 있다. 이를 통해 학습된 표현의 전이 학습 능력을 평가하고, 다양한 오디오 encoder 구조를 비교 분석하고 있다.&lt;/p>
+&lt;p>&lt;strong>Cross-modal contrastive learning.&lt;/strong> 대규모 데이터를 활용한 대조 학습의 성공에 기반하여, 이미지-텍스트 모델에 오디오 타워를 추가하고 크로스-모달 정렬을 강화하는 삼중 모드 구조를 제안하였다. 오디오 분야에서는 오디오의 잠재적 표현과 관련 태그를 정렬하기 위해 대조 학습이 사용되었다. 후속 연구에서는 사전 학습된 비문맥적 단어 임베딩 모델을 사용하여 태그를 넘어 새로운 용어로 일반화하는 능력을 지원하였다. 이 방법은 음악 도메인을 위한 오디오-텍스트 쌍의 대규모 컬렉션을 채굴하는데 초점을 맞추고 있으며, 이를 통해 처음으로 임의적인 zero-shot 음악 태깅과 검색이 가능해졌다.&lt;/p>
+&lt;p>&lt;strong>Music text joint embedding models.&lt;/strong> 콘텐츠 기반 음악 정보 검색은 풍부한 의미를 가진 텍스트와 음악의 광범위하고 세밀한 특성을 연결하는 것을 필요로 한다. 일반적인 접근법은 다중 레이블 분류 작업을 통해 텍스트 레이블 클래스의 의미를 음악에 적용하는 것이다. 이를 위해, 음악 비디오와 연관된 자연어 텍스트에서 대량의 어휘를 추출하고, 이를 통해 오디오 인코더를 학습시키며, 텍스트 레이블을 오디오 특성과 정렬시키는 방법이 사용되었다. 또한, 분류, 회귀, 메트릭 학습 등의 다양한 학습 작업을 통해 자유 형식의 텍스트와 음악 오디오를 정렬하는 방법이 탐색되었다.&lt;/p>
+&lt;p>이 논문의 작업은 MuLaP와 가장 유사하며, 이 연구에서는 제작 음악 라이브러리에서 250K의 오디오-캡션 쌍을 채굴하여 multimodal Transformer를 학습시켰다. 그러나 그들의 초기 융합 방식은 전이 학습 응용에 임베딩의 활용성을 제한한다. 반면, 이 접근법은 임의의 음악 오디오에 대한 자연어 인터페이스를 제공하는 공동 임베딩 공간을 만들어, 크로스-모달 검색, zero-shot 태깅, 언어 이해 등의 가능성을 열어냈다.&lt;/p>
 &lt;hr>
-&lt;h2 id="method">Method&lt;/h2>
-&lt;p>이 섹션에서는 MusicLM과 그 구성 요소에 대해 설명한다. 섹션 3.1은 오디오 표현을 제공하는 모델에 대해, 그리고 섹션 3.2는 이를 텍스트 조건의 음악 생성에 어떻게 활용하는지에 대해 다룬다.&lt;/p>
-&lt;h3 id="representation-and-tokenization-of-audio-and-text">Representation and Tokenization of Audio and Text&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/musiclm/images/figure1.png"
-width="644"
-height="334"
-srcset="https://kurtkim.github.io/p/musiclm/images/figure1_hu6e041e7e12f30cda1cfeed8c59f97029_66923_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/musiclm/images/figure1_hu6e041e7e12f30cda1cfeed8c59f97029_66923_1024x0_resize_box_3.png 1024w"
+&lt;h2 id="proposed-approach">Proposed Approach&lt;/h2>
+&lt;p>목표는 음악 오디오와 자유 형식의 자연어 텍스트에 대한 공유 임베딩 공간을 만드는 것으로, 이 공간에서는 근접성이 의미를 공유하는 지표로 작용한다. 이를 위해 크로스-모달 대조 학습과 두 타워 구조를 사용하며, 대규모의 (오디오, 텍스트) 쌍 훈련 데이터를 채굴하여 이 작업을 지원한다.&lt;/p>
+&lt;h3 id="learning-framework">Learning Framework&lt;/h3>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/figure1.png"
+width="682"
+height="410"
+srcset="https://kurtkim.github.io/p/mulan/images/figure1_hu9b99b9c0e8c2595b9653bf7a0e387718_79893_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/figure1_hu9b99b9c0e8c2595b9653bf7a0e387718_79893_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
-data-flex-grow="192"
-data-flex-basis="462px"
+data-flex-grow="166"
+data-flex-basis="399px"
 >&lt;/p>
-&lt;p>conditional autoregressive 음악 생성을 위해 세 가지 모델을 사용해 오디오 표현을 추출한다. AudioLM의 접근법을 따라 SoundStream의 self-supervise 오디오 표현과 w2vBERT를 각각 음향 토큰과 의미 토큰으로 사용하며, 조절을 위해 MuLan의 음악 임베딩과 텍스트 임베딩을 활용한다. 이 모델들은 독립적으로 사전 학습되고 고정되어, sequence-to-sequence 모델링에 필요한 이산적인 오디오와 텍스트 표현을 제공한다.&lt;/p>
-&lt;p>&lt;strong>SoundStream.&lt;/strong> 24 kHz monophonic 오디오를 위해 스트라이딩 요소 480의 SoundStream 모델을 사용하며, 이로 인해 50 Hz의 임베딩이 생성된다. 이 임베딩들은 RVQ에 의해 학습된 양자화로 인해 6 kbps의 비트레이트를 가지게 되며, 1초의 오디오는 600개의 토큰으로 표현된다. 이 토큰들을 &amp;ldquo;acoustic token&amp;quot;이라 부르며, 이는 $A$로 표기된다.&lt;/p>
-&lt;p>&lt;strong>w2v-BERT.&lt;/strong> 600M parameter를 가진 w2v-BERT masked-language-modeling (MLM) 모듈의 중간 계층을 사용한다. 이 모델을 사전 학습하고 고정한 후, 7번째 계층에서 임베딩을 추출하고, 이를 k-means의 중심을 사용해 양자화한다. 결과적으로, 오디오의 모든 초당 25개의 의미 토큰을 생성하며, 이는 $S$로 표기된다.&lt;/p>
-&lt;p>&lt;strong>MuLan.&lt;/strong> MusicLM을 학습시키기 위해, MuLan의 오디오 임베딩 네트워크에서 오디오 시퀀스의 표현을 추출한다. 이 표현은 연속적이지만, 오디오와 조절 신호가 동질적인 이산 토큰 기반 표현을 가지도록 MuLan 임베딩을 양자화한다. 이는 조절 신호를 autoregressively 하게 모델링하는 연구를 지원한다.&lt;/p>
-&lt;p>MuLan은 10초 오디오 입력에 작동하며, 긴 오디오 시퀀스를 처리하기 위해 1초 간격으로 10초 윈도우에서 오디오 임베딩을 계산하고 평균화한다. 이후 1024 크기의 어휘를 가진 12개의 벡터 양자화기를 사용하는 RVQ로 이산화하여, 오디오 시퀀스에 대해 12개의 MuLan 오디오 토큰 $M_A$를 생성한다. 추론 시에는 텍스트 프롬프트에서 MuLan 텍스트 임베딩을 추출하고 같은 RVQ로 양자화하여 12개의 토큰 $M_T$를 얻는다.&lt;/p>
-&lt;p>학습 중에 $M_A$에 조건을 부여하는 것은 학습 데이터를 쉽게 확장할 수 있도록 하며, 대조적인 손실로 학습된 MuLan 같은 모델을 활용해 잡음이 많은 텍스트 설명에 대한 강건성을 높이는 두 가지 이점이 있다.&lt;/p>
-&lt;h3 id="hierarchical-modeling-of-audio-representations">Hierarchical Modeling of Audio Representations&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/musiclm/images/figure2.png"
-width="1326"
-height="394"
-srcset="https://kurtkim.github.io/p/musiclm/images/figure2_hu5f857058def17e8cc3de10acbfba69e5_117180_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/musiclm/images/figure2_hu5f857058def17e8cc3de10acbfba69e5_117180_1024x0_resize_box_3.png 1024w"
+&lt;p>각 MuLan 모델은 오디오와 텍스트 입력 모달 각각에 대한 별도의 임베딩 네트워크로 구성된다. 이 두 네트워크는 가중치를 공유하지 않지만, 같은 차원의 $l_2$-normalized embedding space에서 종료한다. 오디오 임베딩 네트워크는 log mel spectrogram 컨텍스트 윈도우를, 텍스트 임베딩 네트워크는 널 패딩 텍스트 토큰 시퀀스를 입력으로 받는다.&lt;/p>
+&lt;p>음악 녹음과 관련 텍스트 요소를 가지고, (오디오, 텍스트) 쌍의 크로스-모달 학습 데이터셋을 구축한다. 각 녹음에서 log mel spectrogram을 계산하고, 텍스트 요소를 고정 길이로 조정한다. 그런 다음, 미니 배치는 무작위로 선택된 녹음과 그에 대응하는 텍스트 요소의 쌍으로 구성된다. 이 샘플링 방식은 학습 오디오와 모든 관련 텍스트를 전부 커버하기 위해 여러 에포크가 필요하다는 것을 의미한다. 각 예시에 대해 여러 텍스트 주석을 연결하는 실험도 진행했지만, 일반적으로는 잘 작동하지 않았다.&lt;/p>
+&lt;p>$$ \sum_{i=1}^{B} - log \big[ {{h[f(x^{(i)}), g(t^{(i)})]}\over{\sum_{j \neq i} h[f(x^{(i)}), g(t^{(j)})] + h[f(x^{(j)}), g(t^{(i)})] }} \big] $$&lt;/p>
+&lt;p>$h[a, b] = exp(a^T b/τ)$ 형태의 비평 함수 $h$는 $a, b ∈ \mathbb{R}^d$와 학습 가능한 온도 hyperparameter $τ ∈ (0, 1]$에 의존한다. 이 함수는 내적을 통해 코사인 유사도를 계산하며, 대상 오디오-텍스트 쌍에 대해 큰 값을, 비대상 쌍에 대해서는 0에 가까운 값을 생성하는 것이 목표이다. 또한, 1보다 작은 $τ$ 값은 $h$의 출력 범위를 확장한다. 이전 연구에 따르면, 대량의 배치 크기는 대조적 손실 최적화에 도움이 된다.&lt;/p>
+&lt;h3 id="audio-embedding-network">Audio Embedding Network&lt;/h3>
+&lt;p>오디오 임베딩에 검증된 Resnet-50 아키텍처를 적용하였다. 이를 위해 log mel spectrogram을 흑백 이미지로 처리하고, 학습 클립에서 무작위로 선택된 10초 윈도우를 입력으로 사용한다. 학습 중에는 SpecAugment를 적용하고, 마지막에는 시간과 mel 채널에 대한 평균 풀링과 L2 정규화된 linear fully connected layer를 적용한다. 이 모델은 AudioSet의 로지스틱 회귀를 사용하여 사전 학습되며, 최종 분류 계층은 미세 조정 전에 제거된다.&lt;/p>
+&lt;p>Audio Spectrogram Transformer (AST)는 log mel spectrogram에서 추출된 패치의 토큰 시퀀스에 12개의 Transformer 블록을 적용하는 아키텍처이다. 학습 중에는 SpecAugment를 적용하고, positional encoding과 [CLS] 토큰을 추가한다. [CLS] 토큰 위치에서의 최종 인코딩에 linear fully-connected layer과 L2 정규화를 적용하여 오디오 임베딩 네트워크의 출력을 형성한다. 이 모델은 공개된 AST 체크포인트를 사용하여 사전학습을 시작한다.&lt;/p>
+&lt;h3 id="text-embedding-network">Text Embedding Network&lt;/h3>
+&lt;p>텍스트 임베딩 모델로는 일반적으로 사용되는 BERT 아키텍처를 사용한다. 이는 텍스트 입력을 토큰 시퀀스로 변환하고, [CLS] 토큰 임베딩을 오디오-텍스트 임베딩 공간으로 변환하는 역할을 한다. 이 모델은 공개 체크포인트를 사용하여 사전학습을 시작한다.&lt;/p>
+&lt;h3 id="training-dataset-mining">Training Dataset Mining&lt;/h3>
+&lt;p>5000만 개의 인터넷 음악 비디오에서 30초 클립을 추출하여 MuLan 임베딩 모델을 학습시키는 데 사용한다. 음악 오디오 감지기를 통해 음악 컨텐츠가 절반 미만인 클립을 제거한 후, 약 4400만 개의 클립, 즉 대략 370K 시간의 오디오가 남는다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/table1.png"
+width="648"
+height="186"
+srcset="https://kurtkim.github.io/p/mulan/images/table1_huc988009fa7bb561c10195b33fcb9b7fd_48533_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/table1_huc988009fa7bb561c10195b33fcb9b7fd_48533_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
-data-flex-grow="336"
-data-flex-basis="807px"
+data-flex-grow="348"
+data-flex-basis="836px"
 >&lt;/p>
-&lt;p>discrete 오디오 표현을 AudioLM과 결합해 텍스트 조건의 음악 생성을 달성한다. 이를 위해, 각 단계가 decoder-only Transformer에 의해 autoregressively 하게 모델링되는 계층적인 sequenceto-sequence 모델링 작업을 제안한다.&lt;/p>
-&lt;p>첫 번째 단계는 의미 모델링 단계로, MuLan 오디오 토큰에서 의미 토큰 $S$로의 매핑을 학습한다. 이는 분포 $p(S_t | S_{&amp;lt;t}, M_A)$를 모델링함으로써 이루어지며, 여기서 $t$는 시간 단계에 해당하는 시퀀스 내의 위치이다. 두 번째 단계는 음향 모델링 단계로, 음향 토큰 $A_q$는 MuLan 오디오 토큰과 의미 토큰 모두에 의해 조건이 부여되어 예측되며, 이는 분포 $p(A_t | $A_{&amp;lt;t}, S, M_A)$를 모델링한다.&lt;/p>
-&lt;p>긴 토큰 시퀀스를 피하고자, AudioLM은 음향 모델링 단계를 대략적인 단계와 세부적인 단계로 분할하는 방법을 제안하였으며, 이 연구에서도 이를 따랐다. 대략적인 단계에서는 SoundStream RVQ의 첫 네 단계를, 세부적인 단계에서는 나머지 여덟 단계를 모델링한다.&lt;/p>
-&lt;hr>
-&lt;h2 id="experimental-setup">Experimental Setup&lt;/h2>
-&lt;h3 id="models">Models&lt;/h3>
-&lt;p>AudioLM의 의미 단계와 음향 단계 모델링에 decoder-only Transformer를 사용한다. 이 모델은 24개 layer, 16개 attention head, 1024의 embedding dimension, 4096의 차원의 feed-forward layer, 0.1의 dropout, 그리고 relative positional embedding으로 구성되어 있으며, 각 단계는 430M의 parameter를 가진다.&lt;/p>
-&lt;h3 id="training-and-inference">Training and Inference&lt;/h3>
-&lt;p>MusicLM의 다른 구성 요소를 학습시키기 위해 사전 학습된 MuLan에 의존한다. SoundStream과 w2v-BERT는 FMA 데이터셋에서, 토크나이저와 의미 및 음향 모델링 단계의 모델은 24 kHz에서 280k시간의 음악을 포함하는 5M 개의 오디오 클립 데이터셋에서 학습된다. 각 단계는 학습 데이터를 여러 번 반복하여 학습하며, 의미와 음향 단계에서는 각각 30초와 10초의 임의 오디오를 사용한다. 세부적인 음향 모델링 단계는 3초 자르기에서 학습된다.&lt;/p>
-&lt;p>추론 시에는 MuLan이 학습한 오디오와 텍스트 사이의 임베딩 공간을 사용하며, $M_A$를 $M_T$로 대체한다. 그 후, $M_T$가 주어졌을 때 $A$를 얻기 위해 위에서 설명한 단계를 따른다. 모든 단계에서 autoregressive 샘플링을 위해 온도 샘플링을 사용하며, 의미 모델링 단계는 1.0, 대략적인 음향 모델링 단계는 0.95, 세밀한 음향 모델링 단계는 0.4의 온도를 사용한다. 이 값들은 생성된 음악의 다양성과 시간적 일관성 사이의 좋은 균형을 위해 선택되었다.&lt;/p>
-&lt;h3 id="evaluation-dataset">Evaluation Dataset&lt;/h3>
-&lt;p>MusicLM 평가를 위해 고품질 음악 캡션 데이터셋인 MusicCaps를 준비하였다. 이 데이터셋은 AudioSet의 5.5k 음악 클립과 전문 음악가들의 영어 설명이 포함되어 있다. 각 음악 클립에는 자유 형식의 캡션과 장르, 기분, 템포 등을 설명하는 음악 측면이 포함되어 있다.&lt;/p>
-&lt;p>MusicCaps는 AudioSet의 오디오 클립과 텍스트 설명을 포함한 AudioCaps를 보완한다. AudioCaps는 음악이 아닌 내용이 포함되어 있지만, MusicCaps는 전문가의 상세 주석이 포함된 음악에만 초점을 맞추고 있다. AudioSet의 학습 및 평가 분할로부터 다양한 장르의 예시를 추출하였으며, 1k 예시로 구성된 장르별 균형 분할도 제공한다.&lt;/p>
-&lt;h3 id="metrics">Metrics&lt;/h3>
-&lt;p>MusicLM을 평가하기 위해, 오디오 품질과 텍스트 설명 충실도라는 음악 생성의 두 가지 중요한 측면을 측정하는 다양한 메트릭을 사용한다.&lt;/p>
-&lt;p>&lt;strong>Fréchet Audio Distance (FAD).&lt;/strong>&lt;/p>
-&lt;p>Fréchet Audio Distance는 사람의 인식과 잘 맞는 오디오 품질 지표이다. 이 점수가 낮은 모델은 신뢰할 수 있는 오디오를 생성할 것으로 예상되지만, 생성된 샘플이 제공된 텍스트 설명을 반드시 따르는 것은 아니다.&lt;/p>
-&lt;p>공개적으로 사용 가능한 두 가지 오디오 임베딩 모델, 즉 음성 데이터에 학습된 Trill 2와 YouTube-8M 오디오 이벤트 데이터셋에 학습된 VGGish 3에 기반한 FAD를 보고한다. 학습 데이터의 차이로 인해, 이 두 모델은 오디오 품질의 다른 측면을 측정하게 될 것으로 예상한다.&lt;/p>
-&lt;p>&lt;strong>KL Divergence (KLD).&lt;/strong> 텍스트 설명과 음악 클립 사이에는 다대다 관계가 있어, 오디오 파형 수준에서 직접 비교는 불가능하다. 입력 텍스트 충실도를 평가하기 위해, AudioSet에서 다중 레이블 분류를 위해 학습된 LEAF 분류기를 사용하여 생성된 음악과 참조 음악의 클래스 예측을 계산하고, 이들 사이의 KL-Divergence를 측정한다. KL-Divergence가 낮으면, 생성된 음악은 분류기에 따라 참조 음악과 유사한 음향 특성을 가질 것으로 예상된다.&lt;/p>
-&lt;p>&lt;strong>MuLan Cycle Consistency (MCC).&lt;/strong> 음악-텍스트 임베딩 모델인 MuLan을 사용해 음악-텍스트 쌍의 유사성을 측정한다. MusicCaps의 텍스트 설명과 그에 기반한 생성된 음악에서 임베딩을 계산하고, 이들 간의 평균 코사인 유사성을 MCC 메트릭으로 정의한다.&lt;/p>
-&lt;p>&lt;strong>Qualitative evaluation.&lt;/strong> 생성된 샘플이 텍스트 설명을 얼마나 잘 따르는지 평가하기 위해 A대 B 인간 평가 작업을 설정하였다. 평가자들은 텍스트 설명과 두 가지 다른 모델에 의해 생성된 음악 샘플을 비교하며, 샘플에 대한 강한, 약한 또는 무관한 선호도를 선택한다. 음악 품질은 이미 FAD 메트릭으로 평가되었으므로, 이를 고려하지 않도록 지시받았다.&lt;/p>
-&lt;p>참조 음악과 n개의 다른 모델의 출력을 고려해 총 n + 1개의 조건을 설정하고, 이들 간의 쌍을 비교한다. 각 조건이 얼마나 선호되는지를 승리의 수로 계산하여 결과를 집계하고 순위를 매긴다. 샘플은 평가 데이터의 장르 균형 1k 부분 집합에서 선택된다.&lt;/p>
-&lt;p>&lt;strong>Training data memorization.&lt;/strong> 큰 언어 모델은 학습 데이터의 패턴을 기억할 수 있다. 이를 바탕으로 MusicLM이 음악 세그먼트를 얼마나 기억하는지 연구한다. 학습 세트에서 무작위로 선택한 예시에 대해, MuLan 오디오 토큰과 첫 번째 의미 토큰 시퀀스를 포함한 프롬프트를 모델에 제공한다. greedy decoding을 통해 의미 토큰의 연속을 생성하고, 이를 데이터셋의 대상 토큰과 비교한다. 생성된 토큰과 대상 토큰이 전체 샘플링 세그먼트에서 완전히 일치하는 예시의 비율을 측정한다.&lt;/p>
-&lt;p>음향적으로 유사한 오디오 세그먼트가 다른 토큰 시퀀스로 이어질 수 있다는 관찰을 기반으로, 근사치 일치를 감지하는 방법을 제안한다. 생성된 토큰과 대상 토큰의 의미 토큰 수 히스토그램을 계산하고, 이들 사이의 일치 비용을 측정한다. 이를 위해 먼저 의미 토큰 쌍 간의 거리 행렬을 계산하고, 그 후 Sinkhorn 알고리즘을 사용해 최적의 전송 문제를 해결한다. 부정 쌍을 구성하고 이들의 일치 비용 분포를 측정해 일치 임계값을 보정한다. 이 임계값은 0.01% 미만의 거짓 긍정 근사치 일치를 초래하는 0.85로 설정된다.&lt;/p>
-&lt;hr>
-&lt;h2 id="results">Results&lt;/h2>
-&lt;p>MusicLM을 평가하기 위해, 최근의 기준선인 Mubert와 Riffusion과 비교한다. Mubert API를 쿼리하고 Riffusion 모델에서 추론을 실행하여 오디오를 생성한다. 이 논문과 함께 공개적으로 발표하는 평가 데이터셋인 MusicCaps에서 평가를 수행한다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/musiclm/images/table1.png"
+&lt;p>각 음악 비디오에 대해, 비디오 제목과 태그, 비디오 설명과 댓글, 그리고 데이터셋의 인터넷 음악 비디오에 연결된 재생목록 제목 등 노이즈가 많은 텍스트 데이터를 고려한다. 이러한 텍스트는 반드시 사운드트랙의 음악적 속성을 참조하고 있다는 것이 보장되지 않으며, 특히 댓글 데이터는 가장 많은 노이즈를 포함하고 있다.&lt;/p>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/table2.png"
 width="600"
-height="170"
-srcset="https://kurtkim.github.io/p/musiclm/images/table1_hu932e6e5791924bf2b016ff6504760e37_25595_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/musiclm/images/table1_hu932e6e5791924bf2b016ff6504760e37_25595_1024x0_resize_box_3.png 1024w"
+height="154"
+srcset="https://kurtkim.github.io/p/mulan/images/table2_hu12be41209accd48d06dcfc43168466a0_31265_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/table2_hu12be41209accd48d06dcfc43168466a0_31265_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
-data-flex-grow="352"
-data-flex-basis="847px"
+data-flex-grow="389"
+data-flex-basis="935px"
 >&lt;/p>
-&lt;p>&lt;strong>Comparison to baselines.&lt;/strong> 오디오 품질을 측정하는 FAD 메트릭에 따르면, MusicLM은 Mubert와 Riffusion보다 더 나은 점수를 얻었다. 또한, 입력 텍스트 설명에 대한 충실도를 측정하는 KLD와 MCC에 따라, MusicLM은 기준선에 비해 텍스트 설명에서 더 많은 정보를 캡처하는 능력을 보여준다.&lt;/p>
-&lt;p>텍스트 충실도 평가를 보완하기 위해 인간 청취 테스트를 진행하였다. 참가자들은 두 개의 10초 클립과 텍스트 캡션을 보고, 어떤 클립이 캡션의 텍스트를 가장 잘 설명하는지 5점 척도로 평가한다. 총 1200개의 평가를 수집하였고, 각 소스는 600개의 쌍별 비교에 참여하였다. MusicLM은 두 가지 기준선에 비해 확실히 선호되지만, 실제 참조 음악과의 차이는 여전히 존재한다. 청취 연구의 자세한 내용은 부록 B에서 확인할 수 있다.&lt;/p>
-&lt;p>실제 참조가 MusicLM보다 선호되는 경우, 이는 주로 아래의 패턴 때문이다: (1) 캡션은 매우 상세하고, 여러 악기나 비음악적인 측면을 설명한다; (2) 캡션은 오디오의 재생 순서를 설명한다; (3) 부정적인 표현이 사용되는데, 이는 MuLan에 잘 반영되지 않는다.&lt;/p>
-&lt;p>결론적으로, 이 방법론은 MusicCaps의 자유형 텍스트 캡션에서 세부적인 정보를 잘 포착하며, KLD와 MCC 메트릭은 텍스트 설명에 대한 충실도를 정량적으로 측정하고, 이는 인간의 평가와 일치한다는 것을 확인하였다.&lt;/p>
-&lt;p>&lt;strong>Importance of semantic tokens.&lt;/strong> 의미론적 모델링과 음향 모델링을 분리하는 것의 유용성을 검증하기 위해, Transformer 모델을 학습시켜 MuLan 토큰에서 음향 토큰을 직접 예측하였다. FAD 메트릭은 비슷하지만, 의미론적 모델링 단계를 제거하면 KLD와 MCC 점수가 악화됨을 발견하였다. 이는 의미 토큰이 텍스트 설명에 따른 순응을 돕는다는 것을 나타낸다. 또한, 샘플을 들어보니 장기 구조에서의 저하가 관찰되었다.&lt;/p>
-&lt;p>&lt;strong>Information represented by audio tokens.&lt;/strong> 추가 실험을 통해 의미론적 토큰과 음향 토큰이 어떤 정보를 포착하는지 연구하였다. 첫 번째 실험에서는 텍스트 토큰과 의미론적 토큰을 고정하고, 음향 모델링 단계를 반복하여 샘플을 생성하였다. 결과적으로 샘플들은 다양했지만, 장르나 리듬, 멜로디 등에서 공통점을 보였습니다. 두 번째 실험에서는 텍스트 토큰만 고정하고 의미론적 토큰과 음향 토큰을 생성했을 때, 멜로디와 리듬에서 더 큰 다양성을 보였다. 이 연구의 샘플들은 동반 자료에서 확인할 수 있다.&lt;/p>
-&lt;p>&lt;strong>Memorization analysis.&lt;/strong> 의미론적 토큰 프롬프트의 길이를 변화시킬 때 일치도를 보고합니다. 정확한 일치의 비율은 매우 작은 것을 확인했으며, 근사치 일치(τ = 0.85 사용)의 경우, 프롬프트 길이가 증가함에 따라 일치하는 예시의 비율이 증가한다. 또한, 일치 점수가 낮은 시퀀스는 토큰 다양성이 낮은 것으로 확인되었다. 이러한 패턴은 의미론적 토큰이 정확하게 일치하더라도, 음향 모델링이 생성된 샘플에 추가적인 다양성을 도입한다는 것을 보여준다.&lt;/p>
+&lt;p>노이즈가 많은 텍스트를 고려하여, 음악 서술적 주석으로 필터링된 SF 및 LF 텍스트 데이터를 사용하여 MuLan을 학습시켰다. 이를 위해, 사전 학습된 BERT 모델을 미세 조정하고, 이를 통해 LF 주석을 필터링하였다. 또한, SF 주석을 정리하기 위한 규칙 기반 필터링도 적용하였다. 하지만, 재생목록 제목과 필터링된 장형 주석은 데이터셋의 총 녹음 중 일부분만 사용할 수 있다.&lt;/p>
+&lt;p>AudioSet을 오디오-텍스트 쌍의 세트로 변환하여, 이를 ASET으로 표기한다. 모든 예시를 포함시키고, 각 예시에 첨부된 레이블 문자열을 텍스트 주석으로 사용하여 약 2M 개의 10초 클립 학습 세트를 생성한다. 이 네 가지 다른 데이터 소스의 규모 불균형을 고려하여, SF:LF:PL:ASET을 2:2:1:1의 비율로 미니 배치를 구성한다. 이 방식으로, 규모가 작더라도 필터링된 LF 주석이 미니 배치의 1/3를 차지하게 된다.&lt;/p>
 &lt;hr>
-&lt;h2 id="extensions">Extensions&lt;/h2>
-&lt;p>&lt;strong>Melody conditioning.&lt;/strong> MusicLM은 텍스트 설명과 함께 허밍, 노래, 휘파람, 악기 연주 등의 형태로 제공되는 멜로디에 기반한 음악을 생성할 수 있도록 확장되었다. 이를 위해, 멜로디는 같지만 음향이 다른 오디오 쌍으로 구성된 데이터셋을 만들고, 공통 임베딩 모델을 학습시켜 같은 멜로디를 가진 오디오 클립의 임베딩이 서로 가까워지도록 하였다.&lt;/p>
-&lt;p>MusicLM의 멜로디를 추출하기 위해, 멜로디 임베딩을 양자화하고 결과 토큰 시퀀스를 MuLan 오디오 토큰과 연결한다. 추론 과정에서는, 입력 오디오 클립에서 멜로디 토큰을 계산하고 이를 MuLan 텍스트 토큰과 연결한다. 이러한 방식으로, MusicLM은 입력 오디오 클립의 멜로디를 따르면서도 텍스트 설명을 준수하는 음악을 성공적으로 생성할 수 있다.&lt;/p>
-&lt;p>&lt;strong>Long generation and story mode.&lt;/strong> MusicLM은 시간 차원에서 자기회귀적 생성을 사용하여 학습 시 사용한 것보다 더 긴 시퀀스를 만들 수 있다. 의미론적 모델링은 30초 시퀀스에서 학습되며, 더 긴 시퀀스를 위해 15초 간격으로 진행하고, 15초를 접두사로 사용하여 추가적인 15초를 생성한다. 이 방법으로 몇 분 동안 일관성을 유지하는 긴 오디오 시퀀스를 생성할 수 있다.&lt;/p>
-&lt;p>소소한 수정을 통해 MusicLM은 시간이 지나면서 텍스트 설명이 변화하는 동안 긴 오디오 시퀀스를 생성할 수 있게 되었다. 이를 스토리 모드라고 부르며, 여러 텍스트 설명에서 $M_T$를 계산하고 15초마다 조건 신호를 변경한다. 이 방법으로, 모델은 텍스트 설명에 따라 음악 컨텍스트를 변경하면서도 템포가 일관되고 의미론적으로 타당한 부드러운 전환을 생성한다.&lt;/p>
+&lt;h2 id="experiments">Experiments&lt;/h2>
+&lt;p>Resnet-50과 AST 오디오 encoder를 사용하여 MuLan을 평가하며, 두 경우 모두 텍스트 encoder로 BERT-base-uncased를 사용한다. AudioSet, 단형 태그, 장형 문장, 재생목록 정보 등, 44M 음악 녹음에서 추출한 오디오-텍스트 쌍과 처리된 텍스트 레이블에 대해 모든 모델을 14 epoch 동안 학습시킨다. M-Resnet-50과 M-AST는 비슷한 성능을 보이므로, 더 나은 학습 효율성을 위해 M-Resnet-50을 선택적으로 사용한다.&lt;/p>
+&lt;h3 id="evaluation-tasks">Evaluation Tasks&lt;/h3>
+&lt;h4 id="zero-shot-music-tagging">Zero-shot Music Tagging&lt;/h4>
+&lt;p>음악 클립의 오디오 임베딩과 태그 텍스트의 임베딩 간 코사인 유사도를 이용해 예측 점수를 정의한다. 컨텍스트 텍스트 encoder를 사용하여 유연한 예측 공간을 만들고, 크로스-모달 대조 학습을 통해 언어의 의미를 오디오 표현에 연결함으로써 보이지 않는 타겟 레이블에도 적용할 수 있다.&lt;/p>
+&lt;p>MagnaTagATune과 AudioSet의 음악 부분을 이용한 두 가지 음악 태깅 벤치마크로 평가를 진행한다. MagnaTagATune에서는 상위 50개 태그 세트와 전체 188개 태그 세트를 고려하며, 각 오디오 클립을 10초짜리 3개 세그먼트로 분할해 클립 레벨 임베딩을 얻는다. AudioSet에서는 25개 장르 태깅 작업과 전체 음악 하위 트리를 포함한 141개 태깅 작업을 고려한다. 테스트 세트에서의 수신기 운영 특성 곡선(AUC-ROC)의 클래스 균형을 보고한다.&lt;/p>
+&lt;p>AudioSet은 대조학습에 포함되고, 일부 MTAT 클래스는 AudioSet 온톨로지와 겹친다. 이로 인해 AudioSet과 MTAT 평가는 완전한 zero-shot이 아니다. 하지만, MuLan 학습 중에는 다양한 자유 형식의 언어 감독이 AudioSet 감독을 희석시킨다. 따라서 MuLan 모델과 기존 AudioSet 분류기를 비교함으로써, AudioSet 온톨로지를 넘어서는 클래스를 지원하는 유연한 자연 언어 인터페이스로 넘어가는 비용을 측정할 수 있다.&lt;/p>
+&lt;h4 id="transfer-learning-with-linear-probes">Transfer Learning with Linear Probes&lt;/h4>
+&lt;p>zero-shot 실험 외에도, 오디오 encoder를 downstream 태깅 작업에 적용하는 일반적인 피처 추출기로 평가한다. MagnaTagATune과 AudioSet 벤치마크를 다시 사용하고, 학습 데이터셋을 이용해 고정된 128차원 오디오 임베딩 위에 독립적인 클래스별 로지스틱 회귀 계층을 학습시킨다. 이 방법은 이전 전이 학습 연구의 평가 프로토콜을 따르므로, 성능을 직접 비교할 수 있다.&lt;/p>
+&lt;h4 id="music-retrieval-from-text-queries">Music Retrieval from Text Queries&lt;/h4>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/table3.png"
+width="634"
+height="390"
+srcset="https://kurtkim.github.io/p/mulan/images/table3_hubf8d334ad104ab5b9e994323df780b47_99837_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/table3_hubf8d334ad104ab5b9e994323df780b47_99837_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="162"
+data-flex-basis="390px"
+>&lt;/p>
+&lt;p>MuLan은 임베딩 공간에서 쿼리에 가장 가까운 음악 클립을 찾는 능력을 제공한다. 이는 컨텐츠 특징이 메타데이터 기반 방법보다 더 세밀하고 완전한 유사성 정보를 제공할 수 있는 음악 검색 애플리케이션에 중요하다. 전문가가 큐레이션한 7,000개의 재생 목록을 사용하여 평가하며, 각 재생 목록은 제목, 설명, 그리고 10-100개의 음악 녹음으로 구성되어 있다. 재생 목록 평가는 약 100K의 고유 녹음을 포함한다.&lt;/p>
+&lt;p>전문가 큐레이션 재생 목록 데이터를 사용해 제목과 설명을 쿼리로 하는 두 개의 크로스-모달 검색 평가 세트를 만든다. 각 데이터셋에 대해 해당 재생 목록에 속하는 녹음을 검색 대상으로 사용하고, 100K 녹음 전체를 후보군으로 사용한다. AUC-ROC과 평균 정밀도(mAP)를 보고하며, zero-shot 태깅과 같은 임베딩 평균화 및 코사인 유사도 기반 점수 매기기 사용한다. 재생 목록 정보는 음악 태깅 벤치마크의 태그와는 다르게, 보다 세밀한 정보를 담고 있어 음악 검색 엔진에 제시되는 쿼리와 유사하다.&lt;/p>
+&lt;h4 id="text-triplet-classiﬁcation">Text Triplet Classiﬁcation&lt;/h4>
+&lt;p>텍스트 encoder는 도메인 내 음악 데이터와 크로스-모달 대조 손실을 사용해 미세 조정되었다. 텍스트 encoder가 음악 관련 텍스트를 얼마나 잘 이해하는지 평가하기 위해, 트리플렛 분류 작업을 통해 텍스트 임베딩을 직접 평가한다. 각 트리플렛은 (앵커, 긍정, 부정) 형태의 텍스트로 이루어져 있습니다. AudioSet 온톨로지를 사용한 첫 번째 테스트 세트와 전문가 큐레이션 재생 목록 데이터를 사용한 두 번째 테스트 세트를 구성하였다.&lt;/p>
+&lt;h3 id="results-and-discussion">Results and Discussion&lt;/h3>
+&lt;h4 id="music-tagging">Music Tagging&lt;/h4>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/table4.png"
+width="646"
+height="630"
+srcset="https://kurtkim.github.io/p/mulan/images/table4_hu5a3de2cab49c8abeac5520f681303a61_139581_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/table4_hu5a3de2cab49c8abeac5520f681303a61_139581_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="102"
+data-flex-basis="246px"
+>&lt;/p>
+&lt;p>zero-shot 태깅 메트릭에서 MResnet-50과 M-AST는 비슷한 성능을 보였다. 하지만 학습 텍스트의 레이블 의미와 태깅 평가의 레이블 의미 사이에는 큰 차이가 있을 수 있어, 성능이 저하될 수 있다. 특히, MTAT 간격은 AudioSet보다 크게 나타났으며, 이는 비특정적인 의미나 여러 가지 의미를 가진 태그와 간단한 부정을 포함하는 태그에서 매우 나쁜 성능 때문이다. 이는 BERT의 알려진 문제로, 부정된 개념의 의미를 적절하게 모델링하지 못한다(&amp;ldquo;not rock&amp;quot;의 임베딩은 &amp;ldquo;rock&amp;quot;과 비슷하다).&lt;/p>
+&lt;p>AudioSet만을 사용한 학습은 AudioSet 평가에서 가장 높은 AUC를 얻지만, 일반적으로 더 많은 데이터 소스를 포함하면 다른 모든 작업에서 성능이 향상된다. 무필터 데이터로의 학습은 필터링된 버전과 비슷한 성능을 달성하는데, 이는 원시 텍스트 데이터의 노이즈에도 불구하고 모델이 유용한 연관성을 학습하는 것을 보여준다. 텍스트 필터링이 너무 공격적이었을 수 있으며, 대비 학습의 높은 노이즈 허용성 때문에, 강하게 연결된 오디오-텍스트 쌍으로 제한하는 것의 이점이 유용한 쌍의 큰 세트를 잃는 것으로 상쇄되었을 수 있다.&lt;/p>
+&lt;p>MuLan 오디오 임베딩에 선형 프로브를 적용하면 모든 태깅 작업에서 최고 수준의 전이 학습 성능을 달성한다. 이는 MuLan의 사전 학습된 오디오 encoder가 고품질 음악 오디오 임베딩을 계속 생성하면서 새로운 자연어 응용 프로그램을 지원한다는 것을 입증한다. 또한, 종단간 학습 기준선에 비해 선형 프로브 결과는 대부분이 더 우수하며, 최고 수준의 AST AudioSet 분류기를 약간만 뒤따른다.&lt;/p>
+&lt;h4 id="music-retrieval-from-text-queries-1">Music Retrieval from Text Queries&lt;/h4>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/table5.png"
+width="566"
+height="258"
+srcset="https://kurtkim.github.io/p/mulan/images/table5_hu62430557e012f8c71275209d360899b6_54993_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/table5_hu62430557e012f8c71275209d360899b6_54993_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="219"
+data-flex-basis="526px"
+>&lt;/p>
+&lt;p>MuLan 모델은 쿼리 검색 평가 작업에서 놀랍게도 강인한 성능을 보여준다. 대규모 언어 자원으로 사전 학습된 BERT를 기반으로 하지만, AudioSet 클립과 레이블 주석만으로 학습을 하면 음악에 대한 도메인 내 자연어를 연결하는 능력이 제한적이다. 그러나 인터넷에서 추출한 대규모 단형태 태그를 포함하면 모델이 더 세분화된 음악 개념을 배울 수 있게 되고, 댓글과 재생 목록 데이터를 추가하면 더 복잡한 쿼리를 연결하는 데 도움이 된다. 또한, 필터링되지 않은 학습 텍스트를 사용하여도 유사한 성능을 달성하는 것으로 보아, 주석 노이즈에 대한 훈련의 강인함이 확인된다.&lt;/p>
+&lt;h3 id="text-triplet-classiﬁcation-1">Text Triplet Classiﬁcation&lt;/h3>
+&lt;p>&lt;img src="https://kurtkim.github.io/p/mulan/images/table6.png"
+width="476"
+height="368"
+srcset="https://kurtkim.github.io/p/mulan/images/table6_hufba128f1e6743bcd07342508bb89e20b_70296_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/mulan/images/table6_hufba128f1e6743bcd07342508bb89e20b_70296_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="129"
+data-flex-basis="310px"
+>&lt;/p>
+&lt;p>MuLan 텍스트 임베딩은 Sentence Transformer, SimCSE, Universal Sentence Embedding 등과 같은 기준선과 비교된다. 모든 기준선은 Transformer 기반 모델이며, MuLan 텍스트 encoder는 크로스-모달 손실로만 학습된다. 장형 텍스트 주석을 포함하면, 음악 도메인에 특화된 텍스트 임베딩 모델은 일반적인 문장 임베딩 모델을 능가한다. 놀랍게도, 텍스트 전용 미세 조정 손실을 사용하지 않아도 성공적인 특화가 이루어졌다.&lt;/p>
 &lt;hr>
 &lt;h2 id="conclusions">Conclusions&lt;/h2>
-&lt;p>MusicLM은 텍스트 조건에 충실하면서 몇 분 동안 일관된 24 kHz의 고품질 음악을 생성하는 모델이다. 이 모델은 뮤지션들이 준비한 5.5k 음악-텍스트 쌍의 고품질 데이터셋인 MusicCaps에서 기존 모델을 능가하는 성능을 보여준다.&lt;/p>
-&lt;p>이 방법의 한계 중 일부는 MuLan으로부터 비롯되며, 이는 모델이 부정을 잘못 이해하고 텍스트에 기술된 시간 순서를 정확하게 따르지 않는다는 점을 포함한다. 또한, 정량적 평가의 추가적인 개선이 필요하며, MCC 점수는 MuLan에 의존하기 때문에 이 방법에 유리하다.&lt;/p>
-&lt;p>미래의 연구는 가사 생성, 텍스트 조건화 및 보컬 품질 개선, 고수준 노래 구조(서론, 구절, 후렴구 등)의 모델링, 그리고 더 높은 샘플 속도에서 음악 모델링에 초점을 맞출 수 있다.&lt;/p>
-&lt;hr>
-&lt;h2 id="broader-impact">Broader Impact&lt;/h2>
-&lt;p>MusicLM은 텍스트를 기반으로 고품질 음악을 생성해 인간의 창의적 음악 작업을 돕지만, 여러 위험 요소가 있다. 학습 데이터의 편향이 생성된 샘플에 반영될 수 있으며, 이것은 대표성이 부족한 문화에 대한 음악 생성의 적절성과 문화적 강탈 문제를 불러일으킬 수 있다.&lt;/p>
-&lt;p>창의적 콘텐츠의 잘못된 사용 가능성을 인지하며, 책임있는 모델 개발 원칙에 따라 의미 모델링에 초점을 맞춘 연구를 수행하였다. 기억된 예시는 극히 적었고, 예시의 1%만 대략적으로 일치하였다. 음악 생성과 관련된 위험을 해결하기 위한 미래 연구의 필요성을 강조하며, 현재 모델 공개 계획은 없다.&lt;/p>
+&lt;p>약하게 연결된 텍스트와 오디오 데이터를 이용해 학습된 음악 오디오와 자연어 공동 임베딩 모델을 제시하였다. 이 모델은 다양한 응용에서 자연어 인터페이스의 유연성을 보여주며, 음악 태깅 벤치마크에서 최고 수준의 전이 학습 성능을 보여준다. 이는 음악 오디오에 대한 자유형 자연어 인터페이스를 구축하는 첫 시도로, 약한 신호와 절대적인 노이즈를 더 잘 구분하는 개선된 텍스트 필터링 방법을 통해 더욱 발전될 수 있을 것이다.&lt;/p>
 &lt;hr>
 &lt;h2 id="reference">Reference&lt;/h2>
 &lt;ul>
-&lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2301.11325.pdf" target="_blank" rel="noopener"
+&lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2208.12415.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/lucidrains/musiclm-pytorch" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
