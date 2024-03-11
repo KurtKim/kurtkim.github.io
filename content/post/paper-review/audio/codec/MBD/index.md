@@ -10,7 +10,7 @@ tags = [
     "Audio",
     "Codec"
 ]
-#draft = true
+draft = true
 +++
 
 ## Abstract
@@ -97,12 +97,27 @@ $$ \hat{b}_i = b_i \cdot \big( {{\sigma_i^{\epsilon}\over{\sigma_i^d}}} \big)^p 
 
 $\sigma_i^{\epsilon}$과 $\sigma_i^d$는 standard Gaussian noise와 데이터셋 신호의 밴드 $i$ 에너지를 나타내며, 매개변수 $ρ$로 에너지 수준 조정을 제어한다($ρ=0$은 조정 없음, $ρ=1$은 완전 일치). 고주파수 밴드의 instability를 피하기 위해, 음악 도메인에서 $\sigma_i^d$를 계산한다.
 
-**Scheduler Tuning.**
+**Scheduler Tuning.** 노이즈 스케줄은 diffusion 모델의 품질을 결정하는 핵심 hyperparameter이다.
 
-**Band-Specific Training.**
+raw waveform 생성에는 주로 linear 또는 cosine 스케줄이 사용되지만, 고샘플링 레이트에서는 성능이 떨어진다는 것을 발견하였다. 따라서, 이 연구에서는 더 급진적인 p-power 스케줄 사용을 제안한다.
 
+$$ \beta_t = \big( \sqrt[p]{\beta_0} + {{t}\over{T}} ( \sqrt[p]{\beta_T} - \sqrt[p]{\beta_0} ) \big) $$
 
+![](images/figure3.png)
 
+학습 중 주입되는 노이즈의 분산($\beta_0$과 $\beta_T$)은 중요한 hyperparameter이다. 생성 시 노이즈 스케줄을 학습 후에 결정할 수 있음에도 불구하고, 실제로 학습 노이즈 스케줄은 diffusion 모델에 있어 중요한 역할을 한다. 이 스케줄은 학습 예제에 주입되는 노이즈 레벨을 결정하며, 제안된 파워 스케줄을 사용하면 대부분의 예제에 매우 적은 양의 노이즈를 주입하게 된다.
+
+diffusion 과정의 마지막 단계에서, 모델이 추정하는 노이즈가 실제 데이터보다 못한 경우가 종종 발생한다. 이는 학습의 제한된 정밀도 때문이라고 추정된다. 이 문제를 해결하기 위해, 해당 시간 단계를 건너뛰는 것과 같은 효과를 내기 위해 모델을 정체 함수로 대체하고, 이 현상을 방지하기 위해 $\beta_t$ 값을 조정하여 $\sqrt{1-\alpha_t}$ 값을 충분히 크게 한다.
+
+**Band-Specific Training.** audio diffusion 모델은 낮은 주파수를 먼저 생성하고, 역 과정의 마지막에서 고주파수를 처리한다. 오디오 데이터는 시간과 주파수에 걸쳐 복잡하게 얽혀 있어, 전대역 오디오 데이터를 사용한 학습은 고주파수 생성 시 항상 정확한 낮은 주파수를 제공한다. 하지만, 이 방식은 생성 초기의 오류를 역 과정에서 증폭시키는 문제를 가지고 있다.
+
+각 주파수 대역을 독립적으로 학습시키는 멀티밴드 확산 방식을 제안하였다. 이 접근법은 샘플의 지각 품질을 크게 향상시켰으며, 모델 채널에 따른 주파수 대역 분할은 같은 결과를 내지 못했다. 이는 학습 시 이전에 생성된 내용을 모델에 제공하지 않음으로써 샘플링 오류 누적을 방지할 수 있다는 우리의 가설을 확인시켜 준다.
+
+---
+
+## Experimental Setup
+
+### Model & Hyperparameters
 
 
 ---
