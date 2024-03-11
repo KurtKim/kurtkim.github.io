@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "PaLM-E"
-date = "2024-03-12"
+date = "2024-03-11"
 description = "Aligning Perception with Language Models"
 categories = [
     "Paper Review"
