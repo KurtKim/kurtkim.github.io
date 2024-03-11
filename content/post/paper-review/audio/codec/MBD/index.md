@@ -10,7 +10,7 @@ tags = [
     "Audio",
     "Codec"
 ]
-draft = true
+#draft = true
 +++
 
 ## Abstract
@@ -52,6 +52,56 @@ diffusion-based vocoder는 이미지 생성에서의 diffusion 성공에 영감�
 ## Method
 
 ### Background
+
+Ho et al. (2020)의 연구에 따르면, Markov chain을 사용한 diffusion 과정에서 깨끗한 데이터 $x_0$에 점진적으로 Gaussian noise를 추가해, 결국 standard Gaussian noise에 가까운 noise가 섞인 데이터 $x_T$를 생성한다. 이 과정의 확률이 다음과 같이 정의된다:
+
+$$ q(x_{0:\gamma} | x_0) = \Pi_{t=1}^T q (x_t | x_{t-1}) $$
+
+$q(x_t | x_{t-1})$는 가우시안 분포를 따르며, $\beta_t$는 noise schedule을 나타낸다. 이를 통해 Markov chain의 어떤 단계도 효율적으로 샘플링할 수 있다.
+
+$$ x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon $$
+
+$\bar{\alpha}_t$는 잡음 수준을 나타내고, DDPM은 잡음이 섞인 데이터 $x_T$에서 깨끗한 데이터 $x_0$로 복원하는 것을 목표로 한다.
+
+$$ p(x_{\gamma : 0}) = p(x_{\gamma}) \Pi_{t=1}^T p_{\theta} (x_{t-1} | x_t) $$
+
+$p_\theta(x_t | x_{t+1})$는 diffusion chain을 역으로 하는 학습된 분포이고, $p(x_T)$는 학습되지 않은 사전 분포이다. 이상적인 잡음 조건에서 사전 분포는 $N(0, I)$로 근사할 수 있다.
+
+Ho et al. (2020)에 따르면, $p_\theta(x_{t-1} | x_t)$ 분포는 $N(\mu_\theta(x_t, t), \sigma_t I)$로 나타낼 수 있으며, $\mu_\theta$는 reparameterize가 가능하다.
+
+$$ \mu_{\theta} (x_t, t) = {{1}\over{\sqrt{1 - \beta_t}}} \big( x_t - {{\beta}\over{\sqrt{1 - \bar{\alpha}_t}}} \epsilon_{\theta} (x_t, t)  \big) $$
+
+이 reparametrization를 통해 신경망 $\epsilon_\theta$는 오염된 데이터 $x_t$에서 잡음을 예측하도록 학습된다. Ho et al. (2020)의 방법에 따라, $x_t$ 샘플링 후 L2 손실을 최적화하여 신경망을 학습할 수 있다.
+
+$$ L = \mathbb{E}_{x_0 \sim d(x_0), \epsilon \sim \mathcal{N}(0,I), t \sim \mathcal{U}\lbrace 1, \ldots, T \rbrace} ( \Vert \epsilon - \epsilon\theta\left(\sqrt{x_0} + \sqrt{1-t}\right) \Vert^2 ) $$
+
+이러한 모델을 사용하면, 다음 방정식을 사용하여 diffusion 과정을 반복적으로 역전할 수 있다:
+
+$$ x_{t-1} = {{1}\over{\sqrt{1 - \beta_t}}} \big( x_i - {{\beta_t}\over{\sqrt{1 - \bar{\alpha}_t}}} \epsilon\_{\theta} (x_t, t) \big) + \sqrt{\sigma_t} \epsilon $$
+
+여기서 $\sigma$는 $\tilde{\beta}t = (1 - \bar{\alpha}{t-1})/(1 - \bar{\alpha}_t) \beta_t$와 $\beta_t$ 사이에서 결정해야 하는 parameter이며, 이 실험에서는 $\sigma_t = \beta_t$로 설정한다.
+
+### Multi-Band Diffusion
+
+Multi-Band Diffusion 방법은 Frequency Eq. Processor, Scheduler Tuning, Band-Specific Training의 세 가지 핵심 요소로 구성된다.
+
+**Frequency Eq. Processor** diffusion 과정 이론은 모든 종류의 분포에서 샘플링을 가능하게 하지만, waveform 도메인의 다양한 오디오 모달리티를 위한 diffusion 네트워크 학습은 아직 해결되지 않은 문제이다. 다른 주파수 밴드에서 에너지 레벨의 균형이 효율적인 샘플링에 중요하다고 가정한다.
+
+![](images/figure2.png)
+
+white Gaussian noise는 모든 주파수에서 동등한 에너지를 가지지만, 자연 소리는(예: 음악, 연설) 다른 분포를 보이며, 특히 높은 주파수에서 더 많은 에너지를 가진다. 이로 인해 diffusion 과정에서 고주파수 내용이 저주파수보다 먼저 사라지고, 역 과정에서 고주파수에 더 큰 영향을 받게 된다.
+
+이 문제를 해결하기 위해 멜 스케일을 기반으로 한 밴드 패스 필터를 사용하여 깨끗한 신호 $x_0$를 여러 주파수 밴드로 나누고, 각 밴드 $b_i$의 에너지를 정규화합니다.
+
+$$ \hat{b}_i = b_i \cdot \big( {{\sigma_i^{\epsilon}\over{\sigma_i^d}}} \big)^p  $$
+
+$\sigma_i^{\epsilon}$과 $\sigma_i^d$는 standard Gaussian noise와 데이터셋 신호의 밴드 $i$ 에너지를 나타내며, 매개변수 $ρ$로 에너지 수준 조정을 제어한다($ρ=0$은 조정 없음, $ρ=1$은 완전 일치). 고주파수 밴드의 instability를 피하기 위해, 음악 도메인에서 $\sigma_i^d$를 계산한다.
+
+**Scheduler Tuning.**
+
+**Band-Specific Training.**
+
+
 
 
 
