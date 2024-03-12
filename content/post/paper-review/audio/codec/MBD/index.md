@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "MBD"
-date = "2024-03-12"
+date = "2024-03-13"
 description = "From Discrete Tokens to High-Fidelity Audio Using Multi-Band Diffusion"
 categories = [
     "Paper Review"
