@@ -23,6 +23,7 @@ Pythia는 70M에서 12B parameter까지 다양한 크기의 16개 거대 언어 
 
 
 
+
 ---
 
 ## Reference
