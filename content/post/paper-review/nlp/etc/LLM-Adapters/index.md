@@ -2,8 +2,7 @@
 author = "Kurt"
 title = "LLM-Adapters"
 date = "2024-04-05"
-description = "An Adapter Family for Parameter-Efficient Fine-Tuning of
-Large Language Models"
+description = "An Adapter Family for Parameter-Efficient Fine-Tuning of Large Language Models"
 categories = [
     "Paper Review"
 ]
