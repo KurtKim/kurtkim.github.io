@@ -4,8 +4,14 @@
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>GPT와 PaLM 같은 확장된 언어 모델들은 다양한 추론 과제를 수행하는 능력을 보여주고 있음에도, 이 모델들이 기반하는 원리는 단순한 autoregressive generating text 메커니즘이다. 이러한 단순한 메커니즘이 모든 종류의 문제 해결에 충분한지, 그리고 현재의 접근 방식에 도전할 만한 문제와 대안적 메커니즘이 무엇일지에 대한 질문이 제기된다.&lt;/p>
 &lt;p>&amp;ldquo;dual process&amp;rdquo; 모델 연구는 결정 과정에 빠르고 무의식적인 &amp;ldquo;시스템 1&amp;quot;과 느리고 신중한 &amp;ldquo;시스템 2&amp;quot;의 두 가지 모드가 있다고 제안한다. 이 이론은 언어 모델의 단순한 토큰 선택 방식을 &amp;ldquo;시스템 1&amp;quot;과 연관시키며, 더 신중한 &amp;ldquo;시스템 2&amp;rdquo; 계획 과정으로 보완하는 것이 유익할 수 있음을 시사한다. 이는 현재 선택에 대한 다양한 대안을 탐색하고, 더 글로벌한 결정을 위해 현재 상태를 평가하는 방식을 포함한다.&lt;/p>
-&lt;p>&lt;img src="https://kurtkim.github.io/images/figure1.png"
+&lt;p>&lt;img src="https://kurtkim.github.io/p/tree-of-thoughts/images/figure1.png"
+width="980"
+height="480"
+srcset="https://kurtkim.github.io/p/tree-of-thoughts/images/figure1_hu78b45c316397d054499673620bbb1662_100913_480x0_resize_box_3.png 480w, https://kurtkim.github.io/p/tree-of-thoughts/images/figure1_hu78b45c316397d054499673620bbb1662_100913_1024x0_resize_box_3.png 1024w"
 loading="lazy"
+class="gallery-image"
+data-flex-grow="204"
+data-flex-basis="490px"
 >&lt;/p>
 &lt;p>1950년대 뉴얼, 쇼, 사이먼의 연구에서 영감을 받아, 언어 모델을 활용한 Tree of Thoughts (ToT) 프레임워크를 제안한다. 이 프레임워크는 문제 해결 과정에서 중간 단계로서의 생각들을 나무 구조로 관리하며, 언어를 통한 자가 평가를 통해 문제 해결에 대한 진전을 신중하게 추론한다. 이는 새로운 탐색 휴리스틱의 접근 방식이며, 너비 우선 탐색(BFS) 또는 깊이 우선 탐색(DFS)과 같은 알고리즘을 통해 생각의 나무를 체계적으로 탐색한다.&lt;/p>
 &lt;p>GPT-4조차 해결하기 어려운 24 게임, 창의적 글쓰기, 크로스워드 등 새로운 세 가지 문제를 제안한다. 이 작업들은 다양한 추론 능력과 체계적 계획 및 탐색을 필요로 한다. Tree of Thoughts (ToT) 방식을 통해, 이러한 문제들에 대하여 다양한 수준의 생각과 탐색 알고리즘을 적용함으로써 우수한 성능을 보여주었다. 또한, 선택적 접근법이 모델 성능에 미치는 영향을 분석하고, 향후 LMs의 학습과 사용을 개선하기 위한 방향을 논의한다.&lt;/p>
