@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "LLaMA 2"
-date = "2024-04-17"
+date = "2024-04-15"
 description = "Open Foundation and Fine-Tuned Chat Models"
 categories = [
     "Paper Review"
