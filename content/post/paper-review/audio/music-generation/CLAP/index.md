@@ -7,8 +7,8 @@ categories = [
     "Paper Review"
 ]
 tags = [
-    "Music",
-    "Text-to-Music",
+    "Audio",
+    "Music Generation",
 ]
 +++
 

@@ -199,11 +199,11 @@ menu:
           params:
               icon: instagram
 
-        - identifier: brunch
-          name: 4
-          url: https://brunch.co.kr/@bigevlt
-          params:
-              icon: pen
+        # - identifier: brunch
+        #   name: 4
+        #   url: https://brunch.co.kr/@bigevlt
+        #   params:
+        #       icon: pen
 
 
 related:
