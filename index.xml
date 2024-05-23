@@ -1,4 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K2H'log</title><link>https://kurtkim.github.io/</link><description>Recent content on K2H'log</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Mon, 20 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>MeLoDy</title><link>https://kurtkim.github.io/p/melody/</link><pubDate>Tue, 14 May 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/melody/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K2H'log</title><link>https://kurtkim.github.io/</link><description>Recent content on K2H'log</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Mon, 20 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Noise2Music</title><link>https://kurtkim.github.io/p/noise2music/</link><pubDate>Mon, 20 May 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/noise2music/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>Noise2Music은 텍스트 프롬프트로부터 30초짜리 고품질 음악 클립을 생성하는 diffusion 모델 시리즈이다. 텍스트에 기반한 중간 표현을 생성하는 생성 모델과 고해상도 오디오를 생성하는 캐스케이더 모델을 이용해, 장르, 템포, 악기 등의 텍스트 프롬프트 요소를 반영하는 음악을 만든다. 중간 표현으로는 스펙트로그램과 낮은 해상도 오디오가 사용된다. 이 과정에서 사전 학습된 대규모 언어 모델이 학습 세트 오디오의 텍스트를 생성하고 텍스트 프롬프트의 임베딩을 추출하는 데 중요한 역할을 한다.&lt;/p>
+&lt;hr>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;hr>
+&lt;h2 id="reference">Reference&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2302.03917" target="_blank" rel="noopener"
+>Paper&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://google-research.github.io/noise2music/" target="_blank" rel="noopener"
+>Demo&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>MeLoDy</title><link>https://kurtkim.github.io/p/melody/</link><pubDate>Tue, 14 May 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/melody/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>본 논문은 최신 음악 생성 기술인 MusicLM의 작업량을 대폭 줄인 새로운 모델 MeLoDy를 제시한다. MusicLM의 의미론적 모델링을 기반으로, MeLoDy는 새로운 dual-path diffusion(DPD) 모델과 오디오 VAE-GAN을 활용하여 음악 오디오를 효율적으로 생성한다. 이를 통해 10초나 30초 길이의 음악 샘플링 시 전달 횟수를 각각 95.7% 또는 99.6%까지 줄이면서도 MusicLM과 동등한 품질의 음악을 생성할 수 있다. MeLoDy는 샘플링 속도의 향상과 무한 연속 생성 가능성을 제공하며, 음악성, 오디오 품질, 텍스트 연관성 면에서도 최고 수준을 달성한다.&lt;/p>
 &lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
