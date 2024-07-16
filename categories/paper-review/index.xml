@@ -32,10 +32,10 @@ data-flex-basis="333px"
 &lt;hr>
 &lt;h2 id="generative-adversarial-networks">Generative Adversarial Networks&lt;/h2>
 &lt;p>GANs의 핵심 개념은 생성자와 판별자라는 두 네트워크를 사용하여 적대적 학습을 이루는 것이다. 생성자는 임의의 노이즈 $z$를 데이터 공간으로 매핑하며, 판별자는 진짜 데이터와 생성된 데이터를 구별하는 데 학습된다. 이 과정은 생성자 $G$와 판별자 $D$ 간의 두 플레이어 minimax 게임으로 수학적으로 표현될 수 있다:&lt;/p>
-&lt;p>$$ \min_G \max_D \mathbb{E}&lt;em>{x \sim p&lt;/em>{\text{data}}}[ \log D(x)] + \mathbb{E}_{z \sim p_z}[ \log(1 - D(G(z)))] $$&lt;/p>
+&lt;p>$$ \min_G \max_D \mathbb{E}_{x \sim p_{\text{data}}} [ \log D(x)] + \mathbb{E}_{z \sim p_z}[ \log(1 - D(G(z)))] $$&lt;/p>
 &lt;p>여기서 $p_{\text{data}}$는 실제 데이터의 분포를, $p_z$는 $z$의 사전 분포를 나타낸다.&lt;/p>
 &lt;p>Jensen-Shannon divergence 대신 Wasserstein 거리 또는 Earth Movers 거리를 사용하는 것이 GANs의 학습을 안정화하고 모드 붕괴를 방지하는 데 도움이 된다고 주장한다. 초기에는 Wasserstein GAN에서 Lipschitz 제약을 강제하기 위해 가중치 클리핑을 사용했으나, 이는 나중에 최적화에서 문제가 되었다. 이 문제를 해결하기 위해 판별자의 목적 함수에 기울기 페널티 항을 추가하는 방법을 제안하였다:&lt;/p>
-&lt;p>$$\mathbb{E}&lt;em>{x \sim \hat{p}&lt;em>d} [D(x)] - \mathbb{E}&lt;/em>{z \sim p_z} [D(G(z))] + \lambda \mathbb{E}&lt;/em>{x \sim p_x} [( |\nabla_{\hat{x}} D(\hat{x})|_2 - 1)^2 ],$$&lt;/p>
+&lt;p>$$\mathbb{E}_{x \sim \hat{p}_d} [D(x)] - \mathbb{E}_{z \sim p_z} [D(G(z))] + \lambda \mathbb{E}_{x \sim p_x} [( | \nabla_{\hat{x}} D(\hat{x})\ |_2 - 1)^2 ]$$&lt;/p>
 &lt;p>여기서 $\hat{p}_x$는 실제 데이터 분포 $p_d$와 모델 분포 $p_g$에서 샘플링된 점 쌍 사이의 직선을 따라 균일하게 샘플링된 정의된 모델 분포를 나타낸다. 이 수정된 WGAN-GP 모델은 더 빠르게 수렴하고 매개변수 조정이 적게 필요하여 생성 모델링 작업에 적합하다.&lt;/p>
 &lt;hr>
 &lt;h2 id="proposed-model">Proposed Model&lt;/h2>
