@@ -145,10 +145,16 @@ data-flex-basis="736px"
 >&lt;/p>
 &lt;p>FC-Attention의 효율성을 확인하기 위해, Museformer와 full attention 모델을 검증 세트에서 학습하고 메모리와 실행 시간을 측정하였다. Museformer는 메모리 소비가 시퀀스 길이에 대해 선형적으로 증가하며, full attention 모델보다 3배 더 긴 시퀀스를 처리할 수 있다. 또한, 시퀀스 길이가 약 5,000을 초과하면 더 빠른 학습 시간을 기록한다.&lt;/p>
 &lt;h3 id="case-study">Case Study&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/images/figure5.png"
+&lt;p>&lt;img src="https://kurtkim.github.io/p/museformer/images/figure5.png"
+width="914"
+height="352"
+srcset="https://kurtkim.github.io/p/museformer/images/figure5_hu3623459578026529947.png 480w, https://kurtkim.github.io/p/museformer/images/figure5_hu10085786161042411089.png 1024w"
 loading="lazy"
+class="gallery-image"
+data-flex-grow="259"
+data-flex-basis="623px"
 >&lt;/p>
-&lt;p>Museformer가 생성한 곡의 일부분을 보여준다. 문자열 트랙에서 13&lt;del>16번째 마디는 9&lt;/del>12번째 마디를 4마디 간격으로 반복하며 단기 구조를, 25&lt;del>32번째 마디는 9&lt;/del>16번째 마디를 16마디 간격으로 반복하면서 장기 구조를 보여준다. 이와 같은 방식으로 Museformer는 단순 반복뿐만 아니라 변형을 통해 음악을 생성할 수 있다. 다른 트랙들도 비슷한 구간에서 변형을 추가하여 음악의 발전을 더한다.&lt;/p>
+&lt;p>Museformer가 생성한 곡의 일부분을 보여준다. 문자열 트랙에서 13-16번째 마디는 9-12번째 마디를 4마디 간격으로 반복하며 단기 구조를, 25-32번째 마디는 9-16번째 마디를 16마디 간격으로 반복하면서 장기 구조를 보여준다. 이와 같은 방식으로 Museformer는 단순 반복뿐만 아니라 변형을 통해 음악을 생성할 수 있다. 다른 트랙들도 비슷한 구간에서 변형을 추가하여 음악의 발전을 더한다.&lt;/p>
 &lt;h2 id="conclusion">Conclusion&lt;/h2>
 &lt;p>긴 시퀀스와 음악 구조 모델링 문제를 해결하기 위해 Museformer를 제안한다. Museformer는 ﬁne-grained attention와 coarse-grained attention를 사용하여 구조적 상관관계를 학습하고 전체적인 스케치를 생성한다. structure-related bar는 유사도 통계를 통해 선택된다. 실험 결과, Museformer는 효율적이며 품질 높은 음악을 생성할 수 있음을 보여준다.&lt;/p>
 &lt;p>Museformer는 아직 완벽하지 않으며, 그 한계와 미래 방향에 대해 논의할 필요가 있다. 랜덤 샘플링과 수동 조정의 부재로 인해 생성된 음악이 항상 기대한 대로 잘 구조화되지 않을 수 있다. 신뢰성과 제어성을 향상시키기 위한 연구가 필요하다. 또한, 생성된 음악의 음악성과 창의성은 여전히 인간 음악에 미치지 못하며, 이는 모든 음악 생성 모델의 공통된 문제이다. 더 정교한 음악 표현과 대규모 데이터로 학습된 모델이 도움이 될 수 있다. Museformer는 음악 이해 작업에 적합하며, 자연어 처리에서는 의미적으로 관련된 문장이나 문서를 결정하는 새로운 도전 과제가 될 수 있다.&lt;/p>
