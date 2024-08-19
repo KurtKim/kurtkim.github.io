@@ -33,6 +33,8 @@ symbolic 음악 생성은 자동으로 악보를 만드는 것을 목표로 하�
 * 계산 및 공간 복잡도가 거의 선형으로 줄어들어 긴 음악 시퀀스에 확장할 수 있다.
 * 실험 결과, Museformer는 전체 노래 길이의 음악을 높은 품질과 뛰어난 구조로 생성한다.
 
+---
+
 ## Related Work
 
 ### Symbolic Music Generation
@@ -46,6 +48,8 @@ symbolic 음악 생성은 자동으로 악보를 만드는 것을 목표로 하�
 긴 시퀀스 작업을 해결하기 위해 다양한 Transformer 변형 모델이 제안되었다. 주요 유형은 다음과 같다: 1) Recurrent Transformer, 시퀀스를 청크 단위로 처리한다. 2) Sparse attention, 사전 정의된 패턴이나 내용 기반 패턴으로 attention 레이아웃을 줄인다. 3) Linearized attention, 내적 지수를 특징 맵의 곱셈으로 대체한다. 4) Compression-based attention, 컨텍스트 표현을 압축하여 쿼리와 키-값 쌍의 수를 줄인다. 또한, Compressive Transformer는 recurrent과 compression 기반 방법을, Poolingformer와 Transformer-LS는 sparse attention과 compression 기반 방법을 결합한다.
  
 기존의 긴 시퀀스 Transformer 모델은 음악의 독특한 구조를 충분히 반영하지 못한다. 음악은 반복적이거나 유사한 부분이 시간 단위(바, 비트 등)로 멀리 떨어져 있어, 기존 모델들은 이러한 구조를 효과적으로 처리하지 못한다. linearized attention이나 compression 기반 attention은 전체 시퀀스를 커버할 수 있지만, 토큰 간의 상관관계를 정확히 포착하지 못해 반복적이거나 유사한 음악 생성에 한계가 있다.
+
+---
 
 ## Museformer
 
@@ -104,6 +108,8 @@ Museformer가 음악 생성 작업에 적합한 이유는 다음과 같다.
 coarse-grained attention은 필요한 정보를 보존하여 더 나은 음악 생성을 돕는다. 기존의 sparse attention이 많은 정보를 생략할 수 있는 반면, coarse-grained attention은 다른 바의 정보를 보존해 풍부한 단서를 제공한다.
 
 Museformer는 ﬁne-grained attention과 coarse-grained attention을 결합하여 긴 음악 시퀀스를 효율적으로 처리한다. 구조 관련 바와 요약 토큰의 수가 적어 메모리와 실행 시간이 줄어든다.
+
+---
 
 ## Experiments
 
@@ -171,6 +177,8 @@ FC-Attention의 효율성을 확인하기 위해, Museformer와 full attention �
 ![](images/figure5.png)
 
 Museformer가 생성한 곡의 일부분을 보여준다. 문자열 트랙에서 13-16번째 마디는 9-12번째 마디를 4마디 간격으로 반복하며 단기 구조를, 25-32번째 마디는 9-16번째 마디를 16마디 간격으로 반복하면서 장기 구조를 보여준다. 이와 같은 방식으로 Museformer는 단순 반복뿐만 아니라 변형을 통해 음악을 생성할 수 있다. 다른 트랙들도 비슷한 구간에서 변형을 추가하여 음악의 발전을 더한다. 
+
+---
 
 ## Conclusion
 

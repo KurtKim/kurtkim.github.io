@@ -37,6 +37,8 @@ JEN-1은 최신 모델들보다 지각적으로 더 높은 품질의 음악을 �
 3. JEN-1은 autoregressive와 non-autoregressive diffusion 모드를 통합하여 순차적 의존성과 시퀀스 생성을 동시에 개선한다.
 4. 이 논문은 text-to-music generation 분야에서 중요한 발전을 이루며, 텍스트 프롬프트와 선율 구조에 맞는 고품질 음악을 생성하는 강력하고 효율적인 프레임워크를 제시한다.
 
+---
+
 ## Related Work
 
 **Single-task vs. Multi-task.** conditional neural music generation은 low-level 제어 신호(예: 가사, MIDI)와 high-level 의미적 설명(예: 텍스트, 이미지)을 조건 신호로 사용한다. 그러나 이러한 신호-오디오 쌍은 부족해, self-supervised technique 으로 모델을 학습한다. 이 연구는 text-to-music generation을 위한 정렬된 쌍과 오디오 전용 self-supervised 학습을 통해 노이즈 강건성을 높이고, high-level 의미적 설명과 low-level 제어 신호를 기반으로 음악을 생성한다.
@@ -44,6 +46,8 @@ JEN-1은 최신 모델들보다 지각적으로 더 높은 품질의 음악을 �
 **Waveform vs. Spectrum.** 계산 효율성을 위해 raw audio waveform을 직접 사용하는 것은 어렵다. 그래서 음악 생성에서는 두 가지 주요 전처리 접근 방식이 사용된다. 첫 번째는 waveform을 mel-spectrogram으로 변환한 후, 이미지 처리 기술을 이용하여 오디오를 생성하는 방법이다. 두 번째는 quantization-based audio codec을 활용해 continuous waveform 신호를 압축된 이산 표현으로 변환하는 방법이다. 예를 들어, MusicGen은 EnCodec을 통해 양자화된 오디오 유닛에 transformer-based decoder를 적용하고, AudioLM과 AudioPaLM은 텍스트를 오디오 토큰으로 변환 후 SoundStream을 사용해 raw audio로 변환한다.
 
 **Autoregressive vs. Non-autoregressive.** 음악 생성에는 autoregressive와 non-autoregressive 접근 방식이 있다. autoregressive 모델 (예: PerceiverAR, AudioGen, MusicLM, Jukebox)은 transformer를 사용해 토큰을 순차적으로 생성하여 높은 일관성을 제공하지만, 속도가 느리다. 반면, non-autoregressive 모델은 여러 토큰을 동시에 생성해 속도를 크게 개선한다. 최근에는 diffusion 모델 (예: Make-An-Audio, Noise2Music, AudioLDM, TANGO)이 빠른 생성 속도와 높은 품질을 동시에 달성하는 데 유망한 접근법으로 주목받고 있다.
+
+---
 
 ## Peliminary
 
@@ -83,6 +87,8 @@ $$ L = \mathbb{E}_{z_0, \epsilon \sim N(0,1), t} \left[ \| \epsilon - \epsilon\_
 
 기존의 non-autoregressive diffusion 모델은 음악의 순차적 의존성을 잘 포착하지 못한다. 이를 해결하기 위해, unidirectional과 bidirectional 학습을 통합한 JEN-1 프레임워크를 제안하며, 이를 통해 음악 데이터의 순차적 의존성을 더 효과적으로 포착할 수 있다.
 
+---
+
 ## Method
 
 JEN-1은 unidirectional과 bidirectional 모드를 결합한 전방향 1D diffusion 모델로, 텍스트나 음악 표현을 조건으로 하는 음악 생성을 지원한다. 노이즈에 강한 latent embedding 공간에서 작동하며, 단일 모델로 고해상도 음악을 생성할 수 있다. JEN-1은 autoregressive와 non-autoregressive 학습을 동시에 활용하여 순차적 의존성과 시퀀스 생성을 개선하며, 문맥 학습과 다중 작업 학습을 통해 텍스트나 멜로디 기반의 조건부 생성을 지원한다.
@@ -117,6 +123,8 @@ JEN-1은 unidirectional과 bidirectional 모드를 결합한 전방향 1D diffus
 
 **Music Continuation Task.** JEN-1 모델은 omnidirectional diffusion을 통해 음악 인페인팅과 연속을 지원한다. 기존 diffusion 모델은 non-autoregressive 성격으로 인해 성능이 부족했으며, 이를 해결하기 위해 JEN-1은 unidirectional 모드를 사용하여 왼쪽 컨텍스트에만 주의를 기울이고, 20%에서 80% 비율로 오른쪽 전용 마스크를 생성하여 음악 연속을 시뮬레이션한다.
 
+---
+
 ## Experiment
 
 ### Setup
@@ -144,6 +152,8 @@ JEN-1은 최신 기술인 Riffusion, Mousai, MusicLM, MusicGen, Noise2Music과 �
 **Generation Diversity.** tranformer 기반 방법과 비교하여, diffusion 모델은 생성의 다양성이 뛰어나다. JEN-1은 동일한 텍스트 프롬프트로 다양한 샘플을 생성하며, 높은 품질을 유지하면서 인상적인 다양성을 보여준다.
 
 **Generation, Generalization, and Controllability.** JEN-1은 supervised learning으로 학습되었음에도 zero-shot 생성 능력과 뛰어난 제어 능력을 보여준다. 데모 페이지에서 창의적인 zero-shot 프롬프트로 만족스러운 음악을 생성하는 예시를 제공하며, 음악의 장르, 악기, 분위기 등을 효과적으로 반영하는 것을 확인할 수 있다.
+
+---
 
 ## Conclusion
 
