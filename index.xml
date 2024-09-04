@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K2H'log</title><link>https://kurtkim.github.io/</link><description>Recent content on K2H'log</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Tue, 20 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Museformer</title><link>https://kurtkim.github.io/p/museformer/</link><pubDate>Sat, 10 Aug 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/museformer/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K2H'log</title><link>https://kurtkim.github.io/</link><description>Recent content on K2H'log</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Fri, 30 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Museformer</title><link>https://kurtkim.github.io/p/museformer/</link><pubDate>Sat, 10 Aug 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/museformer/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
 &lt;p>symbolic 음악 생성은 자동으로 악보를 만드는 것을 목표로 하며, 최근 Transformer 모델이 사용되지만 긴 음악 시퀀스 처리와 반복 구조 생성에 한계가 있다. 이 논문에서는 Museformer를 제안한다. Museformer는 ﬁne-attention과 coarse-grained attention 메커니즘을 결합하여 음악 구조와 맥락 정보를 효과적으로 캡처한다. 이 방법은 full-attention 메커니즘보다 계산 효율성이 높아 3배 더 긴 음악 시퀀스를 모델링할 수 있으며, 높은 품질과 구조적 완성도를 제공한다.&lt;/p>
 &lt;hr>
 &lt;h2 id="introduction">Introduction&lt;/h2>
@@ -17213,62 +17213,62 @@ data-flex-basis="1335px"
 &lt;table>
 &lt;thead>
 &lt;tr>
-&lt;th style="text-align:center">Hyperparameter&lt;/th>
-&lt;th style="text-align:center">Descrption&lt;/th>
+&lt;th style="text-align: center">Hyperparameter&lt;/th>
+&lt;th style="text-align: center">Descrption&lt;/th>
 &lt;/tr>
 &lt;/thead>
 &lt;tbody>
 &lt;tr>
-&lt;td style="text-align:center">layer&lt;/td>
-&lt;td style="text-align:center">12-layer decoder-only transformer with masked self-attention heads&lt;/td>
+&lt;td style="text-align: center">layer&lt;/td>
+&lt;td style="text-align: center">12-layer decoder-only transformer with masked self-attention heads&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">state dimension&lt;/td>
-&lt;td style="text-align:center">decoder: 768, attention heads: 12, position-wise FFN: 3072&lt;/td>
+&lt;td style="text-align: center">state dimension&lt;/td>
+&lt;td style="text-align: center">decoder: 768, attention heads: 12, position-wise FFN: 3072&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">optimizer&lt;/td>
-&lt;td style="text-align:center">Adam&lt;/td>
+&lt;td style="text-align: center">optimizer&lt;/td>
+&lt;td style="text-align: center">Adam&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">learning rate&lt;/td>
-&lt;td style="text-align:center">max: 2.5e-4, schedule: cosine annealing, warm-up step: 2,000&lt;/td>
+&lt;td style="text-align: center">learning rate&lt;/td>
+&lt;td style="text-align: center">max: 2.5e-4, schedule: cosine annealing, warm-up step: 2,000&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">schedule&lt;/td>
-&lt;td style="text-align:center">100 epochs&lt;/td>
+&lt;td style="text-align: center">schedule&lt;/td>
+&lt;td style="text-align: center">100 epochs&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">batch size&lt;/td>
-&lt;td style="text-align:center">64 random sample $\times$ 512 token/sample&lt;/td>
+&lt;td style="text-align: center">batch size&lt;/td>
+&lt;td style="text-align: center">64 random sample $\times$ 512 token/sample&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">weight initialization&lt;/td>
-&lt;td style="text-align:center">$N(0, 0.02)$&lt;/td>
+&lt;td style="text-align: center">weight initialization&lt;/td>
+&lt;td style="text-align: center">$N(0, 0.02)$&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">subword segmentation&lt;/td>
-&lt;td style="text-align:center">BPE (40,000 merges)&lt;/td>
+&lt;td style="text-align: center">subword segmentation&lt;/td>
+&lt;td style="text-align: center">BPE (40,000 merges)&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">dropout&lt;/td>
-&lt;td style="text-align:center">0.1&lt;/td>
+&lt;td style="text-align: center">dropout&lt;/td>
+&lt;td style="text-align: center">0.1&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">regularization&lt;/td>
-&lt;td style="text-align:center">L2($w=0.01$)&lt;/td>
+&lt;td style="text-align: center">regularization&lt;/td>
+&lt;td style="text-align: center">L2($w=0.01$)&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">activation function&lt;/td>
-&lt;td style="text-align:center">Gaussian Error Linear Unit(GELU)&lt;/td>
+&lt;td style="text-align: center">activation function&lt;/td>
+&lt;td style="text-align: center">Gaussian Error Linear Unit(GELU)&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">position embedding&lt;/td>
-&lt;td style="text-align:center">learned positoin embeddings&lt;/td>
+&lt;td style="text-align: center">position embedding&lt;/td>
+&lt;td style="text-align: center">learned positoin embeddings&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">pre-processing&lt;/td>
-&lt;td style="text-align:center">cleaning: ftfy, tokenizer : spaCy&lt;/td>
+&lt;td style="text-align: center">pre-processing&lt;/td>
+&lt;td style="text-align: center">cleaning: ftfy, tokenizer : spaCy&lt;/td>
 &lt;/tr>
 &lt;/tbody>
 &lt;/table>
@@ -17277,30 +17277,30 @@ data-flex-basis="1335px"
 &lt;table>
 &lt;thead>
 &lt;tr>
-&lt;th style="text-align:center">Hyperparameter&lt;/th>
-&lt;th style="text-align:center">Descrption&lt;/th>
+&lt;th style="text-align: center">Hyperparameter&lt;/th>
+&lt;th style="text-align: center">Descrption&lt;/th>
 &lt;/tr>
 &lt;/thead>
 &lt;tbody>
 &lt;tr>
-&lt;td style="text-align:center">dropout&lt;/td>
-&lt;td style="text-align:center">0.1&lt;/td>
+&lt;td style="text-align: center">dropout&lt;/td>
+&lt;td style="text-align: center">0.1&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">Learning rate&lt;/td>
-&lt;td style="text-align:center">max: 6.25e-5, warm-up: 0.2% of training&lt;/td>
+&lt;td style="text-align: center">Learning rate&lt;/td>
+&lt;td style="text-align: center">max: 6.25e-5, warm-up: 0.2% of training&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">batch size&lt;/td>
-&lt;td style="text-align:center">32&lt;/td>
+&lt;td style="text-align: center">batch size&lt;/td>
+&lt;td style="text-align: center">32&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">epochs&lt;/td>
-&lt;td style="text-align:center">3&lt;/td>
+&lt;td style="text-align: center">epochs&lt;/td>
+&lt;td style="text-align: center">3&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">auxiliary objective weight($\lambda$)&lt;/td>
-&lt;td style="text-align:center">0.5&lt;/td>
+&lt;td style="text-align: center">auxiliary objective weight($\lambda$)&lt;/td>
+&lt;td style="text-align: center">0.5&lt;/td>
 &lt;/tr>
 &lt;/tbody>
 &lt;/table>

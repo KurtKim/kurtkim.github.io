@@ -13164,62 +13164,62 @@ data-flex-basis="1335px"
 &lt;table>
 &lt;thead>
 &lt;tr>
-&lt;th style="text-align:center">Hyperparameter&lt;/th>
-&lt;th style="text-align:center">Descrption&lt;/th>
+&lt;th style="text-align: center">Hyperparameter&lt;/th>
+&lt;th style="text-align: center">Descrption&lt;/th>
 &lt;/tr>
 &lt;/thead>
 &lt;tbody>
 &lt;tr>
-&lt;td style="text-align:center">layer&lt;/td>
-&lt;td style="text-align:center">12-layer decoder-only transformer with masked self-attention heads&lt;/td>
+&lt;td style="text-align: center">layer&lt;/td>
+&lt;td style="text-align: center">12-layer decoder-only transformer with masked self-attention heads&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">state dimension&lt;/td>
-&lt;td style="text-align:center">decoder: 768, attention heads: 12, position-wise FFN: 3072&lt;/td>
+&lt;td style="text-align: center">state dimension&lt;/td>
+&lt;td style="text-align: center">decoder: 768, attention heads: 12, position-wise FFN: 3072&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">optimizer&lt;/td>
-&lt;td style="text-align:center">Adam&lt;/td>
+&lt;td style="text-align: center">optimizer&lt;/td>
+&lt;td style="text-align: center">Adam&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">learning rate&lt;/td>
-&lt;td style="text-align:center">max: 2.5e-4, schedule: cosine annealing, warm-up step: 2,000&lt;/td>
+&lt;td style="text-align: center">learning rate&lt;/td>
+&lt;td style="text-align: center">max: 2.5e-4, schedule: cosine annealing, warm-up step: 2,000&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">schedule&lt;/td>
-&lt;td style="text-align:center">100 epochs&lt;/td>
+&lt;td style="text-align: center">schedule&lt;/td>
+&lt;td style="text-align: center">100 epochs&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">batch size&lt;/td>
-&lt;td style="text-align:center">64 random sample $\times$ 512 token/sample&lt;/td>
+&lt;td style="text-align: center">batch size&lt;/td>
+&lt;td style="text-align: center">64 random sample $\times$ 512 token/sample&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">weight initialization&lt;/td>
-&lt;td style="text-align:center">$N(0, 0.02)$&lt;/td>
+&lt;td style="text-align: center">weight initialization&lt;/td>
+&lt;td style="text-align: center">$N(0, 0.02)$&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">subword segmentation&lt;/td>
-&lt;td style="text-align:center">BPE (40,000 merges)&lt;/td>
+&lt;td style="text-align: center">subword segmentation&lt;/td>
+&lt;td style="text-align: center">BPE (40,000 merges)&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">dropout&lt;/td>
-&lt;td style="text-align:center">0.1&lt;/td>
+&lt;td style="text-align: center">dropout&lt;/td>
+&lt;td style="text-align: center">0.1&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">regularization&lt;/td>
-&lt;td style="text-align:center">L2($w=0.01$)&lt;/td>
+&lt;td style="text-align: center">regularization&lt;/td>
+&lt;td style="text-align: center">L2($w=0.01$)&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">activation function&lt;/td>
-&lt;td style="text-align:center">Gaussian Error Linear Unit(GELU)&lt;/td>
+&lt;td style="text-align: center">activation function&lt;/td>
+&lt;td style="text-align: center">Gaussian Error Linear Unit(GELU)&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">position embedding&lt;/td>
-&lt;td style="text-align:center">learned positoin embeddings&lt;/td>
+&lt;td style="text-align: center">position embedding&lt;/td>
+&lt;td style="text-align: center">learned positoin embeddings&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">pre-processing&lt;/td>
-&lt;td style="text-align:center">cleaning: ftfy, tokenizer : spaCy&lt;/td>
+&lt;td style="text-align: center">pre-processing&lt;/td>
+&lt;td style="text-align: center">cleaning: ftfy, tokenizer : spaCy&lt;/td>
 &lt;/tr>
 &lt;/tbody>
 &lt;/table>
@@ -13228,30 +13228,30 @@ data-flex-basis="1335px"
 &lt;table>
 &lt;thead>
 &lt;tr>
-&lt;th style="text-align:center">Hyperparameter&lt;/th>
-&lt;th style="text-align:center">Descrption&lt;/th>
+&lt;th style="text-align: center">Hyperparameter&lt;/th>
+&lt;th style="text-align: center">Descrption&lt;/th>
 &lt;/tr>
 &lt;/thead>
 &lt;tbody>
 &lt;tr>
-&lt;td style="text-align:center">dropout&lt;/td>
-&lt;td style="text-align:center">0.1&lt;/td>
+&lt;td style="text-align: center">dropout&lt;/td>
+&lt;td style="text-align: center">0.1&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">Learning rate&lt;/td>
-&lt;td style="text-align:center">max: 6.25e-5, warm-up: 0.2% of training&lt;/td>
+&lt;td style="text-align: center">Learning rate&lt;/td>
+&lt;td style="text-align: center">max: 6.25e-5, warm-up: 0.2% of training&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">batch size&lt;/td>
-&lt;td style="text-align:center">32&lt;/td>
+&lt;td style="text-align: center">batch size&lt;/td>
+&lt;td style="text-align: center">32&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">epochs&lt;/td>
-&lt;td style="text-align:center">3&lt;/td>
+&lt;td style="text-align: center">epochs&lt;/td>
+&lt;td style="text-align: center">3&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:center">auxiliary objective weight($\lambda$)&lt;/td>
-&lt;td style="text-align:center">0.5&lt;/td>
+&lt;td style="text-align: center">auxiliary objective weight($\lambda$)&lt;/td>
+&lt;td style="text-align: center">0.5&lt;/td>
 &lt;/tr>
 &lt;/tbody>
 &lt;/table>
