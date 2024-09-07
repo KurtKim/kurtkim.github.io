@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "LLaVA"
-date = "2024-08-30"
+date = "2024-09-10"
 description = "Visual Instruction Tuning"
 categories = [
     "Paper Review"
