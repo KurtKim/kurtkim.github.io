@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "GPT-4"
-date = "2024-03-14"
+date = "2024-03-16"
 description = "GPT-4 Technical Report"
 categories = [
     "Paper Review"

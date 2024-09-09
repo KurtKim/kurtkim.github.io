@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "PaLM 2"
-date = "2024-03-23"
+date = "2024-03-24"
 description = "PaLM 2 Technical Report"
 categories = [
     "Paper Review"

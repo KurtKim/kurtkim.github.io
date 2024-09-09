@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "LRU"
-date = "2024-08-20"
+date = "2024-03-12"
 description = "Resurrecting Recurrent Neural Networks for Long Sequences"
 categories = [
     "Paper Review"

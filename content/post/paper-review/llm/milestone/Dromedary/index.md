@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "Dromedary"
-date = "2024-03-19"
+date = "2024-03-22"
 description = "Principle-Driven Self-Alignment of Language Models from Scratch with Minimal Human Supervision"
 categories = [
     "Paper Review"

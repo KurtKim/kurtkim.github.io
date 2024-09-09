@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "Musika!"
-date = "2024-09-20"
+date = "2024-09-10"
 description = "Fast Infinite Waveform Music Generation"
 categories = [
     "Paper Review"

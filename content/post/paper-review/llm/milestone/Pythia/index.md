@@ -1,7 +1,7 @@
 +++
 author = "Kurt"
 title = "Pythia"
-date = "2024-03-16"
+date = "2024-03-20"
 description = "A Suite for Analyzing Large Language Models Across Training and Scaling"
 categories = [
     "Paper Review"
