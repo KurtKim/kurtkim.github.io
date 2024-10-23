@@ -1,8 +1,8 @@
 +++
 author = "Kurt"
-title = "Mamba2"
+title = "Mamba 2: Transformers are SSMs"
 date = "2024-09-20"
-description = "Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality"
+description = "Generalized Models and Efficient Algorithms Through Structured State Space Duality"
 categories = [
     "Paper Review"
 ]
@@ -10,7 +10,7 @@ tags = [
     "LLM",
     "Milestone",
 ]
-draft = true
+# draft = true
 +++
 
 ## Abstract
