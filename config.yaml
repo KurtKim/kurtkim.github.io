@@ -1,7 +1,7 @@
 baseurl: https://kurtkim.github.io/
 languageCode: ko-kr
 theme: hugo-theme-stack
-pagination.pagerSize: 5
+paginate: 5
 title: K2H'log
 
 enableRobotsTXT: true
