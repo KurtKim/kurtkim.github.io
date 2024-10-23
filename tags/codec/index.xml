@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Codec on K2H'log</title><link>https://kurtkim.github.io/tags/codec/</link><description>Recent content in Codec on K2H'log</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Wed, 13 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/tags/codec/index.xml" rel="self" type="application/rss+xml"/><item><title>MBD</title><link>https://kurtkim.github.io/p/mbd/</link><pubDate>Wed, 13 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/mbd/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>이 연구에서는 저비트율의 이산 표현에서 다양한 오디오 모달리티(예: 음성, 음악, 환경 소리)를 생성하는 고해상도 Multi-Band Diffusion 기반 프레임워크를 제안한다. 이 방법은 기존의 생성 모델이 완벽하지 않은 조건에서 audible artifact를 생성하는 문제를 해결하려고 한다. 제안된 접근법은 동일한 비트율에서 지각 품질 면에서 state-of-the-art의 생성 기술을 능가한다고 주장한다.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Codec on K2H'log</title><link>https://kurtkim.github.io/tags/codec/</link><description>Recent content in Codec on K2H'log</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Wed, 13 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/tags/codec/index.xml" rel="self" type="application/rss+xml"/><item><title>MBD</title><link>https://kurtkim.github.io/p/mbd/</link><pubDate>Wed, 13 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/mbd/</guid><description>&lt;h2 id="abstract">Abstract
+&lt;/h2>&lt;p>이 연구에서는 저비트율의 이산 표현에서 다양한 오디오 모달리티(예: 음성, 음악, 환경 소리)를 생성하는 고해상도 Multi-Band Diffusion 기반 프레임워크를 제안한다. 이 방법은 기존의 생성 모델이 완벽하지 않은 조건에서 audible artifact를 생성하는 문제를 해결하려고 한다. 제안된 접근법은 동일한 비트율에서 지각 품질 면에서 state-of-the-art의 생성 기술을 능가한다고 주장한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>neural-based vocoder는 최신 neural network 아키텍처를 활용해 자연스러운 음색과 억양의 고품질 음성을 생성하는 데 뛰어난 성과를 보여주었다.&lt;/p>
+&lt;h2 id="introduction">Introduction
+&lt;/h2>&lt;p>neural-based vocoder는 최신 neural network 아키텍처를 활용해 자연스러운 음색과 억양의 고품질 음성을 생성하는 데 뛰어난 성과를 보여주었다.&lt;/p>
 &lt;p>Self-Supervised Learning(SSL)은 음성 데이터에 적용되어 감정과 억양 등의 맥락적 정보를 담은 표현을 생성하며, 이로부터 파형 오디오를 만드는 것이 새로운 연구 주제가 되었다. 이 과정은 SSL을 사용해 오디오 표현을 학습하고, 그 후 GAN 접근법으로 음성을 디코딩하는 두 단계로 이루어진다. 이 방법들은 뛰어난 성능을 보이지만, 불안정하고 학습하기 어렵다는 단점이 있다.&lt;/p>
 &lt;p>압축 모델은 복원 손실을 활용하여 데이터의 의미 있는 표현을 학습하는 SSL 모델로 볼 수 있다. 이 모델들은 오디오 표현과 합성을 동시에 학습하는 과정에서 다양한 오디오 도메인을 모델링할 수 있다. 모델은 스펙트로그램 매칭, 특성 매칭, 그리고 다양한 적대적 손실 등 복잡하게 조합된 목표를 통해 최적화된다. 하지만 매우 낮은 비트율에서는 메탈릭한 목소리나 왜곡 같은 눈에 띄는 아티팩트가 추가될 수 있다.&lt;/p>
 &lt;p>모델 최적화 이후 학습된 표현은 다양한 오디오 작업에 활용될 수 있다. Kreuk et al. 은 텍스트를 통한 오디오 생성을, Wang et al. 은 zero-shot 텍스트-음성 변환을 제안하였다. 또한, Agostinelli et al. 은 텍스트-음악 생성에, Hsu et al. 은 조용한 비디오에서 음성 생성에 이 표현을 적용하였다.&lt;/p>
@@ -12,15 +12,15 @@ loading="lazy"
 >&lt;/p>
 &lt;p>&lt;strong>Our Contributions:&lt;/strong> 오디오 합성을 위한 새로운 diffusion 기반 모델을 제안한다. 이 모델은 각각의 주파수 대역을 독립적으로 처리하는 diffusion 모델, 주파수 이퀄라이저, 그리고 풍부한 고조파를 가진 오디오 데이터를 위한 파워 노이즈 스케줄러를 포함한다. 이 방법은 객관적 지표와 인간 연구를 통해 최첨단 GAN과 diffusion 기반 접근법에 비해 더 효율적임을 입증하였다.&lt;/p>
 &lt;hr>
-&lt;h2 id="related-work">Related work&lt;/h2>
-&lt;p>neural audio synthesis은 웨이브넷과 같은 autoregressive 모델로 시작되었으나, 이는 학습이 느리고 어려운 단점이 있다. 음성 합성 분야에서는, mel-spectrogram에 기반한 다양한 방식, 특히 GAN 기반의 HiFi-GAN 같은 모델이 탐색되었다. 최근에는 HiFi-GAN을 사용해, HuBERT, VQ-VAE, CPC 같은 self-supervise 방법으로 학습한 저 비트율 표현과 함께 기본 주파수와 스피커 정보를 조합하여, 스피커와 기본 주파수로부터 독립적인 제어 가능한 음성을 생성하는 연구가 이루어졌다.&lt;/p>
+&lt;h2 id="related-work">Related work
+&lt;/h2>&lt;p>neural audio synthesis은 웨이브넷과 같은 autoregressive 모델로 시작되었으나, 이는 학습이 느리고 어려운 단점이 있다. 음성 합성 분야에서는, mel-spectrogram에 기반한 다양한 방식, 특히 GAN 기반의 HiFi-GAN 같은 모델이 탐색되었다. 최근에는 HiFi-GAN을 사용해, HuBERT, VQ-VAE, CPC 같은 self-supervise 방법으로 학습한 저 비트율 표현과 함께 기본 주파수와 스피커 정보를 조합하여, 스피커와 기본 주파수로부터 독립적인 제어 가능한 음성을 생성하는 연구가 이루어졌다.&lt;/p>
 &lt;p>diffusion-based vocoder는 이미지 생성에서의 diffusion 성공에 영감을 받아 개발되었다. Diffwave는 기본 diffusion 방정식을 오디오에 적용하며, PriorGrad는 조건부 mel-spectrogram의 에너지를 사용해 사전 노이즈 분포를 조정하는 Diffwave의 확장이다. Wavegrad는 연속적인 노이즈 수준에 조건을 사용한다. Takahashi et al. 은 노래하는 목소리의 복잡한 분포를 다루며, 계층적 모델로 고품질 오디오를 생성한다. 최근 연구는 diffusion을 사용해 고해상도 오디오를 생성하지만, 아직 오디오 모달리티 범위가 좁다.&lt;/p>
 &lt;p>대부분의 diffusion 모델은 복잡한 데이터를 샘플링하기 위해 업샘플링을 사용하지만, 이 과정은 병렬 처리가 불가능하다. 최근, SimpleDiffusion이라는 연구에서는 단일 모델을 이용해 복잡한 diffusion 과정을 단순화하면서도, 낮은 주파수에 집중하여 고품질의 결과를 얻는 방법을 제안하였다. 그러나 이 아이디어는 아직 오디오 처리 분야에는 적용되지 않았다.&lt;/p>
 &lt;p>이 연구는 SoundStream과 EnCodec 같은 adversarial neural audio codec에 대한 대체 방안을 제시한다. 이는 다양한 손실 조합으로 학습된 encoder, quantizer, decoder 구조를 갖추고 있지만, diffusion 기반 decoder는 더 높은 품질의 오디오 생성을 주관적 평가를 통해 달성한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="method">Method&lt;/h2>
-&lt;h3 id="background">Background&lt;/h3>
-&lt;p>Ho et al. (2020)의 연구에 따르면, Markov chain을 사용한 diffusion 과정에서 깨끗한 데이터 $x_0$에 점진적으로 Gaussian noise를 추가해, 결국 standard Gaussian noise에 가까운 noise가 섞인 데이터 $x_T$를 생성한다. 이 과정의 확률이 다음과 같이 정의된다:&lt;/p>
+&lt;h2 id="method">Method
+&lt;/h2>&lt;h3 id="background">Background
+&lt;/h3>&lt;p>Ho et al. (2020)의 연구에 따르면, Markov chain을 사용한 diffusion 과정에서 깨끗한 데이터 $x_0$에 점진적으로 Gaussian noise를 추가해, 결국 standard Gaussian noise에 가까운 noise가 섞인 데이터 $x_T$를 생성한다. 이 과정의 확률이 다음과 같이 정의된다:&lt;/p>
 &lt;p>$$ q(x_{0:\gamma} | x_0) = \Pi_{t=1}^T q (x_t | x_{t-1}) $$&lt;/p>
 &lt;p>$q(x_t | x_{t-1})$는 가우시안 분포를 따르며, $\beta_t$는 noise schedule을 나타낸다. 이를 통해 Markov chain의 어떤 단계도 효율적으로 샘플링할 수 있다.&lt;/p>
 &lt;p>$$ x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon $$&lt;/p>
@@ -34,8 +34,8 @@ loading="lazy"
 &lt;p>이러한 모델을 사용하면, 다음 방정식을 사용하여 diffusion 과정을 반복적으로 역전할 수 있다:&lt;/p>
 &lt;p>$$ x_{t-1} = {{1}\over{\sqrt{1 - \beta_t}}} \big( x_i - {{\beta_t}\over{\sqrt{1 - \bar{\alpha}_t}}} \epsilon_{\theta} (x_t, t) \big) + \sqrt{\sigma_t} \epsilon $$&lt;/p>
 &lt;p>여기서 $\sigma$는 $\tilde{\beta}t = (1 - \bar{\alpha}{t-1})/(1 - \bar{\alpha}_t) \beta_t$와 $\beta_t$ 사이에서 결정해야 하는 parameter이며, 이 실험에서는 $\sigma_t = \beta_t$로 설정한다.&lt;/p>
-&lt;h3 id="multi-band-diffusion">Multi-Band Diffusion&lt;/h3>
-&lt;p>Multi-Band Diffusion 방법은 Frequency Eq. Processor, Scheduler Tuning, Band-Specific Training의 세 가지 핵심 요소로 구성된다.&lt;/p>
+&lt;h3 id="multi-band-diffusion">Multi-Band Diffusion
+&lt;/h3>&lt;p>Multi-Band Diffusion 방법은 Frequency Eq. Processor, Scheduler Tuning, Band-Specific Training의 세 가지 핵심 요소로 구성된다.&lt;/p>
 &lt;p>&lt;strong>Frequency Eq. Processor&lt;/strong> diffusion 과정 이론은 모든 종류의 분포에서 샘플링을 가능하게 하지만, waveform 도메인의 다양한 오디오 모달리티를 위한 diffusion 네트워크 학습은 아직 해결되지 않은 문제이다. 다른 주파수 밴드에서 에너지 레벨의 균형이 효율적인 샘플링에 중요하다고 가정한다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/images/figure2.png"
 loading="lazy"
@@ -55,9 +55,9 @@ loading="lazy"
 &lt;p>&lt;strong>Band-Specific Training.&lt;/strong> audio diffusion 모델은 낮은 주파수를 먼저 생성하고, 역 과정의 마지막에서 고주파수를 처리한다. 오디오 데이터는 시간과 주파수에 걸쳐 복잡하게 얽혀 있어, 전대역 오디오 데이터를 사용한 학습은 고주파수 생성 시 항상 정확한 낮은 주파수를 제공한다. 하지만, 이 방식은 생성 초기의 오류를 역 과정에서 증폭시키는 문제를 가지고 있다.&lt;/p>
 &lt;p>각 주파수 대역을 독립적으로 학습시키는 멀티밴드 확산 방식을 제안하였다. 이 접근법은 샘플의 지각 품질을 크게 향상시켰으며, 모델 채널에 따른 주파수 대역 분할은 같은 결과를 내지 못했다. 이는 학습 시 이전에 생성된 내용을 모델에 제공하지 않음으로써 샘플링 오류 누적을 방지할 수 있다는 우리의 가설을 확인시켜 준다.&lt;/p>
 &lt;hr>
-&lt;h2 id="experimental-setup">Experimental Setup&lt;/h2>
-&lt;h3 id="model--hyperparameters">Model &amp;amp; Hyperparameters&lt;/h3>
-&lt;p>&lt;strong>Overview.&lt;/strong> 이 접근법은 EnCodec decoder를 대체하며, 필요에 따라 품질과 속도 사이에서 원본과 diffusion decoder를 자유롭게 전환할 수 있는 유연성을 제공한다.&lt;/p>
+&lt;h2 id="experimental-setup">Experimental Setup
+&lt;/h2>&lt;h3 id="model--hyperparameters">Model &amp;amp; Hyperparameters
+&lt;/h3>&lt;p>&lt;strong>Overview.&lt;/strong> 이 접근법은 EnCodec decoder를 대체하며, 필요에 따라 품질과 속도 사이에서 원본과 diffusion decoder를 자유롭게 전환할 수 있는 유연성을 제공한다.&lt;/p>
 &lt;p>&lt;strong>Architecture.&lt;/strong> Chen et al., Kong et al., Lee et al.의 연구에 이어 Ronneberger et al.이 제안한 대칭형 U-net 네트워크를 사용하고, Défossez et al.의 두 residual block과 stride 4의 downsampling/upsampling block을 적용하였다. input audio conditioning과 timestep $t$는 네트워크 병목에 통합되고, 고차원 데이터 확산시 병목 부근에 계산 자원을 집중하는 것이 좋다고 Hoogeboom et al.이 권장한다. 이에 따라 growth rate를 4로 설정했으며, 모델의 크기는 1GB이다.&lt;/p>
 &lt;p>&lt;strong>Input Conditioning.&lt;/strong> 공개된 24kHz EnCodec 모델의 latent representation을 사용하며, 이는 학습 동안 고정된다. 임베딩 시퀀스는 UNet 병목 차원에 맞게 linear interpolation으로 upsample 된다. 실험에는 1.5kbps, 3kbps, 6kbps 비트레이트에 해당하는 EnCodec 코드북 1, 2, 4를 사용한 재구성이 포함되며, 여러 코드북 사용 시 임베딩은 코드북들의 평균으로 계산된다.&lt;/p>
 &lt;p>&lt;strong>Schedule.&lt;/strong> 제안된 power schedule로 diffusion 모델을 학습시켰다. 이때 파워 $p=7.5$, 초기 $\beta_0=1.0e−5$, 최종 $\beta_T=2.9e−2$를 사용하였다. 생성 시에는 20단계, 학습 시에는 1000단계를 사용하는 것이 모델의 다양성 증가와 다양한 노이즈 수준에서의 학습 가능성 때문에 유익하다는 것을 발견했다. 실험에서는 가장 간단한 시간 단계 하위 샘플링 방식 $S = \lbrace i * {{1000}\over{N}}, i \in \lbrace 0, 1, &amp;hellip;, N \rbrace \rbrace$ 을 사용, 여기서 $N$은 샘플링 단계 수(기본값 20)이다.&lt;/p>
@@ -65,19 +65,19 @@ loading="lazy"
 &lt;p>&lt;strong>Band Splitting.&lt;/strong> 별개의 diffusion 과정을 사용하며, julius로 멜 스케일 기반 4개 주파수 밴드를 균등 분할한다. 이 밴드들은 프로세서와 무관하며, 모든 모델은 같은 hyperparameter, schedule, conditioning input EnCodec 토큰을 공유한다.&lt;/p>
 &lt;p>&lt;strong>Training.&lt;/strong> Adam optimizer, batch size 128, learning rate 1e-4로 모델 학습. 16GB Nvidia V100 4개로 한 모델 학습에 2일 소요된다.&lt;/p>
 &lt;p>&lt;strong>Computational cost and model size.&lt;/strong> diffusion 모델 샘플링의 비용은 생성을 위한 모델 패스 수에 의해 발생한다.&lt;/p>
-&lt;h3 id="datasets">Datasets&lt;/h3>
-&lt;p>다양한 도메인에서 학습을 진행한다. Common Voice 7.0(9096시간)과 DNS 챌린지 4(2425시간)로 음성 데이터를, MTG-Jamendo(919시간)로 음악 데이터를, FSD50K(108시간)와 AudioSet(4989시간)으로 환경 소리 데이터를 사용한다. AudioSet은 연구 재현을 위해서만 사용되며, 평가에는 내부 음악 데이터셋 샘플을 활용한다.&lt;/p>
-&lt;h3 id="evaluation-metrics">Evaluation Metrics&lt;/h3>
-&lt;p>&lt;strong>Human evaluation.&lt;/strong> 인간 연구에 MUSHRA 프로토콜을 적용해, 숨겨진 참조와 낮은 앵커를 사용한다. 크라우드 소싱을 통해 모집된 평가자들은 제공된 샘플의 품질을 1에서 100 사이로 평가하였다. 테스트 세트의 각 카테고리에서 무작위로 선정된 5초 길이의 50개 샘플에 대해 샘플 당 최소 10개의 평가를 받았다. 잡음이 많은 평가와 이상치를 제거하기 위해, 참조 녹음을 20% 이상의 경우에 90 미만으로, 낮은 앵커 녹음을 50% 이상의 경우에 80 이상으로 평가한 평가자들을 제외하였다.&lt;/p>
+&lt;h3 id="datasets">Datasets
+&lt;/h3>&lt;p>다양한 도메인에서 학습을 진행한다. Common Voice 7.0(9096시간)과 DNS 챌린지 4(2425시간)로 음성 데이터를, MTG-Jamendo(919시간)로 음악 데이터를, FSD50K(108시간)와 AudioSet(4989시간)으로 환경 소리 데이터를 사용한다. AudioSet은 연구 재현을 위해서만 사용되며, 평가에는 내부 음악 데이터셋 샘플을 활용한다.&lt;/p>
+&lt;h3 id="evaluation-metrics">Evaluation Metrics
+&lt;/h3>&lt;p>&lt;strong>Human evaluation.&lt;/strong> 인간 연구에 MUSHRA 프로토콜을 적용해, 숨겨진 참조와 낮은 앵커를 사용한다. 크라우드 소싱을 통해 모집된 평가자들은 제공된 샘플의 품질을 1에서 100 사이로 평가하였다. 테스트 세트의 각 카테고리에서 무작위로 선정된 5초 길이의 50개 샘플에 대해 샘플 당 최소 10개의 평가를 받았다. 잡음이 많은 평가와 이상치를 제거하기 위해, 참조 녹음을 20% 이상의 경우에 90 미만으로, 낮은 앵커 녹음을 50% 이상의 경우에 80 이상으로 평가한 평가자들을 제외하였다.&lt;/p>
 &lt;p>&lt;strong>Objective metrics.&lt;/strong> 두 가지 자동 평가 방법을 사용한다. 첫 번째는 ViSQOL 메트릭이고, 두 번째는 복원된 신호의 멜-스펙트로그램 충실도를 새로운 메트릭으로 측정하는 방법이다. 이를 위해, 참조 파형 신호와 복원된 신호를 정규화하고, $M$ 멜과 $H$ 홉 길이를 사용해 멜-스펙트로그램을 계산한다.&lt;/p>
 &lt;p>$$ z = mel \big[ {{x}\over{\epsilon + \sqrt{ \langle x^2 \rangle}}} \big], \ \text{and} \ \hat{z} = mel \big[ {{\hat{x}}\over{\epsilon + \sqrt{ \langle x^2 \rangle}}} \big] $$&lt;/p>
 &lt;p>멜-스펙트로그램의 왜곡을 분석하기 위해, 우리는 신호 대 잡음비(SNR)를 각 시간 단계와 주파수 빈에서 계산한다. 계산 시 -25dB와 +25dB 사이로 SNR 값을 제한하여 수치적 불안정성과 기준 멜-스펙트로그램의 거의 0에 가까운 값들로 인한 과도한 영향을 방지한다. 이는 신경망의 계산과 학습의 제한된 정밀도로 인해 완전히 0의 에너지 수준을 출력하는 것이 어렵다는 점을 고려한 것이다.&lt;/p>
 &lt;p>$$ s = clamp [10 \cdot (log 10 (z) − log 10 (δ))., \ −25dB, +25dB] $$&lt;/p>
 &lt;p>시간 단계별로 평균을 내고 멜 스케일 밴드를 3등분하여 저, 중, 고주파수의 멜-SNR(L, M, H)을 산출한다. 모든 밴드의 평균은 Mel-SNR-A로 보고된다. 24kHz에서는 512샘플 프레임에 대해 STFT를 사용, 홉 길이는 128, 멜 밴드는 80개이다.&lt;/p>
 &lt;hr>
-&lt;h2 id="results">Results&lt;/h2>
-&lt;h3 id="multi-modalities-model">Multi modalities model&lt;/h3>
-&lt;p>압축 작업에서 EnCodec과 비교해 diffusion 방식의 성능을 검토합니다. EnCodec encoder로 오디오 샘플에서 토큰을 추출하고, Multi-Band Diffusion과 원본 decoder로 디코딩한다.&lt;/p>
+&lt;h2 id="results">Results
+&lt;/h2>&lt;h3 id="multi-modalities-model">Multi modalities model
+&lt;/h3>&lt;p>압축 작업에서 EnCodec과 비교해 diffusion 방식의 성능을 검토합니다. EnCodec encoder로 오디오 샘플에서 토큰을 추출하고, Multi-Band Diffusion과 원본 decoder로 디코딩한다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/images/table1.png"
 loading="lazy"
 >&lt;/p>
@@ -88,8 +88,8 @@ loading="lazy"
 loading="lazy"
 >&lt;/p>
 &lt;p>후반부에서는 EnCodec을 사용하지 않는 다른 종단간 오디오 코덱들과 비교를 추가한다. 이 중에는 24kHz에서 6kbps로 운영되는 DAC의 사전 학습된 모델이 포함된다. EnCodec + Multi-Band Diffusion이 다른 양자화 방식을 사용하는 DAC와 비슷한 수준이라고 보여준다. Multi-Band Diffusion을 DAC의 오디오 토큰으로 학습시키면 오디오 품질이 더 향상될 것으로 예상된다.&lt;/p>
-&lt;h3 id="ablations">Ablations&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/images/table3.png"
+&lt;h3 id="ablations">Ablations
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/images/table3.png"
 loading="lazy"
 >&lt;/p>
 &lt;p>이 연구에서는 ViQOL 점수와 Mel-SNR을 사용하여 다양한 모달리티에서 150개 샘플의 복원 성능을 객관적으로 비교하였다. 연구 결과, EnCodec 방법이 객관적 지표에서는 우수한 성능을 보였지만, 주관적 평가에서는 다소 낮은 성능을 보여주었다. 반면, diffusion 기반 방법은 더 자연스러운 오디오 생성을 가능하게 하며, 생성적 작업에 있어서 선호되는 방법으로 주장된다. 이러한 차이는 각각의 방법이 콘텐츠 복원을 위해 특화되어 있기 때문에 발생한다.&lt;/p>
@@ -98,8 +98,8 @@ loading="lazy"
 loading="lazy"
 >&lt;/p>
 &lt;p>연구 결과, 단계 수를 20까지 늘리면 출력 품질이 향상되지만 그 이상은 효과가 줄어든다. 단일 모델 대비 네 모델 사용이 오디오 품질과 모든 측정 지표에서 우수함을 보여주었다. 또한, 주파수 밴드 재조정으로 ViSQOL 점수가 0.2 향상되었으며, 스케줄 방식은 기존 방식보다 성능이 0.2~0.4 개선되었다. 제안한 데이터 처리 기술로도 ViSQOL 점수가 0.2 증가했으며, 이는 주로 고주파수에 영향을 미쳤다.&lt;/p>
-&lt;h3 id="text-to-audio">Text to audio&lt;/h3>
-&lt;p>이 모델은 조건 없이 오디오를 생성할 수 없으나, 생성 언어 모델과 결합 시 품질이 크게 향상된다.&lt;/p>
+&lt;h3 id="text-to-audio">Text to audio
+&lt;/h3>&lt;p>이 모델은 조건 없이 오디오를 생성할 수 없으나, 생성 언어 모델과 결합 시 품질이 크게 향상된다.&lt;/p>
 &lt;p>&lt;strong>Text to Speech.&lt;/strong> 최근 텍스트에서 음성으로 변환하는 TTS 분야에서 오디오 코덱에 언어 모델을 적용하는 연구가 주목받고 있다. 이 분야에서 VALL-E와 SPEAR-TSS와 같은 모델이 좋은 성과를 보여주었다. Multi-Band Diffusion 토큰 decoder를 사용하여 오디오 품질을 더욱 향상시킬 수 있다고 주장한다. 이를 검증하기 위해 공개적으로 이용 가능한 Bark 3 모델을 사용하였고, 이 모델은 텍스트를 오디오 토큰으로 변환한 뒤, 이를 다시 처리하여 최종 오디오를 생성한다. 실험 결과, 사전 학습된 Bark 모델을 사용했을 때 음성 프롬프트의 5% 미만, 노래 목소리 프롬프트의 약 30%에서 언어 모델이 목소리를 생성하지 못하는 경우가 있었다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/images/table5.png"
 loading="lazy"
@@ -107,33 +107,33 @@ loading="lazy"
 &lt;p>&lt;strong>Text to Music.&lt;/strong> 최근 오디오 토큰의 언어 모델링을 통한 음악 생성 분야에서 MusicLM과 MusicGen 같은 프로젝트를 통해 큰 진전이 이루어졌다. MusicGen의 압축 모델로 생성된 토큰을 기반으로 한 확산 모델을 학습시켜 디코딩 방식의 유연성을 입증했으며, 이 모델은 32kHz 샘플링 레이트와 16개 멜 스케일 밴드의 표준 편차를 가진 데이터셋에서 학습되었다.&lt;/p>
 &lt;p>표준 MusicGen 대비 MUSHRA 점수를 +4 향상시켰으며, diffusion decoder로 생성된 아티팩트가 적다. 특히, 복잡한 음악 요소가 있는 경우, Multi-Band Diffusion 출력이 원본보다 훨씬 명확함을 확인하였다.&lt;/p>
 &lt;hr>
-&lt;h2 id="discussion">Discussion&lt;/h2>
-&lt;p>diffusion 기반 디코딩 방법은 기존 decoder 대비 오디오 품질을 크게 향상시키지만, 더 많은 계산력을 요구하고 처리 속도가 느리다. 이 방법으로 더 자연스러운 오디오와 적은 아티팩트를 생성하지만, 실시간 성능이 중요한 경우에는 적합하지 않을 수 있다.&lt;/p>
+&lt;h2 id="discussion">Discussion
+&lt;/h2>&lt;p>diffusion 기반 디코딩 방법은 기존 decoder 대비 오디오 품질을 크게 향상시키지만, 더 많은 계산력을 요구하고 처리 속도가 느리다. 이 방법으로 더 자연스러운 오디오와 적은 아티팩트를 생성하지만, 실시간 성능이 중요한 경우에는 적합하지 않을 수 있다.&lt;/p>
 &lt;p>&lt;strong>Ethical concerns.&lt;/strong> 생성 AI가 아님에도 Wang et al. (2023) 같은 기술과 결합하여 목소리의 진정성을 높일 수 있으나, 진짜 같은 딥페이크와 보이스 피싱 같은 오용의 위험이 있다. 학습 데이터의 질과 양에 의존하는 이 방법은 광범위한 시나리오에서 최적화되기 위해 큰 데이터셋으로 세심히 학습되었지만, 데이터셋의 불균형으로 인한 소수 집단에 대한 편향 가능성을 인정한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="reference">Reference&lt;/h2>
-&lt;ul>
+&lt;h2 id="reference">Reference
+&lt;/h2>&lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2308.02560.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/facebookresearch/audiocraft/blob/main/docs/MBD.md" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>EnCodec</title><link>https://kurtkim.github.io/p/encodec/</link><pubDate>Fri, 09 Feb 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/encodec/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>neural network를 활용한 state-of-the-art real-time, high-ﬁdelity, audio codec을 소개한다. 이는 아티팩트를 효율적으로 줄이고 고품질 샘플을 생성하는 스트리밍 encoder-decoder 구조이다. 학습을 안정화하기 위해 loss balancer mechanism을 도입하였으며, lightweight Transformer 모델을 사용하여 얻은 표현을 최대 40%까지 더 압축하는 방법을 연구하였다. 이 모델은 말하기, 소음이 많은 반향성 말하기, 음악 등 다양한 오디오 도메인에서 우수한 성능을 보여주었다.&lt;/p>
+&lt;/ul></description></item><item><title>EnCodec</title><link>https://kurtkim.github.io/p/encodec/</link><pubDate>Fri, 09 Feb 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/encodec/</guid><description>&lt;h2 id="abstract">Abstract
+&lt;/h2>&lt;p>neural network를 활용한 state-of-the-art real-time, high-ﬁdelity, audio codec을 소개한다. 이는 아티팩트를 효율적으로 줄이고 고품질 샘플을 생성하는 스트리밍 encoder-decoder 구조이다. 학습을 안정화하기 위해 loss balancer mechanism을 도입하였으며, lightweight Transformer 모델을 사용하여 얻은 표현을 최대 40%까지 더 압축하는 방법을 연구하였다. 이 모델은 말하기, 소음이 많은 반향성 말하기, 음악 등 다양한 오디오 도메인에서 우수한 성능을 보여주었다.&lt;/p>
 &lt;hr>
-&lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>2021년에 스트리밍 오디오와 비디오가 인터넷 트래픽의 82%를 차지했고, 이런 트렌드는 오디오 압축의 중요성을 강조한다. 손실 압축은 샘플의 비트레이트와 왜곡을 최소화하는 것을 목표로 한다. 오디오 codec은 중복성을 제거하고 컴팩트한 비트 스트림을 생성하기 위해 encoder와 decoder를 결합한다. neural network를 활용한 encoder-decoder 메커니즘은 오디오 신호에 중점을 둔 연구의 일환으로서 탐구되어 왔다.&lt;/p>
+&lt;h2 id="introduction">Introduction
+&lt;/h2>&lt;p>2021년에 스트리밍 오디오와 비디오가 인터넷 트래픽의 82%를 차지했고, 이런 트렌드는 오디오 압축의 중요성을 강조한다. 손실 압축은 샘플의 비트레이트와 왜곡을 최소화하는 것을 목표로 한다. 오디오 codec은 중복성을 제거하고 컴팩트한 비트 스트림을 생성하기 위해 encoder와 decoder를 결합한다. neural network를 활용한 encoder-decoder 메커니즘은 오디오 신호에 중점을 둔 연구의 일환으로서 탐구되어 왔다.&lt;/p>
 &lt;p>lossy neural compression 모델에서는 두 가지 문제가 발생한다. 첫 번째는 학습 세트를 과적합하지 않고, 아티팩트가 많은 오디오를 생성하지 않도록 다양한 신호를 표현해야 하는 것이다. 이를 위해 다양한 학습 세트와 perceptual 손실로 작용하는 discriminator network를 사용하였다. 두 번째 문제는 계산 시간과 크기를 모두 고려하여 효율적으로 압축하는 것이다.&lt;/p>
 &lt;p>실시간으로 단일 CPU 코어에서 작동하는 모델에 제한을 두며, neural encoder의 출력에 대한 residual vector quantization를 사용하여 효율적으로 압축한다. 이에 대한 여러 방법이 이전의 연구에서 제안되었다.&lt;/p>
 &lt;p>end-to-end neural compression 모델 설계가 encoder-decoder 아키텍처, quantization 방법, perceptual 손실 등을 포함한 선택의 집합이라고 주장한다. 이 모델의 평가는 객관적인 방법과 인간의 인식에 의존하는 방법 두 가지를 사용하였고, 이를 통해 이 모델이 음성과 음악 압축에서 state-of-the-art를 달성하였음을 확인하였다.&lt;/p>
 &lt;hr>
-&lt;h2 id="related-work">Related Work&lt;/h2>
-&lt;p>&lt;strong>Speech and Audio Synthesis.&lt;/strong> 최근의 neural audio generation 기술 발전은 컴퓨터가 효율적으로 자연스러운 오디오를 생성하도록 하였다. autoregressive 모델인 WaveNet이 초기 성공을 거뒀지만, 추론 속도가 느렸다. 여러 다른 방법이 탐색되었지만, 특히 Generative Adversarial Network (GAN) 기반의 방법이 주목 받았다. 이들은 다양한 adversarial network를 결합하여 더 빠른 속도로 autoregressive 모델의 품질을 달성하였다. 이 연구는 이러한 adversarial 손실을 활용하고 확장하여 오디오 생성 중의 아티팩트를 줄이는 데 초점을 맞추고 있다.&lt;/p>
+&lt;h2 id="related-work">Related Work
+&lt;/h2>&lt;p>&lt;strong>Speech and Audio Synthesis.&lt;/strong> 최근의 neural audio generation 기술 발전은 컴퓨터가 효율적으로 자연스러운 오디오를 생성하도록 하였다. autoregressive 모델인 WaveNet이 초기 성공을 거뒀지만, 추론 속도가 느렸다. 여러 다른 방법이 탐색되었지만, 특히 Generative Adversarial Network (GAN) 기반의 방법이 주목 받았다. 이들은 다양한 adversarial network를 결합하여 더 빠른 속도로 autoregressive 모델의 품질을 달성하였다. 이 연구는 이러한 adversarial 손실을 활용하고 확장하여 오디오 생성 중의 아티팩트를 줄이는 데 초점을 맞추고 있다.&lt;/p>
 &lt;p>&lt;strong>Audio Codec.&lt;/strong> 낮은 비트레이트의 음성과 오디오 codec에 대한 연구가 오랫동안 이루어졌지만, 품질은 제한적이었다. excitation signal을 모델링하는 것은 여전히 어려운 과제로 남아 있다. 현재 state-of-the-art인 전통적인 오디오 codec은 Opus와 Enhanced Voice Service (EVS)로, 다양한 비트레이트, 샘플링 레이트, 실시간 압축을 지원하며 높은 코딩 효율성을 보여준다.&lt;/p>
 &lt;p>최근에 제안된 neural based audio codec은 놀라운 결과를 보여주었다. 대부분의 방법들은 latent space를 quantizing한 후 decoder에 입력하는 방식을 사용하였다. 여러 연구들에서 다양한 접근법이 시도되었으며, 가장 관련성이 높은 연구로는 SoundStream 모델이 있다. 이 모델은 Residual Vector Quantization layer를 포함하는 fully convolutional encoder-decoder 아키텍처를 제안하였고, reconstruction 손실과 adversarial perceptual 손실 모두를 사용하여 최적화하였다.&lt;/p>
 &lt;p>&lt;strong>Audio Discretization.&lt;/strong> 최근에는 discrete 값으로 오디오와 음성을 표현하는 방법이 다양한 작업에 적용되었다. raw 오디오의 discrete 표현을 학습하기 위한 계층적 VQ-VAE 기반 모델은 고품질 음악 생성을 가능하게 했고, 음성에 대한 self-supervised 학습 방법이 conditional 및 unconditional 음성 생성에 사용되었다. 이러한 방법은 음성 재합성, 음성 감정 변환, 대화 시스템, 음성-음성 번역 등의 분야에도 적용되었다.&lt;/p>
 &lt;hr>
-&lt;h2 id="model">Model&lt;/h2>
-&lt;p>오디오 신호의 기간이 $d$라면, 이 신호는 $x \in [−1, 1]^{C_a \times T}$ 시퀀스로 표현될 수 있다. 여기서 $C_a$는 오디오 채널의 수이고, $T = d \cdot f_{sr}$는 주어진 샘플 비율 $f_{sr}$에서의 오디오 샘플 수이다.&lt;/p>
+&lt;h2 id="model">Model
+&lt;/h2>&lt;p>오디오 신호의 기간이 $d$라면, 이 신호는 $x \in [−1, 1]^{C_a \times T}$ 시퀀스로 표현될 수 있다. 여기서 $C_a$는 오디오 채널의 수이고, $T = d \cdot f_{sr}$는 주어진 샘플 비율 $f_{sr}$에서의 오디오 샘플 수이다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/images/figure1.png"
 width="1366"
 height="608"
@@ -144,20 +144,20 @@ data-flex-grow="224"
 data-flex-basis="539px"
 >&lt;/p>
 &lt;p>EnCodec 모델은 오디오 신호를 처리하는 세 가지 주요 요소로 구성된다. 첫째, encoder 네트워크 $E$는 오디오를 latent representation $z$로 변환한다. 둘째, quantization layer $Q$는 vector quantization 를 이용해 압축된 표현 $z_q$를 생성한다. 셋째, decoder 네트워크 $G$는 compressed latent representation $z_q$을 원래의 시간 도메인 신호 $x$로 재구성한다. 이 시스템은 시간과 주파수 도메인에서의 reconstruction 손실 최소화를 목표로 학습되며, 이 과정에는 다른 해상도에서 작동하는 판별자의 discriminator 손실이 포함된다.&lt;/p>
-&lt;h3 id="encoder--decoder-architecture">Encoder &amp;amp; Decoder Architecture&lt;/h3>
-&lt;p>EnCodec 모델은 streaming과 convolutional-based encoder-decoder 구조로, latent representation에 순차적 모델링을 적용한다. 이 구조는 다양한 오디오 작업에서 뛰어난 성과를 보였으며, source separation, enhancement, neural vocoder, audio codec, artiﬁcial bandwidth extension 등에 활용되었다. 이 모델은 24 kHz와 48 kHz 오디오에 동일하게 적용된다.&lt;/p>
+&lt;h3 id="encoder--decoder-architecture">Encoder &amp;amp; Decoder Architecture
+&lt;/h3>&lt;p>EnCodec 모델은 streaming과 convolutional-based encoder-decoder 구조로, latent representation에 순차적 모델링을 적용한다. 이 구조는 다양한 오디오 작업에서 뛰어난 성과를 보였으며, source separation, enhancement, neural vocoder, audio codec, artiﬁcial bandwidth extension 등에 활용되었다. 이 모델은 24 kHz와 48 kHz 오디오에 동일하게 적용된다.&lt;/p>
 &lt;p>&lt;strong>Encoder-Decoder.&lt;/strong> EnCodec의 encoder 모델 $E$는 1D convolution과 여러 convolution block으로 구성된다. 각 block은 residual unit과 strided convolution으로 이루어진 down-sampling layer를 포함하며, down-sampling이 있을 때마다 채널 수가 두 배씩 증가한다. 이어서 시퀀스 모델링을 위한 LSTM 계층과 1D convolution layer가 뒤따른다. 이 모델은 low-latency streamable과 high ﬁdelity non-streamable에 따라 두 가지 변형으로 사용된다. encoder는 24 kHz에서 초당 75개, 48 kHz에서는 초당 150개의 latent step을 출력하며, decoder는 이를 받아 최종 오디오를 생성한다.&lt;/p>
 &lt;p>&lt;strong>Non-streamable.&lt;/strong> non-streamable 설정에서는 각 convolution에 대해 총 패딩 $K - S$를 사용하고, 입력을 1초 청크로 분할한다. 10ms의 오버랩을 통해 클릭을 방지하고, 각 청크를 모델에 공급하기 전에 normalization한다. decoder의 출력에 inverse operation을 적용하고, 스케일 전송에 대한 negligible bandwidth overhead를 최소화한다. layer normalization를 사용하여 상대적인 스케일 정보를 유지한다.&lt;/p>
 &lt;p>&lt;strong>Streamable.&lt;/strong> streamable 설정에서는 모든 패딩을 첫 번째 시간 단계 전에 배치한다. 스트라이드가 있는 transposed convolution을 사용하여, 처음 $s$ 시간 단계를 출력하고, 다음 프레임이 준비되면 나머지를 완성하거나, 스트림 끝에서 버린다. 이 패딩 방식 덕분에 모델은 첫 320 샘플을 받자마자 320 샘플을 출력할 수 있다. 또한, streamable 설정에 부적합한 layer normalization 대신 weight normalization를 사용한다. 이렇게 normalization을 유지함으로써 목표 지표에서 약간의 향상을 얻었다.&lt;/p>
-&lt;h3 id="residual-vector-quantization">Residual Vector Quantization&lt;/h3>
-&lt;p>encoder의 출력을 quantize 하기 위해 Residual Vector Quantization (RVQ)을 사용한다. Vector quantization는 입력 벡터를 코드북의 가장 가까운 항목에 투영하는 것이며, RVQ는 이를 개선하여 quantization 후의 residual을 계산하고 추가로 quantizing 한다.&lt;/p>
+&lt;h3 id="residual-vector-quantization">Residual Vector Quantization
+&lt;/h3>&lt;p>encoder의 출력을 quantize 하기 위해 Residual Vector Quantization (RVQ)을 사용한다. Vector quantization는 입력 벡터를 코드북의 가장 가까운 항목에 투영하는 것이며, RVQ는 이를 개선하여 quantization 후의 residual을 계산하고 추가로 quantizing 한다.&lt;/p>
 &lt;p>Dhariwal et al. 과 Zeghidour et al. 이 설명한 학습 절차를 따르며, 각 입력에 대한 코드북 항목을 exponential moving average을 사용해 업데이트한다. 사용되지 않는 항목은 현재 batch에서 샘플링된 후보로 대체된다. encoder의 기울기를 계산하기 위해 straight-through-estimator를 사용하고, quantizer의 입력과 출력 사이의 MSE로 구성된 commitment 손실을 전체 학습 손실에 추가한다.&lt;/p>
 &lt;p>학습 시간에 residual step의 수를 조절하여, 단일 모델이 multiple bandwidth 목표를 지원할 수 있다. 모든 모델은 최대 32개(48 kHz 모델은 16개)의 코드북을 사용하며, 각 코드북은 1024개의 항목을 가진다. variable bandwidth 학습 시, 4의 배수로 코드북의 수를 무작위로 선택한다. 이렇게 하여, encoder에서 나오는 continuous latent represention을 discrete set of index로 변환하고, 이를 decoder로 들어가기 전에 다시 벡터로 변환한다.&lt;/p>
-&lt;h3 id="language-modeling-and-entropy-coding">Language Modeling and Entropy Coding&lt;/h3>
-&lt;p>실시간보다 빠른 compression/decompression을 목표로, small Transformer 기반 언어 모델을 학습시킨다. 모델은 5개 layer, 8개 head, 200개 channel, feed-forward block의 800 dimension을 가진다. 학습 시, bandwidth과 해당 코드북의 수를 선택하고, 시간 단계별로 discrete representation을 continuous representation으로 변환한다. Transformer의 출력은 linear layer에 공급되어 각 코드북에 대한 estimated distribution의 logit을 제공한다. 이 방법은 코드북간의 잠재적 정보를 무시하면서도 추론을 가속화합니다. 모델은 5초 시퀀스에서 훈련됩니다.&lt;/p>
+&lt;h3 id="language-modeling-and-entropy-coding">Language Modeling and Entropy Coding
+&lt;/h3>&lt;p>실시간보다 빠른 compression/decompression을 목표로, small Transformer 기반 언어 모델을 학습시킨다. 모델은 5개 layer, 8개 head, 200개 channel, feed-forward block의 800 dimension을 가진다. 학습 시, bandwidth과 해당 코드북의 수를 선택하고, 시간 단계별로 discrete representation을 continuous representation으로 변환한다. Transformer의 출력은 linear layer에 공급되어 각 코드북에 대한 estimated distribution의 logit을 제공한다. 이 방법은 코드북간의 잠재적 정보를 무시하면서도 추론을 가속화합니다. 모델은 5초 시퀀스에서 훈련됩니다.&lt;/p>
 &lt;p>&lt;strong>Entropy Encoding.&lt;/strong> 언어 모델로부터 얻은 추정 확률을 활용하기 위해, range based arithmetic coder를 사용한다. 다른 아키텍처나 ﬂoating point approximation으로 인해 동일한 모델의 평가가 다르게 나올 수 있어 디코딩 오류가 발생할 수 있다. 특히, batch 평가와 real-life streaming 평가 사이에는 큰 차이가 있을 수 있다. 따라서 추정 확률을 $10^{-6}$의 정밀도로 반올림하며, 총 범위 너비를 $2^{24}$로, 최소 범위 너비를 $2$로 설정한다. 처리 시간에 미치는 영향에 대해서는 추후 논의하고자 한다.&lt;/p>
-&lt;h3 id="training-objective">Training objective&lt;/h3>
-&lt;p>reconstruction 손실, perceptual 손실 (via discriminators), 그리고 RVQ commitment 손실을 결합한 학습 목표를 상세히 설명한다.&lt;/p>
+&lt;h3 id="training-objective">Training objective
+&lt;/h3>&lt;p>reconstruction 손실, perceptual 손실 (via discriminators), 그리고 RVQ commitment 손실을 결합한 학습 목표를 상세히 설명한다.&lt;/p>
 &lt;p>&lt;strong>Reconstruction Loss.&lt;/strong> reconstruction loss term은 시간 도메인과 주파수 도메인의 손실 항으로 이루어진다. 시간 도메인에서는 목표 오디오와 압축 오디오 사이의 L1 거리를 최소화하고, 주파수 도메인에서는 mel-spectrogram에서의 L1과 L2 손실의 선형 조합을 사용한다.&lt;/p>
 &lt;p>$$ l_f(x, \hat{x}) = {{1}\over{|\alpha| \cdot |s|}} \sum_{\alpha_i \in \alpha} \sum_{i \in e} \parallel S_i(X) - S_i(\hat{x}) \parallel_1 + \alpha \parallel S_i(X) - S_i(\hat{x}) \parallel_2 $$&lt;/p>
 &lt;p>$S_i$는 window size가 $2^i$ 이고 hop length가 $2^i/4$인 normalized STFT를 사용한 64-bins mel-spectrogram이다. $e = 5, &amp;hellip;, 11$은 스케일의 집합을 나타내고, $\alpha$$는 L1과 L2 항 사이의 균형을 맞추는 스칼라 계수의 집합이다. 단, 이 논문에서는 $\alpha_i = 1$을 선택하였다.&lt;/p>
@@ -184,19 +184,19 @@ data-flex-basis="809px"
 &lt;p>$$ \tilde{g}_i = R {{\lambda_i}\over{\sum_j \lambda_j}} \cdot {{g_i}\over{\langle \parallel g_i \parallel_2 \rangle_{\beta}}} $$&lt;/p>
 &lt;p>원래의 gradient 대신 수정된 gradient를 네트워크로 backpropaga한다. 이로 인해 최적화 문제는 변화하지만, 각 손실 스케일에 상관없이 가중치를 해석할 수 있게 한다. 만약 가중치의 합이 1이라면, 각 가중치는 해당 손실로부터 모델 gradient의 비율로 해석될 수 있다. 모든 discriminator 손실은 balancer를 통해 적용되지만, commitment 손실은 모델 출력에 대해 정의되지 않아 제외된다.&lt;/p>
 &lt;hr>
-&lt;h2 id="experiments-and-results">Experiments and Results&lt;/h2>
-&lt;h3 id="dataset">Dataset&lt;/h3>
-&lt;p>EnCodec은 다양한 도메인의 24kHz 모노포닉 오디오에 대해 학습되며, fullband 스테레오 EnCodec는 48kHz 음악에 대해 학습된다. 음성에 대해서는 DNS 챌린지 4와 Common Voice 데이터셋을, 일반 오디오에 대해서는 AudioSet과 FSD50K를, 음악에 대해서는 Jamendo 데이터셋을 사용한다. 추가로 소유한 음악 데이터셋을 사용하여 모델을 평가한다.&lt;/p>
+&lt;h2 id="experiments-and-results">Experiments and Results
+&lt;/h2>&lt;h3 id="dataset">Dataset
+&lt;/h3>&lt;p>EnCodec은 다양한 도메인의 24kHz 모노포닉 오디오에 대해 학습되며, fullband 스테레오 EnCodec는 48kHz 음악에 대해 학습된다. 음성에 대해서는 DNS 챌린지 4와 Common Voice 데이터셋을, 일반 오디오에 대해서는 AudioSet과 FSD50K를, 음악에 대해서는 Jamendo 데이터셋을 사용한다. 추가로 소유한 음악 데이터셋을 사용하여 모델을 평가한다.&lt;/p>
 &lt;p>학습과 검증을 위해, 단일 소스 샘플링 또는 여러 소스 혼합을 포함하는 혼합 전략을 사용한다. 이는 네 가지 전략으로 나뉘는데, Jamendo에서 단일 소스를 샘플링하거나, 다른 데이터셋에서 단일 소스를 샘플링하거나, 모든 데이터셋에서 두 소스를 혼합하거나, 음악을 제외한 모든 데이터셋에서 세 소스를 혼합한다. 각 전략은 특정 확률로 실행된다.&lt;/p>
 &lt;p>오디오는 파일별로 정규화되며, 무작위 게인을 적용한다. 클리핑된 샘플은 제외하고, 일정 확률로 잔향을 추가한다. 테스트는 DNS에서의 깨끗한 음성, FSDK50K 샘플과 혼합된 음성, Jamendo 샘플, 소유한 음악 샘플 등 네 가지 카테고리를 사용한다.&lt;/p>
-&lt;h3 id="baselines">Baselines&lt;/h3>
-&lt;p>Opus와 EVS라는 두 종류의 오디오 코덱을 기본 베이스라인으로 사용하며, 추가적으로 MP3 압축도 베이스라인으로 활용한다. 마지막으로, 업샘플링된 오디오에서 EnCodec와 비교하기 위해 SoundStream 모델을 사용한다. 또한 SoundStream 버전을 약간 개선하여 사용하였다. 이는 relative feature 손실과 layer normalization을 적용함으로써 오디오 품질을 향상시키는데 도움이 되었다.&lt;/p>
-&lt;h3 id="evaluation-methods">Evaluation Methods&lt;/h3>
-&lt;p>주관적 평가를 위해 MUSHRA 프로토콜을 따르며, 샘플의 지각 품질을 1부터 100까지 평가하는 주석 처리자를 모집하였다. 테스트 세트의 각 카테고리에서 무작위로 선택한 샘플에 대해 주석을 추가하였으며, 노이즈가 많은 주석과 이상치는 제거했다. 객관적 평가를 위해서는 ViSQOL과 SI-SNR를 사용하였다.&lt;/p>
-&lt;h3 id="training">Training&lt;/h3>
-&lt;p>모든 모델은 Adam optimizer를 사용하여 300 epoch 동안 학습되고, 각 epoch는 1초당 64개의 예제로 구성된 batch로 2,000번의 업데이트를 포함한다. 모델은 8개의 A100 GPU를 사용하여 학습되며, 특정 가중치가 적용된 balancer를 사용한다. 가중치는 24kHz 모델의 경우 λt = 0.1, λf = 1, λg = 3, λfeat = 3 이고, 48kHz 모델은 서로 다른 가중치를 사용한다.&lt;/p>
-&lt;h3 id="results">Results&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/images/figure3.png"
+&lt;h3 id="baselines">Baselines
+&lt;/h3>&lt;p>Opus와 EVS라는 두 종류의 오디오 코덱을 기본 베이스라인으로 사용하며, 추가적으로 MP3 압축도 베이스라인으로 활용한다. 마지막으로, 업샘플링된 오디오에서 EnCodec와 비교하기 위해 SoundStream 모델을 사용한다. 또한 SoundStream 버전을 약간 개선하여 사용하였다. 이는 relative feature 손실과 layer normalization을 적용함으로써 오디오 품질을 향상시키는데 도움이 되었다.&lt;/p>
+&lt;h3 id="evaluation-methods">Evaluation Methods
+&lt;/h3>&lt;p>주관적 평가를 위해 MUSHRA 프로토콜을 따르며, 샘플의 지각 품질을 1부터 100까지 평가하는 주석 처리자를 모집하였다. 테스트 세트의 각 카테고리에서 무작위로 선택한 샘플에 대해 주석을 추가하였으며, 노이즈가 많은 주석과 이상치는 제거했다. 객관적 평가를 위해서는 ViSQOL과 SI-SNR를 사용하였다.&lt;/p>
+&lt;h3 id="training">Training
+&lt;/h3>&lt;p>모든 모델은 Adam optimizer를 사용하여 300 epoch 동안 학습되고, 각 epoch는 1초당 64개의 예제로 구성된 batch로 2,000번의 업데이트를 포함한다. 모델은 8개의 A100 GPU를 사용하여 학습되며, 특정 가중치가 적용된 balancer를 사용한다. 가중치는 24kHz 모델의 경우 λt = 0.1, λf = 1, λg = 3, λfeat = 3 이고, 48kHz 모델은 서로 다른 가중치를 사용한다.&lt;/p>
+&lt;h3 id="results">Results
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/images/figure3.png"
 width="1318"
 height="472"
 srcset="https://kurtkim.github.io/p/encodec/images/figure3_hu6330301993395112550.png 480w, https://kurtkim.github.io/p/encodec/images/figure3_hu17213543031832479652.png 1024w"
@@ -216,8 +216,8 @@ data-flex-grow="259"
 data-flex-basis="623px"
 >&lt;/p>
 &lt;p>동일한 bandwidth을 고려하면, EnCodec는 모든 베이스라인보다 우수한 성능을 보여준다. 추가적인 언어 모델을 적용하면 bandwidth을 약 25-40% 줄일 수 있다. 하지만 높은 bandwidth에서는 압축 비율이 낮아지는 것을 관찰할 수 있는데, 이는 사용된 Transformer 모델의 크기가 작아서 모든 코드북을 함께 모델링하기 어렵기 때문일 수 있다.&lt;/p>
-&lt;h4 id="ablation-study">Ablation study&lt;/h4>
-&lt;p>다음으로, discriminator 설정, streaming, multitarget bandwidth, balancer의 효과를 더 잘 평가하기 위해 ablation 연구를 수행한다.&lt;/p>
+&lt;h4 id="ablation-study">Ablation study
+&lt;/h4>&lt;p>다음으로, discriminator 설정, streaming, multitarget bandwidth, balancer의 효과를 더 잘 평가하기 위해 ablation 연구를 수행한다.&lt;/p>
 &lt;p>&lt;strong>The eﬀect of discriminators setup.&lt;/strong> 이전 연구에서는 생성된 오디오의 perceptual 품질을 향상시키기 위해 여러 discriminator를 제안하였다. Multi-Scale Discriminator(MSD) 모델은 다양한 해상도에서 raw waveform에 작용한다. Kong et al. 은 Multi-Period Discriminator(MPD) 모델을 추가로 제안했는데, 이는 waveform을 여러 주기를 가진 2D 입력으로 변환한다. 그리고 STFT Discriminator(Mono-STFTD) 모델은 complex-valued STFT에 작용하는 단일 네트워크이다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/images/table2.png"
 width="722"
@@ -240,8 +240,8 @@ data-flex-basis="672px"
 >&lt;/p>
 &lt;p>&lt;strong>The eﬀect of the streamable modeling.&lt;/strong> streamable 설정과 non-streamable 설정을 비교한 결과, 예상대로 non-streamable 설정에서 streamable 설정으로 전환하면 성능이 약간 저하되지만, 스트리밍 추론이 가능해지면서도 성능이 강하게 유지된다.&lt;/p>
 &lt;p>&lt;strong>The eﬀect of the balancer.&lt;/strong> balancer의 영향을 평가하는 결과를 제시했다. balancer의 유무와 상관없이 다양한 값들을 고려하여 EnCodec 모델을 학습시켰고, 예상대로 balancer가 학습 과정을 크게 안정화시키는 것을 확인하였다.&lt;/p>
-&lt;h4 id="stereo-evaluation">Stereo Evaluation&lt;/h4>
-&lt;p>이전의 모든 결과는 monophonic 설정만을 고려하였다. 그러나 음악 데이터의 경우 스테레오 compression이 중요하므로, discriminator 설정을 수정하여 현재 설정을 스테레오로 변경하였다.&lt;/p>
+&lt;h4 id="stereo-evaluation">Stereo Evaluation
+&lt;/h4>&lt;p>이전의 모든 결과는 monophonic 설정만을 고려하였다. 그러나 음악 데이터의 경우 스테레오 compression이 중요하므로, discriminator 설정을 수정하여 현재 설정을 스테레오로 변경하였다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/images/table4.png"
 width="926"
 height="336"
@@ -252,8 +252,8 @@ data-flex-grow="275"
 data-flex-basis="661px"
 >&lt;/p>
 &lt;p>6 kbps에서 작동하는 EnCodec은 Opus를 크게 능가하고, 64 kbps MP3와 비슷한 성능을 보여준다. 12 kbps에서의 EnCodec은 24 kbps에서의 EnCodec와 비교 가능한 성능을 보여준다. 언어 모델과 entropy coding을 사용하면 20%에서 30%의 가변 이득을 얻을 수 있다.&lt;/p>
-&lt;h3 id="latency-and-computation-time">Latency and computation time&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/images/table5.png"
+&lt;h3 id="latency-and-computation-time">Latency and computation time
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/encodec/images/table5.png"
 width="944"
 height="250"
 srcset="https://kurtkim.github.io/p/encodec/images/table5_hu5072445472080444941.png 480w, https://kurtkim.github.io/p/encodec/images/table5_hu15229920600585000471.png 1024w"
@@ -266,20 +266,20 @@ data-flex-basis="906px"
 &lt;p>&lt;strong>Initial latency.&lt;/strong> 24 kHz streaming EnCodec 모델은 initial latency 시간이 13.3ms이다. 반면, 48 kHz non-streaming 버전은 사용된 normalization으로 인해 initial latency 시간이 1초이다. entropy coding 사용시 오버헤드를 줄이기 위해 각 프레임마다 스트림을 플러시할 수 없어 initial latency 시간이 증가하며, 이로 인해 지연 시간이 13ms 증가한다.&lt;/p>
 &lt;p>&lt;strong>Real time factor.&lt;/strong> EnCodec 모델은 처리 속도가 Lyra v2보다 느리지만, 실시간보다 10배 빠르게 오디오를 처리하여 실제 응용에 적합하다. entropy coding의 이점은 비용이 따르지만, 실시간보다 빠른 처리로 latency가 크게 중요하지 않은 응용에 사용 가능하다. 48 kHz에서는 처리 속도가 실시간보다 느리지만, 효율적인 구현이나 accelerated hardware를 사용하면 성능을 개선할 수 있다. 실시간 처리가 필요하지 않은 경우에도 활용 가능하다.&lt;/p>
 &lt;hr>
-&lt;h2 id="conclusion">Conclusion&lt;/h2>
-&lt;p>다양한 sample rate와 bandwidth에서 고품질 오디오 샘플을 생성하는 실시간 신경 오디오 압축 모델인 EnCodec을 소개하였다. 간단하지만 효과적인 spectrogram-only adversarial 손실을 통해 샘플 품질을 향상시켰고, 새로운 gradient balancer를 통해 학습을 안정화하고 손실에 대한 가중치의 해석 가능성을 개선하였다. 또한, small Transformer 모델을 사용하여 품질 저하 없이 bandwidth을 최대 40%까지 줄일 수 있음을 입증하였다.&lt;/p>
+&lt;h2 id="conclusion">Conclusion
+&lt;/h2>&lt;p>다양한 sample rate와 bandwidth에서 고품질 오디오 샘플을 생성하는 실시간 신경 오디오 압축 모델인 EnCodec을 소개하였다. 간단하지만 효과적인 spectrogram-only adversarial 손실을 통해 샘플 품질을 향상시켰고, 새로운 gradient balancer를 통해 학습을 안정화하고 손실에 대한 가중치의 해석 가능성을 개선하였다. 또한, small Transformer 모델을 사용하여 품질 저하 없이 bandwidth을 최대 40%까지 줄일 수 있음을 입증하였다.&lt;/p>
 &lt;hr>
-&lt;h2 id="reference">Reference&lt;/h2>
-&lt;ul>
+&lt;h2 id="reference">Reference
+&lt;/h2>&lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2210.13438.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/facebookresearch/encodec" target="_blank" rel="noopener"
 >Github&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>SoundStream</title><link>https://kurtkim.github.io/p/soundstream/</link><pubDate>Mon, 05 Feb 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/soundstream/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>SoundStream이라는 새로운 neural audio codec은 음성, 음악, 일반 오디오를 효율적으로 압축할 수 있다. 이 codec은 fully convolutional encoder/decoder network와 residual vector quantizer로 구성되어 있으며, 학습 과정은 최근의 text-to-speech와 speech enhancement 기술을 활용한다. 이 모델은 3 kbps에서 18 kbps까지 다양한 비트레이트에서 작동할 수 있으며, 실시간 스마트폰 CPU에서 스트림 가능한 추론을 지원한다. 3 kbps의 SoundStream은 12 kbps의 Opus를 뛰어넘고, 9.6 kbps의 EVS에 근접한다. 추가적으로, 이 codec은 추가적인 지연 없이 압축과 향상을 동시에 수행할 수 있어, 배경 소음 억제 등의 기능도 가능하다.&lt;/p>
+&lt;/ul></description></item><item><title>SoundStream</title><link>https://kurtkim.github.io/p/soundstream/</link><pubDate>Mon, 05 Feb 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/soundstream/</guid><description>&lt;h2 id="abstract">Abstract
+&lt;/h2>&lt;p>SoundStream이라는 새로운 neural audio codec은 음성, 음악, 일반 오디오를 효율적으로 압축할 수 있다. 이 codec은 fully convolutional encoder/decoder network와 residual vector quantizer로 구성되어 있으며, 학습 과정은 최근의 text-to-speech와 speech enhancement 기술을 활용한다. 이 모델은 3 kbps에서 18 kbps까지 다양한 비트레이트에서 작동할 수 있으며, 실시간 스마트폰 CPU에서 스트림 가능한 추론을 지원한다. 3 kbps의 SoundStream은 12 kbps의 Opus를 뛰어넘고, 9.6 kbps의 EVS에 근접한다. 추가적으로, 이 codec은 추가적인 지연 없이 압축과 향상을 동시에 수행할 수 있어, 배경 소음 억제 등의 기능도 가능하다.&lt;/p>
 &lt;hr>
-&lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>audio codec은 waveform codec과 parametric codec 두 가지로 나눌 수 있다. waveform codec은 입력 오디오 샘플을 충실히 재구성하는 것을 목표로 한다. 이는 transform coding technique을 사용하며, 오디오 콘텐츠의 유형에 대한 가정을 거의 하지 않는다. 따라서 일반 오디오에 대해 작동할 수 있지만, 비트레이트가 낮아질수록 코딩 아티팩트가 발생하는 경향이 있다. 반면 parametric codec은 특정 오디오에 대한 가정을 통해 이 문제를 해결하려고 한다. 이는 오디오 합성 과정을 설명하는 parametric 모델을 사용하며, 샘플마다 완벽하게 재구성하는 것이 아니라 원본과 지각적으로(perceptually) 유사한 오디오를 생성하는 것을 목표로 한다.&lt;/p>
+&lt;h2 id="introduction">Introduction
+&lt;/h2>&lt;p>audio codec은 waveform codec과 parametric codec 두 가지로 나눌 수 있다. waveform codec은 입력 오디오 샘플을 충실히 재구성하는 것을 목표로 한다. 이는 transform coding technique을 사용하며, 오디오 콘텐츠의 유형에 대한 가정을 거의 하지 않는다. 따라서 일반 오디오에 대해 작동할 수 있지만, 비트레이트가 낮아질수록 코딩 아티팩트가 발생하는 경향이 있다. 반면 parametric codec은 특정 오디오에 대한 가정을 통해 이 문제를 해결하려고 한다. 이는 오디오 합성 과정을 설명하는 parametric 모델을 사용하며, 샘플마다 완벽하게 재구성하는 것이 아니라 원본과 지각적으로(perceptually) 유사한 오디오를 생성하는 것을 목표로 한다.&lt;/p>
 &lt;p>전통적인 waveform과 parametric codec은 신호 처리 기법과 심리음향학, 음성 합성 등의 도메인 지식을 활용해 설계된다. 최근에는 머신러닝 모델이 오디오 압축에 성공적으로 적용되어, 데이터 기반 솔루션의 가치를 입증하였다. 이러한 모델은 기존 코덱의 품질을 향상시키는 후처리 단계로 사용될 수 있으며, 이는 주파수 대역폭 확장, 오디오 denoising, 패킷 손실 은폐 등을 통해 이루어진다.&lt;/p>
 &lt;p>머신러닝 기반 모델은 audio codec 구조의 핵심 부분으로 사용되며, 최근의 text-to-speech(TTS) 기술 발전의 중요한 역할을 한다. 예를 들어, 텍스트에서 음성을 생성하는 WaveNet이라는 모델은 neural codec의 decoder로 사용되었다. 다른 neural audio codec들은 WaveRNN을 사용한 LPCNet이나 WaveGRU를 사용한 Lyra와 같은 다양한 모델 구조를 채택하였으며, 이들은 모두 낮은 비트레이트에서의 음성을 목표로 한다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/soundstream/images/figure1.png"
@@ -313,8 +313,8 @@ data-flex-basis="752px"
 &lt;li>추가적인 대기 시간 없이 오디오 압축과 향상을 동시에 수행하는 SoundStream 코덱 변형을 제안한다.&lt;/li>
 &lt;/ul>
 &lt;hr>
-&lt;h2 id="related-work">Related Work&lt;/h2>
-&lt;p>&lt;strong>Traditional audio codecs&lt;/strong> Opus와 EVS는 다양한 콘텐츠 유형, 비트레이트, 샘플링 레이트에 대해 높은 코딩 효율성을 제공하며 실시간 오디오 통신에 필요한 낮은 대기 시간을 보장하는 최첨단 오디오 코덱이다. 이 논문에서는 이들과 SoundStream을 주관적 평가를 통해 비교한다.&lt;/p>
+&lt;h2 id="related-work">Related Work
+&lt;/h2>&lt;p>&lt;strong>Traditional audio codecs&lt;/strong> Opus와 EVS는 다양한 콘텐츠 유형, 비트레이트, 샘플링 레이트에 대해 높은 코딩 효율성을 제공하며 실시간 오디오 통신에 필요한 낮은 대기 시간을 보장하는 최첨단 오디오 코덱이다. 이 논문에서는 이들과 SoundStream을 주관적 평가를 통해 비교한다.&lt;/p>
 &lt;p>&lt;strong>Audio generative models&lt;/strong> 텍스트나 코딩된 특성을 오디오 waveform으로 변환하는 여러 생성 모델이 개발되었다. WaveNet과 SampleRNN은 고품질의 오디오를 생성하지만 계산 복잡성이 높다. 그러나 Parallel WaveNet은 병렬 계산을 가능하게 하여 속도를 향상시킨다. 또한, 최근에는 계산 복잡성이 낮으면서 고품질의 오디오를 생성하는 adversarial 모델, MelGAN과 HiFiGAN이 등장하였다. 이들 모델의 설계 방식은 SoundStream의 decoder 설계와 손실 계산에 영향을 미쳤다.&lt;/p>
 &lt;p>&lt;strong>Audio enhancement&lt;/strong> 딥 뉴럴 네트워크는 denoising부터 주파수 대역폭 확장 등 다양한 오디오 향상 작업에 활용되었다. 이 논문에서는 추가 대기 시간 없이 단일 모델로 오디오 향상과 압축을 동시에 수행할 수 있음을 보여준다.&lt;/p>
 &lt;p>&lt;strong>Vector quantization&lt;/strong> optimal quantizer를 학습하는 것은 높은 코딩 효율성을 달성하는 핵심이다. 벡터 양자화는 전통적인 오디오 코덱의 구성 요소였으며, 최근에는 신경망 모델에서 입력 특성의 압축에 사용되었다. 하지만, 비율이 증가하면서 코드북의 크기가 급격히 커지는 문제가 있다. 이를 해결하기 위해, SoundStream에서는 나머지 모델과 함께 end-to-end로 학습되는 residual vector quantizer를 도입하였다. 이는 신경망에서 이런 형태의 벡터 양자화가 처음으로 사용되는 경우이다.&lt;/p>
@@ -322,8 +322,8 @@ data-flex-basis="752px"
 &lt;p>SoundStream은 인코딩하는 신호의 성질에 대한 가정 없이 다양한 오디오 컨텐츠 유형에 적용할 수 있다. end-to-end 방식으로 학습되며, encoder를 학습하면 오디오 품질이 크게 향상된다. 추가 비용 없이 단일 모델이 다른 비트레이트에서 작동하는 능력을 가지며, 이는 residual vector quantizer와 quantizer dropout 학습 체계 덕분이다. SoundStream은 스마트폰 CPU에서 실시간으로 음성, 음악, 일반 오디오를 압축할 수 있으며, 이는 neural audio codec이 넓은 범위의 비트레이트에서 state-of-the-art codec을 능가하는 첫 번째 사례이다.&lt;/p>
 &lt;p>&lt;strong>Joint compression and enhancement&lt;/strong> 최근 연구는 압축과 강화를 동시에 진행하는 방법을 탐구하였다. 하지만 SoundStream은 실시간으로 노이즈를 제어할 수 있는 시간 의존적 조절 계층을 사용해, 일반적으로 제거될 수 있는 자연소리와 음향 장면을 인코딩할 수 있도록 설계되었다. 이는 일반적인 목적의 오디오 코덱으로서의 SoundStream의 역할을 강화한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="model">Model&lt;/h2>
-&lt;p>$f_s$ 에서 샘플링된 단일 채널 녹음 $x \in \mathbb{R}^T$ 를 고려한다. SoundStream 모델은 세 개의 구성 요소로 이루어진 시퀀스로 구성된다:&lt;/p>
+&lt;h2 id="model">Model
+&lt;/h2>&lt;p>$f_s$ 에서 샘플링된 단일 채널 녹음 $x \in \mathbb{R}^T$ 를 고려한다. SoundStream 모델은 세 개의 구성 요소로 이루어진 시퀀스로 구성된다:&lt;/p>
 &lt;ul>
 &lt;li>encoder는 x를 임베딩 시퀀스로 매핑한다.&lt;/li>
 &lt;li>residual vector quantizer는 각 임베딩을 유한한 코드북 집합의 벡터 합으로 대체함으로써 표현을 목표 비트 수로 압축한다.&lt;/li>
@@ -339,12 +339,12 @@ class="gallery-image"
 data-flex-grow="198"
 data-flex-basis="476px"
 >&lt;/p>
-&lt;h3 id="encoder-architecture">Encoder architecture&lt;/h3>
-&lt;p>encoder 아키텍처는 스트리밍 SEANet encoder와 동일한 구조를 따르며, 1D convolution layer와 convolution block으로 구성된다. 각 block은 dilated convolution을 포함하는 residual unit으로 구성되며, 다운샘플링 시 채널 수가 두 배로 늘어난다. 마지막 1D convolution layer는 임베딩의 차원을 설정한다. 실시간 추론을 위해 모든 convolution은 causal 이며, ELU activation을 사용한다. 입력 waveform과 임베딩 사이의 temporal resampling ratio는 convolution block의 수와 스트라이딩 시퀀스에 의해 결정된다.&lt;/p>
-&lt;h3 id="decoder-architecture">Decoder architecture&lt;/h3>
-&lt;p>decoder 아키텍처는 업샘플링을 위한 transposed convolution과 residual unit으로 구성된 convolution block을 포함하며, encoder와 반대 순서의 스트라이드를 사용하여 입력 waveform과 동일한 해상도의 waveform을 재구성한다. 업샘플링 시 채널 수는 절반으로 줄어들며, 마지막 decoder block은 임베딩을 waveform 도메인으로 투영한다. encoder와 decoder 양쪽에서 동일한 채널 수는 동일한 parameter에 의해 제어되며, encoder와 decoder 사이에서 채널 수가 다른 경우도 조사하였다.&lt;/p>
-&lt;h3 id="residual-vector-quantizer">Residual Vector Quantizer&lt;/h3>
-&lt;p>quantizer의 목표는 encoder $enc(x)$의 출력을 bit/second(bps)로 표현된 목표 비트율 $R$로 압축하는 것이다. SoundStream을 end-to-end로 학습시키기 위해, quantizer는 backpropagation에 의해 encoder와 decoder와 함께 학습되어야 한다. vector quantizer (VQ)는 $enc(x)$의 $D$차원 프레임 각각을 인코드하기 위해 $N$개의 벡터로 구성된 코드북을 학습한다. 그런 다음 인코드된 오디오 $enc(x) \in \mathbb{R}^{S \times D}$는 $S \times D$ 형태의 one-hot vector 시퀀스로 매핑되며, 이는 $S log_2 N$ 비트를 사용하여 표현할 수 있다.&lt;/p>
+&lt;h3 id="encoder-architecture">Encoder architecture
+&lt;/h3>&lt;p>encoder 아키텍처는 스트리밍 SEANet encoder와 동일한 구조를 따르며, 1D convolution layer와 convolution block으로 구성된다. 각 block은 dilated convolution을 포함하는 residual unit으로 구성되며, 다운샘플링 시 채널 수가 두 배로 늘어난다. 마지막 1D convolution layer는 임베딩의 차원을 설정한다. 실시간 추론을 위해 모든 convolution은 causal 이며, ELU activation을 사용한다. 입력 waveform과 임베딩 사이의 temporal resampling ratio는 convolution block의 수와 스트라이딩 시퀀스에 의해 결정된다.&lt;/p>
+&lt;h3 id="decoder-architecture">Decoder architecture
+&lt;/h3>&lt;p>decoder 아키텍처는 업샘플링을 위한 transposed convolution과 residual unit으로 구성된 convolution block을 포함하며, encoder와 반대 순서의 스트라이드를 사용하여 입력 waveform과 동일한 해상도의 waveform을 재구성한다. 업샘플링 시 채널 수는 절반으로 줄어들며, 마지막 decoder block은 임베딩을 waveform 도메인으로 투영한다. encoder와 decoder 양쪽에서 동일한 채널 수는 동일한 parameter에 의해 제어되며, encoder와 decoder 사이에서 채널 수가 다른 경우도 조사하였다.&lt;/p>
+&lt;h3 id="residual-vector-quantizer">Residual Vector Quantizer
+&lt;/h3>&lt;p>quantizer의 목표는 encoder $enc(x)$의 출력을 bit/second(bps)로 표현된 목표 비트율 $R$로 압축하는 것이다. SoundStream을 end-to-end로 학습시키기 위해, quantizer는 backpropagation에 의해 encoder와 decoder와 함께 학습되어야 한다. vector quantizer (VQ)는 $enc(x)$의 $D$차원 프레임 각각을 인코드하기 위해 $N$개의 벡터로 구성된 코드북을 학습한다. 그런 다음 인코드된 오디오 $enc(x) \in \mathbb{R}^{S \times D}$는 $S \times D$ 형태의 one-hot vector 시퀀스로 매핑되며, 이는 $S log_2 N$ 비트를 사용하여 표현할 수 있다.&lt;/p>
 &lt;p>&lt;strong>Limitations of Vector Quantization&lt;/strong> 비트율 $R = 6000 bps$를 목표로 하는 코덱 예시에서, 스트라이딩 계수 $M = 320$을 사용하면, 샘플링 레이트가 $24000 Hz$인 1초 오디오는 encoder의 출력에서 75 프레임으로 표현된다. 이는 각 프레임에 80 비트가 할당되는 것을 의미한다. 그러나 plain vector quantizer를 사용하면, 실행 불가능한 수준인 $N = 2^{80}$ 벡터의 코드북을 저장해야 한다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/soundstream/images/algorithm1.png"
 width="730"
@@ -359,8 +359,8 @@ data-flex-basis="458px"
 &lt;p>각 quantizer의 코드북은 exponential moving average 업데이트로 학습되며, 코드북 사용을 개선하기 위해 두 가지 방법을 사용한다. 첫째, 코드북 벡터의 초기화를 위해 첫 번째 학습 배치에서 k-means 알고리즘을 실행한다. 둘째, 코드북 벡터가 여러 배치 동안 입력 프레임을 할당받지 못하면 현재 배치에서 무작위로 샘플링된 입력 프레임으로 대체한다. 이를 위해 각 벡터에 대한 할당의 exponential moving average을 추적하고, 이 값이 2 이하로 떨어지는 벡터를 대체한다.&lt;/p>
 &lt;p>&lt;strong>Enabling bitrate scalability with quantizer dropout&lt;/strong> residual vector quantization는 각 코드북의 크기를 고정하고 $VQ$ layer의 수를 조절함으로써 비트레이트를 제어한다. vector quantizer는 encoder/decoder와 함께 학습되지만, 여러 목표 비트레이트에서 작동할 수 있는 단일 비트레이트 스케일러블 모델이 더 실용적이다. 이 방식은 encoder와 decoder 양쪽에서 모델 parameter를 저장하는 데 필요한 메모리를 줄일 수 있다.&lt;/p>
 &lt;p>각 입력 예제에 대해 무작위로 선택된 $n_q$ 범위 안에서 quantizer를 사용하여 모델을 학습시킨다. 이는 quantization layer에 적용된 구조화된 드롭아웃의 한 형태로 볼 수 있다. 이 방법을 통해 모델은 모든 목표 비트레이트에 대해 오디오를 인코드하고 디코드하도록 학습된다. 이전 neural compression 모델들과 달리, residual vector quantization의 주요 장점은 임베딩의 차원이 비트레이트와 함께 변경되지 않는다는 것이다. 이렇게 하면 encoder나 decoder의 아키텍처 변경이 필요 없으므로, 특정 비트레이트에 대해 학습된 모델의 성능을 일치시키는 단일 SoundStream 모델을 학습시킬 수 있다.&lt;/p>
-&lt;h3 id="discriminator-architecture">Discriminator architecture&lt;/h3>
-&lt;p>adversarial 손실을 계산하기 위해 단일 waveform을 입력으로 받는 wave-based discriminator와 복소수 STFT를 입력으로 받는 STFT-based discriminator, 총 두 가지 discriminator를 사용한다. 이 두 discriminator는 모두 fully convolutional 이므로, 출력 로짓의 수는 입력 오디오의 길이에 비례하게 된
+&lt;h3 id="discriminator-architecture">Discriminator architecture
+&lt;/h3>&lt;p>adversarial 손실을 계산하기 위해 단일 waveform을 입력으로 받는 wave-based discriminator와 복소수 STFT를 입력으로 받는 STFT-based discriminator, 총 두 가지 discriminator를 사용한다. 이 두 discriminator는 모두 fully convolutional 이므로, 출력 로짓의 수는 입력 오디오의 길이에 비례하게 된
 다.&lt;/p>
 &lt;p>wave-based discriminator는 여러 해상도(original, 2-times down-sampled, 4-times down-sampled)에서 입력 오디오에 적용되는 세 개의 동일한 구조의 모델을 사용한다. 각 모델은 initial plain convolution과 네 개의 grouped convolution, 그리고 두 개의 plain convolution layer을 거쳐 logit을 생성힌다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/soundstream/images/figure4.png"
@@ -373,8 +373,8 @@ data-flex-grow="86"
 data-flex-basis="206px"
 >&lt;/p>
 &lt;p>STFT-based discriminator는 단일 스케일에서 작동하며, STFT 계산에는 1024 샘플의 window length와 256 샘플의 hop length를 사용힌다. 이 판별자는 2D-convolution과 일련의 residual block을 거친다. 이 block들은 3×3 convolution을 시작으로 (1, 2) 또는 (2, 2)의 스트라이드를 가진 다른 convolution으로 이어진다. 여기서 $(s_t, s_f)$는 시간 축과 주파수 축을 따라 다운샘플링 요인을 나타낸다.총 6개의 residual block이 있으며, 네트워크의 깊이가 깊어질수록 채널 수가 증가힌다. 마지막 residual block 출력에서는 activation은 $T/(H \cdot 2^3) \times F/2^6$ 형태를 가지며, 여기서 $T$는 시간 도메인의 샘플 수이고 $F = W/2$는 주파수 통의 수이다. 마지막 layer에서는 주파수 통을 통해 logit을 집계하여 1-dimensional signal time domain을 얻는다.&lt;/p>
-&lt;h3 id="training-objective">Training objective&lt;/h3>
-&lt;p>SoundStream generator $G(x)$는 입력 waveform $x$를 처리하며, 이는 encoder, quantizer, decoder를 통과한다. 디코드된 파형은 $\hat{x} = G(x)$로 표시된다. SoundStream은 perception-distortion trade-off에 따라, signal reconstruction ﬁdelity와 perceptual quality을 모두 달성하기 위해 다양한 손실을 사용하여 학습된다.&lt;/p>
+&lt;h3 id="training-objective">Training objective
+&lt;/h3>&lt;p>SoundStream generator $G(x)$는 입력 waveform $x$를 처리하며, 이는 encoder, quantizer, decoder를 통과한다. 디코드된 파형은 $\hat{x} = G(x)$로 표시된다. SoundStream은 perception-distortion trade-off에 따라, signal reconstruction ﬁdelity와 perceptual quality을 모두 달성하기 위해 다양한 손실을 사용하여 학습된다.&lt;/p>
 &lt;p>adversarial 손실은 perceptual quality을 향상시키는 데 사용되며, discriminator의 logit에 대한 hinge 손실로 정의되며, 여러 discriminator와 시간에 걸쳐 평균화된다. 보다 공식적으로, $k \in \lbrace 0, &amp;hellip;, K \rbrace$ 로 개별 discriminator를 인덱싱하게 하고, 여기서 $k = 0$은 STFT-based discriminator를 나타내고 $k \in \lbrace 1, &amp;hellip;, K \rbrace$ 는 waveform-based discriminator의 다른 해상도를 나타낸다. $T_k$는 시간 차원을 따라 $k$번째 discriminator의 출력에서의 logit 수를 나타낸다. discriminator는 원래의 오디오와 디코드된 오디오를 분류하기 위해 최소화함으로써 학습된다.&lt;/p>
 &lt;p>$$ L_D = E_x \big[ {{1}\over{K}} \sum_K {{1}\over{T_K}} \sum_t max(0.1 - D_{k, t}(x)) \big] + E_x \big[ {{1}\over{K}} \sum_K {{1}\over{T_K}} \sum_t max(0.1 - D_{k, t}(g(x))) \big] $$&lt;/p>
 &lt;p>generator에 대한 adversarial 손실은&lt;/p>
@@ -393,26 +393,26 @@ data-flex-basis="206px"
 &lt;p>overall generator 손실은 다른 손실 component의 weighted sum이다:&lt;/p>
 &lt;p>$$ L_G = \lambda_{adj} L_G^{adj} + \lambda_{feat} L_G^{feat} + \lambda_{rec} L_G^{rec} $$&lt;/p>
 &lt;p>모든 실험에서 $\lambda_{adv} = 1, \lambda_{feat} = 100\lambda_{rec} = 1$로 설정하였다.&lt;/p>
-&lt;h3 id="joint-compression-and-enhancement">Joint compression and enhancement&lt;/h3>
-&lt;p>전통적인 오디오 처리에서는 compression과 enhancement가 별도의 모듈에서 이루어지지만, 각 처리 단계는 end-to-end latency에 영향을 미친다. 그러나 SoundStream은 compression과 enhancement을 동시에 수행하는 동일한 모델로 설계되어 전체 지연 시간을 증가시키지 않는다.&lt;/p>
+&lt;h3 id="joint-compression-and-enhancement">Joint compression and enhancement
+&lt;/h3>&lt;p>전통적인 오디오 처리에서는 compression과 enhancement가 별도의 모듈에서 이루어지지만, 각 처리 단계는 end-to-end latency에 영향을 미친다. 그러나 SoundStream은 compression과 enhancement을 동시에 수행하는 동일한 모델로 설계되어 전체 지연 시간을 증가시키지 않는다.&lt;/p>
 &lt;p>enhancement의 종류는 학습 데이터의 선택에 따라 결정된다. 이 논문에서는 오디오 compression과 배경 소음 제거를 결합하는 것이 가능하다는 것을 보여준다. 모델은 denoising을 유연하게 활성화하거나 비활성화할 수 있게 학습되며, 이는 두 가지 모드를 나타내는 조절 신호를 통해 가능하다. 이를 위해 학습 데이터는 (inputs, targets, denoise)의 형태로 구성된다. denoising이 활성화되면, 네트워크는 노이즈가 있는 입력의 청정한 버전을 생성하도록 학습되고, 비활성화되면 노이즈가 있는 음성을 재구성하도록 학습된다. 또한, denoising이 활성화되어도 SoundStream이 청정한 오디오에 부정적인 영향을 미치지 않도록 하였다.&lt;/p>
 &lt;p>conditioning signal을 처리하기 위해, residual unit 사이에 Feature-wise Linear Modulation (FiLM) layer를 사용하는데, 이것은 네트워크 특징을 입력으로 받아 다음과 같이 변형한다.&lt;/p>
 &lt;p>$$ \tilde{a}_{n,c} = \gamma_{n,c} a_{n,c} + \beta_{n,c} $$&lt;/p>
 &lt;p>여기서 $a_{n,c}$ 는 $c$번째 채널의 $n$번째 activation이다. 계수 $\gamma_{n,c}$ 와 $\beta_{n,c}$는 denoising 모드를 결정하는 two-dimensional one-hot encoding을 입력으로 하는 linear layer에 의해 계산된다. 이를 통해 시간에 따른 denoising 수준을 조정할 수 있다.&lt;/p>
 &lt;p>원칙적으로 FiLM layer는 encoder와 decoder 아키텍처 어디에나 적용될 수 있지만, preliminary 실험에서는 encoder나 decoder의 병목 부분에서 조절을 적용하는 것이 효과적이었다. 다른 깊이에서 FiLM layer를 적용해도 추가적인 개선은 관찰되지 않았다.&lt;/p>
 &lt;hr>
-&lt;h2 id="evaluation-setup">Evaluation Setup&lt;/h2>
-&lt;h3 id="datasets">Datasets&lt;/h3>
-&lt;p>SoundStream은 깨끗한 음성, 잡음이 있는 음성, 그리고 음악에 대해 학습되었다. 이를 위해 다양한 데이터셋을 사용하였고, 잡음이 있는 음성은 LibriTTS의 음성과 Freesound의 잡음을 혼합하여 만들었다. 또한, 실세계 데이터셋도 수집하여 테스트에 사용하였다. 이 모든 데이터를 바탕으로 객관적, 주관적 측정치를 계산하였다.&lt;/p>
-&lt;h3 id="evaluation-metrics">Evaluation metrics&lt;/h3>
-&lt;p>SoundStream의 평가는 인간 평가자들에 의한 주관적 평가로 이루어졌다. MUSHRA에서 착안한 방법론을 사용하였고, 각각의 샘플은 20번씩 평가되었다. 평가자들은 영어를 모국어로 사용하며 헤드폰을 착용하였다. 또한, 데이터의 품질을 보장하기 위해 특정 기준을 충족하지 못하는 평가는 제외하였다.&lt;/p>
+&lt;h2 id="evaluation-setup">Evaluation Setup
+&lt;/h2>&lt;h3 id="datasets">Datasets
+&lt;/h3>&lt;p>SoundStream은 깨끗한 음성, 잡음이 있는 음성, 그리고 음악에 대해 학습되었다. 이를 위해 다양한 데이터셋을 사용하였고, 잡음이 있는 음성은 LibriTTS의 음성과 Freesound의 잡음을 혼합하여 만들었다. 또한, 실세계 데이터셋도 수집하여 테스트에 사용하였다. 이 모든 데이터를 바탕으로 객관적, 주관적 측정치를 계산하였다.&lt;/p>
+&lt;h3 id="evaluation-metrics">Evaluation metrics
+&lt;/h3>&lt;p>SoundStream의 평가는 인간 평가자들에 의한 주관적 평가로 이루어졌다. MUSHRA에서 착안한 방법론을 사용하였고, 각각의 샘플은 20번씩 평가되었다. 평가자들은 영어를 모국어로 사용하며 헤드폰을 착용하였다. 또한, 데이터의 품질을 보장하기 위해 특정 기준을 충족하지 못하는 평가는 제외하였다.&lt;/p>
 &lt;p>개발과 hyperparameter 선택에는 계산 가능한 객관적 지표를 사용하였다. 라이센스 제한으로 인해 일반적으로 사용되는 PESQ와 POLQA 대신, 오픈소스화된 ViSQOL 지표를 선택하였다. 이 지표는 POLQA와 비슷한 성능을 보였으며, 주관적 평가와 강한 상관관계를 보였기 때문에 모델 선택과 연구에 사용되었다.&lt;/p>
-&lt;h3 id="baselines">Baselines&lt;/h3>
-&lt;p>Opus는 다목적 음성 및 오디오 코덱으로, 4 kHz에서 24 kHz까지의 신호 대역폭과 6 kbps에서 510 kbps까지의 비트레이트를 지원한다. 인터넷 음성 통신, Zoom, Microsoft Teams, Google Meet 등에서 널리 사용되며, YouTube 스트리밍에도 사용된다. 또한, 최신 3GPP에 의해 표준화된 Enhanced Voice Services (EVS) 코덱도 소개되었다. 이 논문에서는 이 두 코덱과 최근 제시된 Lyra 코덱을 SoundStream 코덱과 비교한다. 이러한 비교를 위해 다양한 비트레이트에서 SoundStream과 기준선에 의해 처리된 오디오를 공개 웹페이지에서 제공한다.&lt;/p>
+&lt;h3 id="baselines">Baselines
+&lt;/h3>&lt;p>Opus는 다목적 음성 및 오디오 코덱으로, 4 kHz에서 24 kHz까지의 신호 대역폭과 6 kbps에서 510 kbps까지의 비트레이트를 지원한다. 인터넷 음성 통신, Zoom, Microsoft Teams, Google Meet 등에서 널리 사용되며, YouTube 스트리밍에도 사용된다. 또한, 최신 3GPP에 의해 표준화된 Enhanced Voice Services (EVS) 코덱도 소개되었다. 이 논문에서는 이 두 코덱과 최근 제시된 Lyra 코덱을 SoundStream 코덱과 비교한다. 이러한 비교를 위해 다양한 비트레이트에서 SoundStream과 기준선에 의해 처리된 오디오를 공개 웹페이지에서 제공한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="result">Result&lt;/h2>
-&lt;h3 id="comparison-with-other-codecs">Comparison with other codecs&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/soundstream/images/figure5.png"
+&lt;h2 id="result">Result
+&lt;/h2>&lt;h3 id="comparison-with-other-codecs">Comparison with other codecs
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/soundstream/images/figure5.png"
 width="1460"
 height="544"
 srcset="https://kurtkim.github.io/p/soundstream/images/figure5_hu17939008506777135513.png 480w, https://kurtkim.github.io/p/soundstream/images/figure5_hu5935558196061172993.png 1024w"
@@ -432,8 +432,8 @@ data-flex-grow="307"
 data-flex-basis="738px"
 >&lt;/p>
 &lt;p>SoundStream이 깨끗한 음성과 잡음이 있는 음성을 인코딩할 때 일관된 품질을 보인다는 것을 확인할 수 있다. 또한, SoundStream은 최소 3 kbps에서 음악을 인코딩하며, 이는 12 kbps의 Opus와 5.9 kbps의 EVS보다 상당히 높은 품질을 보여준다. 이는 이렇게 낮은 비트레이트에서 다양한 콘텐츠 유형에 적용되는 첫 codec이다.&lt;/p>
-&lt;h3 id="objective-quality-metrics">Objective quality metrics&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/soundstream/images/figure7.png"
+&lt;h3 id="objective-quality-metrics">Objective quality metrics
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/soundstream/images/figure7.png"
 width="1364"
 height="448"
 srcset="https://kurtkim.github.io/p/soundstream/images/figure7_hu17357102798075752584.png 480w, https://kurtkim.github.io/p/soundstream/images/figure7_hu11887781642954423923.png 1024w"
@@ -444,11 +444,11 @@ data-flex-basis="730px"
 >&lt;/p>
 &lt;p>SoundStream의 rate-quality 곡선을 보여주며, 3 kbps에서 18 kbps까지의 비트레이트에서 품질이 비트레이트가 감소함에 따라 점차 감소하지만, 최저 비트레이트에서도 3.7 이상을 유지하는 것을 보여준다. SoundStream은 일정한 비트레이트에서 작동하며, 각 인코딩된 프레임에 동일한 수의 비트가 할당된다. 또한, 통계적 중복성을 활용하지 않는 가정 하에 비트레이트 하한을 측정하였으며, 이 결과 7%에서 20% 사이의 비율 절약이 가능함을 보여준다.&lt;/p>
 &lt;p>다양한 콘텐츠 유형을 인코딩할 때 달성되는 rate-quality tradeoff를 조사한 결과, 깨끗한 음성을 인코딩할 때 가장 높은 품질을 얻을 수 있었다. 반면, 내용의 다양성 때문에 음악을 인코딩하는 것은 더욱 도전적인 작업이었다.&lt;/p>
-&lt;h3 id="bitrate-scalability">Bitrate scalability&lt;/h3>
-&lt;p>다양한 비트레이트를 제공하는 단일 모델 학습을 통한 비트레이트 확장성을 조사하였다. 이를 평가하기 위해 세 가지 SoundStream 설정을 고려하였다. 놀랍게도, 18 kbps에서 학습된 모델은 더 낮은 비트레이트에서도 좋은 성능을 보여주었다. 비트레이트가 감소할수록 품질 감소는 증가했지만, quantizer dropout 전략을 사용하면 이 차이가 사라졌다. 또한, 비트레이트 확장 가능 모델은 일정한 비트레이트에서 비트레이트 특정 모델을 약간 능가하는 것으로 나타났다. 이러한 결과는 quantizer dropout이 비트레이트 확장성을 제공하는 것 외에도 regularizer 역할을 할 수 있음을 보여준다.&lt;/p>
+&lt;h3 id="bitrate-scalability">Bitrate scalability
+&lt;/h3>&lt;p>다양한 비트레이트를 제공하는 단일 모델 학습을 통한 비트레이트 확장성을 조사하였다. 이를 평가하기 위해 세 가지 SoundStream 설정을 고려하였다. 놀랍게도, 18 kbps에서 학습된 모델은 더 낮은 비트레이트에서도 좋은 성능을 보여주었다. 비트레이트가 감소할수록 품질 감소는 증가했지만, quantizer dropout 전략을 사용하면 이 차이가 사라졌다. 또한, 비트레이트 확장 가능 모델은 일정한 비트레이트에서 비트레이트 특정 모델을 약간 능가하는 것으로 나타났다. 이러한 결과는 quantizer dropout이 비트레이트 확장성을 제공하는 것 외에도 regularizer 역할을 할 수 있음을 보여준다.&lt;/p>
 &lt;p>MUSHRA 주관적 평가를 통해, 비트레이트 확장 가능한 SoundStream 변형이 3 kbps에서는 비트레이트 특정 변형보다 약간만 나쁘며, 6 kbps와 12 kbps에서는 비트레이트 특정 변형과 동일한 품질을 보여줌을 확인하였다.&lt;/p>
-&lt;h3 id="ablation-studies">Ablation studies&lt;/h3>
-&lt;p>SoundStream에 적용된 몇 가지 설계 선택의 영향을 평가하기 위해 여러 가지 추가 실험을 수행하였다. 특별히 명시되지 않는 한, 모든 실험은 6 kbps에서 작동한다.&lt;/p>
+&lt;h3 id="ablation-studies">Ablation studies
+&lt;/h3>&lt;p>SoundStream에 적용된 몇 가지 설계 선택의 영향을 평가하기 위해 여러 가지 추가 실험을 수행하였다. 특별히 명시되지 않는 한, 모든 실험은 6 kbps에서 작동한다.&lt;/p>
 &lt;p>&lt;strong>Advantage of learning the encoder&lt;/strong> SoundStream의 학습 가능한 encoder를 고정된 mel-ﬁlterbank로 대체하는 것이 품질에 미치는 영향을 조사하였다. 결과적으로, ViSQOL이 3.96에서 3.33으로 크게 떨어지는 것으로 보아, 품질이 크게 감소하는 것을 확인하였다. 이는 encoder를 학습하고 비트레이트를 절반으로 줄일 때보다도 나쁘다는 것을 의미한다. 이는 학습 가능한 encoder의 복잡성이 rate-quality trade-off에서 큰 개선을 가져다준다는 것을 보여준다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/soundstream/images/table1.png"
 width="694"
@@ -480,8 +480,8 @@ data-flex-grow="502"
 data-flex-basis="1206px"
 >&lt;/p>
 &lt;p>&lt;strong>Latency&lt;/strong> 모델의 아키텍처 latency는 스트라이드의 곱으로 결정되며, 이는 오디오의 한 프레임이 몇 개의 샘플로 이루어져 있는지를 나타낸다. residual vector quantizer에 할당된 비트 예산은 이 지연에 따라 조정되며, 지연 시간을 늘리면 프레임 당 예산이 증가해야 한다. 세 가지 다른 구성에서 예산을 조정하는 방법은 코드북 크기를 고정하고 양자화기의 수를 변경하는 것이다. 이 세 가지 구성은 오디오 품질 면에서 동등하나, 모델의 지연을 늘리면 실시간 처리 능력이 크게 증가한다. 이는 단일 프레임의 인코딩/디코딩이 더 긴 오디오 샘플에 해당하기 때문이다.&lt;/p>
-&lt;h3 id="joint-compression-and-enhancement-1">Joint compression and enhancement&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/soundstream/images/figure8.png"
+&lt;h3 id="joint-compression-and-enhancement-1">Joint compression and enhancement
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/soundstream/images/figure8.png"
 width="1338"
 height="428"
 srcset="https://kurtkim.github.io/p/soundstream/images/figure8_hu5213392821253631847.png 480w, https://kurtkim.github.io/p/soundstream/images/figure8_hu12111676117097731104.png 1024w"
@@ -492,8 +492,8 @@ data-flex-basis="750px"
 >&lt;/p>
 &lt;p>compression과 background noise suppression을 동시에 수행하는 SoundStream 변형을 평가하였다. 이 모델은 임베딩에 conditioning signal을 적용하는 두 가지 구성을 고려하며, 각각 encoder와 decoder 측에 conditioning signal을 추가한다. 다른 비트레이트에서 모델을 학습하고, 노이즈가 있는 음성 샘플을 사용하여 denoising이 활성화되거나 비활성화될 때의 오디오 품질을 평가하였다. 결과적으로 denoising이 활성화될 때 오디오 품질이 크게 향상되며, encoder나 decoder에서 denoising하는 것 사이에 큰 차이는 없었다. 또한, denoising을 유연하게 활성화하거나 비활성화할 수 있는 추론 시간 모델은 denoising이 항상 활성화된 모델과 비교하여 성능에서 추가 비용이 발생하지 않았다.&lt;/p>
 &lt;p>denoising이 비트레이트 절약에 어떤 영향을 미치는지 조사하였다. 학습 데이터의 샘플에서 경험적 확률 분포를 측정하고, 테스트 샘플에서의 분포를 바탕으로 비트레이트 하한선을 추정하였다. 결과적으로, encoder 측 denoising과 고정 denoising이 decoder 측 denoising에 비해 상당한 비트레이트 절약을 제공함을 확인하였다. 이는 양자화 전에 denoising을 적용하면 더 적은 비트로 인코딩할 수 있다는 것을 의미한다.&lt;/p>
-&lt;h3 id="joint-vs-disjoint-compression-and-enhancement">Joint vs. disjoint compression and enhancement&lt;/h3>
-&lt;p>제안된 모델은 compression과 enhancement를 동시에 수행할 수 있다. 이를 SoundStream이 compression을 담당하고 전용 denoising 모델이 enhancement를 담당하는 구성과 비교하였다. 이때 두 가지 변형을 고려했는데, 하나는 compression 후 denoising이 이루어지는 경우(decoder 측에서 denoising 적용)이고, 다른 하나는 denoising 후 compression이 이루어지는 경우(encoder 측에서 denoising 적용)이다.&lt;/p>
+&lt;h3 id="joint-vs-disjoint-compression-and-enhancement">Joint vs. disjoint compression and enhancement
+&lt;/h3>&lt;p>제안된 모델은 compression과 enhancement를 동시에 수행할 수 있다. 이를 SoundStream이 compression을 담당하고 전용 denoising 모델이 enhancement를 담당하는 구성과 비교하였다. 이때 두 가지 변형을 고려했는데, 하나는 compression 후 denoising이 이루어지는 경우(decoder 측에서 denoising 적용)이고, 다른 하나는 denoising 후 compression이 이루어지는 경우(encoder 측에서 denoising 적용)이다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/soundstream/images/table4.png"
 width="648"
 height="240"
@@ -505,11 +505,11 @@ data-flex-basis="648px"
 >&lt;/p>
 &lt;p>VCTK 데이터셋을 사용하여 다양한 모델을 평가하였다. 이때, 압축과 강화를 동시에 수행하는 단일 모델은 두 개의 별개 모델을 사용하는 것과 거의 동일한 품질을 달성하며, 계산 비용은 절반으로 줄이고 추가적인 아키텍처 지연을 일으키지 않았다. 또한, 입력 신호 대 잡음 비가 증가할수록 성능 간격이 줄어드는 것을 확인하였다.&lt;/p>
 &lt;hr>
-&lt;h2 id="conclusions">Conclusions&lt;/h2>
-&lt;p>SoundStream이라는 새로운 neural audio codec을 제안한다. 이는 다양한 비트레이트와 콘텐츠 유형에서 state-of-the-art audio codec을 능가한다. SoundStream은 encoder, residual vector quantizer, decoder로 구성되어 우수한 오디오 품질을 제공하며, 실시간으로 스마트폰 CPU에서 작동 가능하다. quantizer dropout을 통해 비트레이트 확장성을 달성하고, 추가적인 대기 시간 없이 압축과 강화를 하나의 모델에서 수행할 수 있음을 보여준다.&lt;/p>
+&lt;h2 id="conclusions">Conclusions
+&lt;/h2>&lt;p>SoundStream이라는 새로운 neural audio codec을 제안한다. 이는 다양한 비트레이트와 콘텐츠 유형에서 state-of-the-art audio codec을 능가한다. SoundStream은 encoder, residual vector quantizer, decoder로 구성되어 우수한 오디오 품질을 제공하며, 실시간으로 스마트폰 CPU에서 작동 가능하다. quantizer dropout을 통해 비트레이트 확장성을 달성하고, 추가적인 대기 시간 없이 압축과 강화를 하나의 모델에서 수행할 수 있음을 보여준다.&lt;/p>
 &lt;hr>
-&lt;h2 id="reference">Reference&lt;/h2>
-&lt;ul>
+&lt;h2 id="reference">Reference
+&lt;/h2>&lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2107.03312.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/wesbz/SoundStream" target="_blank" rel="noopener"

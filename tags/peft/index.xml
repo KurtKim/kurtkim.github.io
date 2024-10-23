@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>PEFT on K2H'log</title><link>https://kurtkim.github.io/tags/peft/</link><description>Recent content in PEFT on K2H'log</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Mon, 08 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/tags/peft/index.xml" rel="self" type="application/rss+xml"/><item><title>LLM-Adapters</title><link>https://kurtkim.github.io/p/llm-adapters/</link><pubDate>Mon, 08 Apr 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/llm-adapters/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>GPT-4 및 ChatGPT와 같은 대규모 언어 모델(LLMs)의 성공에 힘입어, 특정 과제 데이터나 지시 데이터로 LLMs를 미세 조정하여 비용 효율적이고 접근성 높은 대안들이 개발되었다. adapter 기반의 parameter-efficient fine-tuning(PEFT)은 이 중에서도 전체 모델 대신 몇몇 parameter만 조정하여 우수한 성능을 내는 매력적인 방법이다. 본 논문은 LLM에 다양한 adapter를 통합하고, 이를 이용해 다른 과제에 적용할 수 있는 LLMAdapters 프레임워크를 제시한다. 이를 통해 adapter의 유형, 배치, hyper-parameter의 최적 설계를 연구하고, 산술 추론과 상식 추론 과제에서 뛰어난 성능을 입증하였다. 결과적으로, 소규모 LLMs에서도 adapter 기반 PEFT를 사용하여 몇 가지 추가 parameter만으로도 강력한 LLMs와 동등하거나 우수한 성능을 보여주었다.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>PEFT on K2H'log</title><link>https://kurtkim.github.io/tags/peft/</link><description>Recent content in PEFT on K2H'log</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Mon, 08 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kurtkim.github.io/tags/peft/index.xml" rel="self" type="application/rss+xml"/><item><title>LLM-Adapters</title><link>https://kurtkim.github.io/p/llm-adapters/</link><pubDate>Mon, 08 Apr 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/llm-adapters/</guid><description>&lt;h2 id="abstract">Abstract
+&lt;/h2>&lt;p>GPT-4 및 ChatGPT와 같은 대규모 언어 모델(LLMs)의 성공에 힘입어, 특정 과제 데이터나 지시 데이터로 LLMs를 미세 조정하여 비용 효율적이고 접근성 높은 대안들이 개발되었다. adapter 기반의 parameter-efficient fine-tuning(PEFT)은 이 중에서도 전체 모델 대신 몇몇 parameter만 조정하여 우수한 성능을 내는 매력적인 방법이다. 본 논문은 LLM에 다양한 adapter를 통합하고, 이를 이용해 다른 과제에 적용할 수 있는 LLMAdapters 프레임워크를 제시한다. 이를 통해 adapter의 유형, 배치, hyper-parameter의 최적 설계를 연구하고, 산술 추론과 상식 추론 과제에서 뛰어난 성능을 입증하였다. 결과적으로, 소규모 LLMs에서도 adapter 기반 PEFT를 사용하여 몇 가지 추가 parameter만으로도 강력한 LLMs와 동등하거나 우수한 성능을 보여주었다.&lt;/p>
 &lt;hr>
-&lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>대규모 언어 모델(LLMs)인 ChatGPT와 GPT-4는 다양한 NLP와 멀티 모달 작업에서 뛰어난 성능을 보였으나, 수백 억 개의 parameter를 가진 클로즈 소스 모델이기에, LLaMA와 같은 접근 가능하고 비용 효율적인 오픈 소스 대안이 개발되었다. 이 대안들은 특정 작업이나 지시적 데이터로 미세 조정되지만, full-model fine-tuning(FFT)은 계산 및 저장 공간이 많이 필요해 실제 적용에 있어 도전적이다.&lt;/p>
+&lt;h2 id="introduction">Introduction
+&lt;/h2>&lt;p>대규모 언어 모델(LLMs)인 ChatGPT와 GPT-4는 다양한 NLP와 멀티 모달 작업에서 뛰어난 성능을 보였으나, 수백 억 개의 parameter를 가진 클로즈 소스 모델이기에, LLaMA와 같은 접근 가능하고 비용 효율적인 오픈 소스 대안이 개발되었다. 이 대안들은 특정 작업이나 지시적 데이터로 미세 조정되지만, full-model fine-tuning(FFT)은 계산 및 저장 공간이 많이 필요해 실제 적용에 있어 도전적이다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/llm-adapters/images/table1.png"
 width="648"
 height="446"
@@ -28,8 +28,8 @@ data-flex-basis="348px"
 &lt;li>미래 연구에 대한 영감을 주기 위해 세 가지 연구 질문에 답하기 위한 광범위한 실험을 수행한다.&lt;/li>
 &lt;/ul>
 &lt;hr>
-&lt;h2 id="peft-overview">PEFT Overview&lt;/h2>
-&lt;p>이 섹션은 parameter-efficient fine-tuning (PEFT) 방법 4가지를 소개한다.&lt;/p>
+&lt;h2 id="peft-overview">PEFT Overview
+&lt;/h2>&lt;p>이 섹션은 parameter-efficient fine-tuning (PEFT) 방법 4가지를 소개한다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/llm-adapters/images/figure1.png"
 width="1246"
 height="524"
@@ -52,11 +52,11 @@ data-flex-basis="570px"
 &lt;p>$$ H_o ← H_o + f(H_i W_{down})W_{up} $$&lt;/p>
 &lt;p>Multi-head Parallel Adapter는 parallel adapter로 head attention의 출력을 수정한다. Scaled Parallel Adapter는 LoRA의 형식을 adapter에 적용한 변형이며, Ladder Side-Tuning은 lightweight ladder side network를 통해 백본 네트워크의 intermediate activation을 처리한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="experiment-setup">Experiment Setup&lt;/h2>
-&lt;h3 id="benchmarks">Benchmarks&lt;/h3>
-&lt;p>산술 추론과 상식 추론 두 가지 범주에서 총 14개의 벤치마크 데이터셋에 대한 광범위한 경험적 연구를 수행하였다. 산술 추론 분야에는 GSM8K, SVAMP, MultiArith, AddSub, AQuA, SingleEq 데이터셋이 포함되며, 이들은 초등학교 수준의 수학 문제와 대수 문제를 다룬다. 상식 추론 분야에는 BoolQ, PIQA, SIQA, HellaSwag, WinoGrande, ARC-c, ARC-e, OBQA 데이터셋이 포함되어 있으며, 이들은 예/아니오 질문 응답, 물리적 상식, 사회적 함의 추론, 과학 질문 등을 포함한다.&lt;/p>
-&lt;h3 id="fine-tuning-data-collection">Fine-tuning Data Collection&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/llm-adapters/images/table2.png"
+&lt;h2 id="experiment-setup">Experiment Setup
+&lt;/h2>&lt;h3 id="benchmarks">Benchmarks
+&lt;/h3>&lt;p>산술 추론과 상식 추론 두 가지 범주에서 총 14개의 벤치마크 데이터셋에 대한 광범위한 경험적 연구를 수행하였다. 산술 추론 분야에는 GSM8K, SVAMP, MultiArith, AddSub, AQuA, SingleEq 데이터셋이 포함되며, 이들은 초등학교 수준의 수학 문제와 대수 문제를 다룬다. 상식 추론 분야에는 BoolQ, PIQA, SIQA, HellaSwag, WinoGrande, ARC-c, ARC-e, OBQA 데이터셋이 포함되어 있으며, 이들은 예/아니오 질문 응답, 물리적 상식, 사회적 함의 추론, 과학 질문 등을 포함한다.&lt;/p>
+&lt;h3 id="fine-tuning-data-collection">Fine-tuning Data Collection
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/llm-adapters/images/table2.png"
 width="554"
 height="460"
 srcset="https://kurtkim.github.io/p/llm-adapters/images/table2_hu4967180493470111791.png 480w, https://kurtkim.github.io/p/llm-adapters/images/table2_hu7305141559040445851.png 1024w"
@@ -67,12 +67,12 @@ data-flex-basis="289px"
 >&lt;/p>
 &lt;p>수학 추론과 상식 추론을 위해 특별히 설계된 두 개의 고품질 학습 데이터셋(GSM8K, AQuA, MAWPS, MAWPS-single)을 사용하여 adapter를 미세조정한다. 데이터의 다양성을 높이기 위해 선정된 데이터셋에서 방정식과 답만 제공되므로, 모델의 추론 능력을 향상시키기 위해 ChatGPT를 teacher 모델로 사용하여 추론 단계를 생성한다. 잘못된 답변을 제거한 후, 최종적으로 10K의 수학 추론 샘플 세트인 Math10K를 얻어 추가 분석과 미세조정에 사용한다.&lt;/p>
 &lt;p>상식 추론 분야의 미세조정을 위해 BoolQ, PIQA, SIQA, HellaSwag, WinoGrande, ARC-e, ARC-c, OBQA 등의 학습 세트를 사전 정의된 템플릿으로 포맷하여 미세조정 데이터를 만든다. 각 데이터셋의 고유한 작업 설명을 포함하는 구조화된 템플릿을 사용한다. 이 과정을 통해 170K 상식 추론 샘플인 Commonsense170K를 생성하며, 이 데이터셋은 추가 연구를 위해 공개될 예정이다.&lt;/p>
-&lt;h3 id="implementations">Implementations&lt;/h3>
-&lt;p>연구 및 실제 응용을 위해 PEFT 방법을 쉽게 활용할 수 있도록 LLMAdapter 프레임워크를 개발하였다. 이는 LLaMA, BLOOMz, GPT-J와 같은 기본 모델에 다양한 adapter를 통합한다. Prefix-Tuning, Series Adapter, LoRA, Parallel adapter 등 PEFT 방법의 네 가지 주요 카테고리를 실험하여 효과를 검증한다. 모든 실험은 batch size 16과 특정 학습률 설정 하에 3 epoch 동안 진행된다. 중요한 것은, 수학 또는 상식 추론 작업을 위해 단일 모델을 미세조정하고 모든 관련 데이터셋에서 성능을 평가한다는 것이다.&lt;/p>
+&lt;h3 id="implementations">Implementations
+&lt;/h3>&lt;p>연구 및 실제 응용을 위해 PEFT 방법을 쉽게 활용할 수 있도록 LLMAdapter 프레임워크를 개발하였다. 이는 LLaMA, BLOOMz, GPT-J와 같은 기본 모델에 다양한 adapter를 통합한다. Prefix-Tuning, Series Adapter, LoRA, Parallel adapter 등 PEFT 방법의 네 가지 주요 카테고리를 실험하여 효과를 검증한다. 모든 실험은 batch size 16과 특정 학습률 설정 하에 3 epoch 동안 진행된다. 중요한 것은, 수학 또는 상식 추론 작업을 위해 단일 모델을 미세조정하고 모든 관련 데이터셋에서 성능을 평가한다는 것이다.&lt;/p>
 &lt;hr>
-&lt;h2 id="experiment-results">Experiment Results&lt;/h2>
-&lt;h3 id="placement-and-configuration">Placement and Configuration&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/llm-adapters/images/figure2.png"
+&lt;h2 id="experiment-results">Experiment Results
+&lt;/h2>&lt;h3 id="placement-and-configuration">Placement and Configuration
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/llm-adapters/images/figure2.png"
 width="534"
 height="388"
 srcset="https://kurtkim.github.io/p/llm-adapters/images/figure2_hu15003909595432359790.png 480w, https://kurtkim.github.io/p/llm-adapters/images/figure2_hu8622188623948153860.png 1024w"
@@ -98,8 +98,8 @@ data-flex-basis="329px"
 &lt;li>series 및 parallel adapter의 경우, MLP layer에 원활하게 통합하며 병목 크기를 256으로 구성한다.&lt;/li>
 &lt;li>LoRA와 관련하여, multi-head attention layer와 MLP layer 모두에 순위 32로 원활하게 통합한다.&lt;/li>
 &lt;/ul>
-&lt;h3 id="arithmetic-reasoning">Arithmetic Reasoning&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/llm-adapters/images/table3.png"
+&lt;h3 id="arithmetic-reasoning">Arithmetic Reasoning
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/llm-adapters/images/table3.png"
 width="1126"
 height="550"
 srcset="https://kurtkim.github.io/p/llm-adapters/images/table3_hu8401662228239351578.png 480w, https://kurtkim.github.io/p/llm-adapters/images/table3_hu11586476507040644337.png 1024w"
@@ -109,8 +109,8 @@ data-flex-grow="204"
 data-flex-basis="491px"
 >&lt;/p>
 &lt;p>수리 추론 작업에서 adapter를 평가하기 위해 Math10K에서 미세 조정 후 여러 데이터셋을 사용해 연구를 진행하였다. 기준선인 GPT-3.5 모델에 비해, 간단한 수학 데이터셋에서는 LoRA를 사용한 LLaMA-13B와 같은 adapter 기반 방법이 더 우수한 성능을 보였으며, 평균적으로 GPT-3.5의 성능의 약 92.8%를 달성하였다. 이는 적은 양의 학습 가능한 parameter로도 adapter 기반 PEFT가 특정 과제에서 높은 성능을 낼 수 있음을 보여준다. 하지만 더 복잡한 작업에서는 여전히 성능 격차가 있다.&lt;/p>
-&lt;h3 id="commonsense-reasoning">Commonsense Reasoning&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/llm-adapters/images/table4.png"
+&lt;h3 id="commonsense-reasoning">Commonsense Reasoning
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/llm-adapters/images/table4.png"
 width="1320"
 height="612"
 srcset="https://kurtkim.github.io/p/llm-adapters/images/table4_hu2133695664398698611.png 480w, https://kurtkim.github.io/p/llm-adapters/images/table4_hu488281897674521901.png 1024w"
@@ -120,11 +120,11 @@ data-flex-grow="215"
 data-flex-basis="517px"
 >&lt;/p>
 &lt;p>상식 추론 과제에서 다양한 PEFT 방법의 효과를 평가한 결과, Commonsense170K 데이터셋으로 미세 조정된 LLaMA-13B가 Series Adapter, Parallel Adapter, 그리고 LoRA를 사용하여 GPT-3, PaLM, 그리고 ChatGPT를 포함한 모든 기준 모델보다 더 우수한 성능을 보여주었다. 특히, LLaMA-13B와 Parallel Adapter는 평균 정확도 81.5%로, ChatGPT보다 4.5% 향상된 결과를 달성하였다. 이는 PEFT 방법의 성능이 기본 모델의 능력에 의해 영향을 받으며, LLaMA-7B와 LLaMA-13B가 BLOOMz와 GPT-J보다 상식 추론에서 더 우수함을 보여준다.&lt;/p>
-&lt;h3 id="id-and-ood-analysis">ID and OOD Analysis&lt;/h3>
-&lt;p>상식 추론과 수학 추론 과제에서 PEFT 방법의 성능을 비교한 결과, 상식 추론 분야에서 더 뛰어난 성과를 보여주었다. Commonsense170K 데이터셋을 사용한 상식 추론에서는 LLaMA-13B와 같은 작은 언어 모델이 큰 언어 모델인 ChatGPT와 PaLM을 능가할 수 있음이 확인되었다. 반면, Math10K 데이터셋을 사용한 수학 추론에서는 LLaMA-13B가 GPT-3.5보다 우수하긴 하지만, ID 데이터셋에서는 여전히 성능 격차가 존재한다. 이는 작은 LLM의 추론 능력이 제한적일 수 있음을 시사하며, 복잡한 수학 추론 과제에서 PEFT 방법의 성능을 향상시키는 방안을 모색하는 것이 미래 연구의 중요한 방향이 될 수 있다.&lt;/p>
+&lt;h3 id="id-and-ood-analysis">ID and OOD Analysis
+&lt;/h3>&lt;p>상식 추론과 수학 추론 과제에서 PEFT 방법의 성능을 비교한 결과, 상식 추론 분야에서 더 뛰어난 성과를 보여주었다. Commonsense170K 데이터셋을 사용한 상식 추론에서는 LLaMA-13B와 같은 작은 언어 모델이 큰 언어 모델인 ChatGPT와 PaLM을 능가할 수 있음이 확인되었다. 반면, Math10K 데이터셋을 사용한 수학 추론에서는 LLaMA-13B가 GPT-3.5보다 우수하긴 하지만, ID 데이터셋에서는 여전히 성능 격차가 존재한다. 이는 작은 LLM의 추론 능력이 제한적일 수 있음을 시사하며, 복잡한 수학 추론 과제에서 PEFT 방법의 성능을 향상시키는 방안을 모색하는 것이 미래 연구의 중요한 방향이 될 수 있다.&lt;/p>
 &lt;hr>
-&lt;h2 id="qualitative-study">Qualitative Study&lt;/h2>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/llm-adapters/images/table5.png"
+&lt;h2 id="qualitative-study">Qualitative Study
+&lt;/h2>&lt;p>&lt;img src="https://kurtkim.github.io/p/llm-adapters/images/table5.png"
 width="1374"
 height="668"
 srcset="https://kurtkim.github.io/p/llm-adapters/images/table5_hu18125818898862157898.png 480w, https://kurtkim.github.io/p/llm-adapters/images/table5_hu1325505117825243285.png 1024w"
@@ -135,23 +135,23 @@ data-flex-basis="493px"
 >&lt;/p>
 &lt;p>이전 섹션에서 정량적 분석을 소개한 후, 이 섹션에서는 다양한 모델의 출력물 질을 보여주는 예시를 제공한다. GSM8K에서 선택된 질문과 ChatGPT 및 LLaMA-13B 모델의 PEFT 방법을 사용한 출력결과에서, ChatGPT는 문제를 효과적으로 해결하는 반면, LLaMA-13B-Prefix는 잘못된 방향으로 나아가지만, Series Adapter를 사용한 LLaMA-13B는 정확한 계산으로 고품질의 답변을 생성한다. LLaMA-13B-Parallel과 LLaMA-13B-LoRA는 비슷한 논리를 제시하지만, Parallel은 계산 오류로 잘못된 답변을 제공한다. 결론적으로, 작은 언어 모델들은 특정 미세 조정 데이터를 활용하여 ChatGPT와 비교할 수 있는 고품질의 답변을 생성할 수 있다.&lt;/p>
 &lt;hr>
-&lt;h2 id="conclusion">Conclusion&lt;/h2>
-&lt;p>이 논문에서는 LLM-Adapter라는 사용자 친화적 프레임워크를 개발하여 LLM에 다양한 adapter를 통합하고, 연구자들이 여러 과제에 어댑터 기반 PEFT 방법을 적용할 수 있도록 한다. 수학 추론과 상식 추론 과제의 PEFT 성능 향상을 위해 두 고품질 미세 조정 데이터셋을 구축하고, 이를 활용해 PEFT 방법의 최적 구성, 어댑터 아키텍처의 영향, 그리고 ID 및 OOD 시나리오의 영향을 분석하는 연구를 진행한다.&lt;/p>
+&lt;h2 id="conclusion">Conclusion
+&lt;/h2>&lt;p>이 논문에서는 LLM-Adapter라는 사용자 친화적 프레임워크를 개발하여 LLM에 다양한 adapter를 통합하고, 연구자들이 여러 과제에 어댑터 기반 PEFT 방법을 적용할 수 있도록 한다. 수학 추론과 상식 추론 과제의 PEFT 성능 향상을 위해 두 고품질 미세 조정 데이터셋을 구축하고, 이를 활용해 PEFT 방법의 최적 구성, 어댑터 아키텍처의 영향, 그리고 ID 및 OOD 시나리오의 영향을 분석하는 연구를 진행한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="limitations">Limitations&lt;/h2>
-&lt;p>이 연구는 두 가지 주요 제한점을 가진다. 첫째, 컴퓨팅 자원의 제약으로 인해 LLaMA-33B와 LLaMA-65B 같은 큰 언어 모델의 성능 평가를 수행하지 못하였다. 이러한 모델들은 뛰어난 언어 이해 능력으로 인해 더 높은 성능을 보일 것으로 기대된다. 둘째, 다양한 어댑터의 결합에 대한 탐구는 이 논문의 범위를 벗어났다. 이는 향후 연구에서 다룰 예정인 영역이다.&lt;/p>
+&lt;h2 id="limitations">Limitations
+&lt;/h2>&lt;p>이 연구는 두 가지 주요 제한점을 가진다. 첫째, 컴퓨팅 자원의 제약으로 인해 LLaMA-33B와 LLaMA-65B 같은 큰 언어 모델의 성능 평가를 수행하지 못하였다. 이러한 모델들은 뛰어난 언어 이해 능력으로 인해 더 높은 성능을 보일 것으로 기대된다. 둘째, 다양한 어댑터의 결합에 대한 탐구는 이 논문의 범위를 벗어났다. 이는 향후 연구에서 다룰 예정인 영역이다.&lt;/p>
 &lt;hr>
-&lt;h2 id="reference">Reference&lt;/h2>
-&lt;ul>
+&lt;h2 id="reference">Reference
+&lt;/h2>&lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2304.01933.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/AGI-Edgerunners/LLM-Adapters" target="_blank" rel="noopener"
 >GitHub&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>PETL</title><link>https://kurtkim.github.io/p/petl/</link><pubDate>Mon, 01 Apr 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/petl/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>이 논문은 사전 학습된 언어 모델의 parameter-efﬁcient 전이 학습 방법을 분석하고, 이들 간의 연결을 확립하는 통합 프레임워크를 제시한다. 특정 숨겨진 상태를 수정하는 방식으로 다양한 방법을 재정의하고, 중요한 설계 차원을 정의한다. 종합적인 경험적 연구를 통해 중요한 설계 선택을 식별하고, 이를 통해 이전 방법보다 더 적은 parameter를 사용하면서도 더 효과적인 새로운 미세 조정 방법을 개발했으며, 이는 모든 parameter를 미세 조정한 결과와 비교할 수 있는 성능을 보여준다.&lt;/p>
+&lt;/ul></description></item><item><title>PETL</title><link>https://kurtkim.github.io/p/petl/</link><pubDate>Mon, 01 Apr 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/petl/</guid><description>&lt;h2 id="abstract">Abstract
+&lt;/h2>&lt;p>이 논문은 사전 학습된 언어 모델의 parameter-efﬁcient 전이 학습 방법을 분석하고, 이들 간의 연결을 확립하는 통합 프레임워크를 제시한다. 특정 숨겨진 상태를 수정하는 방식으로 다양한 방법을 재정의하고, 중요한 설계 차원을 정의한다. 종합적인 경험적 연구를 통해 중요한 설계 선택을 식별하고, 이를 통해 이전 방법보다 더 적은 parameter를 사용하면서도 더 효과적인 새로운 미세 조정 방법을 개발했으며, 이는 모든 parameter를 미세 조정한 결과와 비교할 수 있는 성능을 보여준다.&lt;/p>
 &lt;hr>
-&lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>사전 학습된 언어 모델(PLMs)을 이용한 전이 학습은 자연어 처리 분야에서 주류가 되었으며, 다양한 작업에서 뛰어난 성능을 보여준다. 가장 일반적인 접근 방식은 모델의 전체 parameter를 미세 조정하는 것이지만, 이는 각 작업마다 별도의 모델 parameter 사본을 생성해야 하므로, 많은 작업을 수행하는 데에 많은 비용이 들게 된다. 특히, PLMs의 parameter 수가 수백만에서 수조에 이르기까지 증가함에 따라 이 문제는 더욱 심각해지고 있다.&lt;/p>
+&lt;h2 id="introduction">Introduction
+&lt;/h2>&lt;p>사전 학습된 언어 모델(PLMs)을 이용한 전이 학습은 자연어 처리 분야에서 주류가 되었으며, 다양한 작업에서 뛰어난 성능을 보여준다. 가장 일반적인 접근 방식은 모델의 전체 parameter를 미세 조정하는 것이지만, 이는 각 작업마다 별도의 모델 parameter 사본을 생성해야 하므로, 많은 작업을 수행하는 데에 많은 비용이 들게 된다. 특히, PLMs의 parameter 수가 수백만에서 수조에 이르기까지 증가함에 따라 이 문제는 더욱 심각해지고 있다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/petl/images/figure1.png"
 width="604"
 height="514"
@@ -165,17 +165,17 @@ data-flex-basis="282px"
 &lt;p>이 논문은 parameter-efﬁcient tuning 방법들의 성공 요인과 이들 간의 연결성이 명확히 이해되지 않음을 지적하며, 세 가지 주요 질문을 탐구한다: (1) 이 방법들은 어떻게 연결되어 있는가, (2) 공유하는 핵심 설계 요소는 무엇인가, (3) 효과적인 요소들을 다른 방법으로 전달해 더 나은 변형을 만들 수 있는가?&lt;/p>
 &lt;p>이 연구에서는 adapter와 밀접하게 연결된 프리픽스 튜닝의 대안 형태를 제시하고, 동결된 PLMs의 숨겨진 표현을 수정하는 방식으로 구성된 통합 프레임워크를 개발하였다. 이 프레임워크는 수정 기능, 적용 위치, 통합 방법 등의 설계 차원을 따라 기존 방법들을 분해하고, 새로운 변형을 제안한다. 실험을 통해, 이 접근법은 기존의 parameter-efﬁcient tuning 방법보다 적은 parameter를 사용하면서, 네 가지 NLP 작업에서 전체 미세 조정과 동등한 성능을 달성함을 입증한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="peliminaries">Peliminaries&lt;/h2>
-&lt;h3 id="recap-of-the-transformer-arch-tecture">Recap Of The Transformer Arch Tecture&lt;/h3>
-&lt;p>Transformer 모델은 최신 NLP 사전 학습된 모델의 기반이며, 여러 층(L개 블록)으로 구성되어 있다. 각 블록은 multi-head self-attention와 fully connected feed-forward network (FFN) 두 가지 sub-layer를 포함한다. 이 모델은 질의(Q), 키(K), 값(V)을 매핑하는 attention 함수를 사용한다.&lt;/p>
+&lt;h2 id="peliminaries">Peliminaries
+&lt;/h2>&lt;h3 id="recap-of-the-transformer-arch-tecture">Recap Of The Transformer Arch Tecture
+&lt;/h3>&lt;p>Transformer 모델은 최신 NLP 사전 학습된 모델의 기반이며, 여러 층(L개 블록)으로 구성되어 있다. 각 블록은 multi-head self-attention와 fully connected feed-forward network (FFN) 두 가지 sub-layer를 포함한다. 이 모델은 질의(Q), 키(K), 값(V)을 매핑하는 attention 함수를 사용한다.&lt;/p>
 &lt;p>$$ Attn(Q, K, V) = softmax( {{QK^T}\over{\sqrt{d_k}}}} ) V $$&lt;/p>
 &lt;p>n과 m은 각각 질의와 key-value 쌍의 수이다. multi-head attention은 병렬로 작동하는 $N_h$개의 헤드를 통해 질의, 키, 값으로 입력을 투영한다. 이는 주어진 벡터 시퀀스 $C$와 질의 벡터 $x$에 대해 각 헤드의 출력을 계산하고 이를 합친다.&lt;/p>
 &lt;p>$$ MHA(C, x) = Concat(head_1, &amp;hellip;, head_h)W_o, head_i = Attn(xW_q^{(i)}, CW_k^{(i)}, CW_v^{(i)}), $$&lt;/p>
 &lt;p>$W_o \in R^{d×d}$ 이며, MHA에서는 모델 차원 d를 $N_h$로 나눈 $d_h$를 사용해 차원을 낮추어 parameter를 절약한다. 또한, 두 선형 변환과 ReLU 활성화 함수를 포함한 완전 연결 feed-forward network(FFN)가 중요한 구성 요소이다.&lt;/p>
 &lt;p>$$ FFN(x) = ReLU(xW_1 + b_1)W_2 + b_2 $$&lt;/p>
 &lt;p>$W_1 \in R^{d×d_m}, W_2 \in R^{d_m×d}$이며, Transformer는 보통 $d_m$으로 $d$의 4배를 사용한다. 이후 residual 연결과 layer normalization가 적용된다.&lt;/p>
-&lt;h3 id="overview-of-pevious-parameter---efficient-tuning-methods">Overview Of Pevious Parameter - Efficient Tuning Methods&lt;/h3>
-&lt;p>아래에서는 최신 parameter-efﬁcient tuning 방법들을 소개하며, 이들은 추가된 parameter만 조정하고 PLM은 변경하지 않는다.&lt;/p>
+&lt;h3 id="overview-of-pevious-parameter---efficient-tuning-methods">Overview Of Pevious Parameter - Efficient Tuning Methods
+&lt;/h3>&lt;p>아래에서는 최신 parameter-efﬁcient tuning 방법들을 소개하며, 이들은 추가된 parameter만 조정하고 PLM은 변경하지 않는다.&lt;/p>
 &lt;p>&lt;strong>Adapters (Houlsby et al., 2019):&lt;/strong> adapter 접근법은 transformer layer 사이에 adapter 모듈을 넣어, 입력을 낮은 차원으로 down-projection한 후 nonlinear 활성화를 거치고 다시 up-projection 한다. 이 과정은 residual 연결로 완성된다.&lt;/p>
 &lt;p>$$ h ← h + f(hW_{down})W_{up} $$&lt;/p>
 &lt;p>Houlsby et al. (2019)은 transformer의 한 층에 multi-head attention과 FFN 뒤에 adapter를 두 개 배치한다. Pfeiffer et al. (2021)은 FFN 뒤에만 삽입되는 더 효율적인 adapter를 제안하였다.&lt;/p>
@@ -187,10 +187,10 @@ data-flex-basis="282px"
 &lt;p>$s ≥ 1$은 조절 가능한 스칼라 hyperparameter이다.&lt;/p>
 &lt;p>&lt;strong>Others:&lt;/strong> 다른 parameter-efﬁcient tuning 방법으로 BITFIT은 bias vector 미세 조정, diff-pruning은 sparse parameter 업데이트 벡터 학습을 포함한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="bridging-the-gap---a-unified-view">Bridging The Gap - A Unified View&lt;/h2>
-&lt;p>접두사 통합의 동등 형태를 정의하고 adapter 연결을 없앤 후, 최신 방법을 포함하는 효율적인 통합 프레임워크를 제안한다.&lt;/p>
-&lt;h3 id="a-closer-look-at-prefix-tuning">A Closer Look At Prefix Tuning&lt;/h3>
-&lt;p>학습 가능한 벡터를 추가해 주의 모듈을 변화시키는 접두사 통합 방식을 설명하며, 여기서 그 동등 형태를 유도하고 대안적 관점을 제시한다.&lt;/p>
+&lt;h2 id="bridging-the-gap---a-unified-view">Bridging The Gap - A Unified View
+&lt;/h2>&lt;p>접두사 통합의 동등 형태를 정의하고 adapter 연결을 없앤 후, 최신 방법을 포함하는 효율적인 통합 프레임워크를 제안한다.&lt;/p>
+&lt;h3 id="a-closer-look-at-prefix-tuning">A Closer Look At Prefix Tuning
+&lt;/h3>&lt;p>학습 가능한 벡터를 추가해 주의 모듈을 변화시키는 접두사 통합 방식을 설명하며, 여기서 그 동등 형태를 유도하고 대안적 관점을 제시한다.&lt;/p>
 &lt;p>$$ head = Attn(xW_q concat(P_k CW_k) concat(P_v CW_v)) $$&lt;/p>
 &lt;p>$$ = softmax(xW_q concat(P_k CW_k)^T) \left[\begin{array} PP_v \\ CW_v \end{array}\right] $$&lt;/p>
 &lt;p>$$ = (1 − λ(x)) softmax(xW_q W_k^T C^T)CW_v + λ(x)softmax(xW_q P_k^T)P_v $$&lt;/p>
@@ -204,8 +204,8 @@ data-flex-basis="282px"
 &lt;p>$$ h ← (1 − λ(x))h + λ(x)f(xW_1)W_2 $$&lt;/p>
 &lt;p>preﬁx tuning은 adapter와 유사한 형태로 가중 추가를 통해 작동하며, 플러그인 모듈로 추상화된다. $l$이 작을 때, $W_1$과 $W_2$는 low-rank 행렬로서 adapter의 $W_{down}$과 $W_{up}$과 유사하게 작동한다. preﬁx 벡터의 수 $l$은 adapter의 병목 차원 $r$과 유사한 역할을 하며, 둘 다 수정 벡터 $∆h$의 랭크 제한을 나타낸다. 이는 $∆h$가 동일한 $l$(or $≤ l$) 기저 벡터의 선형 조합임을 의미한다.&lt;/p>
 &lt;p>&lt;strong>The Difference from Adapters:&lt;/strong> preﬁx tuning과 adapter 사이에 세 가지 주요 차이가 있다. 첫째, preﬁx tuning은 PLM의 입력을 사용해 계산하는 반면, adapter는 출력을 사용한다, 이로 인해 preﬁx tuning은 병렬 계산, adapter는 순차적 계산으로 볼 수 있다. 둘째, adapter는 삽입 위치가 더 유연하며, preﬁx tuning은 주의 출력만을 수정한다. 셋째, preﬁx tuning은 각 주의 헤드에 적용되어 더 표현력이 있으며, $l = r$일 때 adapter보다 많은 parameter를 추가하지 않는다. 이러한 차이는 multi-head 영향에 대한 경험적 검증을 통해 확인된다.&lt;/p>
-&lt;h3 id="the-unified-framework">The Unified Framework&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/petl/images/table1.png"
+&lt;h3 id="the-unified-framework">The Unified Framework
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/petl/images/table1.png"
 width="1138"
 height="282"
 srcset="https://kurtkim.github.io/p/petl/images/table1_hu8613478422926525351.png 480w, https://kurtkim.github.io/p/petl/images/table1_hu9208555212817783188.png 1024w"
@@ -229,18 +229,18 @@ data-flex-basis="1099px"
 &lt;p>&lt;strong>Insertion Form&lt;/strong> 추가된 모듈의 네트워크 삽입 방식에 관한 설명이다. adapter는 전통적으로 순차적 위치에 삽입되며, preﬁx tuning과 LoRA는 병렬 삽입 방식이며 입력은 $x$로, 이 방식은 원래 다르게 설명되지 않았다.&lt;/p>
 &lt;p>&lt;strong>Composition Function&lt;/strong> 수정된 벡터 $∆h$와 원래 숨겨진 표현 $h$의 조합 방식에 대한 설명이다. adapter는 단순 덧셈으로 조합하고, preﬁx tuning은 게이트가 추가된 덧셈을 사용하며, LoRA는 $∆h$를 상수로 스케일링 후 원래 표현에 더한다.&lt;/p>
 &lt;p>위에 없는 여러 방법도 이 프레임워크에 해당된다. 예를 들어, 프롬프트 튜닝과 adapter 변형들은 각각 preﬁx tuning과 유사한 방식으로 구현된다. 이 통합 프레임워크는 설계 차원을 따라 parameter-efﬁcient tuning 방법을 연구하고, 주요 설계 결정을 식별하며, 설계 요소를 방법 간에 전달하는 가능성을 제공한다.&lt;/p>
-&lt;h3 id="transferring-design-elements">Transferring Design Elements&lt;/h3>
-&lt;p>이 연구에서는 방법 간의 설계 요소 전달을 통해 도출된 새로운 방법들을 소개한다: (1) preﬁx tuning의 병렬 삽입 기법을 adapter에 적용한 병렬 adapter, (2) adapter를 통해 헤드 주의 출력을 preﬁx tuning처럼 수정하는 multi-head 병렬 adapter, (3) LoRA의 조합 및 삽입 형태를 adapter에 적용한 스케일된 병렬 adapter이다.&lt;/p>
+&lt;h3 id="transferring-design-elements">Transferring Design Elements
+&lt;/h3>&lt;p>이 연구에서는 방법 간의 설계 요소 전달을 통해 도출된 새로운 방법들을 소개한다: (1) preﬁx tuning의 병렬 삽입 기법을 adapter에 적용한 병렬 adapter, (2) adapter를 통해 헤드 주의 출력을 preﬁx tuning처럼 수정하는 multi-head 병렬 adapter, (3) LoRA의 조합 및 삽입 형태를 adapter에 적용한 스케일된 병렬 adapter이다.&lt;/p>
 &lt;p>지금까지의 토론은 몇 가지 중요한 질문을 남긴다: 다양한 설계 요소를 적용한 방법들은 독특한 특성을 가지는가? 어떤 설계 요소가 가장 중요한가? 새로운 방법들이 성능 향상을 가져오는가? 이러한 질문에 대한 답변을 이어서 다룬다.&lt;/p>
 &lt;hr>
-&lt;h2 id="experiments">Experiments&lt;/h2>
-&lt;h3 id="general-setup">General Setup&lt;/h3>
-&lt;p>&lt;strong>Datasets:&lt;/strong> 네 가지 주요 작업을 연구한다: (1) 뉴스 기사 요약 (XSum), (2) 영어-루마니아어 번역 (WMT 2016 en-ro), (3) 자연어 추론 (MNLI), 그리고 (4) 감정 분류 (SST2).&lt;/p>
+&lt;h2 id="experiments">Experiments
+&lt;/h2>&lt;h3 id="general-setup">General Setup
+&lt;/h3>&lt;p>&lt;strong>Datasets:&lt;/strong> 네 가지 주요 작업을 연구한다: (1) 뉴스 기사 요약 (XSum), (2) 영어-루마니아어 번역 (WMT 2016 en-ro), (3) 자연어 추론 (MNLI), 그리고 (4) 감정 분류 (SST2).&lt;/p>
 &lt;p>&lt;strong>Setup:&lt;/strong> XSum과 en-ro 번역 작업에 $BART_{LARGE}$와 $mBART_{LARGE}$를, MNLI와 SST2에는 $RoBERTa_{BASE}$를 사용한다. 연구는 adapter, preﬁx tuning, LoRA에 집중되며, 이 기법들은 bitﬁt과 preﬁx tuning보다 뛰어난 성능을 보여준다. adapter는 분석을 위해 주의력 또는 FFN 계층에 적용되고, 최종적으로는 두 위치 모두에 적용된 결과를 비교한다.&lt;/p>
 &lt;p>&lt;strong>Evaluation:&lt;/strong> XSum 테스트 세트에 대한 ROUGE 1/2/L 점수, en-ro 테스트 세트에 대한 BLEU 점수, 그리고 MNLI와 SST2 개발 세트에 대한 정확도를 보고한다. MNLI와 SST2는 다섯 번의 실행 중앙값을 사용하며, 전체 미세 조정 대비 조정된 parameter 수(#params)도 제공된다.&lt;/p>
 &lt;p>&lt;strong>Number of Tunable Parameters:&lt;/strong> BART와 mBART는 세 종류의 attention 구조를, RoBERTa는 encoder self-attention을 가진다. preﬁx tuning과 adapter는 각각 $2 × l × d$, $2 × r × d$ parameter를 사용하고, LoRA는 $4 × r × d$ parameter를 사용하여 더 많은 parameter를 필요로 한다. ffn에서의 adapter 수정도 attention 에서의 adapter와 같은 parameter를 사용한다. 따라서 $r$ 또는 $l$에 대해, preﬁx tuning과 adapter는 같은 수의 parameter를 사용하지만, LoRA는 더 많다.&lt;/p>
-&lt;h3 id="the-results-of-existing-methods">The Results Of Existing Methods&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/petl/images/figure4.png"
+&lt;h3 id="the-results-of-existing-methods">The Results Of Existing Methods
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/petl/images/figure4.png"
 width="718"
 height="374"
 srcset="https://kurtkim.github.io/p/petl/images/figure4_hu6781439626222071136.png 480w, https://kurtkim.github.io/p/petl/images/figure4_hu10354124894810574824.png 1024w"
@@ -259,8 +259,8 @@ data-flex-grow="161"
 data-flex-basis="386px"
 >&lt;/p>
 &lt;p>기존 방법들은 MNLI와 SST2에서 1% 미만의 parameter 조정으로 경쟁력 있는 성능을 보이지만, XSum과 en-ro에서는 5% 추가 parameter에도 불구하고 큰 격차가 남아 있다. 이 격차는 parameter를 10% 이상 증가시켜도 유의미하게 지속된다. 이는 많은 방법들이 GLUE 벤치마크나 E2E 같은 간단한 생성 벤치마크에서는 좋은 결과를 보이지만 다른 표준 벤치마크로 잘 일반화되지 않음을 시사한다. 향후 연구는 다양한 벤치마크에서의 결과를 보고하여 성능 프로필을 더 완전히 이해할 필요가 있다. 이 연구의 분석은 주로 고자원 벤치마크인 XSum과 en-ro에 집중되며, MNLI와 SST2의 분석은 encoder만 있는 모델인 RoBERTa로 진행한다.&lt;/p>
-&lt;h3 id="which-insertion-form---sequential-or-parallel">Which Insertion Form - Sequential Or Parallel?&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/petl/images/table3.png"
+&lt;h3 id="which-insertion-form---sequential-or-parallel">Which Insertion Form - Sequential Or Parallel?
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/petl/images/table3.png"
 width="616"
 height="224"
 srcset="https://kurtkim.github.io/p/petl/images/table3_hu5341883462377390598.png 480w, https://kurtkim.github.io/p/petl/images/table3_hu15249611149576182736.png 1024w"
@@ -270,8 +270,8 @@ data-flex-grow="275"
 data-flex-basis="660px"
 >&lt;/p>
 &lt;p>삽입 형식 설계를 비교한 결과, parallel adapter(PA)는 전통적인 sequential adapter(SA)와 preﬁx tuning을 포함한 모든 경우에서 우수한 성능을 보였다. 특히, PA는 XSum에서 SA보다 1.7 R-2 점, en-ro에서는 0.8 BLEU 점 더 높은 성능을 나타냈다. 이러한 결과에 따라, 이 연구에서는 parallel adapter의 결과에 더 집중한다.&lt;/p>
-&lt;h3 id="which-modified-representation---attention-or-ffn">Which Modified Representation - Attention Or FFN?&lt;/h3>
-&lt;p>&lt;strong>Setup:&lt;/strong> 다양한 표현 수정의 효과를 분석하기 위해, attention과 FFN 수정을 주로 비교하며, parallel adapter와 preﬁx tuning, 그리고 LoRA (ffn) 변형을 포함한 전체 비교를 진행한다. 특히, LoRA를 사용하여 FFN 가중치의 parameter 업데이트를 근사하며, 실험에서 전체 parameter 크기를 일치시키기 위해 LoRA (ffn)에는 더 작은 $r$을 사용한다.&lt;/p>
+&lt;h3 id="which-modified-representation---attention-or-ffn">Which Modified Representation - Attention Or FFN?
+&lt;/h3>&lt;p>&lt;strong>Setup:&lt;/strong> 다양한 표현 수정의 효과를 분석하기 위해, attention과 FFN 수정을 주로 비교하며, parallel adapter와 preﬁx tuning, 그리고 LoRA (ffn) 변형을 포함한 전체 비교를 진행한다. 특히, LoRA를 사용하여 FFN 가중치의 parameter 업데이트를 근사하며, 실험에서 전체 parameter 크기를 일치시키기 위해 LoRA (ffn)에는 더 작은 $r$을 사용한다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/petl/images/figure5.png"
 width="1100"
 height="310"
@@ -293,8 +293,8 @@ data-flex-grow="156"
 data-flex-basis="375px"
 >&lt;/p>
 &lt;p>parameter 예산이 적을 때는 head attention 수정이, 큰 용량에서는 FFN 수정이 더 효과적임을 알 수 있다. 이는 attention과 FFN에 동등한 예산을 배분하는 대신, FFN 수정에 더 많은 예산을 투자하는 것이 좋을 수 있음을 시사한다.&lt;/p>
-&lt;h3 id="which-compossition-function">Which Compossition Function?&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/petl/images/table5.png"
+&lt;h3 id="which-compossition-function">Which Compossition Function?
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/petl/images/table5.png"
 width="516"
 height="210"
 srcset="https://kurtkim.github.io/p/petl/images/table5_hu10249589439784797601.png 480w, https://kurtkim.github.io/p/petl/images/table5_hu13276280471720997243.png 1024w"
@@ -304,8 +304,8 @@ data-flex-grow="245"
 data-flex-basis="589px"
 >&lt;/p>
 &lt;p>세 가지 구성 함수 중, LoRA와 scaled parallel adapter(Scaled PA) 비교 연구를 통해 FFN 수정이 더 효과적임을 확인하였다. XSum 결과에 따르면, LoRA(s = 4)는 parallel adapter보다 우수하지만, 스케일링을 제거하면 이점이 사라진다. scaled PA는 기본 parallel adapter를 0.56 ROUGE-2 점 개선시켰으며, 스케일링 구성 함수가 기본 덧셈 함수보다 나음을 보여준다.&lt;/p>
-&lt;h3 id="an-effective-integration-by-transferring-favorable-design-elements">An Effective Integration By Transferring Favorable Design Elements&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/petl/images/table6.png"
+&lt;h3 id="an-effective-integration-by-transferring-favorable-design-elements">An Effective Integration By Transferring Favorable Design Elements
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/petl/images/table6.png"
 width="1084"
 height="420"
 srcset="https://kurtkim.github.io/p/petl/images/table6_hu17755253490754464478.png 480w, https://kurtkim.github.io/p/petl/images/table6_hu8747499192254071424.png 1024w"
@@ -316,43 +316,43 @@ data-flex-basis="619px"
 >&lt;/p>
 &lt;p>이전 연구에서는 (1) scaled parallel adapter가 FFN 수정에 가장 효과적, (2) FFN이 더 큰 용량에서 수정을 더 잘 활용, (3) preﬁx tuning 같은 head attention 수정이 매우 적은 parameter로 강력한 성능을 달성할 수 있음을 발견하였다. 이 발견에 기반하여, preﬁx tuning과 scaled parallel adapter를 결합한 새로운 Mix-And-Match adapter(MAM adapter)를 제안한다. MAM adapter는 다양한 parameter-efﬁcient tuning 방법과 비교하여 두 작업 모두에서 최고의 성능을 보이며, 사전 학습된 parameter의 단 6.7%만으로 전체 미세 조정 결과와 동등한 성능을, 단 0.5%의 추가 parameter로는 MNLI와 SST2에서 전체 미세 조정과 비슷한 결과를 달성한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="discussion">Discussion&lt;/h2>
-&lt;p>다양한 parameter tuning 방법을 위한 통합 프레임워크를 제공하여, 기술 전달을 통해 전체 미세 조정의 성능에 맞는 효과적인 모델을 만들 수 있다. 이 연구가 parameter-efﬁcient tuning 분야의 미래 연구에 도움이 되길 바란다.&lt;/p>
-&lt;h3 id="ethics-statement">Ethics Statement&lt;/h3>
-&lt;p>이 연구는 사전 학습된 언어 모델을 효율적으로 미세 조정하는 방법을 제안한다. 이 모델들은 요약, 번역, 언어 이해 등 다양한 긍정적 응용 가능성을 가지고 있지만, 편향 생성, 개인 정보 유출, 환경적 영향 등 여러 윤리적 문제도 동반한다.&lt;/p>
+&lt;h2 id="discussion">Discussion
+&lt;/h2>&lt;p>다양한 parameter tuning 방법을 위한 통합 프레임워크를 제공하여, 기술 전달을 통해 전체 미세 조정의 성능에 맞는 효과적인 모델을 만들 수 있다. 이 연구가 parameter-efﬁcient tuning 분야의 미래 연구에 도움이 되길 바란다.&lt;/p>
+&lt;h3 id="ethics-statement">Ethics Statement
+&lt;/h3>&lt;p>이 연구는 사전 학습된 언어 모델을 효율적으로 미세 조정하는 방법을 제안한다. 이 모델들은 요약, 번역, 언어 이해 등 다양한 긍정적 응용 가능성을 가지고 있지만, 편향 생성, 개인 정보 유출, 환경적 영향 등 여러 윤리적 문제도 동반한다.&lt;/p>
 &lt;p>이 방법은 사전 학습된 언어 모델의 parameter를 최소한으로 변경하며 학습시킨다. 이 방법이 편향이나 정보 유출 문제에 어떤 영향을 미치는지는 아직 연구되지 않았으며, 향후 연구의 중요한 주제이다.&lt;/p>
 &lt;p>이 논문에서 제안된 방법은 기존 모델에 소수의 parameter를 추가함으로써 학습 및 추론 시간에 약간의 부정적 영향을 미치지만, 전체 미세 조정의 필요성을 줄여 모델 제공 비용을 상당히 절감할 수 있다. 또한, 연구는 전적으로 재생 가능 에너지를 사용하는 데이터 센터에서 수행되었다.&lt;/p>
 &lt;hr>
-&lt;h2 id="reference">Reference&lt;/h2>
-&lt;ul>
+&lt;h2 id="reference">Reference
+&lt;/h2>&lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2110.04366.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/jxhe/unify-parameter-efficient-tuning" target="_blank" rel="noopener"
 >GitHub&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>P-Tuning v2</title><link>https://kurtkim.github.io/p/p-tuning-v2/</link><pubDate>Thu, 28 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/p-tuning-v2/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>prompt tuning은 학습 시 저장 공간과 메모리 사용을 줄이지만, 기존 방법들은 NLU에서 일반적인 모델에 잘 작동하지 않고 어려운 시퀀스 라벨링 작업에 대한 범용성이 부족하다. 그러나, 적절히 최적화된 prompt tuning은 다양한 모델 규모와 NLU 작업에 대해 보편적으로 효과적이며, 조정된 parameter가 극히 적음에도 미세조정과 동등한 성능을 제공한다. P-Tuning v2는 NLU에 최적화된 Deep Prompt Tuning의 구현으로, 미세조정의 대안이자 미래 연구의 강력한 기준이 될 수 있다.&lt;/p>
+&lt;/ul></description></item><item><title>P-Tuning v2</title><link>https://kurtkim.github.io/p/p-tuning-v2/</link><pubDate>Thu, 28 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/p-tuning-v2/</guid><description>&lt;h2 id="abstract">Abstract
+&lt;/h2>&lt;p>prompt tuning은 학습 시 저장 공간과 메모리 사용을 줄이지만, 기존 방법들은 NLU에서 일반적인 모델에 잘 작동하지 않고 어려운 시퀀스 라벨링 작업에 대한 범용성이 부족하다. 그러나, 적절히 최적화된 prompt tuning은 다양한 모델 규모와 NLU 작업에 대해 보편적으로 효과적이며, 조정된 parameter가 극히 적음에도 미세조정과 동등한 성능을 제공한다. P-Tuning v2는 NLU에 최적화된 Deep Prompt Tuning의 구현으로, 미세조정의 대안이자 미래 연구의 강력한 기준이 될 수 있다.&lt;/p>
 &lt;hr>
-&lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>사전 학습된 언어 모델들은 자연어 이해 작업의 성능을 향상시키지만, 미세 조정 방법은 학습 중 많은 메모리를 소모하고, 큰 모델 크기로 인해 추론 시 각 작업에 대한 모델 parameter를 유지하는 것이 불편하다.&lt;/p>
+&lt;h2 id="introduction">Introduction
+&lt;/h2>&lt;p>사전 학습된 언어 모델들은 자연어 이해 작업의 성능을 향상시키지만, 미세 조정 방법은 학습 중 많은 메모리를 소모하고, 큰 모델 크기로 인해 추론 시 각 작업에 대한 모델 parameter를 유지하는 것이 불편하다.&lt;/p>
 &lt;p>&lt;strong>Prompting&lt;/strong> 프롬프팅은 사전 학습된 모델의 parameter를 고정시키고 자연어 프롬프트로 언어 모델을 질의하여 학습 없이 사용한다. 이 방법은 모델 parameter의 단일 복사본만을 필요로 하지만, discrete 프롬프팅은 미세 조정에 비해 많은 경우 최적의 성능을 내지 못할 수 있다.&lt;/p>
 &lt;p>&lt;strong>Prompt tuning&lt;/strong> 프롬프트 튜닝은 입력 시퀀스에 학습 가능한 연속적 임베딩을 추가하는 방식으로, 많은 작업에서 기존 프롬프팅보다 성능이 개선되었다. 하지만, 모델 크기가 10B parameter 미만일 때와 어려운 시퀀스 라벨링 작업에서는 미세 조정에 비해 성능이 떨어지는 것으로 나타났다.&lt;/p>
 &lt;p>이 논문의 핵심 기여는 적절히 최적화된 프롬프트 튜닝이 여러 모델 규모와 NLU 작업에서 미세 조정과 유사한 성능을 낼 수 있다는 것을 발견한 점이다. 이것은 프롬프트 튜닝의 보편적 가능성과 NLU에 대한 잠재력을 새롭게 보여준다.&lt;/p>
 &lt;p>P-tuning v2는 Deep Prompt Tuning의 최적화된 버전으로, 사전 학습된 모델의 모든 layer에 연속적 프롬프트를 적용함으로써 주요 개선을 이루었다. 이 접근법은 특히 소형 모델과 어려운 작업에서 미세 조정과의 격차를 줄이며, 미세 조정에 준하는 성능을 보장하기 위한 최적화 및 구현상의 중요한 세부 사항들을 제공한다.&lt;/p>
 &lt;p>실험 결과, P-tuning v2는 300M에서 10B parameter의 모델 규모와 어려운 시퀀스 태깅 작업에서 미세 조정과 비슷한 성능을 보여주었다. 또한, 미세 조정 대비 학습 가능한 parameter가 0.1%에서 3%로 적어 학습 시간과 저장 비용을 대폭 절감한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="preliminaries">Preliminaries&lt;/h2>
-&lt;p>&lt;strong>NLU Tasks.&lt;/strong> 이 연구에서는 NLU 과제를 간단한 분류 작업과 어려운 시퀀스 라벨링 작업으로 나눈다. 분류 작업은 라벨 공간을 대상으로 하며, GLUE와 SuperGLUE 데이터셋 대부분이 여기에 해당한다. 반면, 시퀀스 라벨링 작업은 토큰 시퀀스 분류를 다루며, 명명된 개체 인식과 추출형 질문 응답이 이에 속한다.&lt;/p>
+&lt;h2 id="preliminaries">Preliminaries
+&lt;/h2>&lt;p>&lt;strong>NLU Tasks.&lt;/strong> 이 연구에서는 NLU 과제를 간단한 분류 작업과 어려운 시퀀스 라벨링 작업으로 나눈다. 분류 작업은 라벨 공간을 대상으로 하며, GLUE와 SuperGLUE 데이터셋 대부분이 여기에 해당한다. 반면, 시퀀스 라벨링 작업은 토큰 시퀀스 분류를 다루며, 명명된 개체 인식과 추출형 질문 응답이 이에 속한다.&lt;/p>
 &lt;p>&lt;strong>Prompt Tuning.&lt;/strong> 언어 모델 $M$에서, discrete 프롬프팅은 프롬프트 토큰 {&amp;ldquo;It&amp;rdquo;, &amp;ldquo;is&amp;rdquo;, &amp;ldquo;[MASK]&amp;quot;}를 사용해 영화 리뷰를 분류한다. 예로, &amp;ldquo;Amazing movie!&amp;rdquo; 리뷰는 임베딩 시퀀스 [e(&amp;ldquo;Amazing movie!&amp;rdquo;), e(&amp;ldquo;It&amp;rdquo;), e(&amp;ldquo;is&amp;rdquo;), e(&amp;quot;[MASK]&amp;rdquo;)]로 변환된다.&lt;/p>
 &lt;p>Lester et al. (2021)과 Liu et al. (2021)은 NLU를 위해 사전 학습된 언어 모델의 parameter를 고정시키고 자연어 프롬프트 대신 학습 가능한 연속적 프롬프트를 사용하였다. 이 방법은 입력 임베딩 시퀀스에 학습 가능한 임베딩을 추가하여, 간단한 분류 작업에서 10B parameter 모델의 미세 조정과 유사한 성능을 달성하였다.&lt;/p>
 &lt;hr>
-&lt;h2 id="p-tuning-v2">P-Tuning v2&lt;/h2>
-&lt;h3 id="lack-of-universality">Lack of Universality&lt;/h3>
-&lt;p>Lester et al. (2021)과 Liu et al. (2021)의 연구는 다양한 NLP 응용 분야에서 효과적임이 입증되었으나, 보편성 부족으로 인해 미세 조정을 완전히 대체하기에는 아직 미흡하다.&lt;/p>
+&lt;h2 id="p-tuning-v2">P-Tuning v2
+&lt;/h2>&lt;h3 id="lack-of-universality">Lack of Universality
+&lt;/h3>&lt;p>Lester et al. (2021)과 Liu et al. (2021)의 연구는 다양한 NLP 응용 분야에서 효과적임이 입증되었으나, 보편성 부족으로 인해 미세 조정을 완전히 대체하기에는 아직 미흡하다.&lt;/p>
 &lt;p>&lt;strong>Lack of universality across scales.&lt;/strong> Lester et al. (2021)에 따르면, 모델이 10B parameter를 초과할 경우 프롬프트 튜닝은 미세 조정과 유사한 성능을 낼 수 있지만, 100M에서 1B parameter를 가진 중간 크기 모델에서는 미세 조정보다 성능이 떨어진다.&lt;/p>
 &lt;p>&lt;strong>Lack of universality across tasks.&lt;/strong> Lester et al. (2021)과 Liu et al. (2021)의 연구는 NLU 벤치마크에서 우수한 결과를 보였지만, 어려운 시퀀스 태깅 작업에서의 프롬프트 튜닝 효과는 입증되지 않았다. 시퀀스 태깅은 verbalizers와 호환되지 않을 수 있는 복잡한 작업이며, 실험 결과 이들 방법은 미세 조정에 비해 시퀀스 태깅에서 성능이 낮음을 보여준다.&lt;/p>
 &lt;p>이러한 도전을 고려하여, 규모와 NLU 작업에 걸쳐 보편적인 해결책으로 deep 프롬프트 튜닝을 적용하는 Ptuning v2를 제안한다.&lt;/p>
-&lt;h3 id="deep-prompt-tuning">Deep Prompt Tuning&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning-v2/images/figure2.png"
+&lt;h3 id="deep-prompt-tuning">Deep Prompt Tuning
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning-v2/images/figure2.png"
 width="1376"
 height="342"
 srcset="https://kurtkim.github.io/p/p-tuning-v2/images/figure2_hu4507462218794050462.png 480w, https://kurtkim.github.io/p/p-tuning-v2/images/figure2_hu864998323537556341.png 1024w"
@@ -363,8 +363,8 @@ data-flex-basis="965px"
 >&lt;/p>
 &lt;p>Lester et al. (2021)과 Liu et al. (2021)에서는 연속적인 프롬프트를 입력 임베딩 시퀀스에 삽입하는데, 이는 시퀀스 길이 제약으로 조정 가능한 parameter가 제한되고, 입력 임베딩이 모델 예측에 간접적인 영향을 미치는 문제를 야기한다.&lt;/p>
 &lt;p>P-tuning v2는 deep 프롬프트 튜닝을 적용하여, 다양한 layer에 프롬프트를 pre-fix 토큰으로 추가함으로써 도전을 해결한다. 이 방법은 작업별로 더 많은 조정 가능한 parameter를 제공하며(0.01%에서 0.1%-3%), 더 깊은 layer의 프롬프트는 모델 예측에 직접적인 영향을 미친다.&lt;/p>
-&lt;h3 id="optimization-and-implementation">Optimization and Implementation&lt;/h3>
-&lt;p>최적의 성능을 위한 몇 가지 중요한 최적화 및 구현 팁이 있다.&lt;/p>
+&lt;h3 id="optimization-and-implementation">Optimization and Implementation
+&lt;/h3>&lt;p>최적의 성능을 위한 몇 가지 중요한 최적화 및 구현 팁이 있다.&lt;/p>
 &lt;p>&lt;strong>Reparameterization.&lt;/strong> 이전 연구들은 학습 가능한 임베딩을 변환하기 위해 주로 reparameterization encoder인 MLP를 사용하였다. 하지만 NLU 분야에서는 MLP의 효용성이 작업과 데이터셋에 따라 다르다는 것을 발견하였다. 일부 데이터셋에서는 MLP가 성능을 일관되게 향상시키는 반면, 다른 데이터셋에서는 미미하거나 부정적인 영향을 미쳤다.&lt;/p>
 &lt;p>&lt;strong>Prompt Length.&lt;/strong> P-Tuning v2에서는 프롬프트 길이가 중요하며, 다양한 NLU 작업은 서로 다른 프롬프트 길이에서 최고 성능을 보여준다. 간단한 분류 작업은 짧은 프롬프트를, 복잡한 시퀀스 라벨링 작업은 긴 프롬프트를 선호한다.&lt;/p>
 &lt;p>&lt;strong>Multi-task Learning.&lt;/strong> 다중 작업 학습은 공유된 연속 프롬프트로 여러 작업을 함께 최적화하는 방식이다. P-Tuning v2에서 다중 작업은 선택적이지만, 성능 향상을 위해 더 나은 초기화로 사용될 수 있다.&lt;/p>
@@ -380,14 +380,14 @@ data-flex-basis="336px"
 >&lt;/p>
 &lt;p>P-tuning v2의 핵심 기여를 강조하기 위해, 기존 프롬프트 튜닝 방식과의 비교를 제시하였다.&lt;/p>
 &lt;hr>
-&lt;h2 id="experiments">Experiments&lt;/h2>
-&lt;p>P-tuning v2의 효과를 검증하기 위해, 다양한 사전 학습된 모델과 NLU 작업에 대한 실험을 진행하였다. 이 과정에서 미세 조정을 제외한 모든 방법은 언어 모델을 고정한 상태로 수행되었으며, 이는 Lester et al. (2021)의 방식을 따르고 Liu et al. (2021)의 방식과는 차이가 있다.&lt;/p>
+&lt;h2 id="experiments">Experiments
+&lt;/h2>&lt;p>P-tuning v2의 효과를 검증하기 위해, 다양한 사전 학습된 모델과 NLU 작업에 대한 실험을 진행하였다. 이 과정에서 미세 조정을 제외한 모든 방법은 언어 모델을 고정한 상태로 수행되었으며, 이는 Lester et al. (2021)의 방식을 따르고 Liu et al. (2021)의 방식과는 차이가 있다.&lt;/p>
 &lt;p>작업 특정 parameter 비율(예: 0.1%)은 프롬프트와 transformers’ parameter 비교로 나온다. 실험은 모두 완전 감독 설정에서, few-shot이 아니라는 점도 중요하다.&lt;/p>
 &lt;p>&lt;strong>NLU Tasks.&lt;/strong> P-tuning v2의 NLU 능력 테스트를 위해, SuperGLUE 데이터셋을 사용하였고, 명명된 개체 인식, 추출형 질의응답, 의미 역할 라벨링 등 시퀀스 라벨링 작업들을 추가로 도입하였다.&lt;/p>
 &lt;p>&lt;strong>Pre-trained Models.&lt;/strong> 평가를 위해 BERT-large, RoBERTa-large, DeBERTa-xlarge, GLMxlarge/xxlarge 등 다양한 크기(300M에서 10B)의 양방향 NLU 모델들을 사용하였다.&lt;/p>
 &lt;p>&lt;strong>Multitask Learning.&lt;/strong> 다중 작업 설정에서는 작업 유형별로 데이터셋 학습 세트를 결합하고, 연속 프롬프트를 공유하며 각 데이터셋에 대해 별도의 선형 분류기를 사용한다.&lt;/p>
-&lt;h3 id="p-tuning-v2-across-scales">P-tuning v2: Across Scales&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning-v2/images/table2.png"
+&lt;h3 id="p-tuning-v2-across-scales">P-tuning v2: Across Scales
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning-v2/images/table2.png"
 width="1316"
 height="514"
 srcset="https://kurtkim.github.io/p/p-tuning-v2/images/table2_hu12784395790654995764.png 480w, https://kurtkim.github.io/p/p-tuning-v2/images/table2_hu8982804976985326737.png 1024w"
@@ -398,8 +398,8 @@ data-flex-basis="614px"
 >&lt;/p>
 &lt;p>P-tuning v2는 작은 규모에서 모든 작업에 걸쳐 미세 조정과 동등한 성능을 보이며, 특히 RTE에서는 미세 조정보다 훨씬 뛰어난 성능을 나타낸다.&lt;/p>
 &lt;p>대규모(2B~10B)에서 GLM을 사용하면, 미세 조정과의 격차가 좁혀지며, 10B 규모에서 프롬프트 튜닝이 경쟁력을 갖는다는 것을 관찰하였다. 그러나 P-tuning v2는 모든 규모에서 미세 조정과 비슷한 성능을 보이면서도 미세 조정 대비 단 0.1%의 작업 특정 parameter만 필요하다.&lt;/p>
-&lt;h3 id="p-tuning-v2-across-tasks">P-tuning v2: Across Tasks&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning-v2/images/table3.png"
+&lt;h3 id="p-tuning-v2-across-tasks">P-tuning v2: Across Tasks
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning-v2/images/table3.png"
 width="1314"
 height="634"
 srcset="https://kurtkim.github.io/p/p-tuning-v2/images/table3_hu14495079359878022797.png 480w, https://kurtkim.github.io/p/p-tuning-v2/images/table3_hu18258239146534582870.png 1024w"
@@ -409,8 +409,8 @@ data-flex-grow="207"
 data-flex-basis="497px"
 >&lt;/p>
 &lt;p>P-tuning v2는 대부분의 작업에서 미세 조정과 유사한 성능을 보이지만, 특히 QA 같은 어려운 작업에서는 P-tuning과 Lester et al. (2021)이 낮은 성능을 나타낸다. SQuAD 2.0에서 비정상적인 결과는 답변 불가능한 질문 때문에 단일 레이어 프롬프트 튜닝의 최적화에 어려움을 겪었기 때문일 가능성이 있다. 다중 작업 학습은 QA를 제외한 대부분의 작업에서 P-Tuning v2의 성능을 크게 향상시킨다.&lt;/p>
-&lt;h3 id="ablation-study">Ablation Study&lt;/h3>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning-v2/images/table4.png"
+&lt;h3 id="ablation-study">Ablation Study
+&lt;/h3>&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning-v2/images/table4.png"
 width="642"
 height="146"
 srcset="https://kurtkim.github.io/p/p-tuning-v2/images/table4_hu7018947486123096787.png 480w, https://kurtkim.github.io/p/p-tuning-v2/images/table4_hu11414345126790538604.png 1024w"
@@ -422,18 +422,18 @@ data-flex-basis="1055px"
 &lt;p>&lt;strong>Verbalizer with LM head v.s. [CLS] label with linear head.&lt;/strong> 이전 방식에서 중요했던 LM 헤드를 가진 verbalizer 대신, P-tuning v2에서는 수천 개 parameter를 가진 linear head 튜닝이 가능하다. hyperparameter를 동일하게 유지하고 [CLS] 라벨만 LM 헤드 verbalizer로 변경하였다. SST-2, RTE, BoolQ는 &amp;ldquo;true&amp;rdquo;/&amp;ldquo;false&amp;rdquo;, CB는 &amp;ldquo;true&amp;rdquo;/&amp;ldquo;false&amp;rdquo;/&amp;ldquo;neutral&amp;quot;를 사용하였다. 결과적으로 verbalizer와 [CLS] 성능 사이에 큰 차이가 없음을 확인했다.&lt;/p>
 &lt;p>&lt;strong>Prompt depth.&lt;/strong> Lester et al. (2021) 및 Liu et al. (2021)과 P-tuning v2의 차이는 멀티 레이어 연속 프롬프트에 있다. 이 영향을 확인하기 위해, 특정 k layer에 프롬프트를 오름차순과 내림차순으로 추가하고 나머지는 그대로 두었다. 결과적으로, 같은 수의 parameter를 가진 상태에서 내림차순으로 프롬프트를 추가하는 것이 더 좋은 성능을 보였고, 특히 RTE에서는 17-24 layer에만 프롬프트를 추가해도 모든 레이어에 추가할 때와 유사한 성능을 얻을 수 있었다.&lt;/p>
 &lt;hr>
-&lt;h2 id="conclusions">Conclusions&lt;/h2>
-&lt;p>P-tuning v2는 프롬프트 튜닝 방법을 제안한다. 기술적 신규성은 제한적이지만, 330M에서 10B parameter에 이르는 다양한 규모와 작업에서 미세 조정과 비슷한 성능을 낼 수 있다는 새로운 발견을 제시한다. 높은 정확도와 parameter 효율성으로, P-Tuning v2는 미세 조정의 대안이자 미래 연구의 강력한 기준이 될 수 있다.&lt;/p>
+&lt;h2 id="conclusions">Conclusions
+&lt;/h2>&lt;p>P-tuning v2는 프롬프트 튜닝 방법을 제안한다. 기술적 신규성은 제한적이지만, 330M에서 10B parameter에 이르는 다양한 규모와 작업에서 미세 조정과 비슷한 성능을 낼 수 있다는 새로운 발견을 제시한다. 높은 정확도와 parameter 효율성으로, P-Tuning v2는 미세 조정의 대안이자 미래 연구의 강력한 기준이 될 수 있다.&lt;/p>
 &lt;hr>
-&lt;h2 id="reference">Reference&lt;/h2>
-&lt;ul>
+&lt;h2 id="reference">Reference
+&lt;/h2>&lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2110.07602.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>P-Tuning</title><link>https://kurtkim.github.io/p/p-tuning/</link><pubDate>Sun, 24 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/p-tuning/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>사전 학습된 언어 모델에 자연어 패턴을 사용하는 것은 효과적이지만, manual discrete 프롬프트는 성능이 불안정할 수 있다. 이에 대한 해결책으로, 학습 가능한 연속 프롬프트 임베딩을 사용하는 P-Tuning 방법을 제안한다. P-Tuning은 다양한 discrete 프롬프트 사이의 격차를 줄이고, LAMA와 SuperGLUE 등 여러 NLU 작업에서 성능을 크게 향상시킨다. 이 방법은 fully-supervised 및 few-shot 설정에서, frozen 및 tuned 모델 모두에 효과적이다.&lt;/p>
+&lt;/ul></description></item><item><title>P-Tuning</title><link>https://kurtkim.github.io/p/p-tuning/</link><pubDate>Sun, 24 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/p-tuning/</guid><description>&lt;h2 id="abstract">Abstract
+&lt;/h2>&lt;p>사전 학습된 언어 모델에 자연어 패턴을 사용하는 것은 효과적이지만, manual discrete 프롬프트는 성능이 불안정할 수 있다. 이에 대한 해결책으로, 학습 가능한 연속 프롬프트 임베딩을 사용하는 P-Tuning 방법을 제안한다. P-Tuning은 다양한 discrete 프롬프트 사이의 격차를 줄이고, LAMA와 SuperGLUE 등 여러 NLU 작업에서 성능을 크게 향상시킨다. 이 방법은 fully-supervised 및 few-shot 설정에서, frozen 및 tuned 모델 모두에 효과적이다.&lt;/p>
 &lt;hr>
-&lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>사전 학습된 언어 모델(PLMs)은 다양한 학습 목표와 프롬프팅 기법을 활용하여 자연어 이해(NLU)의 성능을 크게 개선했하였다. 이러한 모델들은 마스킹, autoregressive, seq2seq, 순열 언어 모델링과 같은 방법으로 학습되며, 수동으로 작성된 프롬프트를 추가 입력으로 사용하여 더욱 향상된다. 프롬프팅은 특히 작은 데이터 세트에 미세 조정하거나 직접 추론을 하는 데 있어서 NLU 작업의 성능을 크게 향상시켰다.&lt;/p>
+&lt;h2 id="introduction">Introduction
+&lt;/h2>&lt;p>사전 학습된 언어 모델(PLMs)은 다양한 학습 목표와 프롬프팅 기법을 활용하여 자연어 이해(NLU)의 성능을 크게 개선했하였다. 이러한 모델들은 마스킹, autoregressive, seq2seq, 순열 언어 모델링과 같은 방법으로 학습되며, 수동으로 작성된 프롬프트를 추가 입력으로 사용하여 더욱 향상된다. 프롬프팅은 특히 작은 데이터 세트에 미세 조정하거나 직접 추론을 하는 데 있어서 NLU 작업의 성능을 크게 향상시켰다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning/images/table1.png"
 width="676"
 height="230"
@@ -447,13 +447,13 @@ data-flex-basis="705px"
 &lt;p>discrete 프롬프트의 불안정성을 해결하기 위해, P-Tuning 방법이 제안되었다. 이 방법은 학습 가능한 연속 프롬프트 임베딩을 discrete 프롬프트와 결합하여 언어 모델에 입력한다. 연속 프롬프트는 학습 과정에서 업데이트되어 학습 안정성을 개선하고, 작은 변화에도 견딜 수 있게 한다. 또한, 연속 프롬프트 임베딩 간 의존성을 모델링하기 위해 LSTM이나 MLP를 포함하는 프롬프트 encoder를 사용하여 성능을 더 향상시킨다.&lt;/p>
 &lt;p>LAMA와 SuperGLUE라는 두 NLU 벤치마크 실험에서, P-Tuning은 언어 모델을 고정하거나 미세 조정함으로써, manual discrete 프롬프트와 검색된 프롬프트, 그리고 PET 방법보다 우수한 성능을 보여주었다. 특히, P-Tuning은 다양한 작업과 설정에서 discrete 프롬프트 간 성능 차이를 줄여 언어 모델의 안정성을 크게 향상시켰다.&lt;/p>
 &lt;hr>
-&lt;h2 id="method">Method&lt;/h2>
-&lt;h3 id="issues-with-discrete-prompts">Issues with Discrete Prompts&lt;/h3>
-&lt;p>프롬프팅은 사전 학습된 언어 모델을 하위 작업에 맞게 조정하기 위해 자연어 패턴을 사용하는 기법이며, 다양한 NLP 작업에서 큰 개선을 보여주었다. 그러나 효과적인 프롬프트를 작성하는 것은 여전히 어려운 문제이다.&lt;/p>
+&lt;h2 id="method">Method
+&lt;/h2>&lt;h3 id="issues-with-discrete-prompts">Issues with Discrete Prompts
+&lt;/h3>&lt;p>프롬프팅은 사전 학습된 언어 모델을 하위 작업에 맞게 조정하기 위해 자연어 패턴을 사용하는 기법이며, 다양한 NLP 작업에서 큰 개선을 보여주었다. 그러나 효과적인 프롬프트를 작성하는 것은 여전히 어려운 문제이다.&lt;/p>
 &lt;p>LAMA 지식 탐색 실험에서 다양한 수동 프롬프트 사용 결과, 프롬프트의 작은 변화가 성능에 큰 영향을 미쳐 불안정한 결과를 초래하였다. 예를 들어, 프롬프트에서 단어 하나만 바꿔도 성능이 20점이나 급락하였다.&lt;/p>
 &lt;p>최근 연구들은 학습 코퍼스 탐사, 그라디언트 기반 검색, 사전 학습된 생성 모델을 이용해 이산 프롬프트 검색 절차를 자동화하려 시도하였다. 그러나 이 방법들은 프롬프트의 불안정성 문제와 이산 공간 검색의 한계를 해결하지 못한다. 이에 대응해, 언어 모델 적응 성능을 안정화 및 개선하기 위해 연속 프롬프트 학습의 가능성을 탐구한다.&lt;/p>
-&lt;h3 id="p-tuning">P-Tuning&lt;/h3>
-&lt;p>사전 학습된 언어 모델 $M$을 사용해, 이산 토큰 시퀀스 $x$와 레이블 $y$를 포함한 NLU 작업 데이터셋에서, $M$의 parameter를 미세 조정하거나 고정하여 조건부 확률 $f_M(x) = p̂(y | x)$을 추정하는 것이 목표이다.&lt;/p>
+&lt;h3 id="p-tuning">P-Tuning
+&lt;/h3>&lt;p>사전 학습된 언어 모델 $M$을 사용해, 이산 토큰 시퀀스 $x$와 레이블 $y$를 포함한 NLU 작업 데이터셋에서, $M$의 parameter를 미세 조정하거나 고정하여 조건부 확률 $f_M(x) = p̂(y | x)$을 추정하는 것이 목표이다.&lt;/p>
 &lt;p>Schick and Schütze (2020)에 의해 제안된 이산 토큰 형태의 프롬프트는 레이블이 있는 데이터를 텍스트 토큰 시퀀스로 재구성하여, 작업을 텍스트의 빈칸 채우기로 변환한다. 예를 들어, &amp;ldquo;The capital of [INPUT] is [LABEL].&amp;ldquo;과 같은 프롬프트를 사용해 &amp;ldquo;The capital of Britain is [MASK].&amp;ldquo;처럼 데이터를 재구성하고, &amp;ldquo;[MASK]&amp;ldquo;를 통해 &amp;ldquo;London&amp;quot;과 같은 레이블을 예측한다. 이 프로세스는 이산 프롬프트와 데이터를 입력 임베딩으로 매핑한다.&lt;/p>
 &lt;p>$$ \lbrace e(D_0)&amp;hellip;e(D_i), e(x_0), &amp;hellip;, e(x_n), &amp;hellip;, e(D_k) \rbrace $$&lt;/p>
 &lt;p>사전 학습된 임베딩 층을 통해, 여기서 $e \in \mathbb{R}^{|V|×d} 이다.&lt;/p>
@@ -463,11 +463,11 @@ data-flex-basis="705px"
 &lt;p>$$ \lbrace h_0 , &amp;hellip;, h_i , e(x), h_{i+1}, &amp;hellip;, h_j, e(y), h_{j+1}, &amp;hellip;, h_k \rbrace $$&lt;/p>
 &lt;p>마지막으로, 작업 손실 함수 최적화를 위해 $\lbrace P_i \rbrace_{i=1}^k$ 임베딩을 업데이트한다.&lt;/p>
 &lt;p>이산 및 연속 프롬프트의 결합은 성능 향상을 가져오며, P-Tuning은 언어 모델의 동결 및 미세조정에 모두 사용된다.&lt;/p>
-&lt;h3 id="prompt-encoder">Prompt Encoder&lt;/h3>
-&lt;p>해당 프레임워크에서는 임베딩 $\lbrace P_i \rbrace$를 입력 $\lbrace h_i \rbrace$로 매핑하는 함수 f를 활용한다. 이는 독립적 학습 가능 임베딩보다 프롬프트 임베딩 간 의존성 모델링에 유리하다. 구현에는 경량 신경망을 사용하며, LSTM, MLPs, 항등 매핑 함수를 실험적으로 탐구한다.&lt;/p>
+&lt;h3 id="prompt-encoder">Prompt Encoder
+&lt;/h3>&lt;p>해당 프레임워크에서는 임베딩 $\lbrace P_i \rbrace$를 입력 $\lbrace h_i \rbrace$로 매핑하는 함수 f를 활용한다. 이는 독립적 학습 가능 임베딩보다 프롬프트 임베딩 간 의존성 모델링에 유리하다. 구현에는 경량 신경망을 사용하며, LSTM, MLPs, 항등 매핑 함수를 실험적으로 탐구한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="experiments">Experiments&lt;/h2>
-&lt;p>LAMA와 SuperGLUE 두 NLU 벤치마크를 사용해 지식 탐색과 자연어 이해를 평가한다. SuperGLUE에서는 fully-supervised 학습과 few-shot 학습을 모두 다룬다.&lt;/p>
+&lt;h2 id="experiments">Experiments
+&lt;/h2>&lt;p>LAMA와 SuperGLUE 두 NLU 벤치마크를 사용해 지식 탐색과 자연어 이해를 평가한다. SuperGLUE에서는 fully-supervised 학습과 few-shot 학습을 모두 다룬다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning/images/table2.png"
 width="502"
 height="212"
@@ -478,14 +478,14 @@ data-flex-grow="236"
 data-flex-basis="568px"
 >&lt;/p>
 &lt;p>LAMA에서는 언어 모델을 고정하고 프롬프트만 조정하며, SuperGLUE에서는 언어 모델을 조정한다. 언어 모델 parameter와 연속적 프롬프트를 동시에 최적화하며, 이는 이전 연구의 표준 설정을 따르고, 조정된 및 고정된 언어 모델 모두에서 P-Tuning을 평가할 수 있게 한다.&lt;/p>
-&lt;h3 id="knowledge-probing">Knowledge Probing&lt;/h3>
-&lt;h4 id="setup">Setup&lt;/h4>
-&lt;p>지식 탐색은 언어 모델이 사전 학습을 통해 얻은 실세계 지식의 양을 평가한다. LAMA 데이터셋은 지식 베이스의 트리플을 이용한 cloze 테스트로 이를 측정한다.&lt;/p>
+&lt;h3 id="knowledge-probing">Knowledge Probing
+&lt;/h3>&lt;h4 id="setup">Setup
+&lt;/h4>&lt;p>지식 탐색은 언어 모델이 사전 학습을 통해 얻은 실세계 지식의 양을 평가한다. LAMA 데이터셋은 지식 베이스의 트리플을 이용한 cloze 테스트로 이를 측정한다.&lt;/p>
 &lt;p>&lt;strong>Datasets and vocabulary.&lt;/strong> LAMA는 답변을 단일 토큰 형식으로만 허용한다. 원래 LAMA-TREx 데이터셋(41개 위키데이터 관계, 총 34,039개 트리플, LAMA-34k)을 사용하며, GPT와 BERT 어휘 교집합을 커버하는 LAMA-29k 부분집합을 채택한다. Shin et al. (2020)의 방법을 따라 공정한 비교를 위한 학습, 개발, 테스트 데이터를 구성한다.&lt;/p>
 &lt;p>&lt;strong>Setup.&lt;/strong> LAMA는 각 관계마다 수작업 프롬프트를 제공하나, 이는 최적화될 여지가 있다. bidirectional masked 언어 모델은 &amp;ldquo;[X]&amp;ldquo;를 주체로, &amp;ldquo;[Y]&amp;ldquo;를 [MASK]로 대체하며, unidirectional 언어 모델(GPT 등)은 Transformer-XL 설정을 따라 목표 직전 출력을 사용한다.&lt;/p>
 &lt;p>개발 세트에 기반해 프롬프트 토큰 수와 위치를 결정하고, bidirectional 모델에는 (3, sub, org_prompt, 3, obj, 3), unidirectional 모델에는 (3, sub, org_prompt, 3, obj) 템플릿을 사용한다. 이 설정은 대부분의 관계에서 효과적이다. 연속적 프롬프트는 기존의 이산적 프롬프트와 결합되며, 프롬프트 학습 시 1e-5의 learning rate와 Adam optimizer를 적용한다.&lt;/p>
-&lt;h4 id="main-results">Main results&lt;/h4>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning/images/table3.png"
+&lt;h4 id="main-results">Main results
+&lt;/h4>&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning/images/table3.png"
 width="1302"
 height="404"
 srcset="https://kurtkim.github.io/p/p-tuning/images/table3_hu3437891282676070084.png 480w, https://kurtkim.github.io/p/p-tuning/images/table3_hu15057889675304072706.png 1024w"
@@ -495,13 +495,13 @@ data-flex-grow="322"
 data-flex-basis="773px"
 >&lt;/p>
 &lt;p>결과에 따르면, P-tuning은 지식 탐색에서 LAMA-34k는 43.3%에서 50.6%로, LAMA-29k는 45.2%에서 64.2%로 성능을 크게 향상시켰다. 또한, P-tuning은 AutoPrompt와 LPAQA 같은 이전 이산적 프롬프트 접근법보다 더 우수한 결과를 보였으며, 이는 이산적 프롬프트가 최적이 아닐 수 있다는 초기 가설을 확인시켜 준다.&lt;/p>
-&lt;h3 id="fully-supervised-learning">Fully-supervised Learning&lt;/h3>
-&lt;h4 id="setup-1">Setup&lt;/h4>
-&lt;p>&lt;strong>Dataset.&lt;/strong> P-tuning은 8개 NLU 과제로 구성된 SuperGLUE 벤치마크를 통해 fully-supervised 학습 과제에서 평가되었다. 이 중 ReCoRD 과제는 이산적 프롬프트를 사용하지 않아 P-tuning이 적용되지 않으므로, 나머지 7개 과제(질문 응답, 텍스트 함축, 공동 참조 해결, 인과 추론, 단어 의미 구별)에 집중하였다.&lt;/p>
+&lt;h3 id="fully-supervised-learning">Fully-supervised Learning
+&lt;/h3>&lt;h4 id="setup-1">Setup
+&lt;/h4>&lt;p>&lt;strong>Dataset.&lt;/strong> P-tuning은 8개 NLU 과제로 구성된 SuperGLUE 벤치마크를 통해 fully-supervised 학습 과제에서 평가되었다. 이 중 ReCoRD 과제는 이산적 프롬프트를 사용하지 않아 P-tuning이 적용되지 않으므로, 나머지 7개 과제(질문 응답, 텍스트 함축, 공동 참조 해결, 인과 추론, 단어 의미 구별)에 집중하였다.&lt;/p>
 &lt;p>&lt;strong>Comparison methods.&lt;/strong> GPT와 BERT 같은 unidirectional 및 bidirectional 사전 학습된 모델에서 P-tuning을 실험하고, BERT-Base, BERT-Large, GPT2-Base, GPT-medium 변형을 포함해 표준 분류 미세조정, PET(수동 이산 프롬프트 기반 미세조정), 그리고 P-tuning을 비교하였다.&lt;/p>
 &lt;p>&lt;strong>Configuration.&lt;/strong> 전적으로 감독된 학습을 위해 큰 학습 세트로 사전 학습된 모델을 미세조정하고 개발 세트로 hyper-parameter 및 모델을 선택한다. 선형적으로 감소하는 learning rate을 적용한 AdamW optimizer와 learning rate {1e-5, 2e-5, 3e-5}, batch size {16, 32}, warm-up ratio {0.0, 0.05, 0.1}을 사용한다. 작은 데이터 세트는 20 epoch, 큰 데이터 세트는 10 epoch 동안 미세조정하며, over-fitting 방지를 위해 early stopping 기법을 적용한다.&lt;/p>
-&lt;h4 id="main-results-1">Main Results&lt;/h4>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning/images/table4.png"
+&lt;h4 id="main-results-1">Main Results
+&lt;/h4>&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning/images/table4.png"
 width="1376"
 height="788"
 srcset="https://kurtkim.github.io/p/p-tuning/images/table4_hu17249643372135095520.png 480w, https://kurtkim.github.io/p/p-tuning/images/table4_hu16662797289845607758.png 1024w"
@@ -511,15 +511,15 @@ data-flex-grow="174"
 data-flex-basis="419px"
 >&lt;/p>
 &lt;p>P-tuning은 BERT와 GPT 모델에서 fully-supervised 학습 성능을 향상시킨다. BERT-Base에서는 7개 중 5개 작업, BERT-Large에서는 7개 중 4개 작업에서 최고 성능을 보였으며, 특히 저자원 작업에서 더 큰 이득을 보여준다. 반면, GPT2-Base와 GPT2-Medium 모델에서는 모든 작업에서 최고의 성능을 달성하였다.&lt;/p>
-&lt;h3 id="few-shot-learning">Few-Shot Learning&lt;/h3>
-&lt;p>GPT-3는 몇 가지 예시 학습에서 잠재력을 보였지만 어려운 작업(예: 자연어 추론)에서는 한계가 있다. P-tuning이 이러한 어려운 작업에서 사전 학습된 모델의 성능을 향상시킬 수 있는지 연구하려고 한다.&lt;/p>
-&lt;h4 id="setup-2">Setup&lt;/h4>
-&lt;p>&lt;strong>Few-shot Evaluation.&lt;/strong> 몇 개의 예시 학습 성능은 다양한 요소에 의해 높은 변동성을 보인다. 진정한 개선을 확인하기 위해, FewNLU 평가 절차를 따라 과적합을 방지하며 작은 라벨이 붙은 세트에서 모델 선택을 위한 무작위 데이터 분할을 사용한다.&lt;/p>
+&lt;h3 id="few-shot-learning">Few-Shot Learning
+&lt;/h3>&lt;p>GPT-3는 몇 가지 예시 학습에서 잠재력을 보였지만 어려운 작업(예: 자연어 추론)에서는 한계가 있다. P-tuning이 이러한 어려운 작업에서 사전 학습된 모델의 성능을 향상시킬 수 있는지 연구하려고 한다.&lt;/p>
+&lt;h4 id="setup-2">Setup
+&lt;/h4>&lt;p>&lt;strong>Few-shot Evaluation.&lt;/strong> 몇 개의 예시 학습 성능은 다양한 요소에 의해 높은 변동성을 보인다. 진정한 개선을 확인하기 위해, FewNLU 평가 절차를 따라 과적합을 방지하며 작은 라벨이 붙은 세트에서 모델 선택을 위한 무작위 데이터 분할을 사용한다.&lt;/p>
 &lt;p>&lt;strong>Dataset.&lt;/strong> 몇 개의 예시를 사용하는 SuperGLUE(FewGLUE) 벤치마크를 활용하며, 데이터 분할 방식은 이전 연구의 방식을 준수한다.&lt;/p>
 &lt;p>&lt;strong>Baseline and Hyper-parameter.&lt;/strong> 몇 개의 예시 학습에서, P-tuning과 일부 작업에서 GPT-3보다 우수한 PET를 비교한다. 기본 모델로 ALBERT-xxLarge를 사용하며, learning rate, 최대 학습 단계, 평가 빈도와 같은 공통 hyper-parameter에 대해 동일한 설정을 적용하여 공정한 비교를 진행한다.&lt;/p>
 &lt;p>&lt;strong>Construction of Prompt Patterns.&lt;/strong> PET를 위해 Schick and Schütze (2020)의 수작업 프롬프트를 사용하고, P-tuning의 프롬프트 패턴은 PET의 프롬프트를 기반으로 다양한 위치에 다른 수의 연속적인 토큰을 삽입하여 후보를 만든다. 이후 FewNLU의 검증 전략으로 P-tuning에 최적의 패턴을 선정하며, 연속적인 토큰의 수와 위치에 대해 추가 분석한다.&lt;/p>
-&lt;h4 id="main-results-2">Main Results&lt;/h4>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning/images/table5.png"
+&lt;h4 id="main-results-2">Main Results
+&lt;/h4>&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning/images/table5.png"
 width="1330"
 height="190"
 srcset="https://kurtkim.github.io/p/p-tuning/images/table5_hu8591609751998518594.png 480w, https://kurtkim.github.io/p/p-tuning/images/table5_hu2260501334242414829.png 1024w"
@@ -529,8 +529,8 @@ data-flex-grow="700"
 data-flex-basis="1680px"
 >&lt;/p>
 &lt;p>&lt;strong>Few-Shot Performance.&lt;/strong> P-tuning이 PET를 평균적으로 1점 이상, PromptTuning을 13점 이상 능가하는 성능을 보여준다. 이는 연속적인 프롬프트 토큰의 자동 학습을 통해 사전 학습된 모델이 NLU 작업에서 더 우수한 성능을 달성할 수 있음을 입증한다.&lt;/p>
-&lt;h4 id="ablation-study">Ablation Study&lt;/h4>
-&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning/images/table8.png"
+&lt;h4 id="ablation-study">Ablation Study
+&lt;/h4>&lt;p>&lt;img src="https://kurtkim.github.io/p/p-tuning/images/table8.png"
 width="650"
 height="234"
 srcset="https://kurtkim.github.io/p/p-tuning/images/table8_hu11648854933882787518.png 480w, https://kurtkim.github.io/p/p-tuning/images/table8_hu3376711307047439794.png 1024w"
@@ -556,31 +556,31 @@ data-flex-basis="965px"
 &lt;li>여러 패턴 후보를 작성한 후 각 작업에 가장 적합한 것을 찾기 위해 탐색하는 것이 좋다.&lt;/li>
 &lt;/ol>
 &lt;p>&lt;strong>Number of Prompt Tokens&lt;/strong> 프롬프트 토큰의 수는 few-shot 학습 성능에 중요한 영향을 미치지만, 토큰 수가 많다고 무조건 좋은 것은 아니다. 제한된 학습 데이터로 인해 토큰 수를 과도하게 늘릴 경우 parameter 학습이 어려울 수 있다. 따라서, 모델 선택을 통해 최적의 프롬프트 토큰 수를 찾는 것이 권장된다.&lt;/p>
-&lt;h4 id="comparison-with-discrete-prompt-search">Comparison with Discrete Prompt Search&lt;/h4>
-&lt;p>이전 연구는 자동으로 탐색된 discrete 프롬프트가 수동 프롬프트보다 우수하다고 제안하였다. P-Tuning과 이러한 자동 탐색된 discrete 프롬프트를 비교하기 위해, RoBERTa-Large 모델을 사용하여 GLUE 작업에 대한 실험을 진행하였다. 결과적으로, discrete 프롬프트에 연속 프롬프트를 추가하는 P-Tuning 방법이 few-shot 성능을 향상시키며, 기존 discrete 프롬프트와의 결합도 용이하고 안정성을 개선한다는 것을 확인하였다.&lt;/p>
-&lt;h3 id="stabilizing-language-model-adaptation">Stabilizing Language Model Adaptation&lt;/h3>
-&lt;p>앞선 연구에서 P-Tuning이 다양한 상황에서 성능을 개선한 것을 보여주었다. 이제 P-Tuning이 언어 모델의 적응을 안정화시키고, 서로 다른 프롬프트 간의 성능 차이를 줄인다는 결과를 제시한다. 특히, P-Tuning은 성능이 가장 낮은 패턴들을 개선하고, 다양한 패턴에 대한 표준 편차를 줄임으로써 패턴 선택의 안정성을 증가시킨다는 것을 확인하였다.&lt;/p>
+&lt;h4 id="comparison-with-discrete-prompt-search">Comparison with Discrete Prompt Search
+&lt;/h4>&lt;p>이전 연구는 자동으로 탐색된 discrete 프롬프트가 수동 프롬프트보다 우수하다고 제안하였다. P-Tuning과 이러한 자동 탐색된 discrete 프롬프트를 비교하기 위해, RoBERTa-Large 모델을 사용하여 GLUE 작업에 대한 실험을 진행하였다. 결과적으로, discrete 프롬프트에 연속 프롬프트를 추가하는 P-Tuning 방법이 few-shot 성능을 향상시키며, 기존 discrete 프롬프트와의 결합도 용이하고 안정성을 개선한다는 것을 확인하였다.&lt;/p>
+&lt;h3 id="stabilizing-language-model-adaptation">Stabilizing Language Model Adaptation
+&lt;/h3>&lt;p>앞선 연구에서 P-Tuning이 다양한 상황에서 성능을 개선한 것을 보여주었다. 이제 P-Tuning이 언어 모델의 적응을 안정화시키고, 서로 다른 프롬프트 간의 성능 차이를 줄인다는 결과를 제시한다. 특히, P-Tuning은 성능이 가장 낮은 패턴들을 개선하고, 다양한 패턴에 대한 표준 편차를 줄임으로써 패턴 선택의 안정성을 증가시킨다는 것을 확인하였다.&lt;/p>
 &lt;p>LAMA에서, 수동 프롬프트가 종종 매우 변동성 있는 결과를 내는 반면, 수동 프롬프트 위에 학습 가능한 연속 프롬프트를 추가하는 것이 그들의 성능을 안정화시킬 수 있으며, 표준 편차를 10.1에서 0.46으로 줄일 수 있다는 유사한 현상을 관찰하였다.&lt;/p>
 &lt;hr>
-&lt;h2 id="related-work">Related work&lt;/h2>
-&lt;p>&lt;strong>Language Model Prompting.&lt;/strong> GPT-3은 문맥 내 예제를 사용하여 사전 학습에서 downstream 작업으로 지식을 전달한다. 클로즈 패턴 사용으로 사전 학습과 downstream 작업 간의 격차를 줄이는 방법이 제안되었다. 또한, 최근 연구들은 고성능 프롬프트를 자동으로 찾기 위해 다양한 방법을 제안하였다. 이 연구의 접근 방식은 discrete 프롬프트를 보완하는 연속 프롬프트 임베딩 사용에 초점을 맞추며, 이는 이전 작업들과 다르다.&lt;/p>
+&lt;h2 id="related-work">Related work
+&lt;/h2>&lt;p>&lt;strong>Language Model Prompting.&lt;/strong> GPT-3은 문맥 내 예제를 사용하여 사전 학습에서 downstream 작업으로 지식을 전달한다. 클로즈 패턴 사용으로 사전 학습과 downstream 작업 간의 격차를 줄이는 방법이 제안되었다. 또한, 최근 연구들은 고성능 프롬프트를 자동으로 찾기 위해 다양한 방법을 제안하였다. 이 연구의 접근 방식은 discrete 프롬프트를 보완하는 연속 프롬프트 임베딩 사용에 초점을 맞추며, 이는 이전 작업들과 다르다.&lt;/p>
 &lt;p>최근 연구에서 연속 프롬프트 사용이 제안되었으며, Prefix-tuning은 시퀀스 시작에 이를 추가한다. 이 방법은 자연어 생성 작업에 초점을 맞춘다.&lt;/p>
 &lt;p>NLU에서 연속 프롬프트 기반의 새로운 방법들이 지식 탐색 개선에 초점을 맞추었다. Lester et al. (2021)에 따르면, 큰 사전 학습 모델에서 언어 모델을 고정시키고 연속 프롬프트만 조정해도 전체 모델 조정과 유사한 성능을 얻을 수 있다.&lt;/p>
 &lt;p>NLU 분야의 다른 연구들과 비교하여, P-Tuning은 연속 프롬프트가 다양한 설정에서 모델의 성능과 학습 안정성을 향상시킨다는 독특한 결론을 제시한다. 이는 특히 조정된 언어 모델을 사용할 때 두드러진다. 또한, P-Tuning은 하이브리드 연속-이산 프롬프트와 프롬프트 encoder를 도입하는 등 기술적으로 독특한 접근 방식을 채택한다.&lt;/p>
 &lt;p>&lt;strong>Knowledge in Language Models.&lt;/strong> Self-supervised로 사전 학습된 언어 모델들은 문맥화된 텍스트 표현뿐만 아니라 언어와 세계 지식을 학습하는 것으로 나타났다. 연구들은 언어 모델이 임베딩 공간에서 구문 트리를 형성하고, 특정 attention head가 문법 기능을 나타낼 수 있음을 보여주었다. 또한, LAMA 작업은 언어 모델의 사실 기억 능력을 평가하고, 다른 연구들은 attention 행렬을 통해 지식 삼중항을 탐색하는 방법을 제시하였다.&lt;/p>
 &lt;hr>
-&lt;h2 id="conclusions">Conclusions&lt;/h2>
-&lt;p>이 논문은 연속 프롬프트와 이산 프롬프트를 결합한 P-Tuning 방법을 소개한다. 이 방법은 사전 학습된 언어 모델의 성능을 향상시키고, few-shot 및 self-supervised 설정에서 조정 및 고정 모델 모두에 효과적이다.&lt;/p>
+&lt;h2 id="conclusions">Conclusions
+&lt;/h2>&lt;p>이 논문은 연속 프롬프트와 이산 프롬프트를 결합한 P-Tuning 방법을 소개한다. 이 방법은 사전 학습된 언어 모델의 성능을 향상시키고, few-shot 및 self-supervised 설정에서 조정 및 고정 모델 모두에 효과적이다.&lt;/p>
 &lt;hr>
-&lt;h2 id="reference">Reference&lt;/h2>
-&lt;ul>
+&lt;h2 id="reference">Reference
+&lt;/h2>&lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2103.10385.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>LoRA</title><link>https://kurtkim.github.io/p/lora/</link><pubDate>Wed, 20 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/lora/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
-&lt;p>자연어 처리에서는 대규모 사전 학습과 특정 작업이나 도메인에 대한 적응이 핵심 패러다임이다. 하지만, 큰 모델의 전체 미세 조정은 비용이 많이 든다. 이에 대한 해결책으로, Low-Rank Adaptation (LoRA)이 제안되었다. LoRA는 사전 학습된 모델의 가중치를 고정하고, Transformer 아키텍처에 학습 가능한 rank decomposition 행렬을 주입함으로써, downstream 작업의 학습 가능한 parameter 수를 대폭 줄인다. 이 방법은 학습 가능한 parameter 수를 10,000배, GPU 메모리 요구를 3배 줄이면서도, RoBERTa, DeBERTa, GPT-2, GPT-3 등에서 전체 미세 조정과 동등하거나 더 나은 성능을 보여준다. 이는 추가적인 추론 지연 없이 더 높은 학습 처리량을 가능하게 한다.&lt;/p>
+&lt;/ul></description></item><item><title>LoRA</title><link>https://kurtkim.github.io/p/lora/</link><pubDate>Wed, 20 Mar 2024 00:00:00 +0000</pubDate><guid>https://kurtkim.github.io/p/lora/</guid><description>&lt;h2 id="abstract">Abstract
+&lt;/h2>&lt;p>자연어 처리에서는 대규모 사전 학습과 특정 작업이나 도메인에 대한 적응이 핵심 패러다임이다. 하지만, 큰 모델의 전체 미세 조정은 비용이 많이 든다. 이에 대한 해결책으로, Low-Rank Adaptation (LoRA)이 제안되었다. LoRA는 사전 학습된 모델의 가중치를 고정하고, Transformer 아키텍처에 학습 가능한 rank decomposition 행렬을 주입함으로써, downstream 작업의 학습 가능한 parameter 수를 대폭 줄인다. 이 방법은 학습 가능한 parameter 수를 10,000배, GPU 메모리 요구를 3배 줄이면서도, RoBERTa, DeBERTa, GPT-2, GPT-3 등에서 전체 미세 조정과 동등하거나 더 나은 성능을 보여준다. 이는 추가적인 추론 지연 없이 더 높은 학습 처리량을 가능하게 한다.&lt;/p>
 &lt;hr>
-&lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;p>자연어 처리 응용 프로그램들은 대규모 사전 학습된 언어 모델을 다양한 응용 프로그램에 맞게 미세 조정하여 적용하는데, 이 과정에서 모델의 parameter가 업데이트된다. 하지만, 미세 조정의 단점은 새 모델이 원본 모델과 같은 많은 수의 parameter를 유지한다는 것이며, 특히 175B 개의 parameter를 가진 GPT-3 같은 더 큰 모델에서는 이것이 중대한 배포 문제로 부각되고 있다.&lt;/p>
+&lt;h2 id="introduction">Introduction
+&lt;/h2>&lt;p>자연어 처리 응용 프로그램들은 대규모 사전 학습된 언어 모델을 다양한 응용 프로그램에 맞게 미세 조정하여 적용하는데, 이 과정에서 모델의 parameter가 업데이트된다. 하지만, 미세 조정의 단점은 새 모델이 원본 모델과 같은 많은 수의 parameter를 유지한다는 것이며, 특히 175B 개의 parameter를 가진 GPT-3 같은 더 큰 모델에서는 이것이 중대한 배포 문제로 부각되고 있다.&lt;/p>
 &lt;p>일부 parameter만 조정하거나 새 작업을 위한 외부 모듈을 학습하는 방식으로 효율성을 높이려는 시도가 있었다. 이 방법은 사전 학습된 모델에 작업별 parameter를 추가로 저장하고 불러와 운영 효율성을 개선하지만, 모델의 깊이를 늘리거나 시퀀스 길이를 줄여 추론 지연을 일으키는 문제가 있다. 또한, 이러한 접근법은 종종 미세 조정닝의 기준치에 미치지 못해, 효율성과 모델 품질 사이의 트레이드오프를 만든다.&lt;/p>
 &lt;p>Li et al. (2018a) 및 Aghajanyan et al. (2020)의 연구에 기반하여, over-parametrized 된 모델이 실제로는 낮은 본질적 차원에 위치한다는 것을 발견하였다. 이를 바탕으로, 모델 적응 시 가중치 변화의 본질적 순위가 낮다는 가설하에 Low-Rank Adaptation (LoRA) 방법을 제안하였다. LoRA는 적응 과정에서 dense layer의 변화를 최적화하여 신경망의 특정 층을 간접적으로 학습시키며, 사전 학습된 가중치는 그대로 유지된다. GPT-3 175B 예시를 통해, 전체 순위가 매우 높음에도 불구하고 매우 낮은 순위로도 충분함을 보여주어, LoRA가 저장 공간과 계산 효율성을 크게 향상시킨다는 것을 입증하였다.&lt;/p>
 &lt;p>LoRA 방법은 다음과 같은 몇 가지 주요 장점을 가지고 있다:&lt;/p>
@@ -601,8 +601,8 @@ data-flex-basis="245px"
 &lt;/ul>
 &lt;p>&lt;strong>Terminologies and Conventions&lt;/strong> transformer 구조에 대해 전통적인 용어를 사용하며, transformer layer의 차원은 $d_{model}$로 표현된다. self-attention 모듈의 투영 행렬은 $W_q$, $W_k$, $W_v$, $W_o$로, 사전 학습된 가중치와 그 업데이트는 각각 $W$, $∆W$로 나타낸다. LoRA 모듈의 순위는 $r$로 표시하며, 모델 최적화에는 Adam을 사용하고, MLP 순방향 차원은 $d_{ffn} = 4 × d_{model}$이다.&lt;/p>
 &lt;hr>
-&lt;h2 id="problem-statement">Problem Statement&lt;/h2>
-&lt;p>이 연구의 제안은 학습 목표와 관계없이, 주로 언어 모델링에 집중한다. 이는 특정 작업 프롬프트에 기반한 조건부 확률 최대화 문제를 다룬다.&lt;/p>
+&lt;h2 id="problem-statement">Problem Statement
+&lt;/h2>&lt;p>이 연구의 제안은 학습 목표와 관계없이, 주로 언어 모델링에 집중한다. 이는 특정 작업 프롬프트에 기반한 조건부 확률 최대화 문제를 다룬다.&lt;/p>
 &lt;p>Φ로 parametrize된 사전 학습된 autoregressive 언어 모델 $P_Φ(y|x)$, 예를 들어 GPT와 같은 모델을, 요약, 기계 독해(MRC), 자연어를 SQL로(NL2SQL) 등의 다양한 텍스트 생성 작업에 맞게 적용하는 상황에서, 이 작업들은 컨텍스트와 타겟의 토큰 시퀀스 쌍으로 이루어진 데이터 세트로 구성된다. 예를 들어, NL2SQL에서는 자연어 질의와 SQL 명령, 요약에서는 기사 내용과 그 요약이 각각 $x_i$와 $y_i$로 표현된다.&lt;/p>
 &lt;p>전체 미세 조정 과정에서, 모델은 사전 학습된 가중치 $Φ_0$에서 출발해 조건부 언어 모델링 목표를 최대화하며 $Φ_0 + ∆Φ$로 반복 업데이트된다.&lt;/p>
 &lt;p>$$ \underset{Φ}{max} \sum_{(x, y) \in z} \sum_{t=1}^{|y|} log \ (P_Φ(y_t | x, y_{&amp;lt;t})) $$&lt;/p>
@@ -611,8 +611,8 @@ data-flex-basis="245px"
 &lt;p>$$ \underset{\theta}{max} \sum_{(x, y) \in z} \sum_{t=1}^{|y|} log \ (P_{Φ_0 + ∆Φ(\theta)}(y_t | x, y_{&amp;lt;t})) $$&lt;/p>
 &lt;p>이어지는 부분에서는, 계산 및 메모리 효율적인 저랭크 표현으로 $∆Φ$를 인코딩하는 방안을 제시한다. GPT-3 175B 모델 기준, 학습 가능한 parameter $|Θ|$는 $|Φ_0|$의 0.01%로 매우 작게 설정될 수 있다.&lt;/p>
 &lt;hr>
-&lt;h2 id="arent-existing-solutions-good-enough">Aren&amp;rsquo;t Existing Solutions Good Enough?&lt;/h2>
-&lt;p>이 연구에서 다루려는 문제는 전이 학습 분야에서 오래 전부터 연구되어 온 것으로, 모델 적응을 더 효율적으로 만들기 위한 다양한 시도가 있었다. 주로 adapter layer를 추가하거나 input layer activation를 최적화하는 두 가지 전략이 사용되었지만, 이 방법들은 대규모 및 지연 시간이 중요한 상황에서는 제한적이다.&lt;/p>
+&lt;h2 id="arent-existing-solutions-good-enough">Aren&amp;rsquo;t Existing Solutions Good Enough?
+&lt;/h2>&lt;p>이 연구에서 다루려는 문제는 전이 학습 분야에서 오래 전부터 연구되어 온 것으로, 모델 적응을 더 효율적으로 만들기 위한 다양한 시도가 있었다. 주로 adapter layer를 추가하거나 input layer activation를 최적화하는 두 가지 전략이 사용되었지만, 이 방법들은 대규모 및 지연 시간이 중요한 상황에서는 제한적이다.&lt;/p>
 &lt;p>&lt;strong>Adapter Layers Introduce Inference Latency&lt;/strong> adapter에는 여러 변형이 있다. Houlsby et al. (2019)이 제안한 원래 디자인은 Transformer block 당 두 개의 adapter layer를, Lin et al. (2020)이 제안한 더 최근 디자인은 block 당 하나의 adapter layer와 추가적인 LayerNorm을 포함한다. adapter layer는 매우 적은 parameter를 가지지만, 대규모 신경망에서는 하드웨어 병렬성을 통해 낮은 지연 시간을 유지해야 하므로, 이러한 레이어는 순차적으로 처리되어야 한다. 이는 특히 배치 크기가 작은 온라인 추론 설정에서 지연 시간이 눈에 띄게 증가하는 원인이 된다. 예를 들어, 단일 GPU에서 GPT-2 중간 모델을 실행할 때 작은 병목 차원을 사용하는 adapter를 적용하더라도 지연 시간이 증가한다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/lora/images/table1.png"
 width="1032"
@@ -626,31 +626,31 @@ data-flex-basis="945px"
 &lt;p>모델을 분할할 때, 추가 깊이로 인해 AllReduce와 Broadcast 같은 동기 GPU 연산이 더 많이 필요해지며, adapter parameter를 여러 번 중복 저장하지 않으면 문제가 악화된다.&lt;/p>
 &lt;p>&lt;strong>Directly Optimizing the Prompt is Hard&lt;/strong> preﬁx tuning은 최적화가 어렵고 성능이 비단조적으로 변하는 문제를 가진다. 시퀀스 길이의 일부를 적응용으로 할당함으로써, 하위 작업 처리에 사용할 수 있는 길이가 줄어들어, 이 방법이 다른 방식에 비해 덜 효과적일 수 있다고 의심된다.&lt;/p>
 &lt;hr>
-&lt;h2 id="our-method">Our Method&lt;/h2>
-&lt;p>LoRA의 설계와 이점을 논한다. 이 원칙은 딥러닝의 모든 dense layer에 적용되나, Transformer 언어 모델의 특정 가중치에 초점을 맞춘 실험을 진행하였다.&lt;/p>
-&lt;h3 id="low-rank-parameterized-update-matrices">Low-Rank-Parameterized Update Matrices&lt;/h3>
-&lt;p>신경망의 가중치 업데이트는 낮은 본질적 순위를 가진다는 가설에 기반해, 사전 학습된 가중치 행렬 $W_0$의 업데이트를 low-rank decomposition $W_0 + \Delta W = W_0 + BA$로 제한한다. 여기서 $B$와 $A$는 학습 가능한 parameter를 포함하며, 학습 중 $W_0$은 고정된다. 이 접근법은 입력에 대해 같은 가중치를 적용하고 출력을 좌표별로 합산하는 방식으로 작동한다.&lt;/p>
+&lt;h2 id="our-method">Our Method
+&lt;/h2>&lt;p>LoRA의 설계와 이점을 논한다. 이 원칙은 딥러닝의 모든 dense layer에 적용되나, Transformer 언어 모델의 특정 가중치에 초점을 맞춘 실험을 진행하였다.&lt;/p>
+&lt;h3 id="low-rank-parameterized-update-matrices">Low-Rank-Parameterized Update Matrices
+&lt;/h3>&lt;p>신경망의 가중치 업데이트는 낮은 본질적 순위를 가진다는 가설에 기반해, 사전 학습된 가중치 행렬 $W_0$의 업데이트를 low-rank decomposition $W_0 + \Delta W = W_0 + BA$로 제한한다. 여기서 $B$와 $A$는 학습 가능한 parameter를 포함하며, 학습 중 $W_0$은 고정된다. 이 접근법은 입력에 대해 같은 가중치를 적용하고 출력을 좌표별로 합산하는 방식으로 작동한다.&lt;/p>
 &lt;p>$$ h = W_0 x + \Delta W x = W_0 x + BAx $$&lt;/p>
 &lt;p>$A$를 random Gaussian으로, $B$를 0으로 초기화하여 학습 시작 시 $\Delta W = BA$가 0이 되도록 하는 reparametrization 방법을 설명한다. $\Delta Wx$는 $\alpha r$로 스케일되며, $\alpha$는 고정된 상수이다. Adam optimizing 시, 적절한 초기 스케일링을 통해 $\alpha$ 조정이 learning rate 조정과 유사해진다. 따라서, $\alpha$는 조정 없이 초기 $r$ 값으로 설정된다. 이 방식은 $r$의 변화에 따른 hyperparameter 재조정 필요성을 줄여준다.&lt;/p>
 &lt;p>&lt;strong>A Generalization of Full Fine-tuning.&lt;/strong> LoRA는 사전 학습된 parameter의 일부만을 학습하는 미세 조정을 발전시켜, 적응 과정에서 가중치 행렬의 누적된 기울기 업데이트가 전체 순위를 가질 필요가 없다. 모든 가중치 행렬과 편향에 LoRA를 적용하면, 사전 학습된 가중치의 순위에 맞춘 LoRA 순위 설정을 통해 전체 미세 조정의 표현력을 대략적으로 되찾을 수 있다. 학습 가능한 parameter를 늘림으로써, LoRA 학습은 원래 모델 학습에 접근하고, 다른 방법들은 제한된 모델로 수렴한다.&lt;/p>
 &lt;p>&lt;strong>No Additional Inference Latency.&lt;/strong> 제품 배포 시, $W = W_0 + BA$를 계산해 저장하고 정상적으로 추론을 진행한다. 다른 작업으로 바꿀 때는 $BA$를 제거하고 $B&amp;rsquo;A&amp;rsquo;$를 추가함으로써 빠르고 메모리 부담 없이 $W_0$을 복구할 수 있다. 이 방법은 미세 조정된 모델 대비 추론 시 추가적인 지연을 발생시키지 않는다.&lt;/p>
-&lt;h3 id="applying-lora-to-transformer">Applying LoRA to Transformer&lt;/h3>
-&lt;p>신경망에서 학습 가능한 parameter를 줄이기 위해, LoRA를 가중치 행렬의 일부에 적용할 수 있다. transformer 구조에서는 자기 주의 모듈과 MLP 모듈 내의 가중치 행렬을 대상으로 한다. attention weight($W_q$, $W_k$, $W_v$, $W_o$)만을 조정하고 MLP 모듈은 변경하지 않음으로써 단순성과 효율성을 추구한다. 이 연구는 attention weight 조정의 효과에 초점을 맞추며, MLP layer, LayerNorm layer, 편향 조정에 대한 연구는 추후에 진행할 예정이다.&lt;/p>
+&lt;h3 id="applying-lora-to-transformer">Applying LoRA to Transformer
+&lt;/h3>&lt;p>신경망에서 학습 가능한 parameter를 줄이기 위해, LoRA를 가중치 행렬의 일부에 적용할 수 있다. transformer 구조에서는 자기 주의 모듈과 MLP 모듈 내의 가중치 행렬을 대상으로 한다. attention weight($W_q$, $W_k$, $W_v$, $W_o$)만을 조정하고 MLP 모듈은 변경하지 않음으로써 단순성과 효율성을 추구한다. 이 연구는 attention weight 조정의 효과에 초점을 맞추며, MLP layer, LayerNorm layer, 편향 조정에 대한 연구는 추후에 진행할 예정이다.&lt;/p>
 &lt;p>&lt;strong>Practical Beneﬁts and Limitations.&lt;/strong> Adam으로 학습된 large Transformer 모델에서는 고정된 parameter에 대한 최적화 상태를 저장할 필요가 없어 VRAM 사용량을 크게 줄일 수 있다. 특히, GPT-3 175B 모델의 경우 학습 중 VRAM 소비를 1.2TB에서 350GB로, 체크포인트 크기를 350GB에서 35MB로 약 10,000배 줄임으로써 GPU 사용량을 대폭 줄이고 I/O 병목 현상을 방지할 수 있다. 또한, LoRA 가중치만 교체함으로써 다양한 작업 간 빠르고 비용 효율적인 전환이 가능해지며, GPT-3 175B의 학습 속도는 전체 미세 조정 대비 25% 향상된다. 이러한 방식으로 맞춤형 모델을 즉시 교체할 수 있게 되어 효율성이 크게 개선된다.&lt;/p>
 &lt;p>LoRA는 추가적인 추론 지연을 없애려 할 때, 다른 작업들을 한번에 배치 처리하는 것이 어려운 한계를 가진다. 하지만, 지연이 큰 문제가 아닌 경우, 다양한 작업에 맞게 LoRA 모듈을 동적으로 선택하여 사용할 수 있다.&lt;/p>
 &lt;hr>
-&lt;h2 id="empirical-experiments">Empirical Experiments&lt;/h2>
-&lt;p>LoRA의 성능을 평가하기 위해, RoBERTa, DeBERTa, GPT-2를 시작으로 GPT-3까지 확장해 실험하였다. 실험 범위는 자연어 이해부터 생성까지 다양하며, RoBERTa와 DeBERTa는 GLUE 벤치마크로, GPT-2와 GPT-3는 추가로 WikiSQL과 SAMSum 데이터셋을 사용하여 평가하였다.&lt;/p>
-&lt;h3 id="baselines">Baselines&lt;/h3>
-&lt;p>다른 기준과의 비교를 위해, 이전 연구의 설정을 따르고 그들의 결과를 재사용한다. 그러나 이는 일부 기준이 특정 실험에만 등장할 수 있음을 의미한다.&lt;/p>
+&lt;h2 id="empirical-experiments">Empirical Experiments
+&lt;/h2>&lt;p>LoRA의 성능을 평가하기 위해, RoBERTa, DeBERTa, GPT-2를 시작으로 GPT-3까지 확장해 실험하였다. 실험 범위는 자연어 이해부터 생성까지 다양하며, RoBERTa와 DeBERTa는 GLUE 벤치마크로, GPT-2와 GPT-3는 추가로 WikiSQL과 SAMSum 데이터셋을 사용하여 평가하였다.&lt;/p>
+&lt;h3 id="baselines">Baselines
+&lt;/h3>&lt;p>다른 기준과의 비교를 위해, 이전 연구의 설정을 따르고 그들의 결과를 재사용한다. 그러나 이는 일부 기준이 특정 실험에만 등장할 수 있음을 의미한다.&lt;/p>
 &lt;p>&lt;strong>Fine-Tuning (FT)&lt;/strong> 미세 조정은 모델을 사전 학습된 상태에서 추가로 조정하는 방식이다. 여기에는 모든 parameter를 업데이트하거나 일부 layer만 업데이트하는 방법이 있다. 특히, GPT-2에 대해 마지막 두 layer만 조정하는 방식(FT Top2)이 이전 연구에서 소개되었다.&lt;/p>
 &lt;p>&lt;strong>Bias-only or BitFit&lt;/strong> Bias-only 또는 BitFit은 다른 부분은 고정하고 편향 벡터만 학습하는 방식으로, 최근 Zaken et al. (2021)에서도 연구되었다.&lt;/p>
 &lt;p>&lt;strong>Preﬁx-embedding tuning (PreEmbed)&lt;/strong> PreEmbed는 특별한 토큰을 입력 사이에 삽입해 이 토큰들의 임베딩을 학습하는 방식이다. 이 토큰들은 모델 어휘에 없으며, 프롬프트 앞(preﬁxing)이나 뒤(inﬁxing)에 배치된다. 이 방법은 학습 가능한 parameter 수에 영향을 주며, Li &amp;amp; Liang (2021)에서 논의되었다.&lt;/p>
 &lt;p>&lt;strong>Preﬁx-layer tuning (PreLayer)&lt;/strong> PreEmbed의 확장으로, 모든 Transformer layer 후의 활성화를 학습하는 방식이다. 이 방법은 이전 layer의 활성화를 학습 가능한 것으로 대체하며, 학습 가능한 parameter의 수는 $|Θ| = L × d_{model} \times (l_p + l_i)$로, 여기서 $L$은 layer 수이다.&lt;/p>
 &lt;p>&lt;strong>Adapter tuning&lt;/strong> adapter tuning은 selfattention 및 MLP 모듈 사이에 adapter layer를 추가하는 방식이다. Houlsby et al. (2019)이 제안한 원래 설계($adapter^H$)는 두 개의 fully connected layer와 nonlinearity을 포함한다. Lin et al. (2020)은 MLP 모듈과 LayerNorm 이후에만 adapter layer를 적용하는 효율적인 디자인($adapter^L$)을, Pfeiffer et al. (2021)은 유사한 디자인($adapter^P$)을 제안하였다. Rücklé et al. (2020)은 효율성을 높이기 위해 일부 어댑터 레이어를 제거하는 AdapterDrop($adapter^D$)을 포함한다. 모든 설계는 adapter layer 수(LAdpt)와 학습 가능한 LayerNorms 수(LLN)에 기반한 parameter 수로 표현된다.&lt;/p>
 &lt;p>&lt;strong>LoRA&lt;/strong> LoRA는 기존 가중치 행렬에 학습 가능한 rank decomposition 행렬을 추가하는 기법이다. 주로 간단함을 위해 $W_q$와 $W_v$에 적용되며, 학습 가능한 parameter 수는 순위 $r$과 가중치 형태에 따라 결정되어, $|Θ| = 2 \times \hat{L}&lt;em>{LoRA} \times d&lt;/em>{model} \times r$로 표현된다. 여기서 $\hat{L}_{LoRA}$는 LoRA가 적용된 가중치 행렬 수이다.&lt;/p>
-&lt;h3 id="roberta-baselarge">RoBERTa BASE/LARGE&lt;/h3>
-&lt;p>RoBERTa는 BERT의 사전 학습 방식을 개선하여 성능을 향상시켰으며, 최근 큰 모델들에 비해 여전히 경쟁력 있는 사전 학습 모델로 인정받고 있다. 이 연구에서는 HuggingFace Transformers 라이브러리의 RoBERTa base와 large 모델을 사용하여 GLUE 벤치마크 태스크에서 다양한 효율적인 적응 방법의 성능을 평가하고, Houlsby et al. (2019) 및 Pfeiffer et al. (2021)의 연구를 복제하였다. LoRA와 어댑터의 공정한 비교를 위해 배치 크기와 시퀀스 길이를 표준화하고, 특정 태스크에 대해 사전 학습된 모델을 초기화하는 방식을 조정하였다.&lt;/p>
+&lt;h3 id="roberta-baselarge">RoBERTa BASE/LARGE
+&lt;/h3>&lt;p>RoBERTa는 BERT의 사전 학습 방식을 개선하여 성능을 향상시켰으며, 최근 큰 모델들에 비해 여전히 경쟁력 있는 사전 학습 모델로 인정받고 있다. 이 연구에서는 HuggingFace Transformers 라이브러리의 RoBERTa base와 large 모델을 사용하여 GLUE 벤치마크 태스크에서 다양한 효율적인 적응 방법의 성능을 평가하고, Houlsby et al. (2019) 및 Pfeiffer et al. (2021)의 연구를 복제하였다. LoRA와 어댑터의 공정한 비교를 위해 배치 크기와 시퀀스 길이를 표준화하고, 특정 태스크에 대해 사전 학습된 모델을 초기화하는 방식을 조정하였다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/lora/images/table3.png"
 width="1114"
 height="520"
@@ -660,10 +660,10 @@ class="gallery-image"
 data-flex-grow="214"
 data-flex-basis="514px"
 >&lt;/p>
-&lt;h3 id="deberta-xxl">DeBERTa XXL&lt;/h3>
-&lt;p>DeBERTa는 더 큰 규모로 학습되어 GLUE 및 SuperGLUE 벤치마크에서 높은 성능을 보이는 BERT의 새로운 변형이다. 이 연구에서는 GLUE에서 완전히 미세 조정된 DeBERTa XXL의 성능을 LoRA와 비교 평가한다.&lt;/p>
-&lt;h3 id="gpt-2-medium--large">GPT-2 MEDIUM / LARGE&lt;/h3>
-&lt;p>NLU에서 전체 미세 조정의 대안으로 LoRA의 경쟁력을 확인한 후, 이제 LoRA가 GPT-2 중형 및 대형 모델에서도 NLG 분야에서 우수한 성능을 보이는지 검토한다. Li &amp;amp; Liang (2021)의 설정을 따라 E2E NLG Challenge 결과만 이 섹션에 소개하며, WebNLG 및 DART 결과는 다른 섹션에서 확인할 수 있다.&lt;/p>
+&lt;h3 id="deberta-xxl">DeBERTa XXL
+&lt;/h3>&lt;p>DeBERTa는 더 큰 규모로 학습되어 GLUE 및 SuperGLUE 벤치마크에서 높은 성능을 보이는 BERT의 새로운 변형이다. 이 연구에서는 GLUE에서 완전히 미세 조정된 DeBERTa XXL의 성능을 LoRA와 비교 평가한다.&lt;/p>
+&lt;h3 id="gpt-2-medium--large">GPT-2 MEDIUM / LARGE
+&lt;/h3>&lt;p>NLU에서 전체 미세 조정의 대안으로 LoRA의 경쟁력을 확인한 후, 이제 LoRA가 GPT-2 중형 및 대형 모델에서도 NLG 분야에서 우수한 성능을 보이는지 검토한다. Li &amp;amp; Liang (2021)의 설정을 따라 E2E NLG Challenge 결과만 이 섹션에 소개하며, WebNLG 및 DART 결과는 다른 섹션에서 확인할 수 있다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/lora/images/table4.png"
 width="930"
 height="386"
@@ -673,8 +673,8 @@ class="gallery-image"
 data-flex-grow="240"
 data-flex-basis="578px"
 >&lt;/p>
-&lt;h3 id="scaling-up-to-175b">Scaling Up to 175B&lt;/h3>
-&lt;p>LoRA의 최종 테스트로 GPT-3(175B parameter)를 사용한다. 높은 비용 때문에 특정 작업의 무작위 시드별 표준 편차만을 보고한다.&lt;/p>
+&lt;h3 id="scaling-up-to-175b">Scaling Up to 175B
+&lt;/h3>&lt;p>LoRA의 최종 테스트로 GPT-3(175B parameter)를 사용한다. 높은 비용 때문에 특정 작업의 무작위 시드별 표준 편차만을 보고한다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/lora/images/figure2.png"
 width="1158"
 height="396"
@@ -686,18 +686,18 @@ data-flex-basis="701px"
 >&lt;/p>
 &lt;p>LoRA는 세 데이터셋 모두에서 미세 조정 기준치를 충족하거나 초과한다. 그러나 모든 방법이 더 많은 parameter로 항상 이득을 보는 것은 아니며, 특수 토큰이 너무 많을 경우 성능이 하락함을 관찰하였다. 이는 입력 분포가 사전 학습 분포와 더 멀어지는 것과 관련이 있을 수 있다. 또한, 저데이터 환경에서의 적응 방식 성능도 조사하였다.&lt;/p>
 &lt;hr>
-&lt;h2 id="related-works">Related Works&lt;/h2>
-&lt;p>&lt;strong>Transformer Language Models.&lt;/strong> Transformer는 self-attention를 기반으로 한 구조로, autoregressive 언어 모델링에 적용되어 NLP 분야에서 큰 성공을 거두었다. BERT와 GPT-2와 같은 대규모 Transformer 언어 모델은 사전 학습 후 특정 작업 데이터에 대한 미세 조정을 통해 뛰어난 성능을 보여주었다. 이러한 모델들은 더 크게 학습될수록 성능이 향상되는 경향이 있으며, 현재까지 가장 큰 모델인 GPT-3는 175B 개의 parameter를 가진다.&lt;/p>
+&lt;h2 id="related-works">Related Works
+&lt;/h2>&lt;p>&lt;strong>Transformer Language Models.&lt;/strong> Transformer는 self-attention를 기반으로 한 구조로, autoregressive 언어 모델링에 적용되어 NLP 분야에서 큰 성공을 거두었다. BERT와 GPT-2와 같은 대규모 Transformer 언어 모델은 사전 학습 후 특정 작업 데이터에 대한 미세 조정을 통해 뛰어난 성능을 보여주었다. 이러한 모델들은 더 크게 학습될수록 성능이 향상되는 경향이 있으며, 현재까지 가장 큰 모델인 GPT-3는 175B 개의 parameter를 가진다.&lt;/p>
 &lt;p>&lt;strong>Prompt Engineering and Fine-Tuning.&lt;/strong> GPT-3 175B는 추가 학습 예제를 통해 행동 조정이 가능하지만, 결과는 입력 프롬프트에 크게 의존한다. 이로 인해 프롬프트 엔지니어링이 중요해지며, 미세 조정을 통해 특정 작업에 모델을 재학습한다. 그러나 GPT-3의 크기 때문에, 높은 하드웨어 요구사항으로 인해 일반적인 미세 조정 방식을 적용하기 어렵다.&lt;/p>
 &lt;p>&lt;strong>Parameter-Efﬁcient Adaptation.&lt;/strong> 많은 연구자들이 신경망의 layer 사이에 adapter layer를 삽입하는 방법을 제안했으며, 이 연구의 방법은 이와 유사하게 병목 구조를 사용하지만, 학습된 가중치를 추론 시 주 가중치와 합칠 수 있어 지연 시간을 줄인다. adapter layer의 현대적 확장인 COMPACTER는 Kronecker 곱을 사용해 parametrize 한다. 또한, 입력 단어 임베딩을 최적화하는 새로운 접근법이 제안되었으며, 이는 프롬프트 엔지니어링의 일반화로 볼 수 있으나 위치 임베딩 학습 시 시퀀스 길이 제한이 있다.&lt;/p>
 &lt;p>&lt;strong>Low-Rank Structures in Deep Learning.&lt;/strong> 기계 학습과 딥러닝에서 low-rank 구조의 중요성이 널리 인식되고 있다. 많은 학습 문제들은 본질적으로 low-rank 구조를 가지며, over-parametrize된 신경망도 학습 후 low-rank 속성을 나타낸다. 이전 연구들은 신경망 학습 시 low-rank 제약을 명시적으로 적용했지만, 고정된 모델을 downstream 과제에 적응시키기 위한 low-rank 업데이트는 고려되지 않았다. 이론적 연구는 특정 low-rank 구조를 가진 경우 신경망이 다른 학습 방법을 능가하며, low-rank 적응이 적대적 학습에도 유용할 수 있다고 제안한다. 따라서, low-rank 적응 업데이트 제안은 기존 문헌에 기반한 탄탄한 동기 부여를 가지고 있다.&lt;/p>
 &lt;hr>
-&lt;h2 id="understanding-the-low-rank-updates">Understanding The Low-Rank Updates&lt;/h2>
-&lt;p>LoRA의 장점을 바탕으로, downstream 과제에서 학습된 low-rank 적응의 세부적인 속성을 분석하려 한다. low-rank 구조는 하드웨어 요구사항을 낮추고, 가중치 업데이트의 해석성을 향상시킨다. 특히, GPT-3 175B 연구에서, 작업 성능을 해치지 않으면서 학습 가능한 parameter를 최대 10,000배 줄인 결과를 얻었다.&lt;/p>
+&lt;h2 id="understanding-the-low-rank-updates">Understanding The Low-Rank Updates
+&lt;/h2>&lt;p>LoRA의 장점을 바탕으로, downstream 과제에서 학습된 low-rank 적응의 세부적인 속성을 분석하려 한다. low-rank 구조는 하드웨어 요구사항을 낮추고, 가중치 업데이트의 해석성을 향상시킨다. 특히, GPT-3 175B 연구에서, 작업 성능을 해치지 않으면서 학습 가능한 parameter를 최대 10,000배 줄인 결과를 얻었다.&lt;/p>
 &lt;p>몇 가지 주요 질문에 답하기 위해 연구를 진행한다: 1) parameter 예산 제한 하에, 사전 학습된 transformer에서 어떤 가중치 행렬을 조정해야 downstream 성능이 최대화되는가? 2) 최적의 적응 행렬 $∆W$는 실제로 순위가 낮은가? 그렇다면 적절한 순위는? 3) $∆W$와 $W$ 사이의 관계는 무엇이며, $∆W$는 $W$와 얼마나 밀접하게 연관되어 있는가? $∆W$의 크기는 $W$와 비교하여 어느 정도인가?&lt;/p>
 &lt;p>질문 (2)와 (3)에 대한 답이 사전 학습된 언어 모델 활용의 기본 원리 이해에 도움이 되며, 이것이 NLP의 중요한 이슈임을 강조한다고 생각한다.&lt;/p>
-&lt;h3 id="which-weight-matrices-in-transformer-should-we-apply-lora-to">Which Weight Matrices In Transformer Should We Apply LoRA to?&lt;/h3>
-&lt;p>제한된 parameter 예산 하에서 LoRA를 활용해 downstream 작업의 성능을 최적화하려면, GPT-3 175B 모델의 self-attention 모듈 내 가중치를 고려합니다. 18M의 parameter 예산(약 35MB, FP16)을 기준으로, 하나의 가중치 유형을 적응시킬 때는 $r=8$, 두 가지를 적응시킬 때는 $r=4$로 설정하여 모든 96개 layer에 적용한다.&lt;/p>
+&lt;h3 id="which-weight-matrices-in-transformer-should-we-apply-lora-to">Which Weight Matrices In Transformer Should We Apply LoRA to?
+&lt;/h3>&lt;p>제한된 parameter 예산 하에서 LoRA를 활용해 downstream 작업의 성능을 최적화하려면, GPT-3 175B 모델의 self-attention 모듈 내 가중치를 고려합니다. 18M의 parameter 예산(약 35MB, FP16)을 기준으로, 하나의 가중치 유형을 적응시킬 때는 $r=8$, 두 가지를 적응시킬 때는 $r=4$로 설정하여 모든 96개 layer에 적용한다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/lora/images/table5.png"
 width="1090"
 height="224"
@@ -708,8 +708,8 @@ data-flex-grow="486"
 data-flex-basis="1167px"
 >&lt;/p>
 &lt;p>$∆W_q$나 $∆W_k$에 모든 parameter를 적용하는 것은 성능 저하를 초래하지만, $W_q$와 $W_v$를 함께 조정할 때 가장 좋은 결과를 얻는다. 이는 랭크 4에서도 $∆W$가 충분한 정보를 담고 있어, 한 종류의 가중치보다 다수의 가중치 행렬을 조정하는 것이 더욱 효과적임을 나타낸다.&lt;/p>
-&lt;h3 id="what-is-the-optimal-rank-r-for-lora">What Is The Optimal Rank $r$ For LoRA?&lt;/h3>
-&lt;p>랭크 $r$의 모델 성능 영향을 분석한다. 비교를 위해 $ \lbrace W_q, W_k, W_v, W_c \rbrace$와 $W_q$만 고려한다.&lt;/p>
+&lt;h3 id="what-is-the-optimal-rank-r-for-lora">What Is The Optimal Rank $r$ For LoRA?
+&lt;/h3>&lt;p>랭크 $r$의 모델 성능 영향을 분석한다. 비교를 위해 $ \lbrace W_q, W_k, W_v, W_c \rbrace$와 $W_q$만 고려한다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/lora/images/table6.png"
 width="1016"
 height="286"
@@ -745,8 +745,8 @@ data-flex-grow="255"
 data-flex-basis="613px"
 >&lt;/p>
 &lt;p>&lt;strong>Subspace similarity between different random seeds.&lt;/strong> $r = 64$에서 무작위 시드를 사용한 두 실행 사이의 부공간 유사도 분석을 통해, $∆W_q$가 $∆W_v$보다 더 높은 내재적 순위를 가짐을 확인하였다. 이는 두 실행 모두에서 $∆W_q$에 대한 공통의 특이값 방향이 더 많이 학습되었기 때문이며, 경험적 관찰과 일치한다. 또한, 서로 공통의 특이값 방향을 공유하지 않는 두 개의 무작위 가우시안 행렬을 비교 대상으로 나타냈다.&lt;/p>
-&lt;h3 id="how-does-the-adaptation-matrix-w-compare-to-w">How Does The Adaptation Matrix $∆W$ Compare To $W$?&lt;/h3>
-&lt;p>$∆W$와 $W$ 사이의 상관관계, 특히 $∆W$가 $W$의 상위 특이 방향에 얼마나 포함되는지, 그리고 $∆W$의 크기가 $W$의 해당 방향에 비해 얼마나 되는지를 조사함으로써, 사전 학습된 언어 모델을 적응시키는 기본 메커니즘을 이해하고자 한다.&lt;/p>
+&lt;h3 id="how-does-the-adaptation-matrix-w-compare-to-w">How Does The Adaptation Matrix $∆W$ Compare To $W$?
+&lt;/h3>&lt;p>$∆W$와 $W$ 사이의 상관관계, 특히 $∆W$가 $W$의 상위 특이 방향에 얼마나 포함되는지, 그리고 $∆W$의 크기가 $W$의 해당 방향에 비해 얼마나 되는지를 조사함으로써, 사전 학습된 언어 모델을 적응시키는 기본 메커니즘을 이해하고자 한다.&lt;/p>
 &lt;p>$W$를 $∆W$의 $r$차원 부공간으로 투영하고, 이를 통해 $∆W$와 $W$ 사이의 Frobenius norm을 비교하여 관계를 분석한다. 또한, $W$의 상위 $r$ 특이 벡터나 무작위 행렬을 사용한 결과와도 비교한다.&lt;/p>
 &lt;p>&lt;img src="https://kurtkim.github.io/p/lora/images/table7.png"
 width="908"
@@ -759,12 +759,12 @@ data-flex-basis="1111px"
 >&lt;/p>
 &lt;p>결론은 다음과 같다. 첫째, $∆W$는 무작위 행렬보다 $W$와 더 강한 상관관계를 보이며, $W$에 이미 존재하는 특징을 증폭한다는 점이다. 둘째, $∆W$는 $W$에서 강조되지 않은 새로운 방향을 증폭한다. 셋째, 증폭 인자가 매우 크며, 이는 저차원 적응 행렬이 특정 하위 작업에 중요한 특징을 증폭할 수 있음을 나타낸다.&lt;/p>
 &lt;hr>
-&lt;h2 id="conclusion-and-future-work">Conclusion And Future Work&lt;/h2>
-&lt;p>대규모 언어 모델의 미세 조정은 비용이 많이 든다. 이 연구는 LoRA, 추론 지연 없이 모델 품질을 유지하며 빠른 작업 전환을 가능하게 하는 효율적인 적응 전략을 제안한다. 이 전략은 Transformer 언어 모델에 초점을 맞추었지만, dense layer를 가진 모든 신경망에 적용 가능하다.&lt;/p>
+&lt;h2 id="conclusion-and-future-work">Conclusion And Future Work
+&lt;/h2>&lt;p>대규모 언어 모델의 미세 조정은 비용이 많이 든다. 이 연구는 LoRA, 추론 지연 없이 모델 품질을 유지하며 빠른 작업 전환을 가능하게 하는 효율적인 적응 전략을 제안한다. 이 전략은 Transformer 언어 모델에 초점을 맞추었지만, dense layer를 가진 모든 신경망에 적용 가능하다.&lt;/p>
 &lt;p>미래 연구 방향에는 여러 가지가 있다. 1) LoRA는 다른 적응 방법과 결합하여 추가적인 개선을 제공할 수 있다. 2) 미세 조정과 LoRA의 작동 원리는 아직 명확하지 않으며, LoRA가 이해를 돕는 데 더 유리할 수 있다. 3) LoRA 적용 대상 가중치 행렬 선택은 주로 휴리스틱에 의존하지만, 더 체계적인 방법이 필요하다. 4) $∆W$의 랭크 부족 현상은 $W$의 랭크 부족 가능성을 시사하며, 이는 미래 연구의 새로운 영감을 줄 수 있다.&lt;/p>
 &lt;hr>
-&lt;h2 id="reference">Reference&lt;/h2>
-&lt;ul>
+&lt;h2 id="reference">Reference
+&lt;/h2>&lt;ul>
 &lt;li>&lt;a class="link" href="https://arxiv.org/pdf/2106.09685.pdf" target="_blank" rel="noopener"
 >Paper&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://github.com/microsoft/LoRA" target="_blank" rel="noopener"
