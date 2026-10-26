@@ -1,0 +1,25 @@
+<script src="https://utteranc.es/client.js"
+        repo="{{ site.Params.utterances.repo }}"
+        issue-term="{{ site.Params.utterances.issueTerm }}"
+        theme="preferred-color-scheme"
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    function syncUtterancesTheme() {
+        const frame = document.querySelector('.utterances iframe');
+        if (frame) {
+            frame.contentWindow.postMessage({
+                type: 'set-theme',
+                theme: document.documentElement.dataset.theme === 'dark' ? 'github-dark' : 'github-light'
+            }, 'https://utteranc.es');
+        }
+    }
+    window.addEventListener('message', event => {
+        if (event.origin === 'https://utteranc.es') syncUtterancesTheme();
+    });
+    new MutationObserver(syncUtterancesTheme).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+    });
+</script>
